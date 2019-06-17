@@ -2,12 +2,12 @@ import * as React from 'react';
 
 import { Link } from '../Link';
 
+import { AppActions, AppState } from './AppComponent';
+
 interface Props {
   link: Link;
-  edit: (newLink: Link) => void;
   focused: boolean;
-  onClickEdit: (link: Link) => void;
-  onBlur: () => void;
+  actions: AppActions;
 }
 
 export class LinkComponent extends React.Component<Props> {
@@ -18,11 +18,11 @@ export class LinkComponent extends React.Component<Props> {
   onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newUrl = event.target.value;
     const newLink = this.props.link.withUrl(newUrl);
-    this.props.edit(newLink);
+    this.props.actions.finishEditingLink(newLink);
   }
 
   onBlurHandler = () => {
-    this.props.onBlur();
+    this.props.actions.blurLink(this.props.link);
   }
 
   onKeyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -36,7 +36,7 @@ export class LinkComponent extends React.Component<Props> {
   }
 
   onClickEdit = () => {
-    this.props.onClickEdit(this.props.link);
+    this.props.actions.clickEditLink(this.props.link);
   }
 
   componentDidUpdate = () => {
