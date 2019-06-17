@@ -90,17 +90,13 @@ body {
   }
 }
 
-.link-button {
-  width: 30px;
-  height: 24px;
+.link-icon {
   margin-right: 6px;
-  background-color: white;
-  border: none;
+  &:hover {
+    color: rgb(100, 100, 250);
+  }
+}
 
-  &:focus {
-    outline-width: 0;
-  }
-  &:active {
-    background-color: lightblue;
-  }
+.link-icon-grip {
+  margin-left: 4px;
 }

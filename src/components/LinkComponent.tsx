@@ -64,7 +64,7 @@ export class LinkComponent extends React.Component<Props> {
   render() {
     return (
       <div className="link">
-        <FaGripVertical className="link-icon"/>
+        <FaGripVertical className="link-icon-grip"/>
         <button className="link-favicon"></button>
         <input
           className="link-text"
