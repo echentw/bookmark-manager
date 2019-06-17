@@ -1,0 +1,10 @@
+{
+  "name": "Bookmark Manager",
+  "version": "1.0",
+  "description": "Manage all your bookmarks in one place.",
+  "permissions": ["activeTab", "declarativeContent", "storage"],
+  "chrome_url_overrides" : {
+    "newtab": "index.html"
+  },
+  "manifest_version": 2
+}

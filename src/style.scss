@@ -1,0 +1,95 @@
+body {
+  background-color: #c4c4c4;
+}
+
+.links-pane {
+  display: flex;
+  flex-direction: column;
+  // justify-content: space-evenly;
+
+  box-sizing: border-box;
+  height: 500px;
+  width: 600px;
+  background-color: white;
+  padding: 10px;
+}
+
+.link {
+  box-sizing: border-box;
+  height: 40px;
+  width: 500px;
+  background-color: #41A9E3;
+  margin-bottom: 10px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.add-link {
+  box-sizing: border-box;
+  height: 40px;
+  width: 500px;
+  background-color: #41A9E3;
+  margin-bottom: 10px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: lightblue;
+    cursor: default;
+  }
+}
+
+.link-text {
+  flex: 1;
+  box-sizing: border-box;
+  height: 24px;
+  width: 480px;
+  border: none;
+  padding: 4px;
+  margin-left: 6px;
+  margin-right: 6px;
+
+  background-color: rgba(0, 0, 0, 0);
+  &:hover {
+    background-color: lightgrey;
+  }
+  &:focus {
+    background-color: white;
+    outline-width: 0;
+  }
+}
+
+.link-drag-handle {
+  width: 10px;
+  height: 24px;
+  background-color: white;
+  border: none;
+
+  &:focus {
+    outline-width: 0;
+  }
+  &:active {
+    background-color: lightblue;
+  }
+}
+
+.link-button {
+  width: 30px;
+  height: 24px;
+  margin-right: 6px;
+  background-color: white;
+  border: none;
+
+  &:focus {
+    outline-width: 0;
+  }
+  &:active {
+    background-color: lightblue;
+  }
+}
+
