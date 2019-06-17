@@ -1,4 +1,7 @@
 import * as React from 'react';
+import { GoPencil, GoClippy } from 'react-icons/go';
+import { FaPen, FaCopy, FaEdit, FaGripVertical, FaGripLines } from 'react-icons/fa';
+import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 import { Link } from '../Link';
 
@@ -39,6 +42,11 @@ export class LinkComponent extends React.Component<Props> {
     this.props.actions.clickEditLink(this.props.link);
   }
 
+  onClickCopy = () => {
+    console.log('url copied!');
+  }
+
+
   componentDidUpdate = () => {
     if (this.props.focused) {
       console.log('calling focus');
@@ -56,7 +64,7 @@ export class LinkComponent extends React.Component<Props> {
   render() {
     return (
       <div className="link">
-        <button className="link-drag-handle"></button>
+        <FaGripVertical className="link-icon"/>
         <button className="link-favicon"></button>
         <input
           className="link-text"
@@ -67,13 +75,10 @@ export class LinkComponent extends React.Component<Props> {
           onChange={this.onChangeHandler}
           ref={(input) => this.textInput = input}
         />
-        <button
-          className="link-button"
-          onClick={this.onClickEdit}
-        >
-          Edit
-        </button>
-        <button className="link-button">Copy</button>
+        <FaPen className="link-icon" onClick={this.onClickEdit}/>
+        <CopyToClipboard text={this.props.link.url} onCopy={this.onClickCopy}>
+          <FaCopy className="link-icon"/>
+        </CopyToClipboard>
       </div>
     );
   }
