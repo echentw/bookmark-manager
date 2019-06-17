@@ -57,10 +57,12 @@ body {
   background-color: rgba(0, 0, 0, 0);
   &:hover {
     background-color: lightgrey;
+    cursor: pointer;
   }
   &:focus {
     background-color: white;
     outline-width: 0;
+    cursor: auto;
   }
 }
 
@@ -73,8 +75,12 @@ body {
   &:focus {
     outline-width: 0;
   }
+  &:hover {
+    cursor: grab;
+  }
   &:active {
     background-color: lightblue;
+    cursor: grabbing;
   }
 }
 
@@ -92,4 +98,3 @@ body {
     background-color: lightblue;
   }
 }
-
