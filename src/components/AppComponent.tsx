@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { DndProvider } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
 import { Link } from '../Link';
 import { LinksPaneComponent } from './LinksPaneComponent';
@@ -15,7 +17,21 @@ export interface AppActions {
   clickAddLink: () => void;
 }
 
-export class AppComponent extends React.Component<{}, AppState> {
+export const DraggableTypes = {
+  LINK: 'link',
+};
+
+export class AppComponent extends React.Component {
+  render() {
+    return (
+      <DndProvider backend={HTML5Backend}>
+        <InnerAppComponent/>
+      </DndProvider>
+    );
+  }
+}
+
+class InnerAppComponent extends React.Component<{}, AppState> {
   state = {
     links: [
       new Link({ url: 'https://youtu.be/W-ulxMYL3ds' }),

@@ -2,10 +2,11 @@ import * as React from 'react';
 import { GoPencil, GoClippy } from 'react-icons/go';
 import { FaPen, FaCopy, FaEdit, FaGripVertical, FaGripLines } from 'react-icons/fa';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
+import { useDrag } from 'react-dnd';
 
 import { Link } from '../Link';
 
-import { AppActions, AppState } from './AppComponent';
+import { AppActions, AppState, DraggableTypes } from './AppComponent';
 
 interface Props {
   link: Link;
@@ -13,7 +14,7 @@ interface Props {
   actions: AppActions;
 }
 
-export class LinkComponent extends React.Component<Props> {
+class InnerLinkComponent extends React.Component<Props> {
 
   // TODO: what is the type of this supposed to be?
   textInput: any = null;
@@ -43,6 +44,7 @@ export class LinkComponent extends React.Component<Props> {
   }
 
   onClickCopy = () => {
+    // TODO: display a small modal
     console.log('url copied!');
   }
 
@@ -85,4 +87,19 @@ export class LinkComponent extends React.Component<Props> {
       </div>
     );
   }
+}
+
+export function LinkComponent(props: Props) {
+  const [{isDragging}, drag] = useDrag({
+    item: { type: DraggableTypes.LINK },
+    collect: monitor => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  })
+
+  return (
+    <div ref={drag}>
+      <InnerLinkComponent link={props.link} focused={props.focused} actions={props.actions}/>
+    </div>
+  );
 }
