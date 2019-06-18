@@ -17,6 +17,12 @@ export interface AppActions {
   clickAddLink: () => void;
 }
 
+export interface DragDropService {
+  beginDrag: (draggedRank: number) => void;
+  endDrag: (draggedRank: number) => void;
+  isOver: (dropTargetRank: number) => void;
+}
+
 export const DraggableTypes = {
   LINK: 'link',
 };
@@ -42,6 +48,8 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     // TODO: I want to set this to null
     focusedLinkId: '',
   };
+
+  private draggedRank: number | null = null;
 
   finishEditingLink = (newLink: Link) => {
     const index = this.state.links.findIndex((link: Link) => {
@@ -74,6 +82,34 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     });
   }
 
+  isOver = (dropTargetRank: number) => {
+    // TODO: do the array operations properly
+    const links: Link[] = JSON.parse(JSON.stringify(this.state.links));
+    const draggedLink = links[this.draggedRank];
+    if (this.draggedRank > dropTargetRank) {
+      for (let i = this.draggedRank; i > dropTargetRank; --i) {
+        links[i] = links[i - 1];
+      }
+    } else {
+      for (let i = this.draggedRank; i < dropTargetRank; ++i) {
+        links[i] = links[i + 1];
+      }
+    }
+    links[dropTargetRank] = draggedLink;
+
+    this.draggedRank = dropTargetRank;
+
+    this.setState({ links });
+  }
+
+  beginDrag = (draggedRank: number) => {
+    this.draggedRank = draggedRank;
+  }
+
+  endDrag = (draggedRank: number) => {
+    this.draggedRank = null;
+  }
+
   render() {
     const actions: AppActions = {
       finishEditingLink: this.finishEditingLink,
@@ -82,9 +118,19 @@ class InnerAppComponent extends React.Component<{}, AppState> {
       clickAddLink: this.clickAddLink,
     };
 
+    const dragDropService: DragDropService = {
+      isOver: this.isOver,
+      beginDrag: this.beginDrag,
+      endDrag: this.endDrag,
+    };
+
     return (
       <div className="app">
-        <LinksPaneComponent actions={actions} state={this.state}/>
+        <LinksPaneComponent
+          actions={actions}
+          state={this.state}
+          dragDropService={dragDropService}
+        />
       </div>
     );
   }

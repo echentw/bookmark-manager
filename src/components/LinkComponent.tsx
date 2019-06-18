@@ -6,15 +6,20 @@ import { useDrag } from 'react-dnd';
 
 import { Link } from '../Link';
 
-import { AppActions, AppState, DraggableTypes } from './AppComponent';
+import { AppActions, AppState, DragDropService, DraggableTypes } from './AppComponent';
 
-export interface Props {
+interface PropsBase {
   link: Link;
   focused: boolean;
   actions: AppActions;
 }
 
-interface InnerProps extends Props {
+export interface Props extends PropsBase {
+  dragDropService: DragDropService;
+  rank: number,
+}
+
+interface InnerProps extends PropsBase {
   isDragging: boolean;
 }
 
@@ -96,11 +101,13 @@ class InnerLinkComponent extends React.Component<InnerProps> {
 }
 
 export function LinkComponent(props: Props) {
-  const [{isDragging}, drag] = useDrag({
+  const [{ isDragging }, drag] = useDrag({
     item: {
       type: DraggableTypes.LINK,
       id: props.link.id,
     },
+    begin: monitor => props.dragDropService.beginDrag(props.rank),
+    end: monitor => props.dragDropService.endDrag(props.rank),
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),
     }),
