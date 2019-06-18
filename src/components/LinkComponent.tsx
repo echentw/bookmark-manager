@@ -46,24 +46,27 @@ export class LinkComponent extends React.Component<Props> {
     console.log('url copied!');
   }
 
+  onClickHandler = (event: React.MouseEvent<HTMLInputElement>) => {
+    if (event.target === this.textInput) {
+      window.open(this.props.link.url);
+    }
+  }
 
   componentDidUpdate = () => {
     if (this.props.focused) {
-      console.log('calling focus');
       this.textInput.focus();
     }
   }
 
   componentDidMount = () => {
     if (this.props.focused) {
-      console.log('calling focus 2');
       this.textInput.focus();
     }
   }
 
   render() {
     return (
-      <div className="link">
+      <div className="link" onClick={this.onClickHandler}>
         <FaGripVertical className="link-icon-grip"/>
         <button className="link-favicon"></button>
         <input
