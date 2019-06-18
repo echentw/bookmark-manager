@@ -51,6 +51,7 @@ body {
 .add-link {
   @extend .link;
 
+  margin-top: 20px;
   justify-content: center;
 
   &:hover {
