@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { Link } from '../Link';
 import { LinkComponent } from './LinkComponent';
+// import { LinkContainerComponent } from './LinkContainerComponent';
 import { AddLinkComponent } from './AddLinkComponent';
 
 import { AppActions, AppState } from './AppComponent';
@@ -18,18 +19,22 @@ export class LinksPaneComponent extends React.Component<Props> {
     const linkComponents = state.links.map((link) => {
       const focused = link.id === state.focusedLinkId;
       return (
-        <LinkComponent
-          key={link.id}
-          link={link}
-          focused={focused}
-          actions={actions}
-        />
+        <div className="link-container">
+          <LinkComponent
+            key={link.id}
+            link={link}
+            focused={focused}
+            actions={actions}
+          />
+        </div>
       );
     });
     return (
       <div className="links-pane">
         { linkComponents }
-        <AddLinkComponent add={actions.clickAddLink}/>
+        <div className="link-container">
+          <AddLinkComponent add={actions.clickAddLink}/>
+        </div>
       </div>
     );
   }

@@ -26,23 +26,31 @@ body {
   align-items: center;
 }
 
+.link-container {
+  background-color: rgb(80, 80, 80);
+  margin-top: 20px;
+  border-radius: 4px;
+}
+
 .link {
   box-sizing: border-box;
   height: 40px;
   width: 460px;
   background-color: #AEE2FF;
-  margin-top: 20px;
   border-radius: 4px;
 
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  &.dragging {
+    opacity: 0;
+  }
 }
 
 .add-link {
   @extend .link;
 
-  margin-bottom: 20px;
   justify-content: center;
 
   &:hover {

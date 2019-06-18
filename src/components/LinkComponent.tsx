@@ -8,13 +8,17 @@ import { Link } from '../Link';
 
 import { AppActions, AppState, DraggableTypes } from './AppComponent';
 
-interface Props {
+export interface Props {
   link: Link;
   focused: boolean;
   actions: AppActions;
 }
 
-class InnerLinkComponent extends React.Component<Props> {
+interface InnerProps extends Props {
+  isDragging: boolean;
+}
+
+class InnerLinkComponent extends React.Component<InnerProps> {
 
   // TODO: what is the type of this supposed to be?
   textInput: any = null;
@@ -67,8 +71,10 @@ class InnerLinkComponent extends React.Component<Props> {
   }
 
   render() {
+    const classes = this.props.isDragging ? 'link dragging' : 'link';
+
     return (
-      <div className="link" onClick={this.onClickHandler}>
+      <div className={classes} onClick={this.onClickHandler}>
         <FaGripVertical className="link-icon-grip"/>
         <button className="link-favicon"></button>
         <input
@@ -91,7 +97,10 @@ class InnerLinkComponent extends React.Component<Props> {
 
 export function LinkComponent(props: Props) {
   const [{isDragging}, drag] = useDrag({
-    item: { type: DraggableTypes.LINK },
+    item: {
+      type: DraggableTypes.LINK,
+      id: props.link.id,
+    },
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -99,7 +108,12 @@ export function LinkComponent(props: Props) {
 
   return (
     <div ref={drag}>
-      <InnerLinkComponent link={props.link} focused={props.focused} actions={props.actions}/>
+      <InnerLinkComponent
+        link={props.link}
+        focused={props.focused}
+        actions={props.actions}
+        isDragging={isDragging}
+      />
     </div>
   );
 }
