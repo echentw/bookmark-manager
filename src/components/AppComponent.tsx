@@ -84,7 +84,7 @@ class InnerAppComponent extends React.Component<{}, AppState> {
 
   isOver = (dropTargetRank: number) => {
     // TODO: do the array operations properly
-    const links: Link[] = JSON.parse(JSON.stringify(this.state.links));
+    const links: Link[] = this.state.links.map(link => link);
     const draggedLink = links[this.draggedRank];
     if (this.draggedRank > dropTargetRank) {
       for (let i = this.draggedRank; i > dropTargetRank; --i) {

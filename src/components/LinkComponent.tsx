@@ -58,7 +58,7 @@ class InnerLinkComponent extends React.Component<InnerProps> {
   }
 
   onClickHandler = (event: React.MouseEvent<HTMLInputElement>) => {
-    if (event.target === this.textInput) {
+    if (event.target === this.textInput && !this.props.focused) {
       window.open(this.props.link.url);
     }
   }
