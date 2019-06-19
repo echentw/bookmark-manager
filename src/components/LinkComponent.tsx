@@ -3,15 +3,15 @@ import { GoPencil, GoClippy } from 'react-icons/go';
 import { FaPen, FaCopy, FaEdit, FaGripVertical, FaGripLines } from 'react-icons/fa';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 import { useDrag } from 'react-dnd';
+// import { getEmptyImage } from 'react-dnd-html5-backend';
 
 import { Link } from '../Link';
-
 import { AppActions, AppState, DragDropService, DraggableTypes } from './AppComponent';
 
 interface PropsBase {
   link: Link;
   focused: boolean;
-  actions: AppActions;
+  actions?: AppActions;
 }
 
 export interface Props extends PropsBase {
@@ -23,7 +23,7 @@ interface InnerProps extends PropsBase {
   isDragging: boolean;
 }
 
-class InnerLinkComponent extends React.Component<InnerProps> {
+export class InnerLinkComponent extends React.Component<InnerProps> {
 
   // TODO: what is the type of this supposed to be?
   textInput: any = null;

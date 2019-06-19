@@ -5,6 +5,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import { Link } from '../Link';
 import { LinksPaneComponent } from './LinksPaneComponent';
 import { GreetingComponent } from './GreetingComponent';
+import { DragLayerComponent } from './DragLayerComponent';
 
 export interface AppState {
   links: Link[];
@@ -44,6 +45,7 @@ class InnerAppComponent extends React.Component<{}, AppState> {
       new Link({ url: 'https://youtu.be/W-ulxMYL3ds' }),
       new Link({ url: 'https://www.skillshare.com/home', alias: 'SkillShare' }),
       new Link({ url: 'https://www.w3schools.com/html/html_css.asp' }),
+      new Link({ url: 'https://react-dnd.github.io/react-dnd/examples/drag-around/custom-drag-layer' }),
     ],
 
     // TODO: I want to set this to null
@@ -133,6 +135,7 @@ class InnerAppComponent extends React.Component<{}, AppState> {
           dragDropService={dragDropService}
         />
         <GreetingComponent name={'Eric'}/>
+        <DragLayerComponent state={this.state}/>
       </div>
     );
   }
