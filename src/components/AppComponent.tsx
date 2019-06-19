@@ -4,6 +4,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import { Link } from '../Link';
 import { LinksPaneComponent } from './LinksPaneComponent';
+import { GreetingComponent } from './GreetingComponent';
 
 export interface AppState {
   links: Link[];
@@ -131,6 +132,7 @@ class InnerAppComponent extends React.Component<{}, AppState> {
           state={this.state}
           dragDropService={dragDropService}
         />
+        <GreetingComponent name={'Eric'}/>
       </div>
     );
   }
