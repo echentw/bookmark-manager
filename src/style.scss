@@ -6,15 +6,17 @@ body {
   position: absolute;
   height: 100%;
   width: 100%;
+  box-sizing: border-box;
 
   display: flex;
   flex-direction: row;
+
+  padding: 40px;
 }
 
 .links-pane {
   box-sizing: border-box;
   border-radius: 4px;
-  margin: 40px;
   width: 500px;
   background-color: rgba(255, 255, 255, 0.5);
   padding: 10px;
@@ -118,16 +120,26 @@ body {
     flex: 3;
 
     color: white;
-    font-size: 36px;
     font-family: arial;
+    font-size: 36px;
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
   }
 
   .greeting-bottom {
     flex: 1;
+
+    color: white;
+    font-family: arial;
+    font-size: 24px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
   }
 
 }
