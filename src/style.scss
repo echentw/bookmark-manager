@@ -158,6 +158,10 @@ body {
   padding: 4px;
   margin-left: 6px;
   margin-right: 6px;
+  overflow: hidden;
+  font-family: Arial;
+  font-size: 12px;
+  white-space: pre;
 
   background-color: rgba(0, 0, 0, 0);
   &:hover {
