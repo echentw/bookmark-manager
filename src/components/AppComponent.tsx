@@ -9,13 +9,14 @@ import { DragLayerComponent } from './DragLayerComponent';
 
 export interface AppState {
   links: Link[];
-  focusedLinkId: string | null;
+  editingLinkId: string | null;
 }
 
-export interface AppActions {
-  finishEditingLink: (link: Link) => void;
+export interface AppService {
+  saveLink: (link: Link) => void;
   clickEditLink: (link: Link) => void;
-  blurLink: (link: Link) => void;
+  cancelEditLink: (link: Link) => void;
+  deleteLink: (link: Link) => void;
   clickAddLink: () => void;
 }
 
@@ -49,12 +50,12 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     ],
 
     // TODO: I want to set this to null
-    focusedLinkId: '',
+    editingLinkId: '',
   };
 
   private draggedRank: number | null = null;
 
-  finishEditingLink = (newLink: Link) => {
+  saveLink = (newLink: Link) => {
     const index = this.state.links.findIndex((link: Link) => {
       return link.id === newLink.id;
     });
@@ -62,17 +63,28 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     // TODO: what's the proper way to do this?
     this.setState({
       links: this.state.links,
-      focusedLinkId: newLink.id,
+      editingLinkId: null,
+    });
+  }
+
+  deleteLink = (link: Link) => {
+    const index = this.state.links.findIndex((thisLink: Link) => {
+      return thisLink.id === link.id;
+    });
+    this.state.links.splice(index, 1);
+    this.setState({
+      links: this.state.links,
+      editingLinkId: null,
     });
   }
 
   clickEditLink = (link: Link) => {
-    this.setState({ focusedLinkId: link.id });
+    this.setState({ editingLinkId: link.id });
   }
 
-  blurLink = (link: Link) => {
-    if (this.state.focusedLinkId === link.id) {
-      this.setState({ focusedLinkId: null });
+  cancelEditLink = (link: Link) => {
+    if (this.state.editingLinkId === link.id) {
+      this.setState({ editingLinkId: null });
     }
   }
 
@@ -81,7 +93,7 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     const joined = this.state.links.concat(link);
     this.setState({
       links: joined,
-      focusedLinkId: link.id,
+      editingLinkId: link.id,
     });
   }
 
@@ -114,11 +126,12 @@ class InnerAppComponent extends React.Component<{}, AppState> {
   }
 
   render() {
-    const actions: AppActions = {
-      finishEditingLink: this.finishEditingLink,
+    const appService: AppService = {
+      saveLink: this.saveLink,
       clickEditLink: this.clickEditLink,
-      blurLink: this.blurLink,
+      cancelEditLink: this.cancelEditLink,
       clickAddLink: this.clickAddLink,
+      deleteLink: this.deleteLink,
     };
 
     const dragDropService: DragDropService = {
@@ -130,12 +143,12 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     return (
       <div className="app">
         <LinksPaneComponent
-          actions={actions}
-          state={this.state}
+          appService={appService}
+          appState={this.state}
           dragDropService={dragDropService}
         />
         <GreetingComponent name={'Eric'}/>
-        <DragLayerComponent state={this.state}/>
+        <DragLayerComponent appState={this.state}/>
       </div>
     );
   }

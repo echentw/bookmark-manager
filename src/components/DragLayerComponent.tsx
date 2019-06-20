@@ -5,7 +5,7 @@ import { AppState } from './AppComponent';
 import { InnerLinkComponent } from './LinkComponent';
 
 interface Props {
-  state: AppState;
+  appState: AppState;
 }
 
 interface CollectedProps {
@@ -51,12 +51,12 @@ export function DragLayerComponent(props: Props) {
 
   if (isDragging) {
     const linkId = item.id;
-    const link = props.state.links.find((link) => link.id === linkId);
+    const link = props.appState.links.find((link) => link.id === linkId);
 
     dragPreviewComponent = (
       <InnerLinkComponent
         link={link}
-        focused={false}
+        editing={false}
         isDragging={false}
       />
     );

@@ -3,19 +3,20 @@ import { GoPencil, GoClippy } from 'react-icons/go';
 import { FaPen, FaCopy, FaEdit, FaGripVertical, FaGripLines } from 'react-icons/fa';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 import { useDrag } from 'react-dnd';
-// import { getEmptyImage } from 'react-dnd-html5-backend';
+import { EditLinkComponent } from './EditLinkComponent';
 
 import { Link } from '../Link';
-import { AppActions, AppState, DragDropService, DraggableTypes } from './AppComponent';
+import { AppService, AppState, DragDropService, DraggableTypes } from './AppComponent';
 
 interface PropsBase {
   link: Link;
-  focused: boolean;
-  actions?: AppActions;
+  editing: boolean;
+  appService?: AppService;
 }
 
 export interface Props extends PropsBase {
   dragDropService: DragDropService;
+  appState: AppState,
   rank: number,
 }
 
@@ -25,31 +26,8 @@ interface InnerProps extends PropsBase {
 
 export class InnerLinkComponent extends React.Component<InnerProps> {
 
-  // TODO: what is the type of this supposed to be?
-  textInput: any = null;
-
-  onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newUrl = event.target.value;
-    const newLink = this.props.link.withUrl(newUrl);
-    this.props.actions.finishEditingLink(newLink);
-  }
-
-  onBlurHandler = () => {
-    this.props.actions.blurLink(this.props.link);
-  }
-
-  onKeyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const keyCodes = [
-      13, // Enter
-      27, // Escape
-    ];
-    if (keyCodes.find((keyCode) => keyCode === event.keyCode)) {
-      this.textInput.blur();
-    }
-  }
-
   onClickEdit = () => {
-    this.props.actions.clickEditLink(this.props.link);
+    this.props.appService.clickEditLink(this.props.link);
   }
 
   onClickCopy = () => {
@@ -57,40 +35,26 @@ export class InnerLinkComponent extends React.Component<InnerProps> {
     console.log('url copied!');
   }
 
-  onClickHandler = (event: React.MouseEvent<HTMLInputElement>) => {
-    if (event.target === this.textInput && !this.props.focused) {
+  onClickUrl = (event: React.MouseEvent<HTMLInputElement>) => {
+    if (!this.props.editing) {
       window.open(this.props.link.url);
-    }
-  }
-
-  componentDidUpdate = () => {
-    if (this.props.focused) {
-      this.textInput.focus();
-    }
-  }
-
-  componentDidMount = () => {
-    if (this.props.focused) {
-      this.textInput.focus();
     }
   }
 
   render() {
     const classes = this.props.isDragging ? 'link dragging' : 'link';
 
+    if (this.props.editing) {
+      return (
+        <EditLinkComponent link={this.props.link} appService={this.props.appService}/>
+      );
+    }
+
     return (
-      <div className={classes} onClick={this.onClickHandler}>
+      <div className={classes}>
         <FaGripVertical className="link-icon-grip"/>
         <button className="link-favicon"></button>
-        <input
-          className="link-text"
-          disabled={!this.props.focused}
-          onBlur={this.onBlurHandler}
-          onKeyDown={this.onKeyDownHandler}
-          value={this.props.link.url}
-          onChange={this.onChangeHandler}
-          ref={(input) => this.textInput = input}
-        />
+        <div className="link-text" onClick={this.onClickUrl}>{this.props.link.url}</div>
         <FaPen className="link-icon" onClick={this.onClickEdit}/>
         <CopyToClipboard text={this.props.link.url} onCopy={this.onClickCopy}>
           <FaCopy className="link-icon"/>
@@ -106,6 +70,7 @@ export function LinkComponent(props: Props) {
       type: DraggableTypes.LINK,
       id: props.link.id,
     },
+    canDrag: monitor => props.link.id !== props.appState.editingLinkId,
     begin: monitor => props.dragDropService.beginDrag(props.rank),
     end: monitor => props.dragDropService.endDrag(props.rank),
     collect: monitor => ({
@@ -117,8 +82,8 @@ export function LinkComponent(props: Props) {
     <div ref={drag}>
       <InnerLinkComponent
         link={props.link}
-        focused={props.focused}
-        actions={props.actions}
+        editing={props.editing}
+        appService={props.appService}
         isDragging={isDragging}
       />
     </div>
