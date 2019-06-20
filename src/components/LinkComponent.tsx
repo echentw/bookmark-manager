@@ -42,19 +42,22 @@ export class InnerLinkComponent extends React.Component<InnerProps> {
   }
 
   render() {
-    const classes = this.props.isDragging ? 'link dragging' : 'link';
-
     if (this.props.editing) {
       return (
         <EditLinkComponent link={this.props.link} appService={this.props.appService}/>
       );
     }
 
+    const { isDragging, link } = this.props;
+
+    const classes = isDragging ? 'link dragging' : 'link';
+    const displayName = link.alias === null ? link.url : link.alias;
+
     return (
       <div className={classes}>
         <FaGripVertical className="link-icon-grip"/>
         <button className="link-favicon"></button>
-        <div className="link-text" onClick={this.onClickUrl}>{this.props.link.url}</div>
+        <div className="link-text" onClick={this.onClickUrl}>{displayName}</div>
         <FaPen className="link-icon" onClick={this.onClickEdit}/>
         <CopyToClipboard text={this.props.link.url} onCopy={this.onClickCopy}>
           <FaCopy className="link-icon"/>

@@ -1,7 +1,7 @@
 export class Link {
   public id: string;
   public url: string;
-  public alias?: string;
+  public alias: string | null;
 
   constructor({ id, url, alias }: { id?: string, url: string, alias?: string }) {
     this.id = id ? id : this.randomId();
