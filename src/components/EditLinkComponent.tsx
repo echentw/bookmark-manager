@@ -16,7 +16,7 @@ export class EditLinkComponent extends React.Component<Props> {
   private urlInput: HTMLInputElement = null;
 
   componentDidMount = () => {
-    this.name = this.props.link.alias;
+    this.name = this.props.link.name;
     this.url = this.props.link.url;
 
     this.urlInput.focus();
@@ -31,7 +31,7 @@ export class EditLinkComponent extends React.Component<Props> {
   }
 
   onClickSave = () => {
-    const newLink = this.props.link.withAlias(this.name).withUrl(this.url);
+    const newLink = this.props.link.withName(this.name).withUrl(this.url);
     this.props.appService.saveLink(newLink);
   }
 
@@ -80,7 +80,7 @@ export class EditLinkComponent extends React.Component<Props> {
           className="edit-link-input"
           ref={(input) => this.nameInput = input}
           type="text"
-          defaultValue={this.props.link.alias}
+          defaultValue={this.props.link.name}
           onChange={this.onChangeName}
           onKeyDown={this.onNameKeyDown}
         />

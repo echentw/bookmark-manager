@@ -1,27 +1,27 @@
 export class Link {
   public id: string;
   public url: string;
-  public alias: string | null;
+  public name: string | null;
 
-  constructor({ id, url, alias }: { id?: string, url: string, alias?: string }) {
+  constructor({ id, url, name }: { id?: string, url: string, name?: string }) {
     this.id = id ? id : this.randomId();
     this.url = url;
-    this.alias = alias ? alias : null;
+    this.name = name ? name : null;
   }
 
   withUrl = (url: string): Link => {
     return new Link({
       id: this.id,
       url: url,
-      alias: this.alias,
+      name: this.name,
     });
   }
 
-  withAlias = (alias: string): Link => {
+  withName = (name: string): Link => {
     return new Link({
       id: this.id,
       url: this.url,
-      alias: alias,
+      name: name,
     });
   }
 

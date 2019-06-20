@@ -45,7 +45,7 @@ export class InnerLinkComponent extends React.Component<InnerProps> {
     const { isDragging, link } = this.props;
 
     const classes = isDragging ? 'link dragging' : 'link';
-    const displayName = link.alias === null ? link.url : link.alias;
+    const displayName = link.name === null ? link.url : link.name;
 
     return (
       <div className={classes}>
