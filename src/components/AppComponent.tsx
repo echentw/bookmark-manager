@@ -10,6 +10,7 @@ import { DragLayerComponent } from './DragLayerComponent';
 export interface AppState {
   links: Link[];
   editingLinkId: string | null;
+  editingNewLink: boolean;
 }
 
 export interface AppService {
@@ -51,6 +52,7 @@ class InnerAppComponent extends React.Component<{}, AppState> {
 
     // TODO: I want to set this to null
     editingLinkId: '',
+    editingNewLink: false,
   };
 
   private draggedRank: number | null = null;
@@ -64,6 +66,7 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     this.setState({
       links: this.state.links,
       editingLinkId: null,
+      editingNewLink: false,
     });
   }
 
@@ -75,16 +78,35 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     this.setState({
       links: this.state.links,
       editingLinkId: null,
+      editingNewLink: false,
     });
   }
 
   clickEditLink = (link: Link) => {
-    this.setState({ editingLinkId: link.id });
+    this.setState({
+      editingLinkId: link.id,
+      editingNewLink: false,
+    });
   }
 
   cancelEditLink = (link: Link) => {
     if (this.state.editingLinkId === link.id) {
-      this.setState({ editingLinkId: null });
+      if (this.state.editingNewLink) {
+        const index = this.state.links.findIndex((thisLink: Link) => {
+          return thisLink.id === link.id;
+        });
+        this.state.links.splice(index, 1);
+        this.setState({
+          links: this.state.links,
+          editingLinkId: null,
+          editingNewLink: false,
+        });
+      } else {
+        this.setState({
+          editingLinkId: null,
+          editingNewLink: false,
+        });
+      }
     }
   }
 
@@ -94,6 +116,7 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     this.setState({
       links: joined,
       editingLinkId: link.id,
+      editingNewLink: true,
     });
   }
 
