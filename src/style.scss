@@ -147,8 +147,11 @@ body {
   justify-content: center;
 
   &:hover {
-    background-color: lightblue;
+    background-color: rgb(100, 180, 250);
     cursor: default;
+  }
+  &:active {
+    background-color: rgb(80, 160, 230);
   }
 }
 
