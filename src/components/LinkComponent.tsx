@@ -35,12 +35,6 @@ export class InnerLinkComponent extends React.Component<InnerProps> {
     console.log('url copied!');
   }
 
-  onClickUrl = (event: React.MouseEvent<HTMLInputElement>) => {
-    if (!this.props.editing) {
-      window.open(this.props.link.url);
-    }
-  }
-
   render() {
     if (this.props.editing) {
       return (
@@ -57,9 +51,9 @@ export class InnerLinkComponent extends React.Component<InnerProps> {
       <div className={classes}>
         <FaGripVertical className="link-icon-grip"/>
         <button className="link-favicon"></button>
-        <div className="link-text" onClick={this.onClickUrl}>{displayName}</div>
+        <a className="link-text" href={link.url}>{displayName}</a>
         <FaPen className="link-icon" onClick={this.onClickEdit}/>
-        <CopyToClipboard text={this.props.link.url} onCopy={this.onClickCopy}>
+        <CopyToClipboard text={link.url} onCopy={this.onClickCopy}>
           <FaCopy className="link-icon"/>
         </CopyToClipboard>
       </div>

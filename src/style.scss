@@ -164,19 +164,21 @@ body {
   padding: 4px;
   margin-left: 6px;
   margin-right: 6px;
+
   overflow: hidden;
   font-family: Arial;
   font-size: 12px;
   white-space: pre;
+  text-decoration: none;
+  color: black;
 
   background-color: rgba(0, 0, 0, 0);
   &:hover {
     cursor: pointer;
   }
   &:focus {
-    background-color: white;
+    cursor: pointer;
     outline-width: 0;
-    cursor: auto;
   }
 }
 
