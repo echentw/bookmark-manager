@@ -30,9 +30,9 @@ export class InnerLinkComponent extends React.Component<InnerProps> {
     this.props.appService.clickEditLink(this.props.link);
   }
 
-  onClickCopy = () => {
-    // TODO: display a small modal
-    console.log('url copied!');
+  onClickCopy = (event: React.MouseEvent<SVGElement, MouseEvent>) => {
+    const { clientX, clientY } = event;
+    this.props.appService.unleashCopiedModal(clientX, clientY);
   }
 
   render() {
@@ -47,14 +47,16 @@ export class InnerLinkComponent extends React.Component<InnerProps> {
     const classes = isDragging ? 'link dragging' : 'link';
     const displayName = link.name === null ? link.url : link.name;
 
+    const faviconUrl = `https://www.google.com/s2/favicons?domain_url=${link.url}`;
+
     return (
       <div className={classes}>
         <FaGripVertical className="link-icon-grip"/>
-        <button className="link-favicon"></button>
+        <img className="link-favicon" src={faviconUrl}/>
         <a className="link-text" href={link.url}>{displayName}</a>
         <FaPen className="link-icon" onClick={this.onClickEdit}/>
-        <CopyToClipboard text={link.url} onCopy={this.onClickCopy}>
-          <FaCopy className="link-icon"/>
+        <CopyToClipboard text={link.url}>
+          <FaCopy className="link-icon" onClick={this.onClickCopy}/>
         </CopyToClipboard>
       </div>
     );

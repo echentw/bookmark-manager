@@ -162,7 +162,7 @@ body {
   width: 480px;
   border: none;
   padding: 4px;
-  margin-left: 6px;
+  margin-left: 4px;
   margin-right: 6px;
 
   overflow: hidden;
@@ -211,6 +211,10 @@ body {
   margin-left: 6px;
 }
 
+.link-favicon {
+  margin-left: 6px;
+}
+
 .greeting {
   flex: 1;
 
@@ -243,4 +247,56 @@ body {
     align-items: flex-end;
   }
 
+}
+
+.copied-modal {
+  width: 80px;
+  height: 24px;
+  background-color: rgba(255, 255, 255, 0.5);
+  color: black;
+
+  box-sizing: border-box;
+  border-radius: 4px;
+  font-family: Arial;
+  font-size: 12px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &.animating {
+    -webkit-animation: fade-in-out 1.0s;
+            animation: fade-in-out 1.0s;
+  }
+
+  opacity: 0;
+}
+
+@-webkit-keyframes fade-in-out {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes fade-in-out {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }

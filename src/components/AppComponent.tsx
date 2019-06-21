@@ -6,11 +6,19 @@ import { Link } from '../Link';
 import { LinksPaneComponent } from './LinksPaneComponent';
 import { GreetingComponent } from './GreetingComponent';
 import { DragLayerComponent } from './DragLayerComponent';
+import { CopiedModalComponent } from './CopiedModalComponent';
+
+export interface CopyContext {
+  showingCopiedModal: boolean;
+  x: number;
+  y: number;
+}
 
 export interface AppState {
   links: Link[];
   editingLinkId: string | null;
   editingNewLink: boolean;
+  copyContext: CopyContext;
 }
 
 export interface AppService {
@@ -19,6 +27,7 @@ export interface AppService {
   cancelEditLink: (link: Link) => void;
   deleteLink: (link: Link) => void;
   clickAddLink: () => void;
+  unleashCopiedModal: (x: number, y: number) => void;
 }
 
 export interface DragDropService {
@@ -53,9 +62,17 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     // TODO: I want to set this to null
     editingLinkId: '',
     editingNewLink: false,
+
+    copyContext: {
+      showingCopiedModal: false,
+      x: 0,
+      y: 0,
+    },
   };
 
   private draggedRank: number | null = null;
+
+  private copiedModalTimeoutId: NodeJS.Timeout | null = null;
 
   saveLink = (newLink: Link) => {
     const index = this.state.links.findIndex((link: Link) => {
@@ -148,6 +165,21 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     this.draggedRank = null;
   }
 
+  unleashCopiedModal = (x: number, y: number) => {
+    const hideContext = { showingCopiedModal: false, x: 0, y: 0 };
+    const showContext = { showingCopiedModal: true, x, y };
+
+    this.setState({ copyContext: showContext }, () => {
+      console.log('setting state to show');
+      const copiedModalTimeoutId = setTimeout(() => {
+        if (this.copiedModalTimeoutId === copiedModalTimeoutId) {
+          this.setState({ copyContext: hideContext });
+        }
+      }, 1000);
+      this.copiedModalTimeoutId = copiedModalTimeoutId;
+    });
+  }
+
   render() {
     const appService: AppService = {
       saveLink: this.saveLink,
@@ -155,6 +187,7 @@ class InnerAppComponent extends React.Component<{}, AppState> {
       cancelEditLink: this.cancelEditLink,
       clickAddLink: this.clickAddLink,
       deleteLink: this.deleteLink,
+      unleashCopiedModal: this.unleashCopiedModal,
     };
 
     const dragDropService: DragDropService = {
@@ -172,6 +205,7 @@ class InnerAppComponent extends React.Component<{}, AppState> {
         />
         <GreetingComponent name={'Eric'}/>
         <DragLayerComponent appState={this.state}/>
+        <CopiedModalComponent copyContext={this.state.copyContext}/>
       </div>
     );
   }
