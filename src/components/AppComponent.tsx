@@ -3,7 +3,7 @@ import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
 import { Bookmark } from '../Bookmark';
-import { BookmarksPaneComponent } from './BookmarksPaneComponent';
+import { BookmarkListComponent } from './BookmarkListComponent';
 import { GreetingComponent } from './GreetingComponent';
 import { DragLayerComponent } from './DragLayerComponent';
 import { CopiedModalComponent } from './CopiedModalComponent';
@@ -200,7 +200,7 @@ class InnerAppComponent extends React.Component<{}, AppState> {
 
     return (
       <div className="app">
-        <BookmarksPaneComponent
+        <BookmarkListComponent
           appService={appService}
           appState={this.state}
           dragDropService={dragDropService}

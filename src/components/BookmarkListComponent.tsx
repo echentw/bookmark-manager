@@ -14,7 +14,7 @@ interface Props {
   dragDropService: DragDropService;
 }
 
-export class BookmarksPaneComponent extends React.Component<Props> {
+export class BookmarkListComponent extends React.Component<Props> {
   render() {
     const { appService, appState, dragDropService } = this.props;
 
@@ -38,7 +38,7 @@ export class BookmarksPaneComponent extends React.Component<Props> {
       );
     });
     return (
-      <div className="bookmarks-pane">
+      <div className="bookmark-list">
         { bookmarkComponents }
         <AddBookmarkComponent add={appService.clickAddBookmark}/>
       </div>
