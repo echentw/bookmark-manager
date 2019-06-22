@@ -1,28 +1,50 @@
+import axios from 'axios';
+
 export class Link {
   public id: string;
   public url: string;
+  public title: string | null;
   public name: string | null;
 
-  constructor({ id, url, name }: { id?: string, url: string, name?: string }) {
+  constructor({ id, url, title, name }: {
+    id?: string,
+    url: string,
+    title?: string,
+    name?: string,
+  }) {
     this.id = id ? id : this.randomId();
     this.url = url;
+    this.title = title ? title : null;
     this.name = name ? name : null;
   }
 
-  withUrl = (url: string): Link => {
+  clone = ({ url, title, name }: { url?: string, title?: string, name?: string }): Link => {
     return new Link({
       id: this.id,
-      url: url,
-      name: this.name,
+      url: url ? url : this.url,
+      title: title ? title : this.title,
+      name: name ? name : this.name,
     });
   }
 
-  withName = (name: string): Link => {
-    return new Link({
-      id: this.id,
-      url: this.url,
-      name: name,
-    });
+  static inferTitle = async (url: string): Promise<string> => {
+    const endpoint = `http://textance.herokuapp.com/title/${url}`;
+    const response: any = await axios.get(endpoint);
+    return response.data;
+  }
+
+  faviconUrl = (): string => {
+    return `https://www.google.com/s2/favicons?domain_url=${this.url}`;
+  }
+
+  displayName = (): string => {
+    if (this.name !== null) {
+      return this.name;
+    }
+    if (this.title !== null) {
+      return this.title;
+    }
+    return this.url;
   }
 
   private randomId() {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { GoPencil, GoClippy } from 'react-icons/go';
-import { FaPen, FaCopy, FaEdit, FaGripVertical, FaGripLines } from 'react-icons/fa';
+import { FaPen, FaCopy, FaEdit, FaGripLines } from 'react-icons/fa';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 import { useDrag } from 'react-dnd';
 import { EditLinkComponent } from './EditLinkComponent';
@@ -45,15 +45,11 @@ export class InnerLinkComponent extends React.Component<InnerProps> {
     const { isDragging, link } = this.props;
 
     const classes = isDragging ? 'link dragging' : 'link';
-    const displayName = link.name === null ? link.url : link.name;
-
-    const faviconUrl = `https://www.google.com/s2/favicons?domain_url=${link.url}`;
 
     return (
       <div className={classes}>
-        <FaGripVertical className="link-icon-grip"/>
-        <img className="link-favicon" src={faviconUrl}/>
-        <a className="link-text" href={link.url}>{displayName}</a>
+        <img className="link-favicon" src={link.faviconUrl()}/>
+        <a className="link-text" href={link.url}>{link.displayName()}</a>
         <FaPen className="link-icon" onClick={this.onClickEdit}/>
         <CopyToClipboard text={link.url}>
           <FaCopy className="link-icon" onClick={this.onClickCopy}/>

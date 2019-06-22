@@ -53,10 +53,13 @@ export class AppComponent extends React.Component {
 class InnerAppComponent extends React.Component<{}, AppState> {
   state = {
     links: [
-      new Link({ url: 'https://youtu.be/W-ulxMYL3ds' }),
-      new Link({ url: 'https://www.skillshare.com/home', name: 'SkillShare' }),
-      new Link({ url: 'https://www.w3schools.com/html/html_css.asp' }),
-      new Link({ url: 'https://react-dnd.github.io/react-dnd/examples/drag-around/custom-drag-layer' }),
+      new Link({ url: 'https://youtu.be/W-ulxMYL3ds', title: 'YouTube' }),
+      new Link({ url: 'https://www.skillshare.com/home', title: 'SkillShare' }),
+      new Link({ url: 'https://www.w3schools.com/html/html_css.asp', title: 'Something', name: 'HTML CSS' }),
+      new Link({
+        url: 'https://react-dnd.github.io/react-dnd/examples/drag-around/custom-drag-layer',
+        title: 'React DnD',
+      }),
     ],
 
     // TODO: I want to set this to null

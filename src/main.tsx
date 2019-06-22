@@ -1,4 +1,4 @@
-import './style.scss';
+import './styles/main.scss';
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
