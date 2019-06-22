@@ -21,9 +21,9 @@ export class Link {
   clone = ({ url, title, name }: { url?: string, title?: string, name?: string }): Link => {
     return new Link({
       id: this.id,
-      url: url ? url : this.url,
-      title: title ? title : this.title,
-      name: name ? name : this.name,
+      url: url === undefined ? this.url : url,
+      title: title === undefined ? this.title : title,
+      name: name === undefined ? this.name : name,
     });
   }
 

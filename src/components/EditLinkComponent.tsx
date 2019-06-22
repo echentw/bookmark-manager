@@ -31,7 +31,9 @@ export class EditLinkComponent extends React.Component<Props> {
   }
 
   onClickSave = async () => {
-    const newLink = this.props.link.clone({ url: this.url, name: this.name });
+    const name = this.name ? this.name : null;
+    const url = this.url;
+    const newLink = this.props.link.clone({ url, name });
     this.props.appService.saveLink(newLink);
     try {
       const title: string = await Link.inferTitle(this.url);
