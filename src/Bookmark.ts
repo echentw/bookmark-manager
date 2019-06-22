@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export class Link {
+export class Bookmark {
   public id: string;
   public url: string;
   public title: string | null;
@@ -18,8 +18,8 @@ export class Link {
     this.name = name ? name : null;
   }
 
-  clone = ({ url, title, name }: { url?: string, title?: string, name?: string }): Link => {
-    return new Link({
+  clone = ({ url, title, name }: { url?: string, title?: string, name?: string }): Bookmark => {
+    return new Bookmark({
       id: this.id,
       url: url === undefined ? this.url : url,
       title: title === undefined ? this.title : title,

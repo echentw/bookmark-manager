@@ -1,4 +1,4 @@
-$link-color: rgb(222,225,229);
+$bookmark-color: rgb(222,225,229);
 
 body {
   background-image: url('./blue_stars.jpg');
@@ -17,7 +17,7 @@ body {
   padding-left: 80px;
 }
 
-.links-pane {
+.bookmarks-pane {
   box-sizing: border-box;
   border-radius: 4px;
   width: 500px;
@@ -29,13 +29,13 @@ body {
   align-items: center;
 }
 
-.link-container {
+.bookmark-container {
   background-color: rgb(80, 80, 80);
   margin-top: 20px;
   border-radius: 4px;
 }
 
-.edit-link {
+.edit-bookmark {
   box-sizing: border-box;
   height: 150px;
   width: 460px;
@@ -48,13 +48,13 @@ body {
   display: flex;
   flex-direction: column;
 
-  .edit-link-label {
+  .edit-bookmark-label {
     font-family: Arial;
     font-size: 14px;
     margin-bottom: 4px;
   }
 
-  .edit-link-input {
+  .edit-bookmark-input {
     border: none;
     padding: 4px;
     margin-bottom: 10px;
@@ -63,7 +63,7 @@ body {
     }
   }
 
-  .edit-link-buttons {
+  .edit-bookmark-buttons {
     flex: 1;
 
     display: flex;
@@ -82,7 +82,7 @@ body {
       justify-content: flex-end;
     }
 
-    .edit-link-button {
+    .edit-bookmark-button {
       width: 60px;
       height: 22px;
 
@@ -126,11 +126,11 @@ body {
   }
 }
 
-.link {
+.bookmark {
   box-sizing: border-box;
   height: 40px;
   width: 460px;
-  background-color: $link-color;
+  background-color: $bookmark-color;
   border-radius: 4px;
 
   display: flex;
@@ -142,8 +142,8 @@ body {
   }
 }
 
-.add-link {
-  @extend .link;
+.add-bookmark {
+  @extend .bookmark;
 
   margin-top: 20px;
   justify-content: center;
@@ -157,7 +157,7 @@ body {
   }
 }
 
-.link-text {
+.bookmark-text {
   flex: 1;
   box-sizing: border-box;
   height: 24px;
@@ -184,7 +184,7 @@ body {
   }
 }
 
-.link-drag-handle {
+.bookmark-drag-handle {
   width: 10px;
   height: 24px;
   background-color: white;
@@ -202,14 +202,14 @@ body {
   }
 }
 
-.link-icon {
+.bookmark-icon {
   margin-right: 6px;
   &:hover {
     color: rgb(100, 100, 250);
   }
 }
 
-.link-favicon {
+.bookmark-favicon {
   margin-left: 10px;
 }
 

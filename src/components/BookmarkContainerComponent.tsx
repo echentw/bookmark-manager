@@ -9,7 +9,7 @@ interface Props {
   rank: number;
 }
 
-export function LinkContainerComponent(props: Props) {
+export function BookmarkContainerComponent(props: Props) {
 	const [{ isOver }, drop] = useDrop({
 		accept: DraggableTypes.LINK,
 		collect: monitor => {
@@ -22,7 +22,7 @@ export function LinkContainerComponent(props: Props) {
 	});
 
   return (
-    <div className="link-container" ref={drop}>
+    <div className="bookmark-container" ref={drop}>
       { props.children }
     </div>
   );

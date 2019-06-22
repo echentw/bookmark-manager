@@ -2,8 +2,8 @@ import * as React from 'react';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
-import { Link } from '../Link';
-import { LinksPaneComponent } from './LinksPaneComponent';
+import { Bookmark } from '../Bookmark';
+import { BookmarksPaneComponent } from './BookmarksPaneComponent';
 import { GreetingComponent } from './GreetingComponent';
 import { DragLayerComponent } from './DragLayerComponent';
 import { CopiedModalComponent } from './CopiedModalComponent';
@@ -15,18 +15,18 @@ export interface CopyContext {
 }
 
 export interface AppState {
-  links: Link[];
-  editingLinkId: string | null;
-  editingNewLink: boolean;
+  bookmarks: Bookmark[];
+  editingBookmarkId: string | null;
+  editingNewBookmark: boolean;
   copyContext: CopyContext;
 }
 
 export interface AppService {
-  saveLink: (link: Link) => void;
-  clickEditLink: (link: Link) => void;
-  cancelEditLink: (link: Link) => void;
-  deleteLink: (link: Link) => void;
-  clickAddLink: () => void;
+  saveBookmark: (bookmark: Bookmark) => void;
+  clickEditBookmark: (bookmark: Bookmark) => void;
+  cancelEditBookmark: (bookmark: Bookmark) => void;
+  deleteBookmark: (bookmark: Bookmark) => void;
+  clickAddBookmark: () => void;
   unleashCopiedModal: (x: number, y: number) => void;
 }
 
@@ -37,7 +37,7 @@ export interface DragDropService {
 }
 
 export const DraggableTypes = {
-  LINK: 'link',
+  LINK: 'bookmark',
 };
 
 export class AppComponent extends React.Component {
@@ -52,19 +52,19 @@ export class AppComponent extends React.Component {
 
 class InnerAppComponent extends React.Component<{}, AppState> {
   state = {
-    links: [
-      new Link({ url: 'https://youtu.be/W-ulxMYL3ds', title: 'YouTube' }),
-      new Link({ url: 'https://www.skillshare.com/home', title: 'SkillShare' }),
-      new Link({ url: 'https://www.w3schools.com/html/html_css.asp', title: 'Something', name: 'HTML CSS' }),
-      new Link({
+    bookmarks: [
+      new Bookmark({ url: 'https://youtu.be/W-ulxMYL3ds', title: 'YouTube' }),
+      new Bookmark({ url: 'https://www.skillshare.com/home', title: 'SkillShare' }),
+      new Bookmark({ url: 'https://www.w3schools.com/html/html_css.asp', title: 'Something', name: 'HTML CSS' }),
+      new Bookmark({
         url: 'https://react-dnd.github.io/react-dnd/examples/drag-around/custom-drag-layer',
         title: 'React DnD',
       }),
     ],
 
     // TODO: I want to set this to null
-    editingLinkId: '',
-    editingNewLink: false,
+    editingBookmarkId: '',
+    editingNewBookmark: false,
 
     copyContext: {
       showingCopiedModal: false,
@@ -77,87 +77,87 @@ class InnerAppComponent extends React.Component<{}, AppState> {
 
   private copiedModalTimeoutId: NodeJS.Timeout | null = null;
 
-  saveLink = (newLink: Link) => {
-    const index = this.state.links.findIndex((link: Link) => {
-      return link.id === newLink.id;
+  saveBookmark = (newBookmark: Bookmark) => {
+    const index = this.state.bookmarks.findIndex((bookmark: Bookmark) => {
+      return bookmark.id === newBookmark.id;
     });
-    this.state.links[index] = newLink;
+    this.state.bookmarks[index] = newBookmark;
     // TODO: what's the proper way to do this?
     this.setState({
-      links: this.state.links,
-      editingLinkId: null,
-      editingNewLink: false,
+      bookmarks: this.state.bookmarks,
+      editingBookmarkId: null,
+      editingNewBookmark: false,
     });
   }
 
-  deleteLink = (link: Link) => {
-    const index = this.state.links.findIndex((thisLink: Link) => {
-      return thisLink.id === link.id;
+  deleteBookmark = (bookmark: Bookmark) => {
+    const index = this.state.bookmarks.findIndex((thisBookmark: Bookmark) => {
+      return thisBookmark.id === bookmark.id;
     });
-    this.state.links.splice(index, 1);
+    this.state.bookmarks.splice(index, 1);
     this.setState({
-      links: this.state.links,
-      editingLinkId: null,
-      editingNewLink: false,
+      bookmarks: this.state.bookmarks,
+      editingBookmarkId: null,
+      editingNewBookmark: false,
     });
   }
 
-  clickEditLink = (link: Link) => {
+  clickEditBookmark = (bookmark: Bookmark) => {
     this.setState({
-      editingLinkId: link.id,
-      editingNewLink: false,
+      editingBookmarkId: bookmark.id,
+      editingNewBookmark: false,
     });
   }
 
-  cancelEditLink = (link: Link) => {
-    if (this.state.editingLinkId === link.id) {
-      if (this.state.editingNewLink) {
-        const index = this.state.links.findIndex((thisLink: Link) => {
-          return thisLink.id === link.id;
+  cancelEditBookmark = (bookmark: Bookmark) => {
+    if (this.state.editingBookmarkId === bookmark.id) {
+      if (this.state.editingNewBookmark) {
+        const index = this.state.bookmarks.findIndex((thisBookmark: Bookmark) => {
+          return thisBookmark.id === bookmark.id;
         });
-        this.state.links.splice(index, 1);
+        this.state.bookmarks.splice(index, 1);
         this.setState({
-          links: this.state.links,
-          editingLinkId: null,
-          editingNewLink: false,
+          bookmarks: this.state.bookmarks,
+          editingBookmarkId: null,
+          editingNewBookmark: false,
         });
       } else {
         this.setState({
-          editingLinkId: null,
-          editingNewLink: false,
+          editingBookmarkId: null,
+          editingNewBookmark: false,
         });
       }
     }
   }
 
-  clickAddLink = () => {
-    const link = new Link({ url: '' });
-    const joined = this.state.links.concat(link);
+  clickAddBookmark = () => {
+    const bookmark = new Bookmark({ url: '' });
+    const joined = this.state.bookmarks.concat(bookmark);
     this.setState({
-      links: joined,
-      editingLinkId: link.id,
-      editingNewLink: true,
+      bookmarks: joined,
+      editingBookmarkId: bookmark.id,
+      editingNewBookmark: true,
     });
   }
 
   isOver = (dropTargetRank: number) => {
     // TODO: do the array operations properly
-    const links: Link[] = this.state.links.map(link => link);
-    const draggedLink = links[this.draggedRank];
+    const bookmarks: Bookmark[] = this.state.bookmarks.map(bookmark => bookmark);
+    const draggedBookmark = bookmarks[this.draggedRank];
     if (this.draggedRank > dropTargetRank) {
       for (let i = this.draggedRank; i > dropTargetRank; --i) {
-        links[i] = links[i - 1];
+        bookmarks[i] = bookmarks[i - 1];
       }
     } else {
       for (let i = this.draggedRank; i < dropTargetRank; ++i) {
-        links[i] = links[i + 1];
+        bookmarks[i] = bookmarks[i + 1];
       }
     }
-    links[dropTargetRank] = draggedLink;
+    bookmarks[dropTargetRank] = draggedBookmark;
 
     this.draggedRank = dropTargetRank;
 
-    this.setState({ links });
+    this.setState({ bookmarks });
   }
 
   beginDrag = (draggedRank: number) => {
@@ -185,11 +185,11 @@ class InnerAppComponent extends React.Component<{}, AppState> {
 
   render() {
     const appService: AppService = {
-      saveLink: this.saveLink,
-      clickEditLink: this.clickEditLink,
-      cancelEditLink: this.cancelEditLink,
-      clickAddLink: this.clickAddLink,
-      deleteLink: this.deleteLink,
+      saveBookmark: this.saveBookmark,
+      clickEditBookmark: this.clickEditBookmark,
+      cancelEditBookmark: this.cancelEditBookmark,
+      clickAddBookmark: this.clickAddBookmark,
+      deleteBookmark: this.deleteBookmark,
       unleashCopiedModal: this.unleashCopiedModal,
     };
 
@@ -201,7 +201,7 @@ class InnerAppComponent extends React.Component<{}, AppState> {
 
     return (
       <div className="app">
-        <LinksPaneComponent
+        <BookmarksPaneComponent
           appService={appService}
           appState={this.state}
           dragDropService={dragDropService}

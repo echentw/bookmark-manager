@@ -3,13 +3,13 @@ import { GoPencil, GoClippy } from 'react-icons/go';
 import { FaPen, FaCopy, FaEdit, FaGripLines } from 'react-icons/fa';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 import { useDrag } from 'react-dnd';
-import { EditLinkComponent } from './EditLinkComponent';
+import { EditBookmarkComponent } from './EditBookmarkComponent';
 
-import { Link } from '../Link';
+import { Bookmark } from '../Bookmark';
 import { AppService, AppState, DragDropService, DraggableTypes } from './AppComponent';
 
 interface PropsBase {
-  link: Link;
+  bookmark: Bookmark;
   editing: boolean;
   appService?: AppService;
 }
@@ -24,10 +24,10 @@ interface InnerProps extends PropsBase {
   isDragging: boolean;
 }
 
-export class InnerLinkComponent extends React.Component<InnerProps> {
+export class InnerBookmarkComponent extends React.Component<InnerProps> {
 
   onClickEdit = () => {
-    this.props.appService.clickEditLink(this.props.link);
+    this.props.appService.clickEditBookmark(this.props.bookmark);
   }
 
   onClickCopy = (event: React.MouseEvent<SVGElement, MouseEvent>) => {
@@ -38,34 +38,34 @@ export class InnerLinkComponent extends React.Component<InnerProps> {
   render() {
     if (this.props.editing) {
       return (
-        <EditLinkComponent link={this.props.link} appService={this.props.appService}/>
+        <EditBookmarkComponent bookmark={this.props.bookmark} appService={this.props.appService}/>
       );
     }
 
-    const { isDragging, link } = this.props;
+    const { isDragging, bookmark } = this.props;
 
-    const classes = isDragging ? 'link dragging' : 'link';
+    const classes = isDragging ? 'bookmark dragging' : 'bookmark';
 
     return (
       <div className={classes}>
-        <img className="link-favicon" src={link.faviconUrl()}/>
-        <a className="link-text" href={link.url}>{link.displayName()}</a>
-        <FaPen className="link-icon" onClick={this.onClickEdit}/>
-        <CopyToClipboard text={link.url}>
-          <FaCopy className="link-icon" onClick={this.onClickCopy}/>
+        <img className="bookmark-favicon" src={bookmark.faviconUrl()}/>
+        <a className="bookmark-text" href={bookmark.url}>{bookmark.displayName()}</a>
+        <FaPen className="bookmark-icon" onClick={this.onClickEdit}/>
+        <CopyToClipboard text={bookmark.url}>
+          <FaCopy className="bookmark-icon" onClick={this.onClickCopy}/>
         </CopyToClipboard>
       </div>
     );
   }
 }
 
-export function LinkComponent(props: Props) {
+export function BookmarkComponent(props: Props) {
   const [{ isDragging }, drag] = useDrag({
     item: {
       type: DraggableTypes.LINK,
-      id: props.link.id,
+      id: props.bookmark.id,
     },
-    canDrag: monitor => props.link.id !== props.appState.editingLinkId,
+    canDrag: monitor => props.bookmark.id !== props.appState.editingBookmarkId,
     begin: monitor => props.dragDropService.beginDrag(props.rank),
     end: monitor => props.dragDropService.endDrag(props.rank),
     collect: monitor => ({
@@ -75,8 +75,8 @@ export function LinkComponent(props: Props) {
 
   return (
     <div ref={drag}>
-      <InnerLinkComponent
-        link={props.link}
+      <InnerBookmarkComponent
+        bookmark={props.bookmark}
         editing={props.editing}
         appService={props.appService}
         isDragging={isDragging}

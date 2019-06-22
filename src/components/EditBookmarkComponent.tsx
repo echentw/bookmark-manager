@@ -1,14 +1,14 @@
 import * as React from 'react';
 
-import { Link } from '../Link';
+import { Bookmark } from '../Bookmark';
 import { AppService } from './AppComponent';
 
 export interface Props {
-  link: Link;
+  bookmark: Bookmark;
   appService: AppService;
 }
 
-export class EditLinkComponent extends React.Component<Props> {
+export class EditBookmarkComponent extends React.Component<Props> {
   private name: string = '';
   private url: string = '';
 
@@ -16,8 +16,8 @@ export class EditLinkComponent extends React.Component<Props> {
   private urlInput: HTMLInputElement = null;
 
   componentDidMount = () => {
-    this.name = this.props.link.name;
-    this.url = this.props.link.url;
+    this.name = this.props.bookmark.name;
+    this.url = this.props.bookmark.url;
 
     this.urlInput.focus();
   }
@@ -33,11 +33,11 @@ export class EditLinkComponent extends React.Component<Props> {
   onClickSave = async () => {
     const name = this.name ? this.name : null;
     const url = this.url;
-    const newLink = this.props.link.clone({ url, name });
-    this.props.appService.saveLink(newLink);
+    const newBookmark = this.props.bookmark.clone({ url, name });
+    this.props.appService.saveBookmark(newBookmark);
     try {
-      const title: string = await Link.inferTitle(this.url);
-      this.props.appService.saveLink(newLink.clone({ title: title }));
+      const title: string = await Bookmark.inferTitle(this.url);
+      this.props.appService.saveBookmark(newBookmark.clone({ title: title }));
     } catch {
       // TODO: fix this
       console.log('something went wrong');
@@ -45,11 +45,11 @@ export class EditLinkComponent extends React.Component<Props> {
   }
 
   onClickCancel = () => {
-    this.props.appService.cancelEditLink(this.props.link);
+    this.props.appService.cancelEditBookmark(this.props.bookmark);
   }
 
   onClickDelete = () => {
-    this.props.appService.deleteLink(this.props.link);
+    this.props.appService.deleteBookmark(this.props.bookmark);
   }
 
   onUrlKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -74,32 +74,32 @@ export class EditLinkComponent extends React.Component<Props> {
 
   render() {
     return (
-      <div className="edit-link">
-        <div className="edit-link-label">URL</div>
+      <div className="edit-bookmark">
+        <div className="edit-bookmark-label">URL</div>
         <input
-          className="edit-link-input"
+          className="edit-bookmark-input"
           ref={(input) => this.urlInput = input}
           type="text"
-          defaultValue={this.props.link.url}
+          defaultValue={this.props.bookmark.url}
           onChange={this.onChangeUrl}
           onKeyDown={this.onUrlKeyDown}
         />
-        <div className="edit-link-label">Name</div>
+        <div className="edit-bookmark-label">Name</div>
         <input
-          className="edit-link-input"
+          className="edit-bookmark-input"
           ref={(input) => this.nameInput = input}
           type="text"
-          defaultValue={this.props.link.name}
+          defaultValue={this.props.bookmark.name}
           onChange={this.onChangeName}
           onKeyDown={this.onNameKeyDown}
         />
-        <div className="edit-link-buttons">
+        <div className="edit-bookmark-buttons">
           <div className="left-buttons">
-            <button className="edit-link-button delete" onClick={this.onClickDelete}>Delete</button>
+            <button className="edit-bookmark-button delete" onClick={this.onClickDelete}>Delete</button>
           </div>
           <div className="right-buttons">
-            <button className="edit-link-button cancel" onClick={this.onClickCancel}>Cancel</button>
-            <button className="edit-link-button save" onClick={this.onClickSave}>Save</button>
+            <button className="edit-bookmark-button cancel" onClick={this.onClickCancel}>Cancel</button>
+            <button className="edit-bookmark-button save" onClick={this.onClickSave}>Save</button>
           </div>
         </div>
       </div>

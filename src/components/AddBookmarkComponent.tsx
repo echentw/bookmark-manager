@@ -6,10 +6,10 @@ interface Props {
   add: () => void;
 }
 
-export class AddLinkComponent extends React.Component<Props> {
+export class AddBookmarkComponent extends React.Component<Props> {
   render() {
     return (
-      <div className="add-link" onClick={this.props.add}>
+      <div className="add-bookmark" onClick={this.props.add}>
         <IconContext.Provider value={{ className: 'fa-plus' }}>
           <FaPlus/>
         </IconContext.Provider>

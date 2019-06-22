@@ -2,7 +2,7 @@ import * as React from 'react';
 import { DragLayerMonitor, useDragLayer, XYCoord } from 'react-dnd';
 
 import { AppState } from './AppComponent';
-import { InnerLinkComponent } from './LinkComponent';
+import { InnerBookmarkComponent } from './BookmarkComponent';
 
 interface Props {
   appState: AppState;
@@ -50,12 +50,12 @@ export function DragLayerComponent(props: Props) {
   let dragPreviewComponent: React.ReactElement = null;
 
   if (isDragging) {
-    const linkId = item.id;
-    const link = props.appState.links.find((link) => link.id === linkId);
+    const bookmarkId = item.id;
+    const bookmark = props.appState.bookmarks.find((bookmark) => bookmark.id === bookmarkId);
 
     dragPreviewComponent = (
-      <InnerLinkComponent
-        link={link}
+      <InnerBookmarkComponent
+        bookmark={bookmark}
         editing={false}
         isDragging={false}
       />
