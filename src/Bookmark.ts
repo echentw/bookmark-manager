@@ -47,7 +47,7 @@ export class Bookmark {
     return this.url;
   }
 
-  private randomId() {
+  private randomId(): string {
     const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let id = '';
     for (let i = 0; i < 8; ++i) {

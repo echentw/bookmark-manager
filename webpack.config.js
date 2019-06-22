@@ -1,5 +1,7 @@
 const path = require('path');
 
+// TODO: copy index.html and manifest.json over to dist/
+
 module.exports = {
   entry: path.join(__dirname, '/src/main.tsx'),
   output: {
