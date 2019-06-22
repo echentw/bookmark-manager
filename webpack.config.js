@@ -1,6 +1,5 @@
 const path = require('path');
-
-// TODO: copy index.html and manifest.json over to dist/
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: path.join(__dirname, '/src/main.tsx'),
@@ -46,8 +45,14 @@ module.exports = {
           },
         ],
       }
-    ]
+    ],
   },
+  plugins: [
+    new CopyPlugin([
+      { from: 'index.html', to: 'index.html', toType: 'file', force: true },
+      { from: 'manifest.json', to: 'manifest.json', toType: 'file', force: true },
+    ]),
+  ],
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".scss"]
   },
