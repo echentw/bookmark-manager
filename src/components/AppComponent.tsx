@@ -173,7 +173,6 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     const showContext = { showingCopiedModal: true, x, y };
 
     this.setState({ copyContext: showContext }, () => {
-      console.log('setting state to show');
       const copiedModalTimeoutId = setTimeout(() => {
         if (this.copiedModalTimeoutId === copiedModalTimeoutId) {
           this.setState({ copyContext: hideContext });
