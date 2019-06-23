@@ -1,4 +1,4 @@
-$bookmark-color: rgb(222,225,229);
+@import './bookmark';
 
 body {
   background-image: url('./blue_stars.jpg');
@@ -27,120 +27,52 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  .bookmark-container {
+    background-color: rgb(80, 80, 80);
+    margin-top: 20px;
+    border-radius: 4px;
+  }
 }
 
-.bookmark-container {
-  background-color: rgb(80, 80, 80);
-  margin-top: 20px;
-  border-radius: 4px;
-}
 
 .edit-bookmark {
-  box-sizing: border-box;
-  height: 150px;
-  width: 460px;
-  background-color: #AEE2FF;
-  border-radius: 4px;
-  padding: 6px;
-  padding-top: 12px;
-  padding-bottom: 8px;
+  @extend .bookmark;
 
-  display: flex;
-  flex-direction: column;
+  // copied from .bookmark-favicon
+  .bookmark-favicon {
+    margin-left: 10px;
+    width: 16px;
+    height: 16px;
+  }
 
-  .edit-bookmark-label {
-    font-family: Arial;
-    font-size: 14px;
-    margin-bottom: 4px;
+  // copied from .bookmark-icon
+  .phantom-icon {
+    width: 12px;
+    margin-right: 6px;
+    &:hover {
+      color: rgb(100, 100, 250);
+    }
   }
 
   .edit-bookmark-input {
+    flex: 1;
+
+    box-sizing: border-box;
+
+    height: 24px;
+    margin-left: 4px;
+    margin-right: 6px;
+
     border: none;
     padding: 4px;
-    margin-bottom: 10px;
+
     &:focus {
       outline-width: 0;
     }
   }
-
-  .edit-bookmark-buttons {
-    flex: 1;
-
-    display: flex;
-    flex-direction: row;
-    // justify-content: flex-end;
-    align-items: flex-end;
-
-    .left-buttons {
-      flex: 1;
-    }
-
-    .right-buttons {
-      flex: 1;
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-    }
-
-    .edit-bookmark-button {
-      width: 60px;
-      height: 22px;
-
-      border: none;
-      &:focus {
-        outline-width: 0;
-      }
-
-      &.save {
-        margin-left: 10px;
-
-        background-color: rgb(0, 160, 0);
-        &:hover {
-          background-color: rgb(0, 140, 0);
-        }
-        &:active {
-          background-color: rgb(0, 100, 0);
-        }
-      }
-
-      &.cancel {
-        background-color: rgb(160, 160, 160);
-        &:hover {
-          background-color: rgb(140, 140, 140);
-        }
-        &:active {
-          background-color: rgb(100, 100, 100);
-        }
-      }
-
-      &.delete {
-        background-color: rgb(240, 0, 0);
-        &:hover {
-          background-color: rgb(200, 0, 0);
-        }
-        &:active {
-          background-color: rgb(140, 0, 0);
-        }
-      }
-    }
-  }
 }
 
-.bookmark {
-  box-sizing: border-box;
-  height: 40px;
-  width: 460px;
-  background-color: $bookmark-color;
-  border-radius: 4px;
-
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  &.dragging {
-    opacity: 0;
-  }
-}
 
 .add-bookmark {
   @extend .bookmark;
@@ -149,70 +81,12 @@ body {
   justify-content: center;
 
   &:hover {
-    background-color: rgb(100, 180, 250);
+    background-color: rgb(200, 200, 200);
     cursor: default;
   }
   &:active {
-    background-color: rgb(80, 160, 230);
+    background-color: rgb(180, 180, 180);
   }
-}
-
-.bookmark-text {
-  flex: 1;
-  box-sizing: border-box;
-  height: 24px;
-  width: 480px;
-  border: none;
-  padding: 4px;
-  margin-left: 4px;
-  margin-right: 6px;
-
-  overflow: hidden;
-  font-family: Arial;
-  font-size: 12px;
-  white-space: pre;
-  text-decoration: none;
-  color: black;
-
-  background-color: rgba(0, 0, 0, 0);
-  &:hover {
-    cursor: pointer;
-  }
-  &:focus {
-    cursor: pointer;
-    outline-width: 0;
-  }
-}
-
-.bookmark-drag-handle {
-  width: 10px;
-  height: 24px;
-  background-color: white;
-  border: none;
-
-  &:focus {
-    outline-width: 0;
-  }
-  &:hover {
-    cursor: grab;
-  }
-  &:active {
-    background-color: lightblue;
-    cursor: grabbing;
-  }
-}
-
-.bookmark-icon {
-  margin-right: 6px;
-  &:hover {
-    color: rgb(100, 100, 250);
-  }
-}
-
-.bookmark-favicon {
-  margin-left: 10px;
-  width: 16px;
-  height: 16px;
 }
 
 .greeting {
@@ -246,7 +120,6 @@ body {
     justify-content: flex-end;
     align-items: flex-end;
   }
-
 }
 
 .copied-modal {

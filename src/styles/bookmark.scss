@@ -1,0 +1,58 @@
+$bookmark-color: rgb(222,225,229);
+
+.bookmark {
+  box-sizing: border-box;
+  height: 40px;
+  width: 460px;
+  background-color: $bookmark-color;
+  border-radius: 4px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &.dragging {
+    opacity: 0;
+  }
+
+  .bookmark-icon {
+    width: 12px;
+    margin-right: 6px;
+    &:hover {
+      color: rgb(100, 100, 250);
+    }
+  }
+
+  .bookmark-favicon {
+    width: 100px;
+    margin-left: 10px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .bookmark-text {
+    flex: 1;
+    box-sizing: border-box;
+    height: 24px;
+    border: none;
+    padding: 4px;
+    margin-left: 4px;
+    margin-right: 6px;
+
+    overflow: hidden;
+    font-family: Arial;
+    font-size: 12px;
+    white-space: pre;
+    text-decoration: none;
+    color: black;
+
+    background-color: rgba(0, 0, 0, 0);
+    &:hover {
+      cursor: pointer;
+    }
+    &:focus {
+      cursor: pointer;
+      outline-width: 0;
+    }
+  }
+}

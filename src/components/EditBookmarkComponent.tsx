@@ -46,27 +46,26 @@ export class EditBookmarkComponent extends React.Component<Props> {
     }
   }
 
+  onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    this.onClickCancel();
+  }
+
   render() {
+    const { bookmark } = this.props;
     return (
       <div className="edit-bookmark">
-        <div className="edit-bookmark-label">Name</div>
+        <img className="bookmark-favicon" src={bookmark.faviconUrl}/>
         <input
           className="edit-bookmark-input"
           ref={(input) => this.nameInput = input}
           type="text"
-          defaultValue={this.props.bookmark.name}
+          defaultValue={bookmark.displayName()}
           onChange={this.onChangeName}
           onKeyDown={this.onKeyDown}
+          onBlur={this.onBlur}
         />
-        <div className="edit-bookmark-buttons">
-          <div className="left-buttons">
-            <button className="edit-bookmark-button delete" onClick={this.onClickDelete}>Delete</button>
-          </div>
-          <div className="right-buttons">
-            <button className="edit-bookmark-button cancel" onClick={this.onClickCancel}>Cancel</button>
-            <button className="edit-bookmark-button save" onClick={this.onClickSave}>Save</button>
-          </div>
-        </div>
+        <div className="phantom-icon"/>
+        <div className="phantom-icon"/>
       </div>
     );
   }
