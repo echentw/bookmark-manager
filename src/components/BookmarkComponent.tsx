@@ -48,7 +48,7 @@ export class InnerBookmarkComponent extends React.Component<InnerProps> {
 
     return (
       <div className={classes}>
-        <img className="bookmark-favicon" src={bookmark.faviconUrl()}/>
+        <img className="bookmark-favicon" src={bookmark.faviconUrl}/>
         <a className="bookmark-text" href={bookmark.url}>{bookmark.displayName()}</a>
         <FaPen className="bookmark-icon" onClick={this.onClickEdit}/>
         <CopyToClipboard text={bookmark.url}>

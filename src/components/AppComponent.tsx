@@ -17,7 +17,6 @@ export interface CopyContext {
 export interface AppState {
   bookmarks: Bookmark[];
   editingBookmarkId: string | null;
-  editingNewBookmark: boolean;
   copyContext: CopyContext;
 }
 
@@ -53,18 +52,30 @@ export class AppComponent extends React.Component {
 class InnerAppComponent extends React.Component<{}, AppState> {
   state = {
     bookmarks: [
-      new Bookmark({ url: 'https://youtu.be/W-ulxMYL3ds', title: 'YouTube' }),
-      new Bookmark({ url: 'https://www.skillshare.com/home', title: 'SkillShare' }),
-      new Bookmark({ url: 'https://www.w3schools.com/html/html_css.asp', title: 'Something', name: 'HTML CSS' }),
       new Bookmark({
-        url: 'https://react-dnd.github.io/react-dnd/examples/drag-around/custom-drag-layer',
-        title: 'React DnD',
+        url: 'https://developers.chrome.com/extensions/bookmarks',
+        title: 'chrome.bookmarks - Google Chrome',
+        faviconUrl: 'https://www.google.com/images/icons/product/chrome-32.png',
+      }),
+      new Bookmark({
+        url: 'chrome://extensions/',
+        title: 'Extensions',
+        faviconUrl: '',
+      }),
+      new Bookmark({
+        url: 'https://www.google.com/search?q=get+favicon+of+web…s=chrome..69i57.6034j0j4&sourceid=chrome&ie=UTF-8',
+        title: 'get favicon of website that you are logged into - Google Search',
+        faviconUrl: 'https://www.google.com/favicon.ico',
+      }),
+      new Bookmark({
+        url: 'https://stackoverflow.com/questions/1990475/how-can-i-retrieve-the-favicon-of-a-website',
+        title: 'web - How can I retrieve the favicon of a website? - Stack Overflow',
+        faviconUrl: 'https://cdn.sstatic.net/Sites/stackoverflow/img/favicon.ico?v=4f32ecc8f43d',
       }),
     ],
 
     // TODO: I want to set this to null
     editingBookmarkId: '',
-    editingNewBookmark: false,
 
     copyContext: {
       showingCopiedModal: false,
@@ -86,7 +97,6 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     this.setState({
       bookmarks: this.state.bookmarks,
       editingBookmarkId: null,
-      editingNewBookmark: false,
     });
   }
 
@@ -98,46 +108,24 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     this.setState({
       bookmarks: this.state.bookmarks,
       editingBookmarkId: null,
-      editingNewBookmark: false,
     });
   }
 
   clickEditBookmark = (bookmark: Bookmark) => {
     this.setState({
       editingBookmarkId: bookmark.id,
-      editingNewBookmark: false,
     });
   }
 
   cancelEditBookmark = (bookmark: Bookmark) => {
     if (this.state.editingBookmarkId === bookmark.id) {
-      if (this.state.editingNewBookmark) {
-        const index = this.state.bookmarks.findIndex((thisBookmark: Bookmark) => {
-          return thisBookmark.id === bookmark.id;
-        });
-        this.state.bookmarks.splice(index, 1);
-        this.setState({
-          bookmarks: this.state.bookmarks,
-          editingBookmarkId: null,
-          editingNewBookmark: false,
-        });
-      } else {
-        this.setState({
-          editingBookmarkId: null,
-          editingNewBookmark: false,
-        });
-      }
+      this.setState({ editingBookmarkId: null });
     }
   }
 
   clickAddBookmark = () => {
-    const bookmark = new Bookmark({ url: '' });
-    const joined = this.state.bookmarks.concat(bookmark);
-    this.setState({
-      bookmarks: joined,
-      editingBookmarkId: bookmark.id,
-      editingNewBookmark: true,
-    });
+    // TODO: unimplemented
+    console.log('this is unimplemented!');
   }
 
   isOver = (dropTargetRank: number) => {

@@ -1,50 +1,43 @@
-import axios from 'axios';
-
 export class Bookmark {
-  public id: string;
-  public url: string;
-  public title: string | null;
-  public name: string | null;
+  public readonly id: string;
+  public readonly url: string;
+  public readonly faviconUrl: string;
+  public readonly title: string;
+  public name: string;
 
-  constructor({ id, url, title, name }: {
-    id?: string,
+  constructor({ url, title, faviconUrl, id, name }: {
     url: string,
-    title?: string,
+    title: string,
+    faviconUrl: string,
+    id?: string
     name?: string,
   }) {
-    this.id = id ? id : this.randomId();
     this.url = url;
-    this.title = title ? title : null;
-    this.name = name ? name : null;
+    this.title = title;
+    this.faviconUrl = faviconUrl;
+
+    this.id = id ? id : this.randomId();
+    this.name = name ? name : '';
   }
 
-  clone = ({ url, title, name }: { url?: string, title?: string, name?: string }): Bookmark => {
-    return new Bookmark({
-      id: this.id,
-      url: url === undefined ? this.url : url,
-      title: title === undefined ? this.title : title,
-      name: name === undefined ? this.name : name,
-    });
-  }
-
-  static inferTitle = async (url: string): Promise<string> => {
-    const endpoint = `http://textance.herokuapp.com/title/${url}`;
-    const response: any = await axios.get(endpoint);
-    return response.data;
-  }
-
-  faviconUrl = (): string => {
-    return `https://www.google.com/s2/favicons?domain_url=${this.url}`;
-  }
-
-  displayName = (): string => {
-    if (this.name !== null) {
+  public displayName = (): string => {
+    if (this.name !== '') {
       return this.name;
     }
-    if (this.title !== null) {
+    if (this.title !== '') {
       return this.title;
     }
     return this.url;
+  }
+
+  public withName = (name: string): Bookmark => {
+    return new Bookmark({
+      url: this.url,
+      title: this.title,
+      faviconUrl: this.faviconUrl,
+      id: this.id,
+      name: name,
+    });
   }
 
   private randomId(): string {
