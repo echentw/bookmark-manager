@@ -3,10 +3,13 @@ import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
 import { Bookmark } from '../Bookmark';
+import { ChromeHelpers, TabInfo } from '../ChromeHelpers';
+
 import { BookmarkListComponent } from './BookmarkListComponent';
 import { GreetingComponent } from './GreetingComponent';
 import { DragLayerComponent } from './DragLayerComponent';
 import { CopiedModalComponent } from './CopiedModalComponent';
+import { AddBookmarkModalComponent } from './AddBookmarkModalComponent';
 
 export interface CopyContext {
   showingCopiedModal: boolean;
@@ -14,10 +17,16 @@ export interface CopyContext {
   y: number;
 }
 
+export interface AddBookmarkContext {
+  addingBookmark: boolean;
+  tabs: TabInfo[];
+}
+
 export interface AppState {
   bookmarks: Bookmark[];
   editingBookmarkId: string | null;
   copyContext: CopyContext;
+  addBookmarkContext: AddBookmarkContext;
 }
 
 export interface AppService {
@@ -27,6 +36,8 @@ export interface AppService {
   deleteBookmark: (bookmark: Bookmark) => void;
   clickAddBookmark: () => void;
   unleashCopiedModal: (x: number, y: number) => void;
+  cancelAddBookmarks: () => void;
+  saveAddBookmarks: (bookmarks: Bookmark[]) => void;
 }
 
 export interface DragDropService {
@@ -82,6 +93,11 @@ class InnerAppComponent extends React.Component<{}, AppState> {
       x: 0,
       y: 0,
     },
+
+    addBookmarkContext: {
+      addingBookmark: false,
+      tabs: [] as TabInfo[],
+    },
   };
 
   private draggedRank: number | null = null;
@@ -123,9 +139,19 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     }
   }
 
-  clickAddBookmark = () => {
+  clickAddBookmark = async () => {
     // TODO: unimplemented
-    console.log('this is unimplemented!');
+    try {
+      const tabInfos = await ChromeHelpers.getTabInfos();
+      this.setState({
+        addBookmarkContext: {
+          addingBookmark: true,
+          tabs: tabInfos,
+        },
+      });
+    } catch(e) {
+      console.log('something went wrong!');
+    }
   }
 
   isOver = (dropTargetRank: number) => {
@@ -170,6 +196,26 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     });
   }
 
+  cancelAddBookmarks = () => {
+    this.setState({
+      addBookmarkContext: {
+        addingBookmark: false,
+        tabs: [],
+      },
+    });
+  }
+
+  saveAddBookmarks = (bookmarks: Bookmark[]) => {
+    const allBookmarks = this.state.bookmarks.concat(bookmarks);
+    this.setState({
+      bookmarks: allBookmarks,
+      addBookmarkContext: {
+        addingBookmark: false,
+        tabs: [],
+      },
+    });
+  }
+
   render() {
     const appService: AppService = {
       saveBookmark: this.saveBookmark,
@@ -178,6 +224,8 @@ class InnerAppComponent extends React.Component<{}, AppState> {
       clickAddBookmark: this.clickAddBookmark,
       deleteBookmark: this.deleteBookmark,
       unleashCopiedModal: this.unleashCopiedModal,
+      cancelAddBookmarks: this.cancelAddBookmarks,
+      saveAddBookmarks: this.saveAddBookmarks,
     };
 
     const dragDropService: DragDropService = {
@@ -196,6 +244,10 @@ class InnerAppComponent extends React.Component<{}, AppState> {
         <GreetingComponent name={'Eric'}/>
         <DragLayerComponent appState={this.state}/>
         <CopiedModalComponent copyContext={this.state.copyContext}/>
+        <AddBookmarkModalComponent
+          addBookmarkContext={this.state.addBookmarkContext}
+          appService={appService}
+        />
       </div>
     );
   }

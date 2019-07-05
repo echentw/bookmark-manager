@@ -1,4 +1,5 @@
 @import './bookmark';
+@import './add-bookmark';
 
 body {
   background-image: url('./blue_stars.jpg');
@@ -91,6 +92,7 @@ body {
 
 .greeting {
   flex: 1;
+  min-width: 420px;
 
   display: flex;
   flex-direction: column;

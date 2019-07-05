@@ -1,0 +1,79 @@
+$bookmark-color: rgb(222,225,229);
+$highlight-border: rgb(0,148,255);
+
+.add-bookmark-layer {
+  display: flex;
+
+  .add-bookmark-modal {
+    margin: 150px;
+
+    flex: 1;
+    min-width: 500px;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: rgba(160, 160, 160, 0.9);
+
+    .tab-infos-outer-container {
+      flex: 1;
+
+      // TODO: handle overflow
+
+      .tab-infos-inner-container {
+        display: flex;
+
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+
+        .tab-info {
+          box-sizing: border-box;
+
+          height: 80px;
+          width: 160px;
+          background-color: $bookmark-color;
+          margin: 16px;
+
+          &.selected {
+            border-style: solid;
+            border-width: 4px;
+            border-color: $highlight-border;
+          }
+        }
+      }
+    }
+
+    .buttons-container {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: flex-end;
+
+      height: 60px;
+
+      .button {
+        width: 120px;
+        height: 40px;
+        margin: 10px;
+        background-color: rgb(200, 200, 200);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        font-family: Arial;
+        font-size: 14px;
+
+        &:hover {
+          cursor: default;
+          background-color: rgb(190, 190, 190);
+        }
+        &:active {
+          background-color: rgb(180, 180, 180);
+        }
+      }
+    }
+  }
+}

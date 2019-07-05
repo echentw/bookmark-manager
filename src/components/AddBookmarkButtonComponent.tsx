@@ -6,7 +6,7 @@ interface Props {
   add: () => void;
 }
 
-export class AddBookmarkComponent extends React.Component<Props> {
+export class AddBookmarkButtonComponent extends React.Component<Props> {
   render() {
     return (
       <div className="add-bookmark" onClick={this.props.add}>

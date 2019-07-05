@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Bookmark } from '../Bookmark';
 import { BookmarkComponent } from './BookmarkComponent';
 import { BookmarkContainerComponent } from './BookmarkContainerComponent';
-import { AddBookmarkComponent } from './AddBookmarkComponent';
+import { AddBookmarkButtonComponent } from './AddBookmarkButtonComponent';
 import { EditBookmarkComponent } from './EditBookmarkComponent';
 
 import { AppService, AppState, DragDropService } from './AppComponent';
@@ -40,7 +40,7 @@ export class BookmarkListComponent extends React.Component<Props> {
     return (
       <div className="bookmark-list">
         { bookmarkComponents }
-        <AddBookmarkComponent add={appService.clickAddBookmark}/>
+        <AddBookmarkButtonComponent add={appService.clickAddBookmark}/>
       </div>
     );
   }
