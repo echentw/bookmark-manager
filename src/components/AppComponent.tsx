@@ -11,6 +11,8 @@ import { DragLayerComponent } from './DragLayerComponent';
 import { CopiedModalComponent } from './CopiedModalComponent';
 import { AddBookmarkModalComponent } from './AddBookmarkModalComponent';
 
+import * as dummyBookmarkData from './bookmarks.json';
+
 export interface CopyContext {
   showingCopiedModal: boolean;
   x: number;
@@ -62,28 +64,13 @@ export class AppComponent extends React.Component {
 
 class InnerAppComponent extends React.Component<{}, AppState> {
   state = {
-    bookmarks: [
-      new Bookmark({
-        url: 'https://developers.chrome.com/extensions/bookmarks',
-        title: 'chrome.bookmarks - Google Chrome',
-        faviconUrl: 'https://www.google.com/images/icons/product/chrome-32.png',
-      }),
-      new Bookmark({
-        url: 'chrome://extensions/',
-        title: 'Extensions',
-        faviconUrl: '',
-      }),
-      new Bookmark({
-        url: 'https://www.google.com/search?q=get+favicon+of+web…s=chrome..69i57.6034j0j4&sourceid=chrome&ie=UTF-8',
-        title: 'get favicon of website that you are logged into - Google Search',
-        faviconUrl: 'https://www.google.com/favicon.ico',
-      }),
-      new Bookmark({
-        url: 'https://stackoverflow.com/questions/1990475/how-can-i-retrieve-the-favicon-of-a-website',
-        title: 'web - How can I retrieve the favicon of a website? - Stack Overflow',
-        faviconUrl: 'https://cdn.sstatic.net/Sites/stackoverflow/img/favicon.ico?v=4f32ecc8f43d',
-      }),
-    ],
+    bookmarks: dummyBookmarkData['bookmarks'].map(data => {
+      return new Bookmark({
+        url: data.url,
+        title: data.title,
+        faviconUrl: data.faviconUrl,
+      });
+    }),
 
     // TODO: I want to set this to null
     editingBookmarkId: '',

@@ -6,7 +6,9 @@
 
     "outDir": "./dist/",
     "noImplicitAny": true,
-    "jsx": "react"
+    "jsx": "react",
+
+    "resolveJsonModule": true
   },
   "exclude": [
     "node_modules"
