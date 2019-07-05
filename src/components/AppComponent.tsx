@@ -8,13 +8,13 @@ import { ChromeHelpers, TabInfo } from '../ChromeHelpers';
 import { BookmarkListComponent } from './BookmarkListComponent';
 import { GreetingComponent } from './GreetingComponent';
 import { DragLayerComponent } from './DragLayerComponent';
-import { CopiedModalComponent } from './CopiedModalComponent';
+import { CopiedToastComponent } from './CopiedToastComponent';
 import { AddBookmarkModalComponent } from './AddBookmarkModalComponent';
 
 import * as dummyBookmarkData from './bookmarks.json';
 
 export interface CopyContext {
-  showingCopiedModal: boolean;
+  showingCopiedToast: boolean;
   x: number;
   y: number;
 }
@@ -37,7 +37,7 @@ export interface AppService {
   cancelEditBookmark: (bookmark: Bookmark) => void;
   deleteBookmark: (bookmark: Bookmark) => void;
   clickAddBookmark: () => void;
-  unleashCopiedModal: (x: number, y: number) => void;
+  unleashCopiedToast: (x: number, y: number) => void;
   cancelAddBookmarks: () => void;
   saveAddBookmarks: (bookmarks: Bookmark[]) => void;
 }
@@ -76,7 +76,7 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     editingBookmarkId: '',
 
     copyContext: {
-      showingCopiedModal: false,
+      showingCopiedToast: false,
       x: 0,
       y: 0,
     },
@@ -89,7 +89,7 @@ class InnerAppComponent extends React.Component<{}, AppState> {
 
   private draggedRank: number | null = null;
 
-  private copiedModalTimeoutId: NodeJS.Timeout | null = null;
+  private copiedToastTimeoutId: NodeJS.Timeout | null = null;
 
   saveBookmark = (newBookmark: Bookmark) => {
     const index = this.state.bookmarks.findIndex((bookmark: Bookmark) => {
@@ -169,17 +169,17 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     this.draggedRank = null;
   }
 
-  unleashCopiedModal = (x: number, y: number) => {
-    const hideContext = { showingCopiedModal: false, x: 0, y: 0 };
-    const showContext = { showingCopiedModal: true, x, y };
+  unleashCopiedToast = (x: number, y: number) => {
+    const hideContext = { showingCopiedToast: false, x: 0, y: 0 };
+    const showContext = { showingCopiedToast: true, x, y };
 
     this.setState({ copyContext: showContext }, () => {
-      const copiedModalTimeoutId = setTimeout(() => {
-        if (this.copiedModalTimeoutId === copiedModalTimeoutId) {
+      const copiedToastTimeoutId = setTimeout(() => {
+        if (this.copiedToastTimeoutId === copiedToastTimeoutId) {
           this.setState({ copyContext: hideContext });
         }
       }, 1000);
-      this.copiedModalTimeoutId = copiedModalTimeoutId;
+      this.copiedToastTimeoutId = copiedToastTimeoutId;
     });
   }
 
@@ -210,7 +210,7 @@ class InnerAppComponent extends React.Component<{}, AppState> {
       cancelEditBookmark: this.cancelEditBookmark,
       clickAddBookmark: this.clickAddBookmark,
       deleteBookmark: this.deleteBookmark,
-      unleashCopiedModal: this.unleashCopiedModal,
+      unleashCopiedToast: this.unleashCopiedToast,
       cancelAddBookmarks: this.cancelAddBookmarks,
       saveAddBookmarks: this.saveAddBookmarks,
     };
@@ -230,7 +230,7 @@ class InnerAppComponent extends React.Component<{}, AppState> {
         />
         <GreetingComponent name={'Eric'}/>
         <DragLayerComponent appState={this.state}/>
-        <CopiedModalComponent copyContext={this.state.copyContext}/>
+        <CopiedToastComponent copyContext={this.state.copyContext}/>
         <AddBookmarkModalComponent
           addBookmarkContext={this.state.addBookmarkContext}
           appService={appService}

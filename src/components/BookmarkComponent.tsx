@@ -32,7 +32,7 @@ export class InnerBookmarkComponent extends React.Component<InnerProps> {
 
   onClickCopy = (event: React.MouseEvent<SVGElement, MouseEvent>) => {
     const { clientX, clientY } = event;
-    this.props.appService.unleashCopiedModal(clientX, clientY);
+    this.props.appService.unleashCopiedToast(clientX, clientY);
   }
 
   render() {

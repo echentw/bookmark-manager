@@ -30,14 +30,14 @@ const itemStyles = (x: number, y: number): React.CSSProperties => {
   };
 };
 
-export class CopiedModalComponent extends React.Component<Props> {
+export class CopiedToastComponent extends React.Component<Props> {
   render() {
-    const { showingCopiedModal, x, y } = this.props.copyContext;
+    const { showingCopiedToast, x, y } = this.props.copyContext;
 
-    const classes = showingCopiedModal ? 'copied-modal animating' : 'copied-modal';
+    const classes = showingCopiedToast ? 'copied-toast animating' : 'copied-toast';
 
     return (
-      <div className="copied-modal-layer" style={layerStyles}>
+      <div className="copied-toast-layer" style={layerStyles}>
         <div className={classes} style={itemStyles(x, y)}>
           URL copied!
         </div>
