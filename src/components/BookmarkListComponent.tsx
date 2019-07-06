@@ -7,11 +7,13 @@ import { AddBookmarkButtonComponent } from './AddBookmarkButtonComponent';
 import { EditBookmarkComponent } from './EditBookmarkComponent';
 
 import { AppService, AppState, DragDropService } from './AppComponent';
+import { CopyUrlContext } from './contexts';
 
 interface Props {
   appService: AppService;
   appState: AppState;
   dragDropService: DragDropService;
+  copyUrlContext: CopyUrlContext;
 }
 
 export class BookmarkListComponent extends React.Component<Props> {
@@ -33,6 +35,7 @@ export class BookmarkListComponent extends React.Component<Props> {
             appState={appState}
             dragDropService={dragDropService}
             rank={rank}
+            copyUrlContext={this.props.copyUrlContext}
           />
         </BookmarkContainerComponent>
       );

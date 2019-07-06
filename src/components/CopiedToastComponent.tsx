@@ -1,14 +1,9 @@
 import * as React from 'react';
 
-import { CopyContext } from './AppComponent';
+import { CopyUrlContext } from './contexts';
 
 interface Props {
-  copyContext: CopyContext;
-}
-
-interface Position {
-  x: number;
-  y: number;
+  copyUrlContext: CopyUrlContext;
 }
 
 // Copy-pasted from DragLayerComponent.tsx
@@ -32,9 +27,10 @@ const itemStyles = (x: number, y: number): React.CSSProperties => {
 
 export class CopiedToastComponent extends React.Component<Props> {
   render() {
-    const { showingCopiedToast, x, y } = this.props.copyContext;
+    const { showingToast, position } = this.props.copyUrlContext.state;
+    const { x, y } = position;
 
-    const classes = showingCopiedToast ? 'copied-toast animating' : 'copied-toast';
+    const classes = showingToast ? 'copied-toast animating' : 'copied-toast';
 
     return (
       <div className="copied-toast-layer" style={layerStyles}>

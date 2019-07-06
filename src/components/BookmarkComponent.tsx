@@ -7,17 +7,19 @@ import { EditBookmarkComponent } from './EditBookmarkComponent';
 
 import { Bookmark } from '../Bookmark';
 import { AppService, AppState, DragDropService, DraggableTypes } from './AppComponent';
+import { CopyUrlContext } from './contexts';
 
 interface PropsBase {
   bookmark: Bookmark;
   editing: boolean;
   appService?: AppService;
+  copyUrlContext?: CopyUrlContext;
 }
 
 export interface Props extends PropsBase {
   dragDropService: DragDropService;
-  appState: AppState,
-  rank: number,
+  appState: AppState;
+  rank: number;
 }
 
 interface InnerProps extends PropsBase {
@@ -32,7 +34,7 @@ export class InnerBookmarkComponent extends React.Component<InnerProps> {
 
   onClickCopy = (event: React.MouseEvent<SVGElement, MouseEvent>) => {
     const { clientX, clientY } = event;
-    this.props.appService.unleashCopiedToast(clientX, clientY);
+    this.props.copyUrlContext.service.showToast(clientX, clientY);
   }
 
   render() {
@@ -80,6 +82,7 @@ export function BookmarkComponent(props: Props) {
         editing={props.editing}
         appService={props.appService}
         isDragging={isDragging}
+        copyUrlContext={props.copyUrlContext}
       />
     </div>
   );
