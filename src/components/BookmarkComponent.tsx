@@ -7,13 +7,14 @@ import { EditBookmarkComponent } from './EditBookmarkComponent';
 
 import { Bookmark } from '../Bookmark';
 import { AppService, AppState, DragDropService, DraggableTypes } from './AppComponent';
-import { CopyUrlContext } from './contexts';
+import { CopyUrlContext, EditBookmarkContext } from './contexts';
 
 interface PropsBase {
   bookmark: Bookmark;
   editing: boolean;
   appService?: AppService;
   copyUrlContext?: CopyUrlContext;
+  editBookmarkContext?: EditBookmarkContext;
 }
 
 export interface Props extends PropsBase {
@@ -29,7 +30,7 @@ interface InnerProps extends PropsBase {
 export class InnerBookmarkComponent extends React.Component<InnerProps> {
 
   onClickEdit = () => {
-    this.props.appService.clickEditBookmark(this.props.bookmark);
+    this.props.editBookmarkContext.service.clickEditBookmarkButton(this.props.bookmark);
   }
 
   onClickCopy = (event: React.MouseEvent<SVGElement, MouseEvent>) => {
@@ -40,7 +41,10 @@ export class InnerBookmarkComponent extends React.Component<InnerProps> {
   render() {
     if (this.props.editing) {
       return (
-        <EditBookmarkComponent bookmark={this.props.bookmark} appService={this.props.appService}/>
+        <EditBookmarkComponent
+          bookmark={this.props.bookmark}
+          editBookmarkContext={this.props.editBookmarkContext}
+        />
       );
     }
 
@@ -67,7 +71,7 @@ export function BookmarkComponent(props: Props) {
       type: DraggableTypes.LINK,
       id: props.bookmark.id,
     },
-    canDrag: monitor => props.bookmark.id !== props.appState.editingBookmarkId,
+    canDrag: monitor => props.bookmark.id !== props.editBookmarkContext.state.editingBookmarkId,
     begin: monitor => props.dragDropService.beginDrag(props.rank),
     end: monitor => props.dragDropService.endDrag(props.rank),
     collect: monitor => ({
@@ -83,6 +87,7 @@ export function BookmarkComponent(props: Props) {
         appService={props.appService}
         isDragging={isDragging}
         copyUrlContext={props.copyUrlContext}
+        editBookmarkContext={props.editBookmarkContext}
       />
     </div>
   );

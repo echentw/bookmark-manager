@@ -7,21 +7,23 @@ import { AddBookmarkButtonComponent } from './AddBookmarkButtonComponent';
 import { EditBookmarkComponent } from './EditBookmarkComponent';
 
 import { AppService, AppState, DragDropService } from './AppComponent';
-import { CopyUrlContext } from './contexts';
+import { CopyUrlContext, EditBookmarkContext } from './contexts';
 
 interface Props {
   appService: AppService;
   appState: AppState;
   dragDropService: DragDropService;
+  editBookmarkContext: EditBookmarkContext;
   copyUrlContext: CopyUrlContext;
 }
 
 export class BookmarkListComponent extends React.Component<Props> {
   render() {
     const { appService, appState, dragDropService } = this.props;
+    const { copyUrlContext, editBookmarkContext } = this.props;
 
     const bookmarkComponents = appState.bookmarks.map((bookmark: Bookmark, rank: number) => {
-      const editing = bookmark.id === appState.editingBookmarkId;
+      const editing = bookmark.id === editBookmarkContext.state.editingBookmarkId;
       return (
         <BookmarkContainerComponent
           key={bookmark.id}
@@ -35,7 +37,8 @@ export class BookmarkListComponent extends React.Component<Props> {
             appState={appState}
             dragDropService={dragDropService}
             rank={rank}
-            copyUrlContext={this.props.copyUrlContext}
+            editBookmarkContext={editBookmarkContext}
+            copyUrlContext={copyUrlContext}
           />
         </BookmarkContainerComponent>
       );

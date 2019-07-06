@@ -12,6 +12,8 @@ import { CopiedToastComponent } from './CopiedToastComponent';
 import { AddBookmarkModalComponent } from './AddBookmarkModalComponent';
 
 import { CopyUrlState, CopyUrlService, CopyUrlContext } from './contexts';
+import { EditBookmarkState, EditBookmarkService, EditBookmarkContext } from './contexts';
+
 import * as dummyBookmarkData from './bookmarks.json';
 
 export interface AddBookmarkContext {
@@ -21,16 +23,12 @@ export interface AddBookmarkContext {
 
 export interface AppState {
   bookmarks: Bookmark[];
-  editingBookmarkId: string | null;
+  editBookmarkState: EditBookmarkState;
   copyUrlState: CopyUrlState;
   addBookmarkContext: AddBookmarkContext;
 }
 
 export interface AppService {
-  saveBookmark: (bookmark: Bookmark) => void;
-  clickEditBookmark: (bookmark: Bookmark) => void;
-  cancelEditBookmark: (bookmark: Bookmark) => void;
-  deleteBookmark: (bookmark: Bookmark) => void;
   clickAddBookmark: () => void;
   cancelAddBookmarks: () => void;
   saveAddBookmarks: (bookmarks: Bookmark[]) => void;
@@ -66,8 +64,10 @@ class InnerAppComponent extends React.Component<{}, AppState> {
       });
     }),
 
-    // TODO: I want to set this to null
-    editingBookmarkId: '',
+    editBookmarkState: {
+      // TODO: I want to set this to null
+      editingBookmarkId: '',
+    },
 
     copyUrlState: {
       showingToast: false,
@@ -85,40 +85,49 @@ class InnerAppComponent extends React.Component<{}, AppState> {
 
   private draggedRank: number | null = null;
 
-  saveBookmark = (newBookmark: Bookmark) => {
-    const index = this.state.bookmarks.findIndex((bookmark: Bookmark) => {
-      return bookmark.id === newBookmark.id;
-    });
-    this.state.bookmarks[index] = newBookmark;
-    // TODO: what's the proper way to do this?
-    this.setState({
-      bookmarks: this.state.bookmarks,
-      editingBookmarkId: null,
-    });
-  }
-
-  deleteBookmark = (bookmark: Bookmark) => {
-    const index = this.state.bookmarks.findIndex((thisBookmark: Bookmark) => {
-      return thisBookmark.id === bookmark.id;
-    });
-    this.state.bookmarks.splice(index, 1);
-    this.setState({
-      bookmarks: this.state.bookmarks,
-      editingBookmarkId: null,
-    });
-  }
-
-  clickEditBookmark = (bookmark: Bookmark) => {
-    this.setState({
-      editingBookmarkId: bookmark.id,
-    });
-  }
-
-  cancelEditBookmark = (bookmark: Bookmark) => {
-    if (this.state.editingBookmarkId === bookmark.id) {
-      this.setState({ editingBookmarkId: null });
-    }
-  }
+  editBookmarkService: EditBookmarkService = {
+    clickEditBookmarkButton: (bookmark: Bookmark) => {
+      this.setState({
+        editBookmarkState: {
+          editingBookmarkId: bookmark.id,
+        },
+      });
+    },
+    cancelEditBookmark: (bookmark: Bookmark) => {
+      if (this.state.editBookmarkState.editingBookmarkId === bookmark.id) {
+        this.setState({
+          editBookmarkState: {
+            editingBookmarkId: null,
+          },
+        });
+      }
+    },
+    saveEditBookmark: (newBookmark: Bookmark) => {
+      const index = this.state.bookmarks.findIndex((bookmark: Bookmark) => {
+        return bookmark.id === newBookmark.id;
+      });
+      this.state.bookmarks[index] = newBookmark;
+      // TODO: what's the proper way to do this?
+      this.setState({
+        bookmarks: this.state.bookmarks,
+        editBookmarkState: {
+          editingBookmarkId: null,
+        },
+      });
+    },
+    deleteBookmark: (bookmark: Bookmark) => {
+      const index = this.state.bookmarks.findIndex((thisBookmark: Bookmark) => {
+        return thisBookmark.id === bookmark.id;
+      });
+      this.state.bookmarks.splice(index, 1);
+      this.setState({
+        bookmarks: this.state.bookmarks,
+        editBookmarkState: {
+          editingBookmarkId: null,
+        },
+      });
+    },
+  };
 
   clickAddBookmark = async () => {
     // TODO: unimplemented
@@ -206,12 +215,13 @@ class InnerAppComponent extends React.Component<{}, AppState> {
       service: this.copyUrlService,
     };
 
+    const editBookmarkContext: EditBookmarkContext = {
+      state: this.state.editBookmarkState,
+      service: this.editBookmarkService,
+    };
+
     const appService: AppService = {
-      saveBookmark: this.saveBookmark,
-      clickEditBookmark: this.clickEditBookmark,
-      cancelEditBookmark: this.cancelEditBookmark,
       clickAddBookmark: this.clickAddBookmark,
-      deleteBookmark: this.deleteBookmark,
       cancelAddBookmarks: this.cancelAddBookmarks,
       saveAddBookmarks: this.saveAddBookmarks,
     };
@@ -229,6 +239,7 @@ class InnerAppComponent extends React.Component<{}, AppState> {
           appState={this.state}
           dragDropService={dragDropService}
           copyUrlContext={copyUrlContext}
+          editBookmarkContext={editBookmarkContext}
         />
         <GreetingComponent name={'Eric'}/>
         <DragLayerComponent appState={this.state}/>

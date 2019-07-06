@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 import { Bookmark } from '../Bookmark';
-import { AppService } from './AppComponent';
+import { EditBookmarkContext } from './contexts';
 
 export interface Props {
   bookmark: Bookmark;
-  appService: AppService;
+  editBookmarkContext: EditBookmarkContext;
 }
 
 export class EditBookmarkComponent extends React.Component<Props> {
@@ -25,15 +25,15 @@ export class EditBookmarkComponent extends React.Component<Props> {
   onClickSave = async () => {
     const name = this.name ? this.name : null;
     const newBookmark = this.props.bookmark.withName(name);
-    this.props.appService.saveBookmark(newBookmark);
+    this.props.editBookmarkContext.service.saveEditBookmark(newBookmark);
   }
 
   onClickCancel = () => {
-    this.props.appService.cancelEditBookmark(this.props.bookmark);
+    this.props.editBookmarkContext.service.cancelEditBookmark(this.props.bookmark);
   }
 
   onClickDelete = () => {
-    this.props.appService.deleteBookmark(this.props.bookmark);
+    this.props.editBookmarkContext.service.deleteBookmark(this.props.bookmark);
   }
 
   onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {

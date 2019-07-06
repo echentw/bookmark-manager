@@ -44,6 +44,7 @@ export interface EditBookmarkService {
   clickEditBookmarkButton: (bookmark: Bookmark) => void;
   cancelEditBookmark: (bookmark: Bookmark) => void;
   saveEditBookmark: (bookmark: Bookmark) => void;
+  deleteBookmark: (bookmark: Bookmark) => void;
 }
 
 export interface EditBookmarkContext {
