@@ -13,6 +13,7 @@ import { AddBookmarkModalComponent } from './AddBookmarkModalComponent';
 
 import { CopyUrlState, CopyUrlService, CopyUrlContext } from './contexts';
 import { EditBookmarkState, EditBookmarkService, EditBookmarkContext } from './contexts';
+import { AddBookmarksState, AddBookmarksService, AddBookmarksContext } from './contexts';
 
 import * as dummyBookmarkData from './bookmarks.json';
 
@@ -23,15 +24,9 @@ export interface AddBookmarkContext {
 
 export interface AppState {
   bookmarks: Bookmark[];
-  editBookmarkState: EditBookmarkState;
+  addBookmarksState: AddBookmarksState;
   copyUrlState: CopyUrlState;
-  addBookmarkContext: AddBookmarkContext;
-}
-
-export interface AppService {
-  clickAddBookmark: () => void;
-  cancelAddBookmarks: () => void;
-  saveAddBookmarks: (bookmarks: Bookmark[]) => void;
+  editBookmarkState: EditBookmarkState;
 }
 
 export interface DragDropService {
@@ -77,13 +72,48 @@ class InnerAppComponent extends React.Component<{}, AppState> {
       },
     },
 
-    addBookmarkContext: {
-      addingBookmark: false,
+    addBookmarksState: {
+      showingModal: false,
       tabs: [] as TabInfo[],
     },
   };
 
   private draggedRank: number | null = null;
+
+  addBookmarksService: AddBookmarksService = {
+    clickAddBookmarksButton: async () => {
+      // TODO: unimplemented
+      try {
+        const tabInfos = await ChromeHelpers.getTabInfos();
+        this.setState({
+          addBookmarksState: {
+            showingModal: true,
+            tabs: tabInfos,
+          },
+        });
+      } catch(e) {
+        console.log('something went wrong!');
+      }
+    },
+    cancelAddBookmarks: () => {
+      this.setState({
+        addBookmarksState: {
+          showingModal: false,
+          tabs: [],
+        },
+      });
+    },
+    saveAddBookmarks: (bookmarks: Bookmark[]) => {
+      const allBookmarks = this.state.bookmarks.concat(bookmarks);
+      this.setState({
+        bookmarks: allBookmarks,
+        addBookmarksState: {
+          showingModal: false,
+          tabs: [],
+        },
+      });
+    },
+  };
 
   editBookmarkService: EditBookmarkService = {
     clickEditBookmarkButton: (bookmark: Bookmark) => {
@@ -129,20 +159,6 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     },
   };
 
-  clickAddBookmark = async () => {
-    // TODO: unimplemented
-    try {
-      const tabInfos = await ChromeHelpers.getTabInfos();
-      this.setState({
-        addBookmarkContext: {
-          addingBookmark: true,
-          tabs: tabInfos,
-        },
-      });
-    } catch(e) {
-      console.log('something went wrong!');
-    }
-  }
 
   isOver = (dropTargetRank: number) => {
     // TODO: do the array operations properly
@@ -189,25 +205,6 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     },
   };
 
-  cancelAddBookmarks = () => {
-    this.setState({
-      addBookmarkContext: {
-        addingBookmark: false,
-        tabs: [],
-      },
-    });
-  }
-
-  saveAddBookmarks = (bookmarks: Bookmark[]) => {
-    const allBookmarks = this.state.bookmarks.concat(bookmarks);
-    this.setState({
-      bookmarks: allBookmarks,
-      addBookmarkContext: {
-        addingBookmark: false,
-        tabs: [],
-      },
-    });
-  }
 
   render() {
     const copyUrlContext: CopyUrlContext = {
@@ -220,10 +217,9 @@ class InnerAppComponent extends React.Component<{}, AppState> {
       service: this.editBookmarkService,
     };
 
-    const appService: AppService = {
-      clickAddBookmark: this.clickAddBookmark,
-      cancelAddBookmarks: this.cancelAddBookmarks,
-      saveAddBookmarks: this.saveAddBookmarks,
+    const addBookmarksContext: AddBookmarksContext = {
+      state: this.state.addBookmarksState,
+      service: this.addBookmarksService,
     };
 
     const dragDropService: DragDropService = {
@@ -235,9 +231,9 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     return (
       <div className="app">
         <BookmarkListComponent
-          appService={appService}
           appState={this.state}
           dragDropService={dragDropService}
+          addBookmarksContext={addBookmarksContext}
           copyUrlContext={copyUrlContext}
           editBookmarkContext={editBookmarkContext}
         />
@@ -245,8 +241,7 @@ class InnerAppComponent extends React.Component<{}, AppState> {
         <DragLayerComponent appState={this.state}/>
         <CopiedToastComponent copyUrlContext={copyUrlContext}/>
         <AddBookmarkModalComponent
-          addBookmarkContext={this.state.addBookmarkContext}
-          appService={appService}
+          addBookmarksContext={addBookmarksContext}
         />
       </div>
     );

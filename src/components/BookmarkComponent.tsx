@@ -6,13 +6,12 @@ import { useDrag } from 'react-dnd';
 import { EditBookmarkComponent } from './EditBookmarkComponent';
 
 import { Bookmark } from '../Bookmark';
-import { AppService, AppState, DragDropService, DraggableTypes } from './AppComponent';
+import { AppState, DragDropService, DraggableTypes } from './AppComponent';
 import { CopyUrlContext, EditBookmarkContext } from './contexts';
 
 interface PropsBase {
   bookmark: Bookmark;
   editing: boolean;
-  appService?: AppService;
   copyUrlContext?: CopyUrlContext;
   editBookmarkContext?: EditBookmarkContext;
 }
@@ -84,7 +83,6 @@ export function BookmarkComponent(props: Props) {
       <InnerBookmarkComponent
         bookmark={props.bookmark}
         editing={props.editing}
-        appService={props.appService}
         isDragging={isDragging}
         copyUrlContext={props.copyUrlContext}
         editBookmarkContext={props.editBookmarkContext}

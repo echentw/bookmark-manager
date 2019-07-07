@@ -3,11 +3,10 @@ import * as React from 'react';
 import { Bookmark } from '../Bookmark';
 import { TabInfo } from '../ChromeHelpers';
 
-import { AddBookmarkContext, AppService } from './AppComponent';
+import { AddBookmarksContext } from './contexts';
 
 interface Props {
-  addBookmarkContext: AddBookmarkContext;
-  appService: AppService;
+  addBookmarksContext: AddBookmarksContext;
 }
 
 interface State {
@@ -30,7 +29,7 @@ export class AddBookmarkModalComponent extends React.Component<Props, State> {
   };
 
   onClickCancel = () => {
-    this.props.appService.cancelAddBookmarks();
+    this.props.addBookmarksContext.service.cancelAddBookmarks();
     this.setState({ selectedTabs: new Map<number, TabInfo>() });
   }
 
@@ -43,7 +42,7 @@ export class AddBookmarkModalComponent extends React.Component<Props, State> {
         faviconUrl: tab.faviconUrl,
       });
     });
-    this.props.appService.saveAddBookmarks(bookmarks);
+    this.props.addBookmarksContext.service.saveAddBookmarks(bookmarks);
     this.setState({ selectedTabs: new Map<number, TabInfo>() });
   }
 
@@ -52,15 +51,15 @@ export class AddBookmarkModalComponent extends React.Component<Props, State> {
     if (selectedTabs.has(index)) {
       selectedTabs.delete(index);
     } else {
-      selectedTabs.set(index, this.props.addBookmarkContext.tabs[index]);
+      selectedTabs.set(index, this.props.addBookmarksContext.state.tabs[index]);
     }
     this.setState({ selectedTabs });
   }
 
   render() {
-    const { addBookmarkContext: context } = this.props;
+    const { addBookmarksContext: context } = this.props;
 
-    const tabInfoComponents = context.tabs.map((tab: TabInfo, index: number) => {
+    const tabInfoComponents = context.state.tabs.map((tab: TabInfo, index: number) => {
       const selected = this.state.selectedTabs.has(index);
       const classes = selected ? 'tab-info selected' : 'tab-info';
       return (
@@ -72,10 +71,10 @@ export class AddBookmarkModalComponent extends React.Component<Props, State> {
 
     const layerStyles: React.CSSProperties = {
       ...layerBaseStyles,
-      pointerEvents: context.addingBookmark ? 'auto' : 'none',
+      pointerEvents: context.state.showingModal ? 'auto' : 'none',
     };
 
-    const maybeModalComponent = context.addingBookmark ? (
+    const maybeModalComponent = context.state.showingModal ? (
       <div className="add-bookmark-modal">
         <div className="tab-infos-outer-container">
           <div className="tab-infos-inner-container">
