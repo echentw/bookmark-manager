@@ -1,23 +1,6 @@
 import { Bookmark } from '../Bookmark';
 import { TabInfo } from '../ChromeHelpers';
 
-export interface CopyUrlState {
-  showingToast: boolean;
-  position: {
-    x: number;
-    y: number;
-  };
-}
-
-export interface CopyUrlService {
-  showToast: (x: number, y: number) => void;
-}
-
-export interface CopyUrlContext {
-  state: CopyUrlState;
-  service: CopyUrlService;
-}
-
 
 export interface AddBookmarksState {
   showingModal: boolean;

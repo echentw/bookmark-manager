@@ -11,7 +11,6 @@ import { DragLayerComponent } from './DragLayerComponent';
 import { CopiedToastComponent } from './CopiedToastComponent';
 import { AddBookmarkModalComponent } from './AddBookmarkModalComponent';
 
-import { CopyUrlState, CopyUrlService, CopyUrlContext } from './contexts';
 import { EditBookmarkState, EditBookmarkService, EditBookmarkContext } from './contexts';
 import { AddBookmarksState, AddBookmarksService, AddBookmarksContext } from './contexts';
 
@@ -25,7 +24,6 @@ export interface AddBookmarkContext {
 export interface AppState {
   bookmarks: Bookmark[];
   addBookmarksState: AddBookmarksState;
-  copyUrlState: CopyUrlState;
   editBookmarkState: EditBookmarkState;
 }
 
@@ -62,14 +60,6 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     editBookmarkState: {
       // TODO: I want to set this to null
       editingBookmarkId: '',
-    },
-
-    copyUrlState: {
-      showingToast: false,
-      position: {
-        x: 0,
-        y: 0,
-      },
     },
 
     addBookmarksState: {
@@ -188,30 +178,7 @@ class InnerAppComponent extends React.Component<{}, AppState> {
     this.draggedRank = null;
   }
 
-  private copiedToastTimeoutId: NodeJS.Timeout | null = null;
-  copyUrlService: CopyUrlService = {
-    showToast: (x: number, y: number) => {
-      const hideState = { showingToast: false, position: { x: 0, y: 0  } };
-      const showState = { showingToast: true, position: { x, y } };
-
-      this.setState({ copyUrlState: showState }, () => {
-        const copiedToastTimeoutId = setTimeout(() => {
-          if (this.copiedToastTimeoutId === copiedToastTimeoutId) {
-            this.setState({ copyUrlState: hideState });
-          }
-        }, 1000);
-        this.copiedToastTimeoutId = copiedToastTimeoutId;
-      });
-    },
-  };
-
-
   render() {
-    const copyUrlContext: CopyUrlContext = {
-      state: this.state.copyUrlState,
-      service: this.copyUrlService,
-    };
-
     const editBookmarkContext: EditBookmarkContext = {
       state: this.state.editBookmarkState,
       service: this.editBookmarkService,
@@ -234,12 +201,11 @@ class InnerAppComponent extends React.Component<{}, AppState> {
           appState={this.state}
           dragDropService={dragDropService}
           addBookmarksContext={addBookmarksContext}
-          copyUrlContext={copyUrlContext}
           editBookmarkContext={editBookmarkContext}
         />
         <GreetingComponent name={'Eric'}/>
         <DragLayerComponent appState={this.state}/>
-        <CopiedToastComponent copyUrlContext={copyUrlContext}/>
+        <CopiedToastComponent/>
         <AddBookmarkModalComponent
           addBookmarksContext={addBookmarksContext}
         />

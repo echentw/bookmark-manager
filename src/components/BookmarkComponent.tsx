@@ -3,22 +3,27 @@ import { GoPencil, GoClippy } from 'react-icons/go';
 import { FaPen, FaCopy, FaEdit, FaGripLines } from 'react-icons/fa';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 import { useDrag } from 'react-dnd';
-import { EditBookmarkComponent } from './EditBookmarkComponent';
+import { connect } from 'react-redux';
 
+import * as CopyUrlActions from '../actions/CopyUrlActions';
+import { Action } from '../actions/constants';
+import { AppState } from '../reducers';
+
+import { EditBookmarkComponent } from './EditBookmarkComponent';
 import { Bookmark } from '../Bookmark';
-import { AppState, DragDropService, DraggableTypes } from './AppComponent';
-import { CopyUrlContext, EditBookmarkContext } from './contexts';
+import { DragDropService, DraggableTypes } from './AppComponent';
+import { EditBookmarkContext } from './contexts';
 
 interface PropsBase {
   bookmark: Bookmark;
   editing: boolean;
-  copyUrlContext?: CopyUrlContext;
   editBookmarkContext?: EditBookmarkContext;
+  showCopyUrlToast?: (params: CopyUrlActions.ShowToastParams) => Action<CopyUrlActions.ShowToastParams>;
+  hideCopyUrlToast?: (params: CopyUrlActions.HideToastParams) => Action<CopyUrlActions.HideToastParams>;
 }
 
 export interface Props extends PropsBase {
   dragDropService: DragDropService;
-  appState: AppState;
   rank: number;
 }
 
@@ -34,7 +39,18 @@ export class InnerBookmarkComponent extends React.Component<InnerProps> {
 
   onClickCopy = (event: React.MouseEvent<SVGElement, MouseEvent>) => {
     const { clientX, clientY } = event;
-    this.props.copyUrlContext.service.showToast(clientX, clientY);
+
+    const timeoutId = setTimeout(() => {
+      this.props.hideCopyUrlToast({ timeoutId: timeoutId });
+    }, 1000);
+
+    this.props.showCopyUrlToast({
+      timeoutId: timeoutId,
+      position: {
+        x: clientX,
+        y: clientY,
+      },
+    });
   }
 
   render() {
@@ -64,7 +80,7 @@ export class InnerBookmarkComponent extends React.Component<InnerProps> {
   }
 }
 
-export function BookmarkComponent(props: Props) {
+function BookmarkComponent(props: Props) {
   const [{ isDragging }, drag] = useDrag({
     item: {
       type: DraggableTypes.LINK,
@@ -84,9 +100,25 @@ export function BookmarkComponent(props: Props) {
         bookmark={props.bookmark}
         editing={props.editing}
         isDragging={isDragging}
-        copyUrlContext={props.copyUrlContext}
         editBookmarkContext={props.editBookmarkContext}
+        showCopyUrlToast={props.showCopyUrlToast}
+        hideCopyUrlToast={props.hideCopyUrlToast}
       />
     </div>
   );
 }
+
+const mapStateToProps = (state: AppState, props: Props) => {
+  return {
+    copyUrlState: state.copyUrlState,
+  };
+};
+
+const mapActionsToProps = {
+  showCopyUrlToast: CopyUrlActions.showToast,
+  hideCopyUrlToast: CopyUrlActions.hideToast,
+};
+
+const asdf = connect(mapStateToProps, mapActionsToProps)(BookmarkComponent);
+
+export { asdf as BookmarkComponent };

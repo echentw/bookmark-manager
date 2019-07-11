@@ -1,9 +1,10 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 
-import { CopyUrlContext } from './contexts';
+import { AppState, CopyUrlState } from '../reducers';
 
 interface Props {
-  copyUrlContext: CopyUrlContext;
+  copyUrlState: CopyUrlState;
 }
 
 // Copy-pasted from DragLayerComponent.tsx
@@ -17,7 +18,7 @@ const layerStyles: React.CSSProperties = {
   height: '100%',
 };
 
-const itemStyles = (x: number, y: number): React.CSSProperties => {
+const itemStyles = ({ x, y }: { x: number, y: number }): React.CSSProperties => {
   const transform = `translate(${x + 20}px, ${y - 12}px)`;
   return {
     transform: transform,
@@ -25,19 +26,30 @@ const itemStyles = (x: number, y: number): React.CSSProperties => {
   };
 };
 
-export class CopiedToastComponent extends React.Component<Props> {
+class CopiedToastComponent extends React.Component<Props> {
   render() {
-    const { showingToast, position } = this.props.copyUrlContext.state;
-    const { x, y } = position;
+    const { showingToast, position } = this.props.copyUrlState;
 
-    const classes = showingToast ? 'copied-toast animating' : 'copied-toast';
+    const InnerElement = showingToast ? (
+      <div className="copied-toast animating" style={itemStyles(position)}>
+        URL copied!
+      </div>
+    ) : null;
 
     return (
       <div className="copied-toast-layer" style={layerStyles}>
-        <div className={classes} style={itemStyles(x, y)}>
-          URL copied!
-        </div>
+        { InnerElement }
       </div>
     );
   }
 }
+
+const mapStateToProps = (state: AppState, props: {}) => {
+  return {
+    copyUrlState: state.copyUrlState,
+  };
+};
+
+const asdf = connect(mapStateToProps)(CopiedToastComponent);
+
+export { asdf as CopiedToastComponent };
