@@ -1,4 +1,4 @@
-import { ShowModalParams, AddBookmarksSaveParams } from '../actions/AddBookmarksActions';
+import { AddBookmarksSaveParams, ShowModalParams } from '../actions/AddBookmarksActions';
 import { Action, AddBookmarksActionType as ActionType } from '../actions/constants';
 import { TabInfo } from '../ChromeHelpers';
 
