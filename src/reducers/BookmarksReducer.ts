@@ -17,7 +17,7 @@ export interface BookmarksState {
 }
 
 export const initialBookmarksState: BookmarksState = {
-  bookmarks: dummyBookmarkData['bookmarks'].map(data => {
+  bookmarks: dummyBookmarkData.bookmarks.map(data => {
     return new Bookmark({
       url: data.url,
       title: data.title,

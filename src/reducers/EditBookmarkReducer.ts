@@ -9,7 +9,10 @@ export const initialEditBookmarkState: EditBookmarkState = {
   editingBookmarkId: null,
 };
 
-export function editBookmarkReducer(state: EditBookmarkState = initialEditBookmarkState, action: Action): EditBookmarkState {
+export function editBookmarkReducer(
+  state: EditBookmarkState = initialEditBookmarkState,
+  action: Action
+): EditBookmarkState {
   switch(action.type) {
     case ActionType.beginEdit:
       return handleBeginEdit(state, action as Action<EditBookmarkParams>);

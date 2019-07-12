@@ -26,7 +26,7 @@ export function save(params: EditBookmarkParams): Action<EditBookmarkParams> {
   };
 }
 
-export const deleteBookmark = (params: EditBookmarkParams): Action<EditBookmarkParams> => {
+export function deleteBookmark(params: EditBookmarkParams): Action<EditBookmarkParams> {
   return {
     type: ActionType.deleteBookmark,
     params: params,
