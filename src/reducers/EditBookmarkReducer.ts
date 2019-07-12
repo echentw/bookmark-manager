@@ -11,9 +11,9 @@ export const initialEditBookmarkState: EditBookmarkState = {
 
 export function editBookmarkReducer(
   state: EditBookmarkState = initialEditBookmarkState,
-  action: Action
+  action: Action,
 ): EditBookmarkState {
-  switch(action.type) {
+  switch (action.type) {
     case ActionType.beginEdit:
       return handleBeginEdit(state, action as Action<EditBookmarkParams>);
     case ActionType.cancel:

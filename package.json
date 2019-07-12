@@ -6,6 +6,7 @@
   "scripts": {
     "start": "webpack --watch --progress",
     "lint": "node_modules/tslint/bin/tslint -c tslint.json 'src/**/*.ts'",
+    "lint-fix": "node_modules/tslint/bin/tslint -c tslint.json --fix 'src/**/*.ts'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Eric Chen",

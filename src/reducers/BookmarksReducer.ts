@@ -1,13 +1,13 @@
-import { Bookmark } from '../Bookmark';
+import { AddBookmarksSaveParams } from '../actions/AddBookmarksActions';
 import {
   Action,
   AddBookmarksActionType,
   DragDropActionType,
   EditBookmarkActionType,
 } from '../actions/constants';
-import { AddBookmarksSaveParams } from '../actions/AddBookmarksActions';
-import { EditBookmarkParams } from '../actions/EditBookmarkActions';
 import { DragDropParams } from '../actions/DragDropActions';
+import { EditBookmarkParams } from '../actions/EditBookmarkActions';
+import { Bookmark } from '../Bookmark';
 
 import * as dummyBookmarkData from './bookmarks.json';
 
@@ -28,7 +28,7 @@ export const initialBookmarksState: BookmarksState = {
 };
 
 export function bookmarksReducer(state: BookmarksState = initialBookmarksState, action: Action): BookmarksState {
-  switch(action.type) {
+  switch (action.type) {
     case AddBookmarksActionType.save:
       return handleAddBookmarksSave(state, action as Action<AddBookmarksSaveParams>);
     case DragDropActionType.beginDrag:

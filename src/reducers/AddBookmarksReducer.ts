@@ -1,6 +1,6 @@
-import { TabInfo } from '../ChromeHelpers';
-import { Action, AddBookmarksActionType as ActionType } from '../actions/constants';
 import { AddBookmarksSaveParams } from '../actions/AddBookmarksActions';
+import { Action, AddBookmarksActionType as ActionType } from '../actions/constants';
+import { TabInfo } from '../ChromeHelpers';
 
 export interface AddBookmarksState {
   showingModal: boolean;
@@ -12,8 +12,11 @@ export const initialAddBookmarksState: AddBookmarksState = {
   tabs: [],
 };
 
-export function addBookmarksReducer(state: AddBookmarksState = initialAddBookmarksState, action: Action): AddBookmarksState {
-  switch(action.type) {
+export function addBookmarksReducer(
+  state: AddBookmarksState = initialAddBookmarksState,
+  action: Action,
+): AddBookmarksState {
+  switch (action.type) {
     case ActionType.showModal:
       return handleShowModal(state, action);
     case ActionType.cancel:

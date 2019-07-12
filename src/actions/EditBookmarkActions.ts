@@ -2,7 +2,7 @@ import { Bookmark } from '../Bookmark';
 import { Action, EditBookmarkActionType as ActionType } from './constants';
 
 export interface EditBookmarkParams {
-  bookmark: Bookmark,
+  bookmark: Bookmark;
 }
 
 export function beginEdit(params: EditBookmarkParams): Action<EditBookmarkParams> {

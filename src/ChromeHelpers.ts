@@ -52,7 +52,7 @@ export class ChromeHelpers {
 
   public static loadBookmarks = (): Promise<Bookmark[]> => {
     return new Promise((resolve, reject) => {
-      chrome.storage.sync.get([ChromeHelpers.Keys.Bookmarks], (result) => {
+      chrome.storage.sync.get([ChromeHelpers.Keys.Bookmarks], result => {
         const datas: BookmarkData[] = result[ChromeHelpers.Keys.Bookmarks];
         const bookmarks: Bookmark[] = datas.map(data => new Bookmark(data));
         // TODO: error handling
