@@ -1,14 +1,27 @@
+import { Dispatch } from 'redux';
 import { Bookmark } from '../Bookmark';
 import { Action, AddBookmarksActionType as ActionType } from './constants';
+import { ChromeHelpers, TabInfo } from '../ChromeHelpers';
 
 export interface AddBookmarksSaveParams {
   bookmarks: Bookmark[];
 }
 
-export function showModal(): Action {
+export interface ShowModalParams {
+  tabs: TabInfo[];
+}
+
+function _showModal(params: ShowModalParams): Action<ShowModalParams> {
   return {
     type: ActionType.showModal,
-    params: {},
+    params: params,
+  };
+}
+
+export function showModal() {
+  return async (dispatch: Dispatch<Action<ShowModalParams>>) => {
+    const tabInfos = await ChromeHelpers.getTabInfos();
+    dispatch(_showModal({ tabs: tabInfos }));
   };
 }
 

@@ -2,7 +2,8 @@ import * as React from 'react';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { Provider } from 'react-redux';
-import { combineReducers, createStore } from 'redux';
+import { compose, applyMiddleware, combineReducers, createStore } from 'redux';
+import thunk from 'redux-thunk';
 
 import { Bookmark } from '../Bookmark';
 import { addBookmarksReducer, initialAddBookmarksState, AddBookmarksState } from '../reducers/AddBookmarksReducer';
@@ -41,6 +42,13 @@ const allReducers = combineReducers({
   editBookmarkState: editBookmarkReducer,
 });
 
+const allStoreEnhancers = window.__REDUX_DEVTOOLS_EXTENSION__ ? (
+  compose(
+    applyMiddleware(thunk),
+    window.__REDUX_DEVTOOLS_EXTENSION__()
+  )
+) : applyMiddleware(thunk);
+
 const store = createStore(
   allReducers,
   {
@@ -49,7 +57,7 @@ const store = createStore(
     copyUrlState: initialCopyUrlState,
     editBookmarkState: initialEditBookmarkState,
   },
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  allStoreEnhancers
 );
 
 export class AppComponent extends React.Component {

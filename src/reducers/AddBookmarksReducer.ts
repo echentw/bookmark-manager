@@ -1,4 +1,4 @@
-import { AddBookmarksSaveParams } from '../actions/AddBookmarksActions';
+import { ShowModalParams, AddBookmarksSaveParams } from '../actions/AddBookmarksActions';
 import { Action, AddBookmarksActionType as ActionType } from '../actions/constants';
 import { TabInfo } from '../ChromeHelpers';
 
@@ -18,7 +18,7 @@ export function addBookmarksReducer(
 ): AddBookmarksState {
   switch (action.type) {
     case ActionType.showModal:
-      return handleShowModal(state, action);
+      return handleShowModal(state, action as Action<ShowModalParams>);
     case ActionType.cancel:
       return handleCancel(state, action);
     case ActionType.save:
@@ -28,12 +28,10 @@ export function addBookmarksReducer(
   }
 }
 
-function handleShowModal(state: AddBookmarksState, action: Action): AddBookmarksState {
-  // TODO: make the line below work!
-  // const tabInfos = await ChromeHelpers.getTabInfos();
+function handleShowModal(state: AddBookmarksState, action: Action<ShowModalParams>): AddBookmarksState {
   return {
     showingModal: true,
-    tabs: [],
+    tabs: action.params.tabs,
   };
 }
 
