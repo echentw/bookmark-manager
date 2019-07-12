@@ -1,21 +1,25 @@
 import * as React from 'react';
 import { useDrop } from 'react-dnd';
+import { connect } from 'react-redux';
 
-import { DragDropService, DraggableTypes } from './AppComponent';
+import { AppState } from '../main';
+import { DraggableTypes } from './AppComponent';
+import * as DragDropActions from '../actions/DragDropActions';
+import { DragDropParams } from '../actions/DragDropActions';
 
 interface Props {
   children: React.ReactElement;
-  dragDropService: DragDropService;
+  isOver: (params: DragDropParams) => void;
   rank: number;
 }
 
-export function BookmarkContainerComponent(props: Props) {
+function BookmarkContainerComponent(props: Props) {
 	const [{ isOver }, drop] = useDrop({
-		accept: DraggableTypes.LINK,
+		accept: DraggableTypes.Bookmark,
 		collect: monitor => {
       const isOver = !!monitor.isOver();
       if (isOver) {
-        props.dragDropService.isOver(props.rank);
+        props.isOver({ rank: props.rank });
       }
       return { isOver };
 		},
@@ -27,3 +31,15 @@ export function BookmarkContainerComponent(props: Props) {
     </div>
   );
 }
+
+const mapStateToProps = (state: AppState, props: {}) => {
+  return {};
+};
+
+const mapActionsToProps = {
+  isOver: DragDropActions.isOver,
+};
+
+const asdf = connect(mapStateToProps, mapActionsToProps)(BookmarkContainerComponent);
+
+export { asdf as BookmarkContainerComponent };

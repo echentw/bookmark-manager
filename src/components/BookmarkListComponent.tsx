@@ -1,40 +1,31 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 
 import { Bookmark } from '../Bookmark';
 import { BookmarkComponent } from './BookmarkComponent';
 import { BookmarkContainerComponent } from './BookmarkContainerComponent';
-import { AddBookmarkButtonComponent } from './AddBookmarkButtonComponent';
+import { AddBookmarksButtonComponent } from './AddBookmarksButtonComponent';
 import { EditBookmarkComponent } from './EditBookmarkComponent';
-
-import { AppState, DragDropService } from './AppComponent';
-import { AddBookmarksContext, EditBookmarkContext } from './contexts';
+import { AppState } from '../main';
 
 interface Props {
-  appState: AppState;
-  dragDropService: DragDropService;
-  addBookmarksContext: AddBookmarksContext;
-  editBookmarkContext: EditBookmarkContext;
+  bookmarks: Bookmark[];
+  editingBookmarkId: string | null;
 }
 
-export class BookmarkListComponent extends React.Component<Props> {
+class BookmarkListComponent extends React.Component<Props> {
   render() {
-    const { appState, dragDropService } = this.props;
-    const { addBookmarksContext, editBookmarkContext } = this.props;
-
-    const bookmarkComponents = appState.bookmarks.map((bookmark: Bookmark, rank: number) => {
-      const editing = bookmark.id === editBookmarkContext.state.editingBookmarkId;
+    const bookmarkComponents = this.props.bookmarks.map((bookmark: Bookmark, rank: number) => {
+      const editing = bookmark.id === this.props.editingBookmarkId;
       return (
         <BookmarkContainerComponent
           key={bookmark.id}
-          dragDropService={dragDropService}
           rank={rank}
         >
           <BookmarkComponent
             bookmark={bookmark}
             editing={editing}
-            dragDropService={dragDropService}
             rank={rank}
-            editBookmarkContext={editBookmarkContext}
           />
         </BookmarkContainerComponent>
       );
@@ -42,8 +33,19 @@ export class BookmarkListComponent extends React.Component<Props> {
     return (
       <div className="bookmark-list">
         { bookmarkComponents }
-        <AddBookmarkButtonComponent add={addBookmarksContext.service.clickAddBookmarksButton}/>
+        <AddBookmarksButtonComponent/>
       </div>
     );
   }
 }
+
+const mapStateToProps = (state: AppState, props: {}) => {
+  return {
+    bookmarks: state.bookmarksState.bookmarks,
+    editingBookmarkId: state.editBookmarkState.editingBookmarkId,
+  };
+};
+
+const asdf = connect(mapStateToProps)(BookmarkListComponent);
+
+export { asdf as BookmarkListComponent };

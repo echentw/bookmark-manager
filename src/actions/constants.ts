@@ -14,6 +14,12 @@ export const CopyUrlActionType = {
   hideToast: 'CopyUrl:hideToast',
 };
 
+export const DragDropActionType = {
+  beginDrag: 'DragDrop:beginDrag',
+  endDrag: 'DragDrop:endDrag',
+  isOver: 'DragDrop:isOver',
+};
+
 export const EditBookmarkActionType = {
   beginEdit: 'EditBookmark:beginEdit',
   cancel: 'EditBookmark:cancel',

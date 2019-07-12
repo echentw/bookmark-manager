@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { DragLayerMonitor, useDragLayer, XYCoord } from 'react-dnd';
+import { connect } from 'react-redux';
 
-import { AppState } from './AppComponent';
+import { Bookmark } from '../Bookmark';
 import { InnerBookmarkComponent } from './BookmarkComponent';
+import { AppState } from '../main';
 
 interface Props {
-  appState: AppState;
+  bookmarks: Bookmark[],
 }
 
 interface CollectedProps {
@@ -38,7 +40,7 @@ const itemStyles = (currentOffset?: XYCoord): React.CSSProperties => {
   }
 }
 
-export function DragLayerComponent(props: Props) {
+function DragLayerComponent(props: Props) {
   const { isDragging, currentOffset, item }: CollectedProps = useDragLayer(
     (monitor: DragLayerMonitor) => ({
       isDragging: !!monitor.isDragging(),
@@ -51,7 +53,7 @@ export function DragLayerComponent(props: Props) {
 
   if (isDragging) {
     const bookmarkId = item.id;
-    const bookmark = props.appState.bookmarks.find((bookmark) => bookmark.id === bookmarkId);
+    const bookmark = props.bookmarks.find((bookmark) => bookmark.id === bookmarkId);
 
     dragPreviewComponent = (
       <InnerBookmarkComponent
@@ -70,3 +72,13 @@ export function DragLayerComponent(props: Props) {
     </div>
   );
 }
+
+const mapStateToProps = (state: AppState, props: {}) => {
+  return {
+    bookmarks: state.bookmarksState.bookmarks,
+  };
+};
+
+const asdf = connect(mapStateToProps)(DragLayerComponent);
+
+export { asdf as DragLayerComponent };

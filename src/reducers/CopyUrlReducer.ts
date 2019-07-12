@@ -1,12 +1,5 @@
-import { Bookmark } from './Bookmark';
-
-import { Action, CopyUrlActionType as ActionType } from './actions/constants';
-import { ShowToastParams, HideToastParams } from './actions/CopyUrlActions';
-
-export interface AppState {
-  bookmarks: Bookmark[];
-  copyUrlState: CopyUrlState;
-}
+import { Action, CopyUrlActionType as ActionType } from '../actions/constants';
+import { ShowToastParams, HideToastParams } from '../actions/CopyUrlActions';
 
 export interface CopyUrlState {
   showingToast: boolean;

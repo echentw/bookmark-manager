@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { AppState, CopyUrlState } from '../reducers';
+import { CopyUrlState } from '../reducers/CopyUrlReducer';
+import { AppState } from '../main';
 
 interface Props {
   copyUrlState: CopyUrlState;

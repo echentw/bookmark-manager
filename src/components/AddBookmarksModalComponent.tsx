@@ -1,12 +1,16 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 
 import { Bookmark } from '../Bookmark';
 import { TabInfo } from '../ChromeHelpers';
-
-import { AddBookmarksContext } from './contexts';
+import * as AddBookmarksActions from '../actions/AddBookmarksActions';
+import { AppState } from '../main';
 
 interface Props {
-  addBookmarksContext: AddBookmarksContext;
+  showingModal: boolean;
+  tabs: TabInfo[];
+  cancel: () => void;
+  save: (bookmark: Bookmark[]) => void;
 }
 
 interface State {
@@ -23,13 +27,13 @@ const layerBaseStyles: React.CSSProperties = {
   height: '100%',
 };
 
-export class AddBookmarkModalComponent extends React.Component<Props, State> {
+class AddBookmarksModalComponent extends React.Component<Props, State> {
   state = {
     selectedTabs: new Map<number, TabInfo>(),
   };
 
   onClickCancel = () => {
-    this.props.addBookmarksContext.service.cancelAddBookmarks();
+    this.props.cancel();
     this.setState({ selectedTabs: new Map<number, TabInfo>() });
   }
 
@@ -42,7 +46,7 @@ export class AddBookmarkModalComponent extends React.Component<Props, State> {
         faviconUrl: tab.faviconUrl,
       });
     });
-    this.props.addBookmarksContext.service.saveAddBookmarks(bookmarks);
+    this.props.save(bookmarks);
     this.setState({ selectedTabs: new Map<number, TabInfo>() });
   }
 
@@ -51,15 +55,13 @@ export class AddBookmarkModalComponent extends React.Component<Props, State> {
     if (selectedTabs.has(index)) {
       selectedTabs.delete(index);
     } else {
-      selectedTabs.set(index, this.props.addBookmarksContext.state.tabs[index]);
+      selectedTabs.set(index, this.props.tabs[index]);
     }
     this.setState({ selectedTabs });
   }
 
   render() {
-    const { addBookmarksContext: context } = this.props;
-
-    const tabInfoComponents = context.state.tabs.map((tab: TabInfo, index: number) => {
+    const tabInfoComponents = this.props.tabs.map((tab: TabInfo, index: number) => {
       const selected = this.state.selectedTabs.has(index);
       const classes = selected ? 'tab-info selected' : 'tab-info';
       return (
@@ -71,10 +73,10 @@ export class AddBookmarkModalComponent extends React.Component<Props, State> {
 
     const layerStyles: React.CSSProperties = {
       ...layerBaseStyles,
-      pointerEvents: context.state.showingModal ? 'auto' : 'none',
+      pointerEvents: this.props.showingModal ? 'auto' : 'none',
     };
 
-    const maybeModalComponent = context.state.showingModal ? (
+    const maybeModalComponent = this.props.showingModal ? (
       <div className="add-bookmark-modal">
         <div className="tab-infos-outer-container">
           <div className="tab-infos-inner-container">
@@ -99,3 +101,19 @@ export class AddBookmarkModalComponent extends React.Component<Props, State> {
     );
   }
 }
+
+const mapStateToProps = (state: AppState, props: {}) => {
+  return {
+    showingModal: state.addBookmarksState.showingModal,
+    tabs: state.addBookmarksState.tabs,
+  };
+};
+
+const mapActionsToProps = {
+  cancel: AddBookmarksActions.cancel,
+  save: AddBookmarksActions.save,
+};
+
+const asdf = connect(mapStateToProps, mapActionsToProps)(AddBookmarksModalComponent);
+
+export { asdf as AddBookmarksModalComponent };

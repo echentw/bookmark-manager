@@ -6,24 +6,36 @@ import { useDrag } from 'react-dnd';
 import { connect } from 'react-redux';
 
 import * as CopyUrlActions from '../actions/CopyUrlActions';
+import * as EditBookmarkActions from '../actions/EditBookmarkActions';
+import * as DragDropActions from '../actions/DragDropActions';
+import { ShowToastParams, HideToastParams } from '../actions/CopyUrlActions';
+import { EditBookmarkParams } from '../actions/EditBookmarkActions';
+import { DragDropParams } from '../actions/DragDropActions';
 import { Action } from '../actions/constants';
-import { AppState } from '../reducers';
+import { AppState } from '../main';
 
 import { EditBookmarkComponent } from './EditBookmarkComponent';
 import { Bookmark } from '../Bookmark';
-import { DragDropService, DraggableTypes } from './AppComponent';
-import { EditBookmarkContext } from './contexts';
+import { DraggableTypes } from './AppComponent';
+
+interface ExternalProps {
+  bookmark: Bookmark;
+  editing: boolean;
+  rank: number;
+}
 
 interface PropsBase {
   bookmark: Bookmark;
   editing: boolean;
-  editBookmarkContext?: EditBookmarkContext;
-  showCopyUrlToast?: (params: CopyUrlActions.ShowToastParams) => Action<CopyUrlActions.ShowToastParams>;
-  hideCopyUrlToast?: (params: CopyUrlActions.HideToastParams) => Action<CopyUrlActions.HideToastParams>;
+  beginEdit?: (params: EditBookmarkParams) => void;
+  beginDrag?: (params: DragDropParams) => void;
+  endDrag?: (params: DragDropParams) => void;
+  showCopyUrlToast?: (params: ShowToastParams) => void;
+  hideCopyUrlToast?: (params: HideToastParams) => void;
 }
 
 export interface Props extends PropsBase {
-  dragDropService: DragDropService;
+  editingBookmarkId: string | null;
   rank: number;
 }
 
@@ -34,7 +46,7 @@ interface InnerProps extends PropsBase {
 export class InnerBookmarkComponent extends React.Component<InnerProps> {
 
   onClickEdit = () => {
-    this.props.editBookmarkContext.service.clickEditBookmarkButton(this.props.bookmark);
+    this.props.beginEdit({ bookmark: this.props.bookmark });
   }
 
   onClickCopy = (event: React.MouseEvent<SVGElement, MouseEvent>) => {
@@ -56,10 +68,7 @@ export class InnerBookmarkComponent extends React.Component<InnerProps> {
   render() {
     if (this.props.editing) {
       return (
-        <EditBookmarkComponent
-          bookmark={this.props.bookmark}
-          editBookmarkContext={this.props.editBookmarkContext}
-        />
+        <EditBookmarkComponent bookmark={this.props.bookmark}/>
       );
     }
 
@@ -83,12 +92,18 @@ export class InnerBookmarkComponent extends React.Component<InnerProps> {
 function BookmarkComponent(props: Props) {
   const [{ isDragging }, drag] = useDrag({
     item: {
-      type: DraggableTypes.LINK,
+      type: DraggableTypes.Bookmark,
       id: props.bookmark.id,
     },
-    canDrag: monitor => props.bookmark.id !== props.editBookmarkContext.state.editingBookmarkId,
-    begin: monitor => props.dragDropService.beginDrag(props.rank),
-    end: monitor => props.dragDropService.endDrag(props.rank),
+    canDrag: monitor => props.bookmark.id !== props.editingBookmarkId,
+    begin: monitor => {
+      props.beginDrag({ rank: props.rank });
+      return;
+    },
+    end: monitor => {
+      props.endDrag({ rank: props.rank });
+      return;
+    },
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -100,23 +115,27 @@ function BookmarkComponent(props: Props) {
         bookmark={props.bookmark}
         editing={props.editing}
         isDragging={isDragging}
-        editBookmarkContext={props.editBookmarkContext}
         showCopyUrlToast={props.showCopyUrlToast}
         hideCopyUrlToast={props.hideCopyUrlToast}
+        beginEdit={props.beginEdit}
+        endDrag={props.endDrag}
       />
     </div>
   );
 }
 
-const mapStateToProps = (state: AppState, props: Props) => {
+const mapStateToProps = (state: AppState, props: ExternalProps) => {
   return {
-    copyUrlState: state.copyUrlState,
+    editingBookmarkId: state.editBookmarkState.editingBookmarkId,
   };
 };
 
 const mapActionsToProps = {
   showCopyUrlToast: CopyUrlActions.showToast,
   hideCopyUrlToast: CopyUrlActions.hideToast,
+  beginEdit: EditBookmarkActions.beginEdit,
+  beginDrag: DragDropActions.beginDrag,
+  endDrag: DragDropActions.endDrag,
 };
 
 const asdf = connect(mapStateToProps, mapActionsToProps)(BookmarkComponent);

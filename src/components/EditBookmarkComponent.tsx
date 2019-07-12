@@ -1,14 +1,22 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 
 import { Bookmark } from '../Bookmark';
-import { EditBookmarkContext } from './contexts';
+import * as EditBookmarkActions from '../actions/EditBookmarkActions';
+import { EditBookmarkParams } from '../actions/EditBookmarkActions';
+import { AppState } from '../main';
 
-export interface Props {
+interface ExternalProps {
   bookmark: Bookmark;
-  editBookmarkContext: EditBookmarkContext;
 }
 
-export class EditBookmarkComponent extends React.Component<Props> {
+interface InternalProps extends ExternalProps {
+  cancel: (params: EditBookmarkParams) => void;
+  save: (params: EditBookmarkParams) => void;
+  deleteBookmark: (params: EditBookmarkParams) => void;
+}
+
+class EditBookmarkComponent extends React.Component<InternalProps> {
   private name: string = '';
 
   private nameInput: HTMLInputElement = null;
@@ -25,15 +33,15 @@ export class EditBookmarkComponent extends React.Component<Props> {
   onClickSave = async () => {
     const name = this.name ? this.name : null;
     const newBookmark = this.props.bookmark.withName(name);
-    this.props.editBookmarkContext.service.saveEditBookmark(newBookmark);
+    this.props.save({ bookmark: newBookmark });
   }
 
   onClickCancel = () => {
-    this.props.editBookmarkContext.service.cancelEditBookmark(this.props.bookmark);
+    this.props.cancel({ bookmark: this.props.bookmark });
   }
 
   onClickDelete = () => {
-    this.props.editBookmarkContext.service.deleteBookmark(this.props.bookmark);
+    this.props.deleteBookmark({ bookmark: this.props.bookmark });
   }
 
   onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -70,3 +78,17 @@ export class EditBookmarkComponent extends React.Component<Props> {
     );
   }
 }
+
+const mapStateToProps = (state: AppState, props: ExternalProps) => {
+  return {};
+};
+
+const mapActionsToProps = {
+  cancel: EditBookmarkActions.cancel,
+  save: EditBookmarkActions.save,
+  deleteBookmark: EditBookmarkActions.deleteBookmark,
+};
+
+const asdf = connect(mapStateToProps, mapActionsToProps)(EditBookmarkComponent);
+
+export { asdf as EditBookmarkComponent };
