@@ -4,7 +4,7 @@ import { FaPlus } from 'react-icons/fa';
 import { connect } from 'react-redux';
 
 import * as AddBookmarksActions from '../actions/AddBookmarksActions';
-import { AppState } from '../main';
+import { AppState } from './AppComponent';
 
 interface Props {
   showModal: () => void;

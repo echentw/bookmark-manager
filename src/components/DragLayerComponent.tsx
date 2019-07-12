@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { Bookmark } from '../Bookmark';
 import { InnerBookmarkComponent } from './BookmarkComponent';
-import { AppState } from '../main';
+import { AppState } from './AppComponent';
 
 interface Props {
   bookmarks: Bookmark[],

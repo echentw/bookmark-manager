@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Bookmark } from '../Bookmark';
 import { TabInfo } from '../ChromeHelpers';
 import * as AddBookmarksActions from '../actions/AddBookmarksActions';
-import { AppState } from '../main';
+import { AppState } from './AppComponent';
 
 interface Props {
   showingModal: boolean;

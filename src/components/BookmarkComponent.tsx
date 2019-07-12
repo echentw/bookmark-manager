@@ -12,7 +12,7 @@ import { ShowToastParams, HideToastParams } from '../actions/CopyUrlActions';
 import { EditBookmarkParams } from '../actions/EditBookmarkActions';
 import { DragDropParams } from '../actions/DragDropActions';
 import { Action } from '../actions/constants';
-import { AppState } from '../main';
+import { AppState } from './AppComponent';
 
 import { EditBookmarkComponent } from './EditBookmarkComponent';
 import { Bookmark } from '../Bookmark';

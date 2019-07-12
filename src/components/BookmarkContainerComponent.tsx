@@ -2,8 +2,7 @@ import * as React from 'react';
 import { useDrop } from 'react-dnd';
 import { connect } from 'react-redux';
 
-import { AppState } from '../main';
-import { DraggableTypes } from './AppComponent';
+import { AppState, DraggableTypes } from './AppComponent';
 import * as DragDropActions from '../actions/DragDropActions';
 import { DragDropParams } from '../actions/DragDropActions';
 

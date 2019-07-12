@@ -6,7 +6,7 @@ import { BookmarkComponent } from './BookmarkComponent';
 import { BookmarkContainerComponent } from './BookmarkContainerComponent';
 import { AddBookmarksButtonComponent } from './AddBookmarksButtonComponent';
 import { EditBookmarkComponent } from './EditBookmarkComponent';
-import { AppState } from '../main';
+import { AppState } from './AppComponent';
 
 interface Props {
   bookmarks: Bookmark[];

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Bookmark } from '../Bookmark';
 import * as EditBookmarkActions from '../actions/EditBookmarkActions';
 import { EditBookmarkParams } from '../actions/EditBookmarkActions';
-import { AppState } from '../main';
+import { AppState } from './AppComponent';
 
 interface ExternalProps {
   bookmark: Bookmark;
