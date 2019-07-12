@@ -46,6 +46,5 @@ const mapStateToProps = (state: AppState, props: {}) => {
   };
 };
 
-const asdf = connect(mapStateToProps)(BookmarkListComponent);
-
-export { asdf as BookmarkListComponent };
+const Component = connect(mapStateToProps)(BookmarkListComponent);
+export { Component as BookmarkListComponent };

@@ -51,6 +51,5 @@ const mapStateToProps = (state: AppState, props: {}) => {
   };
 };
 
-const asdf = connect(mapStateToProps)(CopiedToastComponent);
-
-export { asdf as CopiedToastComponent };
+const Component = connect(mapStateToProps)(CopiedToastComponent);
+export { Component as CopiedToastComponent };

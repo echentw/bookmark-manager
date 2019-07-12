@@ -114,6 +114,5 @@ const mapActionsToProps = {
   save: AddBookmarksActions.save,
 };
 
-const asdf = connect(mapStateToProps, mapActionsToProps)(AddBookmarksModalComponent);
-
-export { asdf as AddBookmarksModalComponent };
+const Component = connect(mapStateToProps, mapActionsToProps)(AddBookmarksModalComponent);
+export { Component as AddBookmarksModalComponent };

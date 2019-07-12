@@ -40,6 +40,5 @@ const mapActionsToProps = {
   isOver: DragDropActions.isOver,
 };
 
-const asdf = connect(mapStateToProps, mapActionsToProps)(BookmarkContainerComponent);
-
-export { asdf as BookmarkContainerComponent };
+const Component = connect(mapStateToProps, mapActionsToProps)(BookmarkContainerComponent);
+export { Component as BookmarkContainerComponent };

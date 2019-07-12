@@ -138,6 +138,5 @@ const mapActionsToProps = {
   endDrag: DragDropActions.endDrag,
 };
 
-const asdf = connect(mapStateToProps, mapActionsToProps)(BookmarkComponent);
-
-export { asdf as BookmarkComponent };
+const Component = connect(mapStateToProps, mapActionsToProps)(BookmarkComponent);
+export { Component as BookmarkComponent };

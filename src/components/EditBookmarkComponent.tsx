@@ -89,6 +89,5 @@ const mapActionsToProps = {
   deleteBookmark: EditBookmarkActions.deleteBookmark,
 };
 
-const asdf = connect(mapStateToProps, mapActionsToProps)(EditBookmarkComponent);
-
-export { asdf as EditBookmarkComponent };
+const Component = connect(mapStateToProps, mapActionsToProps)(EditBookmarkComponent);
+export { Component as EditBookmarkComponent };

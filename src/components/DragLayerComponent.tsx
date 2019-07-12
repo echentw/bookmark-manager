@@ -79,6 +79,5 @@ const mapStateToProps = (state: AppState, props: {}) => {
   };
 };
 
-const asdf = connect(mapStateToProps)(DragLayerComponent);
-
-export { asdf as DragLayerComponent };
+const Component = connect(mapStateToProps)(DragLayerComponent);
+export { Component as DragLayerComponent };
