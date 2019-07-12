@@ -1,5 +1,5 @@
 import { Action, CopyUrlActionType as ActionType } from '../actions/constants';
-import { HideToastParams, ShowToastParams } from '../actions/CopyUrlActions';
+import { HideToastParams, _ShowToastParams } from '../actions/CopyUrlActions';
 
 export interface CopyUrlState {
   showingToast: boolean;
@@ -19,7 +19,7 @@ export const initialCopyUrlState: CopyUrlState = {
 export function copyUrlReducer(state: CopyUrlState = initialCopyUrlState, action: Action): CopyUrlState {
   switch (action.type) {
     case ActionType.showToast:
-      return handleShowToast(state, action as Action<ShowToastParams>);
+      return handleShowToast(state, action as Action<_ShowToastParams>);
     case ActionType.hideToast:
       return handleHideToast(state, action as Action<HideToastParams>);
     default:
@@ -27,7 +27,7 @@ export function copyUrlReducer(state: CopyUrlState = initialCopyUrlState, action
   }
 }
 
-function handleShowToast(state: CopyUrlState, action: Action<ShowToastParams>): CopyUrlState {
+function handleShowToast(state: CopyUrlState, action: Action<_ShowToastParams>): CopyUrlState {
   return {
     showingToast: true,
     timeoutId: action.params.timeoutId,

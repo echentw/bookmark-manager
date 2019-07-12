@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import * as CopyUrlActions from '../actions/CopyUrlActions';
 import * as EditBookmarkActions from '../actions/EditBookmarkActions';
-import { ShowToastParams, HideToastParams } from '../actions/CopyUrlActions';
+import { ShowToastParams } from '../actions/CopyUrlActions';
 import { EditBookmarkParams } from '../actions/EditBookmarkActions';
 import { AppState } from './AppComponent';
 
@@ -19,9 +19,8 @@ interface ExternalProps {
 }
 
 interface InternalProps extends ExternalProps {
-  showCopyUrlToast?: (params: ShowToastParams) => void;
-  hideCopyUrlToast?: (params: HideToastParams) => void;
-  beginEdit?: (params: EditBookmarkParams) => void;
+  showCopyUrlToast: (params: ShowToastParams) => void;
+  beginEdit: (params: EditBookmarkParams) => void;
 }
 
 class BookmarkComponent extends React.Component<InternalProps> {
@@ -32,18 +31,7 @@ class BookmarkComponent extends React.Component<InternalProps> {
 
   onClickCopy = (event: React.MouseEvent<SVGElement, MouseEvent>) => {
     const { clientX, clientY } = event;
-
-    const timeoutId = setTimeout(() => {
-      this.props.hideCopyUrlToast({ timeoutId: timeoutId });
-    }, 1000);
-
-    this.props.showCopyUrlToast({
-      timeoutId: timeoutId,
-      position: {
-        x: clientX,
-        y: clientY,
-      },
-    });
+    this.props.showCopyUrlToast({ x: clientX, y: clientY });
   }
 
   render() {
@@ -76,7 +64,6 @@ const mapStateToProps = (state: AppState, props: ExternalProps) => {
 
 const mapActionsToProps = {
   showCopyUrlToast: CopyUrlActions.showToast,
-  hideCopyUrlToast: CopyUrlActions.hideToast,
   beginEdit: EditBookmarkActions.beginEdit,
 };
 
