@@ -4,13 +4,14 @@ import { connect } from 'react-redux';
 import { Bookmark } from '../Bookmark';
 import { TabInfo } from '../ChromeHelpers';
 import * as AddBookmarksActions from '../actions/AddBookmarksActions';
+import { AddBookmarksSaveParams } from '../actions/AddBookmarksActions';
 import { AppState } from './AppComponent';
 
 interface Props {
   showingModal: boolean;
   tabs: TabInfo[];
   cancel: () => void;
-  save: (bookmark: Bookmark[]) => void;
+  save: (params: AddBookmarksSaveParams) => void;
 }
 
 interface State {
@@ -46,7 +47,7 @@ class AddBookmarksModalComponent extends React.Component<Props, State> {
         faviconUrl: tab.faviconUrl,
       });
     });
-    this.props.save(bookmarks);
+    this.props.save({ bookmarks: bookmarks });
     this.setState({ selectedTabs: new Map<number, TabInfo>() });
   }
 

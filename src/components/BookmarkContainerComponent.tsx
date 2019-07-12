@@ -6,13 +6,16 @@ import { AppState, DraggableTypes } from './AppComponent';
 import * as DragDropActions from '../actions/DragDropActions';
 import { DragDropParams } from '../actions/DragDropActions';
 
-interface Props {
+interface ExternalProps {
   children: React.ReactElement;
-  isOver: (params: DragDropParams) => void;
   rank: number;
 }
 
-function BookmarkContainerComponent(props: Props) {
+interface InternalProps extends ExternalProps {
+  isOver: (params: DragDropParams) => void;
+}
+
+function BookmarkContainerComponent(props: InternalProps) {
 	const [{ isOver }, drop] = useDrop({
 		accept: DraggableTypes.Bookmark,
 		collect: monitor => {
@@ -31,7 +34,7 @@ function BookmarkContainerComponent(props: Props) {
   );
 }
 
-const mapStateToProps = (state: AppState, props: {}) => {
+const mapStateToProps = (state: AppState, props: ExternalProps) => {
   return {};
 };
 

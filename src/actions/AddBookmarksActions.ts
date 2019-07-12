@@ -19,9 +19,9 @@ export function cancel(): Action {
   };
 }
 
-export function save(bookmarks: Bookmark[]): Action<AddBookmarksSaveParams> {
+export function save(params: AddBookmarksSaveParams): Action<AddBookmarksSaveParams> {
   return {
     type: ActionType.save,
-    params: { bookmarks },
+    params: params,
   };
 }

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { Bookmark } from '../Bookmark';
-import { BookmarkComponent } from './BookmarkComponent';
+import { DraggableBookmarkComponent } from './DraggableBookmarkComponent';
 import { BookmarkContainerComponent } from './BookmarkContainerComponent';
 import { AddBookmarksButtonComponent } from './AddBookmarksButtonComponent';
 import { EditBookmarkComponent } from './EditBookmarkComponent';
@@ -22,7 +22,7 @@ class BookmarkListComponent extends React.Component<Props> {
           key={bookmark.id}
           rank={rank}
         >
-          <BookmarkComponent
+          <DraggableBookmarkComponent
             bookmark={bookmark}
             editing={editing}
             rank={rank}

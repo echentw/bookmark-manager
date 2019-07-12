@@ -3,7 +3,7 @@ import { DragLayerMonitor, useDragLayer, XYCoord } from 'react-dnd';
 import { connect } from 'react-redux';
 
 import { Bookmark } from '../Bookmark';
-import { InnerBookmarkComponent } from './BookmarkComponent';
+import { BookmarkComponent } from './BookmarkComponent';
 import { AppState } from './AppComponent';
 
 interface Props {
@@ -56,7 +56,7 @@ function DragLayerComponent(props: Props) {
     const bookmark = props.bookmarks.find((bookmark) => bookmark.id === bookmarkId);
 
     dragPreviewComponent = (
-      <InnerBookmarkComponent
+      <BookmarkComponent
         bookmark={bookmark}
         editing={false}
         isDragging={false}
