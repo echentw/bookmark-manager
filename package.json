@@ -5,8 +5,8 @@
   "main": "jquery.min.js",
   "scripts": {
     "start": "webpack --watch --progress",
-    "lint": "node_modules/tslint/bin/tslint -c tslint.json 'src/**/*.ts'",
-    "lint-fix": "node_modules/tslint/bin/tslint -c tslint.json --fix 'src/**/*.ts'",
+    "lint": "node_modules/tslint/bin/tslint -c tslint.json --project tsconfig.json 'src/**/*.ts'",
+    "lint-fix": "node_modules/tslint/bin/tslint -c tslint.json --fix --project tsconfig.json 'src/**/*.ts'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Eric Chen",
@@ -35,10 +35,12 @@
     "source-map-loader": "^0.2.4",
     "style-loader": "^0.23.1",
     "ts-loader": "^6.0.2",
-    "tslint": "^5.18.0",
     "typescript": "^3.5.2",
     "webpack": "^4.34.0",
     "webpack-cli": "^3.3.4",
     "webpack-dev-server": "^3.7.1"
+  },
+  "devDependencies": {
+    "tslint": "^5.18.0"
   }
 }
