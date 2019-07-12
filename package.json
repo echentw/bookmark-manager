@@ -4,7 +4,7 @@
   "description": "",
   "main": "jquery.min.js",
   "scripts": {
-    "start": "webpack-dev-server --mode development",
+    "start": "webpack --watch --progress",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Eric Chen",
