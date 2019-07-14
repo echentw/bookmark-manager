@@ -36,45 +36,6 @@ body {
   }
 }
 
-
-.edit-bookmark {
-  @extend .bookmark;
-
-  // copied from .bookmark-favicon
-  .bookmark-favicon {
-    margin-left: 10px;
-    width: 16px;
-    height: 16px;
-  }
-
-  // copied from .bookmark-icon
-  .phantom-icon {
-    width: 12px;
-    margin-right: 6px;
-    &:hover {
-      color: rgb(100, 100, 250);
-    }
-  }
-
-  .edit-bookmark-input {
-    flex: 1;
-
-    box-sizing: border-box;
-
-    height: 24px;
-    margin-left: 4px;
-    margin-right: 6px;
-
-    border: none;
-    padding: 4px;
-
-    &:focus {
-      outline-width: 0;
-    }
-  }
-}
-
-
 .add-bookmarks-button {
   @extend .bookmark;
 

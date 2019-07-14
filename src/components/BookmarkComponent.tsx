@@ -41,27 +41,33 @@ class BookmarkComponent extends React.Component<InternalProps> {
   }
 
   render() {
-    if (this.props.editing) {
-      return (
-        <EditBookmarkComponent bookmark={this.props.bookmark}/>
-      );
-    }
+    const { editing, isDragging, bookmark } = this.props;
 
-    const { isDragging, bookmark } = this.props;
+    const bookmarkNameElement = editing ? (
+      <EditBookmarkComponent bookmark={bookmark}/>
+    ) : (
+      <a className="bookmark-text" href={bookmark.url}>{bookmark.displayName()}</a>
+    );
+
+    const buttonElements = editing ? (
+      null
+    ) : (
+      <IconContext.Provider value={{ size: '1.3em' }}>
+        <CopyToClipboard text={bookmark.url}>
+          <FaCopy className="bookmark-icon" onClick={this.onClickCopy}/>
+        </CopyToClipboard>
+        <FaPen className="bookmark-icon" onClick={this.onClickEdit}/>
+        <FaTrash className="bookmark-icon" onClick={this.onClickDelete}/>
+      </IconContext.Provider>
+    );
 
     const classes = isDragging ? 'bookmark dragging' : 'bookmark';
 
     return (
       <div className={classes}>
         <img className="bookmark-favicon" src={bookmark.faviconUrl}/>
-        <a className="bookmark-text" href={bookmark.url}>{bookmark.displayName()}</a>
-        <IconContext.Provider value={{ size: '1.3em' }}>
-          <CopyToClipboard text={bookmark.url}>
-            <FaCopy className="bookmark-icon" onClick={this.onClickCopy}/>
-          </CopyToClipboard>
-          <FaPen className="bookmark-icon" onClick={this.onClickEdit}/>
-          <FaTrash className="bookmark-icon" onClick={this.onClickDelete}/>
-        </IconContext.Provider>
+        { bookmarkNameElement }
+        { buttonElements }
       </div>
     );
   }

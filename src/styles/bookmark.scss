@@ -17,7 +17,7 @@ $bookmark-color: rgb(222,225,229);
 
   .bookmark-icon {
     width: 16px;
-    margin-right: 12px;
+    margin-right: 10px;
     // the size is hard-coded inside the component
   }
 
@@ -33,7 +33,7 @@ $bookmark-color: rgb(222,225,229);
     box-sizing: border-box;
     height: 24px;
     border: none;
-    padding: 4px;
+    padding-left: 4px;
     margin-left: 4px;
     margin-right: 6px;
 
@@ -43,13 +43,33 @@ $bookmark-color: rgb(222,225,229);
     white-space: pre;
     text-decoration: none;
     color: black;
-
     background-color: rgba(0, 0, 0, 0);
+
+    display: flex;
+    align-items: center;
+
     &:hover {
       cursor: pointer;
     }
     &:focus {
       cursor: pointer;
+      outline-width: 0;
+    }
+  }
+
+  .edit-bookmark-input {
+    flex: 1;
+
+    box-sizing: border-box;
+
+    height: 24px;
+    margin-left: 5px;
+    margin-right: 16px;
+
+    border: none;
+    padding: 4px;
+
+    &:focus {
       outline-width: 0;
     }
   }

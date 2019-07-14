@@ -56,20 +56,15 @@ class EditBookmarkComponent extends React.Component<InternalProps> {
   render() {
     const { bookmark } = this.props;
     return (
-      <div className="edit-bookmark">
-        <img className="bookmark-favicon" src={bookmark.faviconUrl}/>
-        <input
-          className="edit-bookmark-input"
-          ref={(input) => this.nameInput = input}
-          type="text"
-          defaultValue={bookmark.displayName()}
-          onChange={this.onChangeName}
-          onKeyDown={this.onKeyDown}
-          onBlur={this.onBlur}
-        />
-        <div className="phantom-icon"/>
-        <div className="phantom-icon"/>
-      </div>
+      <input
+        className="edit-bookmark-input"
+        ref={(input) => this.nameInput = input}
+        type="text"
+        defaultValue={bookmark.displayName()}
+        onChange={this.onChangeName}
+        onKeyDown={this.onKeyDown}
+        onBlur={this.onBlur}
+      />
     );
   }
 }
