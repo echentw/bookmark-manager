@@ -16,8 +16,9 @@ $bookmark-color: rgb(222,225,229);
   }
 
   .bookmark-icon {
-    width: 12px;
-    margin-right: 6px;
+    width: 16px;
+    margin-right: 12px;
+    // the size is hard-coded inside the component
   }
 
   .bookmark-favicon {

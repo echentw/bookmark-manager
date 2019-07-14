@@ -13,7 +13,6 @@ interface ExternalProps {
 interface InternalProps extends ExternalProps {
   cancel: (params: EditBookmarkParams) => void;
   save: (params: EditBookmarkParams) => void;
-  deleteBookmark: (params: EditBookmarkParams) => void;
 }
 
 class EditBookmarkComponent extends React.Component<InternalProps> {
@@ -38,10 +37,6 @@ class EditBookmarkComponent extends React.Component<InternalProps> {
 
   onClickCancel = () => {
     this.props.cancel({ bookmark: this.props.bookmark });
-  }
-
-  onClickDelete = () => {
-    this.props.deleteBookmark({ bookmark: this.props.bookmark });
   }
 
   onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -86,7 +81,6 @@ const mapStateToProps = (state: AppState, props: ExternalProps) => {
 const mapActionsToProps = {
   cancel: EditBookmarkActions.cancel,
   save: EditBookmarkActions.save,
-  deleteBookmark: EditBookmarkActions.deleteBookmark,
 };
 
 const Component = connect(mapStateToProps, mapActionsToProps)(EditBookmarkComponent);

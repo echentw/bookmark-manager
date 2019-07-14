@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { FaPen, FaCopy } from 'react-icons/fa';
+import { IconContext } from 'react-icons';
+import { FaPen, FaCopy, FaTrash } from 'react-icons/fa';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 import { connect } from 'react-redux';
 
@@ -21,17 +22,22 @@ interface ExternalProps {
 interface InternalProps extends ExternalProps {
   showCopyUrlToast: (params: ShowToastParams) => void;
   beginEdit: (params: EditBookmarkParams) => void;
+  deleteBookmark: (params: EditBookmarkParams) => void;
 }
 
 class BookmarkComponent extends React.Component<InternalProps> {
 
-  onClickEdit = () => {
-    this.props.beginEdit({ bookmark: this.props.bookmark });
+  onClickDelete = (event: React.MouseEvent<SVGElement, MouseEvent>) => {
+    this.props.deleteBookmark({ bookmark: this.props.bookmark });
   }
 
   onClickCopy = (event: React.MouseEvent<SVGElement, MouseEvent>) => {
     const { clientX, clientY } = event;
     this.props.showCopyUrlToast({ x: clientX, y: clientY });
+  }
+
+  onClickEdit = () => {
+    this.props.beginEdit({ bookmark: this.props.bookmark });
   }
 
   render() {
@@ -49,10 +55,13 @@ class BookmarkComponent extends React.Component<InternalProps> {
       <div className={classes}>
         <img className="bookmark-favicon" src={bookmark.faviconUrl}/>
         <a className="bookmark-text" href={bookmark.url}>{bookmark.displayName()}</a>
-        <FaPen className="bookmark-icon" onClick={this.onClickEdit}/>
-        <CopyToClipboard text={bookmark.url}>
-          <FaCopy className="bookmark-icon" onClick={this.onClickCopy}/>
-        </CopyToClipboard>
+        <IconContext.Provider value={{ size: '1.3em' }}>
+          <CopyToClipboard text={bookmark.url}>
+            <FaCopy className="bookmark-icon" onClick={this.onClickCopy}/>
+          </CopyToClipboard>
+          <FaPen className="bookmark-icon" onClick={this.onClickEdit}/>
+          <FaTrash className="bookmark-icon" onClick={this.onClickDelete}/>
+        </IconContext.Provider>
       </div>
     );
   }
@@ -65,6 +74,7 @@ const mapStateToProps = (state: AppState, props: ExternalProps) => {
 const mapActionsToProps = {
   showCopyUrlToast: CopyUrlActions.showToast,
   beginEdit: EditBookmarkActions.beginEdit,
+  deleteBookmark: EditBookmarkActions.deleteBookmark,
 };
 
 const Component = connect(mapStateToProps, mapActionsToProps)(BookmarkComponent);
