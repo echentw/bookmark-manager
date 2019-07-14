@@ -1,5 +1,5 @@
 @import './bookmark';
-@import './add-bookmark';
+@import './add-bookmarks';
 
 body {
   background-image: url('./blue_stars.jpg');
@@ -75,7 +75,7 @@ body {
 }
 
 
-.add-bookmark {
+.add-bookmarks-button {
   @extend .bookmark;
 
   margin-top: 20px;

@@ -13,7 +13,7 @@ interface Props {
 class AddBookmarksButtonComponent extends React.Component<Props> {
   render() {
     return (
-      <div className="add-bookmark" onClick={this.props.showModal}>
+      <div className="add-bookmarks-button" onClick={this.props.showModal}>
         <IconContext.Provider value={{ className: 'fa-plus' }}>
           <FaPlus/>
         </IconContext.Provider>

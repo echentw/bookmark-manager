@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FaPen, FaCopy, FaEdit, FaGripLines } from 'react-icons/fa';
+import { FaPen, FaCopy } from 'react-icons/fa';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 import { connect } from 'react-redux';
 

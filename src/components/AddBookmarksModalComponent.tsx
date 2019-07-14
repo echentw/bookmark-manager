@@ -78,7 +78,7 @@ class AddBookmarksModalComponent extends React.Component<Props, State> {
     };
 
     const maybeModalComponent = this.props.showingModal ? (
-      <div className="add-bookmark-modal">
+      <div className="add-bookmarks-modal">
         <div className="tab-infos-outer-container">
           <div className="tab-infos-inner-container">
             { tabInfoComponents }
@@ -96,7 +96,7 @@ class AddBookmarksModalComponent extends React.Component<Props, State> {
     ) : null;
 
     return (
-      <div className="add-bookmark-layer" style={layerStyles}>
+      <div className="add-bookmarks-layer" style={layerStyles}>
         { maybeModalComponent }
       </div>
     );
