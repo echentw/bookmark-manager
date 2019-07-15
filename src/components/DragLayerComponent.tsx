@@ -60,6 +60,7 @@ function DragLayerComponent(props: Props) {
         bookmark={bookmark}
         editing={false}
         isDragging={false}
+        isDragPreview={true}
       />
     );
   }

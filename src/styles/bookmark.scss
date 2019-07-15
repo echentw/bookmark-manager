@@ -15,10 +15,15 @@ $bookmark-color: rgb(222,225,229);
     opacity: 0;
   }
 
-  .bookmark-icon {
-    width: 14px;
-    margin-right: 10px;
-    // the size is hard-coded inside the component
+  .bookmark-icons {
+    -webkit-animation: fade-in 0.3s;
+            animation: fade-in 0.3s;
+
+    .bookmark-icon {
+      width: 14px;
+      margin-right: 10px;
+      // the size is hard-coded inside the component
+    }
   }
 
   .bookmark-favicon {
@@ -73,4 +78,13 @@ $bookmark-color: rgb(222,225,229);
       outline-width: 0;
     }
   }
+}
+
+@-webkit-keyframes fade-in {
+  0%   { opacity: 0.0; }
+  100% { opacity: 1.0; }
+}
+@keyframes fade-in {
+  0%   { opacity: 0.0; }
+  100% { opacity: 1.0; }
 }

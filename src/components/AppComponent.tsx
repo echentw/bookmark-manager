@@ -9,6 +9,7 @@ import { Bookmark } from '../Bookmark';
 import { addBookmarksReducer, initialAddBookmarksState, AddBookmarksState } from '../reducers/AddBookmarksReducer';
 import { bookmarksReducer, initialBookmarksState, BookmarksState } from '../reducers/BookmarksReducer';
 import { copyUrlReducer, initialCopyUrlState, CopyUrlState } from '../reducers/CopyUrlReducer';
+import { dragDropReducer, initialDragDropState, DragDropState } from '../reducers/DragDropReducer';
 import { editBookmarkReducer, initialEditBookmarkState, EditBookmarkState } from '../reducers/EditBookmarkReducer';
 
 import { BookmarkListComponent } from './BookmarkListComponent';
@@ -32,6 +33,7 @@ export interface AppState {
   addBookmarksState: AddBookmarksState;
   bookmarksState: BookmarksState;
   copyUrlState: CopyUrlState;
+  dragDropState: DragDropState;
   editBookmarkState: EditBookmarkState;
 }
 
@@ -39,6 +41,7 @@ const allReducers = combineReducers({
   addBookmarksState: addBookmarksReducer,
   bookmarksState: bookmarksReducer,
   copyUrlState: copyUrlReducer,
+  dragDropState: dragDropReducer,
   editBookmarkState: editBookmarkReducer,
 });
 
@@ -55,6 +58,7 @@ const store = createStore(
     addBookmarksState: initialAddBookmarksState,
     bookmarksState: initialBookmarksState,
     copyUrlState: initialCopyUrlState,
+    dragDropState: initialDragDropState,
     editBookmarkState: initialEditBookmarkState,
   },
   allStoreEnhancers
