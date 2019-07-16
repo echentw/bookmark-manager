@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 
 import { AppState } from './AppComponent';
@@ -6,11 +7,19 @@ import { EditBookmarkComponent } from './EditBookmarkComponent';
 import { BookmarkButtonsComponent } from './BookmarkButtonsComponent';
 import { Bookmark } from '../Bookmark';
 
+const isMouseOverElement = (element: Element, x: number, y: number) => {
+  const { left, right, bottom, top } = element.getBoundingClientRect();
+  return x > left && x < right && y > top && y < bottom;
+}
+
 interface ExternalProps {
   bookmark: Bookmark;
   editing: boolean;
   isDragging: boolean;
   isDragPreview?: boolean;
+  hovering: boolean;
+  updateHoverRank: (rank: number, hovering: boolean) => void;
+  rank: number;
 }
 
 interface InternalProps extends ExternalProps {
@@ -18,23 +27,42 @@ interface InternalProps extends ExternalProps {
 }
 
 interface State {
-  mouseHover: boolean;
+  isMouseOver: boolean;
 }
 
 class BookmarkComponent extends React.Component<InternalProps, State> {
   state = {
-    mouseHover: false,
+    isMouseOver: false,
   };
+
+  private element: HTMLDivElement = null;
 
   onMouseEnter = () => {
     if (!this.props.somethingIsDragging) {
-      this.setState({ mouseHover: true });
+      this.props.updateHoverRank(this.props.rank, true);
     }
   }
 
   onMouseLeave = () => {
     if (!this.props.somethingIsDragging) {
-      this.setState({ mouseHover: false });
+      this.props.updateHoverRank(this.props.rank, false);
+    }
+  }
+
+  onDragEnter = () => {
+    this.props.updateHoverRank(this.props.rank, true);
+  }
+
+  onDragLeave = () => {
+    this.props.updateHoverRank(this.props.rank, false);
+  }
+
+  onDragEnd = (event: React.DragEvent) => {
+    const { clientX, clientY } = event;
+    const element = findDOMNode(this.element) as Element;
+    const isMouseOver = isMouseOverElement(element, clientX, clientY);
+    if (isMouseOver !== this.state.isMouseOver) {
+      this.props.updateHoverRank(this.props.rank, isMouseOver);
     }
   }
 
@@ -47,14 +75,21 @@ class BookmarkComponent extends React.Component<InternalProps, State> {
       <a className="bookmark-text" href={bookmark.url}>{bookmark.displayName()}</a>
     );
 
-    const maybeButtons = (this.props.isDragPreview || (this.state.mouseHover && !editing)) ? (
+    const maybeButtons = (this.props.isDragPreview || (this.props.hovering && !editing)) ? (
       <BookmarkButtonsComponent bookmark={bookmark}/>
     ) : null;
 
     const classes = isDragging ? 'bookmark dragging' : 'bookmark';
 
     return (
-      <div className={classes} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <div className={classes}
+        ref={(elem) => this.element = elem}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        onDragEnter={this.onDragEnter}
+        onDragLeave={this.onDragLeave}
+        onDragEnd={this.onDragEnd}
+      >
         <img className="bookmark-favicon" src={bookmark.faviconUrl}/>
         { bookmarkName }
         { maybeButtons }

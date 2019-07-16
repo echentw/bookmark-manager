@@ -16,6 +16,9 @@ $bookmark-color: rgb(222,225,229);
   }
 
   .bookmark-icons {
+    display: flex;
+    align-items: center;
+
     -webkit-animation: fade-in 0.3s;
             animation: fade-in 0.3s;
 

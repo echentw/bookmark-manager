@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useDrag } from 'react-dnd';
+import { useDrag, DragPreviewImage } from 'react-dnd';
 import { connect } from 'react-redux';
 
 import { Bookmark } from '../Bookmark';
@@ -13,6 +13,8 @@ interface ExternalProps {
   bookmark: Bookmark;
   editing: boolean;
   rank: number;
+  hovering: boolean;
+  updateHoverRank: (rank: number, hovering: boolean) => void;
 }
 
 interface InternalProps extends ExternalProps {
@@ -22,7 +24,7 @@ interface InternalProps extends ExternalProps {
 }
 
 function DraggableBookmarkComponent(props: InternalProps) {
-  const [{ isDragging }, drag] = useDrag({
+  const [{ isDragging }, drag, preview] = useDrag({
     item: {
       type: DraggableTypes.Bookmark,
       id: props.bookmark.id,
@@ -41,13 +43,21 @@ function DraggableBookmarkComponent(props: InternalProps) {
     }),
   })
 
+  const emptyImageSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+
   return (
-    <div ref={drag}>
-      <BookmarkComponent
-        bookmark={props.bookmark}
-        editing={props.editing}
-        isDragging={isDragging}
-      />
+    <div>
+      <DragPreviewImage connect={preview} src={emptyImageSrc}/>
+      <div ref={drag}>
+        <BookmarkComponent
+          bookmark={props.bookmark}
+          editing={props.editing}
+          isDragging={isDragging}
+          hovering={props.hovering}
+          updateHoverRank={props.updateHoverRank}
+          rank={props.rank}
+        />
+      </div>
     </div>
   );
 }

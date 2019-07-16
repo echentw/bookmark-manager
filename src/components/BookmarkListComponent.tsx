@@ -13,7 +13,23 @@ interface Props {
   editingBookmarkId: string | null;
 }
 
-class BookmarkListComponent extends React.Component<Props> {
+interface State {
+  hoverRank: number | null;
+}
+
+class BookmarkListComponent extends React.Component<Props, State> {
+  state: State = {
+    hoverRank: null,
+  };
+
+  updateHoverRank = (rank: number, hovering: boolean) => {
+    if (rank === this.state.hoverRank && !hovering) {
+      this.setState({ hoverRank: null });
+    } else if (rank !== this.state.hoverRank && hovering) {
+      this.setState({ hoverRank: rank });
+    }
+  }
+
   render() {
     const bookmarkComponents = this.props.bookmarks.map((bookmark: Bookmark, rank: number) => {
       const editing = bookmark.id === this.props.editingBookmarkId;
@@ -26,6 +42,8 @@ class BookmarkListComponent extends React.Component<Props> {
             bookmark={bookmark}
             editing={editing}
             rank={rank}
+            hovering={rank === this.state.hoverRank}
+            updateHoverRank={this.updateHoverRank}
           />
         </BookmarkContainerComponent>
       );
