@@ -18,6 +18,8 @@ import { DragLayerComponent } from './DragLayerComponent';
 import { CopiedToastComponent } from './CopiedToastComponent';
 import { AddBookmarksModalComponent } from './AddBookmarksModalComponent';
 
+const backgroundImage = require('../blue_stars.jpg');
+
 declare global {
   interface Window {
     __REDUX_DEVTOOLS_EXTENSION__?: any;
@@ -75,6 +77,7 @@ export class AppComponent extends React.Component {
             <DragLayerComponent/>
             <CopiedToastComponent/>
             <AddBookmarksModalComponent/>
+            <img className="background-image" src={backgroundImage}/>
           </div>
         </DndProvider>
       </Provider>
