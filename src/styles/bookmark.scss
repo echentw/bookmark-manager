@@ -11,6 +11,15 @@ $bookmark-color: rgb(222,225,229);
   flex-direction: row;
   align-items: center;
 
+  &.active {
+    $h-offset: 2px;
+    $v-offset: 2px;
+    $blur: 10px;
+    $spread: -2px;
+    box-shadow: $h-offset $v-offset $blur $spread rgb(110, 110, 110);
+    transition: box-shadow 0.2s ease-in-out;
+  }
+
   &.dragging {
     opacity: 0;
   }
