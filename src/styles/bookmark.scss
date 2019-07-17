@@ -12,11 +12,7 @@ $bookmark-color: rgb(222,225,229);
   align-items: center;
 
   &.active {
-    $h-offset: 2px;
-    $v-offset: 2px;
-    $blur: 10px;
-    $spread: -2px;
-    box-shadow: $h-offset $v-offset $blur $spread rgb(110, 110, 110);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.19), 0 4px 6px rgba(0, 0, 0, 0.23);
     transition: box-shadow 0.2s ease-in-out;
   }
 
