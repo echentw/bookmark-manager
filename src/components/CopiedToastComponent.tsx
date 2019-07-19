@@ -20,7 +20,7 @@ const layerStyles: React.CSSProperties = {
 };
 
 const itemStyles = ({ x, y }: { x: number, y: number }): React.CSSProperties => {
-  const transform = `translate(${x + 20}px, ${y - 12}px)`;
+  const transform = `translate(${x + 6}px, ${y - 28}px)`;
   return {
     transform: transform,
     WebkitTransform: transform,
