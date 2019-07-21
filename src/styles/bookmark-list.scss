@@ -1,0 +1,15 @@
+@import './mixins/list';
+
+.bookmark-list {
+  @include list;
+
+  .bookmark-container {
+    @include list-item-container;
+
+  }
+
+  .add-bookmarks-button {
+    @include list-button;
+    margin-top: 20px;
+  }
+}

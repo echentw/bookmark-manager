@@ -1,0 +1,5 @@
+@import './mixins/layer';
+
+.drag-layer {
+  @include layer;
+}

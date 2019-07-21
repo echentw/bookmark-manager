@@ -57,7 +57,7 @@ class EditBookmarkComponent extends React.Component<InternalProps> {
     const { bookmark } = this.props;
     return (
       <input
-        className="edit-bookmark-input"
+        className="edit-bookmark"
         ref={(input) => this.nameInput = input}
         type="text"
         defaultValue={bookmark.displayName()}

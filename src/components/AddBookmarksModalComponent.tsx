@@ -18,20 +18,20 @@ interface State {
   selectedTabs: Map<number, TabInfo>;
 }
 
-// Copy-pasted from DragLayerComponent.tsx
-const layerBaseStyles: React.CSSProperties = {
-  position: 'fixed',
-  zIndex: 100,
-  left: 0,
-  top: 0,
-  width: '100%',
-  height: '100%',
-};
-
 class AddBookmarksModalComponent extends React.Component<Props, State> {
   state = {
     selectedTabs: new Map<number, TabInfo>(),
   };
+
+  private innerNode: HTMLElement = null;
+
+  onClick = (event: React.MouseEvent) => {
+    if (this.innerNode !== null && this.innerNode.contains(event.target as Node)) {
+      // Clicked inside the modal. Do nothing.
+      return;
+    }
+    this.onClickCancel();
+  }
 
   onClickCancel = () => {
     this.props.cancel();
@@ -62,42 +62,36 @@ class AddBookmarksModalComponent extends React.Component<Props, State> {
   }
 
   render() {
+    if (!this.props.showingModal) {
+      return null;
+    }
+
     const tabInfoComponents = this.props.tabs.map((tab: TabInfo, index: number) => {
       const selected = this.state.selectedTabs.has(index);
-      const classes = selected ? 'tab-info selected' : 'tab-info';
+      const classes = selected ? 'open-tab selected' : 'open-tab';
       return (
-        <div className={classes} key={index} onClick={() => this.onClickTab(index)}>
-          { tab.title }
+        <div className="open-tab-container" key={index}>
+          <div className={classes} onClick={() => this.onClickTab(index)}>
+            <img className="open-tab-favicon" src={tab.faviconUrl}/>
+            <div className="open-tab-name">{tab.title}</div>
+          </div>
         </div>
       );
     });
 
-    const layerStyles: React.CSSProperties = {
-      ...layerBaseStyles,
-      pointerEvents: this.props.showingModal ? 'auto' : 'none',
-    };
-
-    const maybeModalComponent = this.props.showingModal ? (
-      <div className="add-bookmarks-modal">
-        <div className="tab-infos-outer-container">
-          <div className="tab-infos-inner-container">
-            { tabInfoComponents }
-          </div>
-        </div>
-        <div className="buttons-container">
-          <div className="button cancel-button" onClick={this.onClickCancel}>
-            Cancel
-          </div>
-          <div className="button add-button" onClick={this.onClickSave}>
-            Save
-          </div>
-        </div>
-      </div>
-    ) : null;
-
     return (
-      <div className="add-bookmarks-layer" style={layerStyles}>
-        { maybeModalComponent }
+      <div className="add-bookmarks-layer" onClick={this.onClick}>
+        <div className="add-bookmarks-modal" ref={(element) => this.innerNode = element}>
+          { tabInfoComponents }
+          <div className="add-bookmarks-buttons">
+            <div className="add-bookmarks-cancel-button" onClick={this.onClickCancel}>
+              Cancel
+            </div>
+            <div className="add-bookmarks-save-button" onClick={this.onClickSave}>
+              Save
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

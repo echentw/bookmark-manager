@@ -8,17 +8,6 @@ interface Props {
   copyUrlState: CopyUrlState;
 }
 
-// Copy-pasted from DragLayerComponent.tsx
-const layerStyles: React.CSSProperties = {
-  position: 'fixed',
-  pointerEvents: 'none',
-  zIndex: 100,
-  left: 0,
-  top: 0,
-  width: '100%',
-  height: '100%',
-};
-
 const itemStyles = ({ x, y }: { x: number, y: number }): React.CSSProperties => {
   const transform = `translate(${x + 6}px, ${y - 28}px)`;
   return {
@@ -38,7 +27,7 @@ class CopiedToastComponent extends React.Component<Props> {
     ) : null;
 
     return (
-      <div className="copied-toast-layer" style={layerStyles}>
+      <div className="copied-toast-layer">
         { InnerElement }
       </div>
     );

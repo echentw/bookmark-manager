@@ -1,0 +1,28 @@
+@import './mixins/layer';
+
+.copied-toast-layer {
+  @include layer;
+
+  .copied-toast {
+    width: 80px;
+    height: 24px;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: black;
+
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-family: Arial;
+    font-size: 12px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.animating {
+      -webkit-animation: fade-in-out 1.0s;
+              animation: fade-in-out 1.0s;
+    }
+
+    opacity: 0;
+  }
+}

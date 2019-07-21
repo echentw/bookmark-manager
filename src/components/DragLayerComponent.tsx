@@ -16,16 +16,6 @@ interface CollectedProps {
   item: { type: string, id: string },
 }
 
-const layerStyles: React.CSSProperties = {
-  position: 'fixed',
-  pointerEvents: 'none',
-  zIndex: 100,
-  left: 0,
-  top: 0,
-  width: '100%',
-  height: '100%',
-};
-
 const itemStyles = (currentOffset?: XYCoord): React.CSSProperties => {
   if (!currentOffset) {
     return {
@@ -56,23 +46,23 @@ function DragLayerComponent(props: Props) {
     const bookmark = props.bookmarks.find((bookmark) => bookmark.id === bookmarkId);
 
     dragPreviewComponent = (
-      <BookmarkComponent
-        bookmark={bookmark}
-        editing={false}
-        isDragging={false}
-        isDragPreview={true}
-        hovering={false}
-        updateHoverRank={() => {}}
-        rank={-1}
-      />
+      <div className="drag-layer-item" style={itemStyles(currentOffset)}>
+        <BookmarkComponent
+          bookmark={bookmark}
+          editing={false}
+          isDragging={false}
+          isDragPreview={true}
+          hovering={false}
+          updateHoverRank={() => {}}
+          rank={-1}
+        />
+      </div>
     );
   }
 
   return (
-    <div className="drag-layer" style={layerStyles}>
-      <div className="drag-layer-item" style={itemStyles(currentOffset)}>
-        { dragPreviewComponent }
-      </div>
+    <div className="drag-layer">
+      { dragPreviewComponent }
     </div>
   );
 }

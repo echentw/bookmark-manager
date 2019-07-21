@@ -39,13 +39,13 @@ class BookmarkButtonsComponent extends React.Component<InternalProps> {
 
   render() {
     return (
-      <div className="bookmark-icons">
+      <div className="bookmark-buttons">
         <IconContext.Provider value={{ size: '1.2em' }}>
           <CopyToClipboard text={this.props.bookmark.url}>
-            <FaCopy className="bookmark-icon" onClick={this.onClickCopy}/>
+            <FaCopy className="bookmark-button" onClick={this.onClickCopy}/>
           </CopyToClipboard>
-          <FaPen className="bookmark-icon" onClick={this.onClickEdit}/>
-          <FaTrash className="bookmark-icon" onClick={this.onClickDelete}/>
+          <FaPen className="bookmark-button" onClick={this.onClickEdit}/>
+          <FaTrash className="bookmark-button" onClick={this.onClickDelete}/>
         </IconContext.Provider>
       </div>
     );

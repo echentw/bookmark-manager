@@ -1,10 +1,16 @@
+@import './add-bookmarks-layer';
+@import './animations';
+@import './greeting';
+@import './bookmark-list';
+@import './drag-layer';
 @import './bookmark';
-@import './add-bookmarks';
+@import './copied-toast-layer';
 
 $fade-in-time: 0.3s;
 
 body {
   margin: 0;
+  @include fade-in-and-out;
   -webkit-animation: all-fade-in $fade-in-time;
           animation: all-fade-in $fade-in-time;
 }
@@ -32,134 +38,4 @@ body {
 
   padding: 40px;
   padding-left: 80px;
-}
-
-.bookmark-list {
-  box-sizing: border-box;
-  border-radius: 4px;
-  width: 500px; // This doesn't work, why?
-  background-color: rgba(255, 255, 255, 0.5);
-  padding: 16px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  .bookmark-container {
-    background-color: rgb(80, 80, 80);
-    margin-top: 20px;
-    border-radius: 4px;
-  }
-}
-
-.add-bookmarks-button {
-  @extend .bookmark;
-
-  margin-top: 20px;
-  justify-content: center;
-
-  &:hover {
-    background-color: rgb(200, 200, 200);
-    cursor: default;
-  }
-  &:active {
-    background-color: rgb(180, 180, 180);
-  }
-}
-
-.greeting {
-  flex: 1;
-  min-width: 420px;
-
-  display: flex;
-  flex-direction: column;
-
-  .greeting-top {
-    flex: 3;
-
-    color: white;
-    font-family: arial;
-    font-size: 36px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .greeting-bottom {
-    flex: 1;
-
-    color: white;
-    font-family: arial;
-    font-size: 24px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-end;
-  }
-}
-
-.copied-toast {
-  width: 80px;
-  height: 24px;
-  background-color: rgba(255, 255, 255, 0.9);
-  color: black;
-
-  box-sizing: border-box;
-  border-radius: 4px;
-  font-family: Arial;
-  font-size: 12px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &.animating {
-    -webkit-animation: fade-in-out 1.0s;
-            animation: fade-in-out 1.0s;
-  }
-
-  opacity: 0;
-}
-
-@-webkit-keyframes fade-in-out {
-  0% {
-    opacity: 0;
-  }
-  20% {
-    opacity: 1;
-  }
-  80% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-@keyframes fade-in-out {
-  0% {
-    opacity: 0;
-  }
-  20% {
-    opacity: 1;
-  }
-  80% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-@-webkit-keyframes all-fade-in {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-
-@keyframes all-fade-in {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
 }

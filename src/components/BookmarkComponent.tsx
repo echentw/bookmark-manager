@@ -72,7 +72,7 @@ class BookmarkComponent extends React.Component<InternalProps, State> {
     const bookmarkName = editing ? (
       <EditBookmarkComponent bookmark={bookmark}/>
     ) : (
-      <a className="bookmark-text" href={bookmark.url}>{bookmark.displayName()}</a>
+      <a className="bookmark-name" href={bookmark.url}>{bookmark.displayName()}</a>
     );
 
     const shouldShowButtons = this.props.isDragPreview || (this.props.hovering && !editing);
@@ -82,10 +82,10 @@ class BookmarkComponent extends React.Component<InternalProps, State> {
 
     let classes = 'bookmark';
     if (isDragging) {
-      classes += ' dragging';
+      classes += ' vanished';
     }
     if (shouldShowBoxShadow) {
-      classes += ' active';
+      classes += ' with-shadow';
     }
 
     return (

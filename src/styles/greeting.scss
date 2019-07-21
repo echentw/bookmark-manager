@@ -1,0 +1,33 @@
+.greeting {
+  flex: 1;
+  min-width: 420px;
+
+  display: flex;
+  flex-direction: column;
+
+  .greeting-top {
+    flex: 3;
+
+    color: white;
+    font-family: arial;
+    font-size: 36px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .greeting-bottom {
+    flex: 1;
+
+    color: white;
+    font-family: arial;
+    font-size: 24px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
+}

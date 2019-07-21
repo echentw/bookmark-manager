@@ -1,0 +1,63 @@
+@import './mixins/layer';
+@import './mixins/list';
+
+$highlight-border-color: rgb(0, 148, 255);
+
+.add-bookmarks-layer {
+  @include layer;
+  pointer-events: auto;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgba(0, 0, 0, 0.5);
+
+  .add-bookmarks-modal {
+    @include list;
+
+    .open-tab-container {
+      @include list-item-container;
+
+      .open-tab {
+        @include list-item;
+        &:hover {
+          cursor: pointer;
+        }
+
+        &.selected {
+          border-style: solid;
+          border-width: 2px;
+          border-color: $highlight-border-color;
+        }
+
+        .open-tab-favicon {
+          @include list-item-image;
+        }
+
+        .open-tab-name {
+          @include list-item-text;
+        }
+      }
+    }
+
+    .add-bookmarks-buttons {
+      width: 460px;
+      margin-top: 20px;
+
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      .add-bookmarks-cancel-button {
+        @include list-button;
+        width: 220px;
+      }
+
+      .add-bookmarks-save-button {
+        @include list-button;
+        width: 220px;
+      }
+    }
+  }
+}
