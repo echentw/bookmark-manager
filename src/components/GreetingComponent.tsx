@@ -45,9 +45,13 @@ export class GreetingComponent extends React.Component<Props, State> {
   }
 
   getTime = (date: Date): string => {
-    const hours = date.getHours() <= 12 ? date.getHours() : date.getHours() - 12;
+    const hoursNumber = date.getHours() <= 12 ? date.getHours() : date.getHours() - 12;
+    const minutesNumber = date.getMinutes();
+
+    const hours = hoursNumber < 10 ? `0${hoursNumber}` : `${hoursNumber}`;
+    const minutes = minutesNumber < 10 ? `0${minutesNumber}` : `${minutesNumber}`;
     const period = date.getHours() < 12 ? 'am' : 'pm';
-    const minutes = date.getMinutes();
+
     return `${hours}:${minutes}${period}`;
   }
 
