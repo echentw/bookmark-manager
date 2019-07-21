@@ -10,9 +10,8 @@ $fade-in-time: 0.3s;
 
 body {
   margin: 0;
-  @include fade-in-and-out;
-  -webkit-animation: all-fade-in $fade-in-time;
-          animation: all-fade-in $fade-in-time;
+  -webkit-animation: fade-in $fade-in-time;
+          animation: fade-in $fade-in-time;
 }
 
 .background-image {
@@ -23,8 +22,8 @@ body {
   height: 100%;
   z-index: -100;
   pointer-events: none;
-  -webkit-animation: all-fade-in $fade-in-time;
-          animation: all-fade-in $fade-in-time;
+  -webkit-animation: fade-in $fade-in-time;
+          animation: fade-in $fade-in-time;
 }
 
 .app {
