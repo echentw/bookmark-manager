@@ -9,21 +9,13 @@ import { DragDropParams } from '../actions/DragDropActions';
 import { EditBookmarkParams } from '../actions/EditBookmarkActions';
 import { Bookmark } from '../Bookmark';
 
-import * as dummyBookmarkData from './bookmarks.json';
-
 export interface BookmarksState {
   bookmarks: Bookmark[];
   draggedRank: number | null;
 }
 
 export const initialBookmarksState: BookmarksState = {
-  bookmarks: dummyBookmarkData.bookmarks.map(data => {
-    return new Bookmark({
-      url: data.url,
-      title: data.title,
-      faviconUrl: data.faviconUrl,
-    });
-  }),
+  bookmarks: [],
   draggedRank: null,
 };
 

@@ -1,8 +1,6 @@
 import * as React from 'react';
-import { DndProvider } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 import { Provider } from 'react-redux';
-import { compose, applyMiddleware, combineReducers, createStore } from 'redux';
+import { Store, compose, applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
 
 import { Bookmark } from '../Bookmark';
@@ -11,6 +9,7 @@ import { bookmarksReducer, initialBookmarksState, BookmarksState } from '../redu
 import { copyUrlReducer, initialCopyUrlState, CopyUrlState } from '../reducers/CopyUrlReducer';
 import { dragDropReducer, initialDragDropState, DragDropState } from '../reducers/DragDropReducer';
 import { editBookmarkReducer, initialEditBookmarkState, EditBookmarkState } from '../reducers/EditBookmarkReducer';
+import { ChromeHelpers } from '../ChromeHelpers';
 
 import { BookmarkListComponent } from './BookmarkListComponent';
 import { GreetingComponent } from './GreetingComponent';
@@ -54,31 +53,59 @@ const allStoreEnhancers = window.__REDUX_DEVTOOLS_EXTENSION__ ? (
   )
 ) : applyMiddleware(thunk);
 
-const store = createStore(
-  allReducers,
-  {
-    addBookmarksState: initialAddBookmarksState,
-    bookmarksState: initialBookmarksState,
-    copyUrlState: initialCopyUrlState,
-    dragDropState: initialDragDropState,
-    editBookmarkState: initialEditBookmarkState,
-  },
-  allStoreEnhancers
-);
+const initialAppState = {
+  addBookmarksState: initialAddBookmarksState,
+  bookmarksState: initialBookmarksState,
+  copyUrlState: initialCopyUrlState,
+  dragDropState: initialDragDropState,
+  editBookmarkState: initialEditBookmarkState,
+};
 
-export class AppComponent extends React.Component {
+const initialStore = createStore(allReducers, initialAppState, allStoreEnhancers);
+
+interface State {
+  loaded: boolean;
+  store: Store | null;
+}
+
+export class AppComponent extends React.Component<{}, State> {
+  state: State = {
+    loaded: false,
+    store: null,
+  };
+
+  componentDidMount = async () => {
+    const bookmarks = await ChromeHelpers.loadBookmarks();
+
+    const loadedBookmarksState = {
+      bookmarks: bookmarks,
+    };
+
+    const loadedAppState = {
+      ...initialAppState,
+      bookmarksState: loadedBookmarksState,
+    };
+
+    const store = createStore(allReducers, loadedAppState, allStoreEnhancers);
+
+    this.setState({
+      loaded: true,
+      store: store,
+    });
+  }
+
   render() {
+    const store = this.state.loaded ? this.state.store : initialStore;
+    const classes = this.state.loaded ? 'app loaded' : 'app';
     return (
       <Provider store={store}>
-        <DndProvider backend={HTML5Backend}>
-          <div className="app">
-            <BookmarkListComponent/>
-            <GreetingComponent name={'Eric'}/>
-            <DragLayerComponent/>
-            <CopiedToastComponent/>
-            <AddBookmarksModalComponent/>
-          </div>
-        </DndProvider>
+        <div className={classes}>
+          <BookmarkListComponent/>
+          <GreetingComponent name={'Eric'}/>
+          <DragLayerComponent/>
+          <CopiedToastComponent/>
+          <AddBookmarksModalComponent/>
+        </div>
       </Provider>
     );
   }
