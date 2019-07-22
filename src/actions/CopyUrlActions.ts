@@ -1,5 +1,5 @@
-import { Action, CopyUrlActionType as ActionType } from './constants';
 import { Dispatch } from 'redux';
+import { Action, CopyUrlActionType as ActionType } from './constants';
 
 export interface ShowToastParams {
   x: number;

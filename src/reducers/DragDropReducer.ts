@@ -10,7 +10,7 @@ export const initialDragDropState: DragDropState = {
 };
 
 export function dragDropReducer(state: DragDropState = initialDragDropState, action: Action): DragDropState {
-  switch(action.type) {
+  switch (action.type) {
     case ActionType.beginDrag:
       return handleBeginDrag(state, action as Action<DragDropParams>);
     case ActionType.endDrag:

@@ -1,5 +1,5 @@
 import { Action, CopyUrlActionType as ActionType } from '../actions/constants';
-import { HideToastParams, _ShowToastParams } from '../actions/CopyUrlActions';
+import { _ShowToastParams, HideToastParams } from '../actions/CopyUrlActions';
 
 export interface CopyUrlState {
   showingToast: boolean;
