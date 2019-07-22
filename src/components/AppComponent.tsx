@@ -77,7 +77,6 @@ export class AppComponent extends React.Component {
             <DragLayerComponent/>
             <CopiedToastComponent/>
             <AddBookmarksModalComponent/>
-            <img className="background-image" src={backgroundImage}/>
           </div>
         </DndProvider>
       </Provider>
