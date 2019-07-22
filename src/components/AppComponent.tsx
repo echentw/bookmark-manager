@@ -74,6 +74,8 @@ export class AppComponent extends React.Component<{}, State> {
     store: null,
   };
 
+  oldBookmarks: Bookmark[] = [];
+
   componentDidMount = async () => {
     const bookmarks = await ChromeHelpers.loadBookmarks();
 
@@ -91,6 +93,17 @@ export class AppComponent extends React.Component<{}, State> {
     this.setState({
       loaded: true,
       store: store,
+    });
+
+    this.oldBookmarks = bookmarks;
+
+    store.subscribe(async () => {
+      const dragging = store.getState().dragDropState.dragging;
+      const bookmarks = store.getState().bookmarksState.bookmarks;
+      if (!dragging && bookmarks !== this.oldBookmarks) {
+        await ChromeHelpers.saveBookmarks(bookmarks);
+        this.oldBookmarks = bookmarks;
+      }
     });
   }
 

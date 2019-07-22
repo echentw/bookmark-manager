@@ -43,7 +43,7 @@ export class ChromeHelpers {
     }));
 
     return new Promise((resolve, reject) => {
-      chrome.storage.sync.set({ [ChromeHelpers.Keys.Bookmarks]: data }, () => {
+      chrome.storage.local.set({ [ChromeHelpers.Keys.Bookmarks]: data }, () => {
         // TODO: error handling
         resolve();
       });
@@ -52,12 +52,25 @@ export class ChromeHelpers {
 
   public static loadBookmarks = (): Promise<Bookmark[]> => {
     return new Promise((resolve, reject) => {
-      chrome.storage.sync.get([ChromeHelpers.Keys.Bookmarks], result => {
-        const datas: BookmarkData[] = result[ChromeHelpers.Keys.Bookmarks];
-        const bookmarks: Bookmark[] = datas.map(data => new Bookmark(data));
-        // TODO: error handling
-        resolve(bookmarks);
+      chrome.storage.local.get([ChromeHelpers.Keys.Bookmarks], result => {
+        if (result[ChromeHelpers.Keys.Bookmarks]) {
+          const datas: BookmarkData[] = result[ChromeHelpers.Keys.Bookmarks];
+          const bookmarks: Bookmark[] = datas.map(data => new Bookmark(data));
+          // TODO: error handling
+          resolve(bookmarks);
+        } else {
+          resolve([]);
+        }
       });
+    });
+  }
+
+  public static printStorageDetails = () => {
+    chrome.storage.local.getBytesInUse((bytes: number) => {
+      console.log('bytes in use', bytes);
+    });
+    chrome.storage.local.get([ChromeHelpers.Keys.Bookmarks], result => {
+      console.log('data', result);
     });
   }
 }
