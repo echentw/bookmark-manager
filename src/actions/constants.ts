@@ -3,6 +3,10 @@ export interface Action<Params = {}> {
   params: Params;
 }
 
+export const SyncBookmarksActionType = {
+  sync: 'SyncBookmarksActionType',
+};
+
 export const AddBookmarksActionType = {
   showModal: 'AddBookmarks:showModal',
   cancel: 'AddBookmarks:cancel',

@@ -57,11 +57,25 @@ export class ChromeHelpers {
           const datas: BookmarkData[] = result[ChromeHelpers.Keys.Bookmarks];
           const bookmarks: Bookmark[] = datas.map(data => new Bookmark(data));
           // TODO: error handling
-          resolve(bookmarks);
+          return resolve(bookmarks);
         } else {
-          resolve([]);
+          return resolve([]);
         }
       });
+    });
+  }
+
+  public static addOnChangedListener = (handleNewBookmarks: (bookmarks: Bookmark[]) => void): void => {
+    chrome.storage.onChanged.addListener((
+      changes: { [key: string]: chrome.storage.StorageChange },
+      areaName: string
+    ) => {
+      if (areaName === 'local' && changes[ChromeHelpers.Keys.Bookmarks]) {
+        const change: chrome.storage.StorageChange = changes[ChromeHelpers.Keys.Bookmarks];
+        const datas: BookmarkData[] = change.newValue;
+        const newBookmarks: Bookmark[] = datas.map(data => new Bookmark(data));
+        handleNewBookmarks(newBookmarks);
+      }
     });
   }
 

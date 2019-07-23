@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Provider } from 'react-redux';
+import { connect } from 'react-redux';
 import { Store, compose, applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
 
@@ -10,6 +10,8 @@ import { copyUrlReducer, initialCopyUrlState, CopyUrlState } from '../reducers/C
 import { dragDropReducer, initialDragDropState, DragDropState } from '../reducers/DragDropReducer';
 import { editBookmarkReducer, initialEditBookmarkState, EditBookmarkState } from '../reducers/EditBookmarkReducer';
 import { ChromeHelpers } from '../ChromeHelpers';
+import * as SyncBookmarksActions from '../actions/SyncBookmarksActions';
+import { SyncBookmarksParams } from '../actions/SyncBookmarksActions';
 
 import { BookmarkListComponent } from './BookmarkListComponent';
 import { GreetingComponent } from './GreetingComponent';
@@ -61,65 +63,64 @@ const initialAppState = {
   editBookmarkState: initialEditBookmarkState,
 };
 
-const initialStore = createStore(allReducers, initialAppState, allStoreEnhancers);
+export const store = createStore(allReducers, initialAppState, allStoreEnhancers);
 
-interface State {
+interface Props {
   loaded: boolean;
-  store: Store | null;
+  loadBookmarks: (params: {}) => void;
+  syncBookmarks: (params: SyncBookmarksParams) => void;
 }
 
-export class AppComponent extends React.Component<{}, State> {
-  state: State = {
-    loaded: false,
-    store: null,
-  };
-
-  oldBookmarks: Bookmark[] = [];
+class AppComponent extends React.Component<Props> {
+  oldBookmarks: Bookmark[] | null = null;
 
   componentDidMount = async () => {
-    const bookmarks = await ChromeHelpers.loadBookmarks();
-
-    const loadedBookmarksState = {
-      bookmarks: bookmarks,
-    };
-
-    const loadedAppState = {
-      ...initialAppState,
-      bookmarksState: loadedBookmarksState,
-    };
-
-    const store = createStore(allReducers, loadedAppState, allStoreEnhancers);
-
-    this.setState({
-      loaded: true,
-      store: store,
-    });
-
-    this.oldBookmarks = bookmarks;
-
     store.subscribe(async () => {
       const dragging = store.getState().dragDropState.dragging;
       const bookmarks = store.getState().bookmarksState.bookmarks;
+
+      if (this.oldBookmarks === null) {
+        this.oldBookmarks = bookmarks;
+        return;
+      }
+
       if (!dragging && bookmarks !== this.oldBookmarks) {
         await ChromeHelpers.saveBookmarks(bookmarks);
         this.oldBookmarks = bookmarks;
       }
     });
+
+    ChromeHelpers.addOnChangedListener((newBookmarks: Bookmark[]) => {
+      this.props.syncBookmarks({ bookmarks: newBookmarks });
+    });
+
+    this.props.loadBookmarks({});
   }
 
   render() {
-    const store = this.state.loaded ? this.state.store : initialStore;
-    const classes = this.state.loaded ? 'app loaded' : 'app';
+    const classes = this.props.loaded ? 'app loaded' : 'app';
     return (
-      <Provider store={store}>
-        <div className={classes}>
-          <BookmarkListComponent/>
-          <GreetingComponent name={'Eric'}/>
-          <DragLayerComponent/>
-          <CopiedToastComponent/>
-          <AddBookmarksModalComponent/>
-        </div>
-      </Provider>
+      <div className={classes}>
+        <BookmarkListComponent/>
+        <GreetingComponent name={'Eric'}/>
+        <DragLayerComponent/>
+        <CopiedToastComponent/>
+        <AddBookmarksModalComponent/>
+      </div>
     );
   }
 }
+
+const mapStateToProps = (state: AppState, props: {}) => {
+  return {
+    loaded: state.bookmarksState.loaded,
+  };
+};
+
+const mapActionsToProps = {
+  loadBookmarks: SyncBookmarksActions.loadBookmarks,
+  syncBookmarks: SyncBookmarksActions.syncBookmarks,
+};
+
+const Component = connect(mapStateToProps, mapActionsToProps)(AppComponent);
+export { Component as AppComponent };

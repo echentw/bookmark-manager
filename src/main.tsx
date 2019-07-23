@@ -4,14 +4,17 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import { Provider } from 'react-redux';
 
-import { AppComponent } from './components/AppComponent';
+import { AppComponent, store } from './components/AppComponent';
 
 const MainComponent = () => {
   return (
-    <DndProvider backend={HTML5Backend}>
-      <AppComponent/>
-    </DndProvider>
+    <Provider store={store}>
+      <DndProvider backend={HTML5Backend}>
+        <AppComponent/>
+      </DndProvider>
+    </Provider>
   );
 };
 

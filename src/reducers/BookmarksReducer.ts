@@ -4,19 +4,23 @@ import {
   AddBookmarksActionType,
   DragDropActionType,
   EditBookmarkActionType,
+  SyncBookmarksActionType,
 } from '../actions/constants';
 import { DragDropParams } from '../actions/DragDropActions';
 import { EditBookmarkParams } from '../actions/EditBookmarkActions';
+import { SyncBookmarksParams } from '../actions/SyncBookmarksActions';
 import { Bookmark } from '../Bookmark';
 
 export interface BookmarksState {
   bookmarks: Bookmark[];
   draggedRank: number | null;
+  loaded: boolean;
 }
 
 export const initialBookmarksState: BookmarksState = {
   bookmarks: [],
   draggedRank: null,
+  loaded: false,
 };
 
 export function bookmarksReducer(state: BookmarksState = initialBookmarksState, action: Action): BookmarksState {
@@ -33,6 +37,8 @@ export function bookmarksReducer(state: BookmarksState = initialBookmarksState, 
       return handleEditBookmarkSave(state, action as Action<EditBookmarkParams>);
     case EditBookmarkActionType.deleteBookmark:
       return handleEditBookmarkDeleteBookmark(state, action as Action<EditBookmarkParams>);
+    case SyncBookmarksActionType.sync:
+      return handleSyncBookmarks(state, action as Action<SyncBookmarksParams>);
     default:
       return state;
   }
@@ -79,6 +85,7 @@ function handleDragIsOver(state: BookmarksState, action: Action<DragDropParams>)
   bookmarks[dropTargetRank] = draggedBookmark;
 
   return {
+    ...state,
     bookmarks: bookmarks,
     draggedRank: dropTargetRank,
   };
@@ -105,5 +112,13 @@ function handleEditBookmarkDeleteBookmark(state: BookmarksState, action: Action<
   return {
     ...state,
     bookmarks: bookmarks,
+  };
+}
+
+function handleSyncBookmarks(state: BookmarksState, action: Action<SyncBookmarksParams>): BookmarksState {
+  return {
+    ...state,
+    bookmarks: action.params.bookmarks,
+    loaded: true,
   };
 }
