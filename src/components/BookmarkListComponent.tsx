@@ -50,8 +50,10 @@ class BookmarkListComponent extends React.Component<Props, State> {
     });
     return (
       <div className="bookmark-list">
-        { bookmarkComponents }
-        <AddBookmarksButtonComponent/>
+        <div className="bookmark-list-scrollable-area">
+          { bookmarkComponents }
+          <AddBookmarksButtonComponent/>
+        </div>
       </div>
     );
   }

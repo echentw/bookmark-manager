@@ -16,32 +16,41 @@ $highlight-border-color: rgb(0, 148, 255);
   .add-bookmarks-modal {
     @include list;
 
+    padding-left: 16px;
+    padding-right: 16px;
+
     width: 500px;
+    max-height: calc(100% - 100px);
     background-color: rgba(150, 150, 150, 0.9);
 
-    .open-tab-container {
-      @include list-item-container;
+    .add-bookmarks-modal-scrollable-area {
+      @include list-scrollable-area;
 
-      .open-tab {
-        @include list-item;
-        &:hover {
-          cursor: pointer;
-        }
+      .open-tab-container {
+        @include list-item-container;
 
-        &.selected {
-          border-style: solid;
-          border-width: 2px;
-          border-color: $highlight-border-color;
-        }
+        .open-tab {
+          @include list-item;
+          &:hover {
+            cursor: pointer;
+          }
 
-        .open-tab-favicon {
-          @include list-item-image;
-        }
+          &.selected {
+            border-style: solid;
+            border-width: 2px;
+            border-color: $highlight-border-color;
+          }
 
-        .open-tab-name {
-          @include list-item-text;
+          .open-tab-favicon {
+            @include list-item-image;
+          }
+
+          .open-tab-name {
+            @include list-item-text;
+          }
         }
       }
+
     }
 
     .add-bookmarks-buttons {

@@ -82,7 +82,9 @@ class AddBookmarksModalComponent extends React.Component<Props, State> {
     return (
       <div className="add-bookmarks-layer" onClick={this.onClick}>
         <div className="add-bookmarks-modal" ref={(element) => this.innerNode = element}>
-          { tabInfoComponents }
+          <div className="add-bookmarks-modal-scrollable-area">
+            { tabInfoComponents }
+          </div>
           <div className="add-bookmarks-buttons">
             <div className="add-bookmarks-cancel-button" onClick={this.onClickCancel}>
               Cancel

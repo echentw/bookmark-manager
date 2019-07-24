@@ -5,13 +5,18 @@
 
   width: 440px;
 
-  .bookmark-container {
-    @include list-item-container;
+  .bookmark-list-scrollable-area {
+    @include list-scrollable-area;
 
-  }
+    .bookmark-container {
+      @include list-item-container;
 
-  .add-bookmarks-button {
-    @include list-button;
-    margin-top: 20px;
+    }
+
+    .add-bookmarks-button {
+      @include list-button;
+      margin-top: 20px;
+    }
+
   }
 }
