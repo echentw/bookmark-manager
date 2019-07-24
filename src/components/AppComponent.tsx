@@ -101,8 +101,12 @@ class AppComponent extends React.Component<Props> {
     const classes = this.props.loaded ? 'app loaded' : 'app';
     return (
       <div className={classes}>
-        <BookmarkListComponent/>
-        <GreetingComponent name={'Eric'}/>
+        <div className="app-left">
+          <BookmarkListComponent/>
+        </div>
+        <div className="app-right">
+          <GreetingComponent name={'Eric'}/>
+        </div>
         <DragLayerComponent/>
         <CopiedToastComponent/>
         <AddBookmarksModalComponent/>

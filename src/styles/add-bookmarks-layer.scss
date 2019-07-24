@@ -15,6 +15,8 @@ $highlight-border-color: rgb(0, 148, 255);
 
   .add-bookmarks-modal {
     @include list;
+
+    width: 500px;
     background-color: rgba(150, 150, 150, 0.9);
 
     .open-tab-container {
@@ -43,7 +45,7 @@ $highlight-border-color: rgb(0, 148, 255);
     }
 
     .add-bookmarks-buttons {
-      width: 460px;
+      width: 100%;
       margin-top: 20px;
 
       display: flex;

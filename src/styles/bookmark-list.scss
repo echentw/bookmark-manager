@@ -3,6 +3,8 @@
 .bookmark-list {
   @include list;
 
+  width: 440px;
+
   .bookmark-container {
     @include list-item-container;
 
