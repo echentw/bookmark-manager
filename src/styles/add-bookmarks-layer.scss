@@ -16,9 +16,6 @@ $highlight-border-color: rgb(0, 148, 255);
   .add-bookmarks-modal {
     @include list;
 
-    padding-left: 16px;
-    padding-right: 16px;
-
     width: 500px;
     max-height: calc(100% - 100px);
     background-color: rgba(150, 150, 150, 0.9);
@@ -28,6 +25,10 @@ $highlight-border-color: rgb(0, 148, 255);
 
       .open-tab-container {
         @include list-item-container;
+
+        &.last {
+          margin-bottom: 0;
+        }
 
         .open-tab {
           @include list-item;
@@ -50,12 +51,15 @@ $highlight-border-color: rgb(0, 148, 255);
           }
         }
       }
-
     }
 
     .add-bookmarks-buttons {
       width: 100%;
-      margin-top: 20px;
+
+      margin-top: 16px;
+
+      padding-left: 16px;
+      padding-right: 16px;
 
       display: flex;
       flex-direction: row;
@@ -63,12 +67,12 @@ $highlight-border-color: rgb(0, 148, 255);
 
       .add-bookmarks-cancel-button {
         @include list-button;
-        width: 220px;
+        width: 224px;
       }
 
       .add-bookmarks-save-button {
         @include list-button;
-        width: 220px;
+        width: 224px;
       }
     }
   }

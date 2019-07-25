@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import Scrollbars from 'react-custom-scrollbars';
 
 import { Bookmark } from '../Bookmark';
 import { DraggableBookmarkComponent } from './DraggableBookmarkComponent';
@@ -50,12 +51,15 @@ class BookmarkListComponent extends React.Component<Props, State> {
     });
     return (
       <div className="bookmark-list">
-        <div className="bookmark-list-scrollable-area">
-          { bookmarkComponents }
-          <AddBookmarksButtonComponent/>
-        </div>
+        <Scrollbars>
+          <div className="bookmark-list-scrollable-area">
+            { bookmarkComponents }
+            <AddBookmarksButtonComponent/>
+          </div>
+        </Scrollbars>
       </div>
     );
+
   }
 }
 

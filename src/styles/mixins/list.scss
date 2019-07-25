@@ -17,11 +17,11 @@ $list-item-color: rgb(222,225,229);
   width: 100%;
   padding-left: 16px;
   padding-right: 16px;
-  overflow: auto;
+  overflow: scroll;
 }
 
 @mixin list-item-container {
-  margin-top: 16px;
+  margin-bottom: 16px;
   background-color: rgb(80, 80, 80);
   width: 100%;
   border-radius: 4px;
@@ -96,6 +96,7 @@ $list-item-color: rgb(222,225,229);
 
 @mixin list-button {
   @include list-item;
+  height: 32px;
 
   width: 100%;
 

@@ -68,9 +68,11 @@ class AddBookmarksModalComponent extends React.Component<Props, State> {
 
     const tabInfoComponents = this.props.tabs.map((tab: TabInfo, index: number) => {
       const selected = this.state.selectedTabs.has(index);
+      const isLast = (index == this.props.tabs.length - 1);
       const classes = selected ? 'open-tab selected' : 'open-tab';
+      const containerClasses = isLast ? 'open-tab-container last' : 'open-tab-container';
       return (
-        <div className="open-tab-container" key={index}>
+        <div className={containerClasses} key={index}>
           <div className={classes} onClick={() => this.onClickTab(index)}>
             <img className="open-tab-favicon" src={tab.faviconUrl}/>
             <div className="open-tab-name">{tab.title}</div>
