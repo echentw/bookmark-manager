@@ -1,33 +1,35 @@
 .greeting {
-  flex: 1;
-  min-width: 360px;
+  width: 100%;
+  height: 100%;
+
+  color: white;
+  font-family: arial;
 
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
-  .greeting-top {
-    flex: 3;
+.name-text {
+  font-size: 36px;
+  text-align: center;
+  margin-bottom: 20px;
+}
 
-    color: white;
-    font-family: arial;
-    font-size: 36px;
+.time-text {
+  font-size: 30px;
+  text-align: center;
+  margin-bottom: 40px;
+}
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+@media (max-width: 800px) {
+  .name-text {
+    margin-bottom: 0;
   }
 
-  .greeting-bottom {
-    flex: 1;
-
-    color: white;
-    font-family: arial;
+  .time-text {
     font-size: 24px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-end;
+    margin-bottom: 0;
   }
 }

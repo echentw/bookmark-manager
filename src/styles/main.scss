@@ -1,10 +1,13 @@
 @import './add-bookmarks-layer';
 @import './animations';
 @import './greeting';
+@import './date';
 @import './bookmark-list';
 @import './drag-layer';
 @import './bookmark';
 @import './copied-toast-layer';
+
+@import './app-layout';
 
 $fade-in-time: 0.3s;
 
@@ -21,14 +24,10 @@ body {
   width: 100%;
   height: 100%;
 
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-
   padding-top: 40px;
   padding-bottom: 40px;
   padding-left: 80px;
-  padding-right: 80px;
+  padding-right: 20px;
   opacity: 0;
 
   &.loaded {
@@ -39,26 +38,10 @@ body {
   }
 }
 
-.app-left {
-  height: 100%;
-
-  display: flex;
-  justify-content: center;
-}
-
-.app-right {
-  flex: 1;
-
-  display: flex;
-  flex-direction: row;
-}
-
 @media (max-width: 800px) {
-  .app-left {
-    width: 100%;
-  }
-  .app-right {
-    display: none;
+  .app {
+    padding-left: 20px;
+    padding-right: 20px;
   }
 }
 
