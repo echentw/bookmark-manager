@@ -13,6 +13,22 @@ $list-item-color: rgb(222,225,229);
   width: 100%;
 }
 
+@mixin list-title-container {
+  width: 100%;
+
+  padding-left: 16px;
+  padding-right: 16px;
+
+  margin-top: 8px;
+  margin-bottom: 16px;
+  margin-left: 8px;
+}
+
+@mixin list-title {
+  font-family: Arial;
+  font-size: 16px;
+}
+
 @mixin list-scrollable-area {
   width: 100%;
   padding-left: 16px;

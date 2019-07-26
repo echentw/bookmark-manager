@@ -20,6 +20,14 @@ $highlight-border-color: rgb(0, 148, 255);
     max-height: calc(100% - 100px);
     background-color: rgba(150, 150, 150, 0.9);
 
+    .add-bookmarks-title-container {
+      @include list-title-container;
+
+      .add-bookmarks-title {
+        @include list-title;
+      }
+    }
+
     .add-bookmarks-modal-scrollable-area {
       @include list-scrollable-area;
 
