@@ -26,7 +26,9 @@ $list-item-color: rgb(222,225,229);
 
 @mixin list-title {
   font-family: Arial;
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: bold;
+  color: rgb(50, 50, 50);
 }
 
 @mixin list-scrollable-area {
