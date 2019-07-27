@@ -20,7 +20,7 @@ function _showModal(params: ShowModalParams): Action<ShowModalParams> {
 
 export function showModal() {
   return async (dispatch: Dispatch<Action<ShowModalParams>>) => {
-    const tabInfos = await ChromeHelpers.getTabInfos();
+    const tabInfos = await ChromeHelpers.getOpenTabs();
     dispatch(_showModal({ tabs: tabInfos }));
   };
 }

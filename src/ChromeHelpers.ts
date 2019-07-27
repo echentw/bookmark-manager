@@ -1,4 +1,6 @@
-import { Bookmark } from './Bookmark';
+import { Bookmark, BookmarkData } from './Bookmark';
+import { Folder, FolderData } from './Folder';
+import { AppState } from './components/AppComponent';
 
 export interface TabInfo {
   url: string;
@@ -6,21 +8,13 @@ export interface TabInfo {
   faviconUrl?: string;
 }
 
-export interface BookmarkData {
-  id: string;
-  url: string;
-  faviconUrl: string;
-  title: string;
-  name: string;
-}
-
 export class ChromeHelpers {
 
   public static Keys = {
-    Bookmarks: 'bookmarks',
+    AppData: 'AppData',
   };
 
-  public static getTabInfos = (): Promise<TabInfo[]> => {
+  public static getOpenTabs = (): Promise<TabInfo[]> => {
     return new Promise((resolve, reject) => {
       chrome.tabs.query({}, (tabs: chrome.tabs.Tab[]) => {
         const infos: TabInfo[] = tabs.map((tab: chrome.tabs.Tab) => ({
@@ -33,48 +27,57 @@ export class ChromeHelpers {
     });
   }
 
-  public static saveBookmarks = (bookmarks: Bookmark[]): Promise<{}> => {
-    const data: BookmarkData[] = bookmarks.map(bookmark => ({
-      id: bookmark.id,
-      url: bookmark.url,
-      faviconUrl: bookmark.faviconUrl,
-      title: bookmark.title,
-      name: bookmark.name,
-    }));
+  public static saveAppState = (appState: AppState): Promise<{}> => {
+    const folders = [
+      new Folder({
+        id: 'cool-folder-id',
+        name: 'General',
+        bookmarks: appState.bookmarksState.bookmarks,
+      }),
+    ];
+
+    const folderDatas = folders.map(folder => folder.toData());
 
     return new Promise((resolve, reject) => {
-      chrome.storage.local.set({ [ChromeHelpers.Keys.Bookmarks]: data }, () => {
+      chrome.storage.local.set({ [ChromeHelpers.Keys.AppData]: folderDatas }, () => {
         // TODO: error handling
         resolve();
       });
     });
   }
 
-  public static loadBookmarks = (): Promise<Bookmark[]> => {
+  public static loadAppState = (): Promise<Folder[]> => {
+    // TODO: error handling
     return new Promise((resolve, reject) => {
-      chrome.storage.local.get([ChromeHelpers.Keys.Bookmarks], result => {
-        if (result[ChromeHelpers.Keys.Bookmarks]) {
-          const datas: BookmarkData[] = result[ChromeHelpers.Keys.Bookmarks];
-          const bookmarks: Bookmark[] = datas.map(data => new Bookmark(data));
-          // TODO: error handling
-          return resolve(bookmarks);
+      chrome.storage.local.get([ChromeHelpers.Keys.AppData], result => {
+        if (result[ChromeHelpers.Keys.AppData]) {
+          const folderDatas: FolderData[] = result[ChromeHelpers.Keys.AppData];
+          const folders: Folder[] = folderDatas.map(data => Folder.fromData(data));
+          return resolve(folders);
         } else {
-          return resolve([]);
+          const initialFolders: Folder[] = [
+            new Folder({
+              id: 'cool-folder-id',
+              name: 'General',
+              bookmarks: [],
+            }),
+          ];
+          return resolve(initialFolders);
         }
       });
     });
   }
 
-  public static addOnChangedListener = (handleNewBookmarks: (bookmarks: Bookmark[]) => void): void => {
+  public static addOnChangedListener = (handleNewAppData: (folders: Folder[]) => void): void => {
     chrome.storage.onChanged.addListener((
       changes: { [key: string]: chrome.storage.StorageChange },
       areaName: string
     ) => {
-      if (areaName === 'local' && changes[ChromeHelpers.Keys.Bookmarks]) {
-        const change: chrome.storage.StorageChange = changes[ChromeHelpers.Keys.Bookmarks];
-        const datas: BookmarkData[] = change.newValue;
-        const newBookmarks: Bookmark[] = datas.map(data => new Bookmark(data));
-        handleNewBookmarks(newBookmarks);
+      if (areaName === 'local' && changes[ChromeHelpers.Keys.AppData]) {
+        const change: chrome.storage.StorageChange = changes[ChromeHelpers.Keys.AppData];
+        const datas: FolderData[] = change.newValue;
+        const newFolders: Folder[] = datas.map(data => Folder.fromData(data));
+        handleNewAppData(newFolders);
       }
     });
   }
@@ -83,7 +86,7 @@ export class ChromeHelpers {
     chrome.storage.local.getBytesInUse((bytes: number) => {
       console.log('bytes in use', bytes);
     });
-    chrome.storage.local.get([ChromeHelpers.Keys.Bookmarks], result => {
+    chrome.storage.local.get([ChromeHelpers.Keys.AppData], result => {
       console.log('data', result);
     });
   }

@@ -1,3 +1,11 @@
+export interface BookmarkData {
+  id: string;
+  url: string;
+  faviconUrl: string;
+  title: string;
+  name: string;
+}
+
 export class Bookmark {
   public readonly id: string;
   public readonly url: string;
@@ -48,5 +56,19 @@ export class Bookmark {
       id += chars[index];
     }
     return id;
+  }
+
+  public static fromData = (data: BookmarkData): Bookmark => {
+    return new Bookmark(data);
+  }
+
+  public toData = (): BookmarkData => {
+    return {
+      id: this.id,
+      url: this.url,
+      faviconUrl: this.faviconUrl,
+      title: this.title,
+      name: this.name,
+    };
   }
 }

@@ -4,6 +4,7 @@ import { Store, compose, applyMiddleware, combineReducers, createStore } from 'r
 import thunk from 'redux-thunk';
 
 import { Bookmark } from '../Bookmark';
+import { Folder } from '../Folder';
 import { addBookmarksReducer, initialAddBookmarksState, AddBookmarksState } from '../reducers/AddBookmarksReducer';
 import { bookmarksReducer, initialBookmarksState, BookmarksState } from '../reducers/BookmarksReducer';
 import { copyUrlReducer, initialCopyUrlState, CopyUrlState } from '../reducers/CopyUrlReducer';
@@ -33,7 +34,6 @@ export const DraggableTypes = {
 };
 
 export interface AppState {
-  bookmarks: Bookmark;
   addBookmarksState: AddBookmarksState;
   bookmarksState: BookmarksState;
   copyUrlState: CopyUrlState;
@@ -105,13 +105,14 @@ class AppComponent extends React.Component<Props, State> {
       }
 
       if (!dragging && bookmarks !== this.oldBookmarks) {
-        await ChromeHelpers.saveBookmarks(bookmarks);
+        await ChromeHelpers.saveAppState(store.getState());
         this.oldBookmarks = bookmarks;
       }
     });
 
-    ChromeHelpers.addOnChangedListener((newBookmarks: Bookmark[]) => {
-      this.props.syncBookmarks({ bookmarks: newBookmarks });
+    ChromeHelpers.addOnChangedListener((newFolders: Folder[]) => {
+      const folder = newFolders[0];
+      this.props.syncBookmarks({ bookmarks: folder.bookmarks });
     });
 
     this.props.loadBookmarks({});

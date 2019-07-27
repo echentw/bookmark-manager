@@ -59,7 +59,6 @@ class BookmarkListComponent extends React.Component<Props, State> {
         </Scrollbars>
       </div>
     );
-
   }
 }
 
