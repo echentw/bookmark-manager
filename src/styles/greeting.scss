@@ -11,24 +11,25 @@
   align-items: center;
 }
 
-.name-text {
-  font-size: 36px;
+.time-text {
+  font-size: 56px;
   text-align: center;
   margin-bottom: 20px;
 }
 
-.time-text {
-  font-size: 30px;
+.name-text {
+  font-size: 36px;
   text-align: center;
   margin-bottom: 40px;
 }
 
 @media (max-width: 800px) {
-  .name-text {
+  .time-text {
+    font-size: 36px;
     margin-bottom: 0;
   }
 
-  .time-text {
+  .name-text {
     font-size: 24px;
     margin-bottom: 0;
   }

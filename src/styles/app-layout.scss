@@ -16,8 +16,8 @@
 
 // Large screens
 .app {
-  grid-template-rows: auto 50px;
-  grid-template-columns: 440px auto;
+  grid-template-rows: auto 90px; // 40px (+50px bottom margin)
+  grid-template-columns: 520px auto; // 440px (+80px left margin)
 }
 .app-list-container {
   grid-column-start: 1;

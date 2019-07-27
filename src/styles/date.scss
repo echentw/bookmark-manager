@@ -8,14 +8,35 @@
 
   display: flex;
   justify-content: flex-end;
-  align-items: center;
+  align-items: flex-end;
 
   text-align: center;
+
+  .date-text {
+    margin-right: 50px;
+    margin-bottom: 50px;
+  }
+}
+
+// Medium screens
+@media (max-width: 1100px) {
+  .date {
+    justify-content: center;
+
+    .date-text {
+      margin-right: 0;
+    }
+  }
 }
 
 // Small screens
 @media (max-width: 800px) {
   .date {
     justify-content: center;
+    align-items: center;
+
+    .date-text {
+      margin: 0;
+    }
   }
 }

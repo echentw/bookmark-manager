@@ -13,17 +13,17 @@ export class GreetingComponent extends React.Component<Props> {
 
     const hours = hoursNumber === 0 ? '12' : `${hoursNumber}`;
     const minutes = minutesNumber < 10 ? `0${minutesNumber}` : `${minutesNumber}`;
-    const period = date.getHours() < 12 ? 'am' : 'pm';
+    const period = date.getHours() < 12 ? 'AM' : 'PM';
 
-    return `${hours}:${minutes}${period}`;
+    return `${hours}:${minutes} ${period}`;
   }
 
   render() {
     const time = this.dateToTime(this.props.date);
     return (
       <div className="greeting">
-        <div className="name-text">Hello, {this.props.name}.</div>
-        <div className="time-text">The time is {time}.</div>
+        <div className="time-text">{time}</div>
+        <div className="name-text">Good evening, {this.props.name}.</div>
       </div>
     );
   }

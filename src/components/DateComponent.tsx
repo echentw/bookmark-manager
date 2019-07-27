@@ -43,7 +43,9 @@ export class DateComponent extends React.Component<Props> {
     const date = this.dateToString(this.props.date);
     return (
       <div className="date">
-        { date }
+        <div className="date-text">
+          { date }
+        </div>
       </div>
     );
   }
