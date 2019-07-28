@@ -3,8 +3,9 @@ export interface Action<Params = {}> {
   params: Params;
 }
 
-export const SyncBookmarksActionType = {
-  sync: 'SyncBookmarksActionType',
+export const SyncAppActionType = {
+  syncBookmarks: 'SyncApp:syncBookmarks',
+  syncFolders: 'SyncApp:syncFolders',
 };
 
 export const AddBookmarksActionType = {

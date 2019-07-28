@@ -2,6 +2,21 @@ import { Bookmark, BookmarkData } from './Bookmark';
 import { Folder, FolderData } from './Folder';
 import { AppState } from './components/AppComponent';
 
+// What gets returned by some methods in this class
+export interface ChromeAppState {
+  folders: Folder[];
+  openFolderId: string;
+}
+
+export interface ChromeData {
+  appData: AppData;
+}
+
+export interface AppData {
+  folders: FolderData[];
+  openFolderId: string;
+}
+
 export interface TabInfo {
   url: string;
   title: string;
@@ -11,7 +26,7 @@ export interface TabInfo {
 export class ChromeHelpers {
 
   public static Keys = {
-    AppData: 'AppData',
+    AppData: 'appData',
   };
 
   public static getOpenTabs = (): Promise<TabInfo[]> => {
@@ -36,33 +51,45 @@ export class ChromeHelpers {
       }),
     ];
 
-    const folderDatas = folders.map(folder => folder.toData());
+    const folderDatas: FolderData[] = folders.map(folder => folder.toData());
+
+    const appData: AppData = {
+      folders: folderDatas,
+      openFolderId: folders[0].id,
+    };
 
     return new Promise((resolve, reject) => {
-      chrome.storage.local.set({ [ChromeHelpers.Keys.AppData]: folderDatas }, () => {
+      chrome.storage.local.set({ [ChromeHelpers.Keys.AppData]: appData }, () => {
         // TODO: error handling
         resolve();
       });
     });
   }
 
-  public static loadAppState = (): Promise<Folder[]> => {
-    // TODO: error handling
+  public static loadAppState = (): Promise<ChromeAppState> => {
     return new Promise((resolve, reject) => {
-      chrome.storage.local.get([ChromeHelpers.Keys.AppData], result => {
-        if (result[ChromeHelpers.Keys.AppData]) {
-          const folderDatas: FolderData[] = result[ChromeHelpers.Keys.AppData];
+      chrome.storage.local.get([ChromeHelpers.Keys.AppData], (result: ChromeData) => {
+        // TODO: error handling
+        if (result.appData) {
+          const folderDatas: FolderData[] = result.appData.folders;
           const folders: Folder[] = folderDatas.map(data => Folder.fromData(data));
-          return resolve(folders);
+          const state: ChromeAppState = {
+            folders: folders,
+            openFolderId: result.appData.openFolderId,
+          };
+          return resolve(state);
         } else {
-          const initialFolders: Folder[] = [
-            new Folder({
-              id: 'cool-folder-id',
-              name: 'General',
-              bookmarks: [],
-            }),
-          ];
-          return resolve(initialFolders);
+          const initialState: ChromeAppState = {
+            folders: [
+              new Folder({
+                id: 'cool-folder-id',
+                name: 'General',
+                bookmarks: [],
+              }),
+            ],
+            openFolderId: 'cool-folder-id',
+          };
+          return resolve(initialState);
         }
       });
     });
@@ -75,8 +102,9 @@ export class ChromeHelpers {
     ) => {
       if (areaName === 'local' && changes[ChromeHelpers.Keys.AppData]) {
         const change: chrome.storage.StorageChange = changes[ChromeHelpers.Keys.AppData];
-        const datas: FolderData[] = change.newValue;
-        const newFolders: Folder[] = datas.map(data => Folder.fromData(data));
+        const newAppData: AppData = change.newValue;
+        const newFolderDatas: FolderData[] = newAppData.folders;
+        const newFolders: Folder[] = newFolderDatas.map(data => Folder.fromData(data));
         handleNewAppData(newFolders);
       }
     });

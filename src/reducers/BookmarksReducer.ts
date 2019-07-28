@@ -4,11 +4,11 @@ import {
   AddBookmarksActionType,
   DragDropActionType,
   EditBookmarkActionType,
-  SyncBookmarksActionType,
+  SyncAppActionType,
 } from '../actions/constants';
 import { DragDropParams } from '../actions/DragDropActions';
 import { EditBookmarkParams } from '../actions/EditBookmarkActions';
-import { SyncBookmarksParams } from '../actions/SyncBookmarksActions';
+import { SyncBookmarksParams } from '../actions/SyncAppActions';
 import { Bookmark } from '../Bookmark';
 
 export interface BookmarksState {
@@ -37,7 +37,7 @@ export function bookmarksReducer(state: BookmarksState = initialBookmarksState, 
       return handleEditBookmarkSave(state, action as Action<EditBookmarkParams>);
     case EditBookmarkActionType.deleteBookmark:
       return handleEditBookmarkDeleteBookmark(state, action as Action<EditBookmarkParams>);
-    case SyncBookmarksActionType.sync:
+    case SyncAppActionType.syncBookmarks:
       return handleSyncBookmarks(state, action as Action<SyncBookmarksParams>);
     default:
       return state;

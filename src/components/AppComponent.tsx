@@ -10,9 +10,10 @@ import { bookmarksReducer, initialBookmarksState, BookmarksState } from '../redu
 import { copyUrlReducer, initialCopyUrlState, CopyUrlState } from '../reducers/CopyUrlReducer';
 import { dragDropReducer, initialDragDropState, DragDropState } from '../reducers/DragDropReducer';
 import { editBookmarkReducer, initialEditBookmarkState, EditBookmarkState } from '../reducers/EditBookmarkReducer';
+import { foldersReducer, initialFoldersState, FoldersState } from '../reducers/FoldersReducer';
 import { ChromeHelpers } from '../ChromeHelpers';
-import * as SyncBookmarksActions from '../actions/SyncBookmarksActions';
-import { SyncBookmarksParams } from '../actions/SyncBookmarksActions';
+import * as SyncAppActions from '../actions/SyncAppActions';
+import { SyncBookmarksParams } from '../actions/SyncAppActions';
 
 import { BookmarkListComponent } from './BookmarkListComponent';
 import { GreetingComponent } from './GreetingComponent';
@@ -39,6 +40,7 @@ export interface AppState {
   copyUrlState: CopyUrlState;
   dragDropState: DragDropState;
   editBookmarkState: EditBookmarkState;
+  foldersState: FoldersState;
 }
 
 const allReducers = combineReducers({
@@ -47,6 +49,7 @@ const allReducers = combineReducers({
   copyUrlState: copyUrlReducer,
   dragDropState: dragDropReducer,
   editBookmarkState: editBookmarkReducer,
+  foldersState: foldersReducer,
 });
 
 const allStoreEnhancers = window.__REDUX_DEVTOOLS_EXTENSION__ ? (
@@ -62,13 +65,14 @@ const initialAppState = {
   copyUrlState: initialCopyUrlState,
   dragDropState: initialDragDropState,
   editBookmarkState: initialEditBookmarkState,
+  foldersState: initialFoldersState,
 };
 
 export const store = createStore(allReducers, initialAppState, allStoreEnhancers);
 
 interface Props {
   loaded: boolean;
-  loadBookmarks: (params: {}) => void;
+  loadAppData: (params: {}) => void;
   syncBookmarks: (params: SyncBookmarksParams) => void;
 }
 
@@ -115,7 +119,7 @@ class AppComponent extends React.Component<Props, State> {
       this.props.syncBookmarks({ bookmarks: folder.bookmarks });
     });
 
-    this.props.loadBookmarks({});
+    this.props.loadAppData({});
   }
 
   render() {
@@ -146,8 +150,8 @@ const mapStateToProps = (state: AppState, props: {}) => {
 };
 
 const mapActionsToProps = {
-  loadBookmarks: SyncBookmarksActions.loadBookmarks,
-  syncBookmarks: SyncBookmarksActions.syncBookmarks,
+  loadAppData: SyncAppActions.loadAppData,
+  syncBookmarks: SyncAppActions.syncBookmarks,
 };
 
 const Component = connect(mapStateToProps, mapActionsToProps)(AppComponent);
