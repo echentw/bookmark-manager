@@ -7,16 +7,14 @@ export interface FoldersState {
   folders: Folder[];
   draggedRank: number | null;
   loaded: boolean;
-  openFolderId: string | null;
+  openFolder: Folder | null;
 }
 
-const firstFolder = new Folder({ name: 'General' });
-
 export const initialFoldersState: FoldersState = {
-  folders: [firstFolder],
+  folders: [],
   draggedRank: null,
   loaded: false,
-  openFolderId: firstFolder.id,
+  openFolder: null,
 }
 
 export function foldersReducer(state: FoldersState = initialFoldersState, action: Action): FoldersState {
@@ -35,25 +33,26 @@ export function foldersReducer(state: FoldersState = initialFoldersState, action
 function handleOpenFolder(state: FoldersState, action: Action<OpenFolderParams>): FoldersState {
   return {
     ...state,
-    openFolderId: action.params.folder.id,
+    openFolder: action.params.folder,
   };
 }
 
 function handleCloseFolder(state: FoldersState, action: Action): FoldersState {
   return {
     ...state,
-    openFolderId: null,
+    openFolder: null,
   };
 }
 
 function handleSyncFolders(state: FoldersState, action: Action<SyncFoldersParams>): FoldersState {
-  let openFolderId = state.openFolderId;
-  if (openFolderId === null && action.params.openFolderId !== null) {
-    openFolderId = action.params.openFolderId;
+  let openFolder = state.openFolder;
+  if (openFolder === null && action.params.openFolder !== null) {
+    openFolder = action.params.openFolder;
   }
+
   return {
     ...state,
     folders: action.params.folders,
-    openFolderId: openFolderId,
+    openFolder: openFolder,
   };
 }

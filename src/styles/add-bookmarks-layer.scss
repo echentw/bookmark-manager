@@ -25,6 +25,7 @@ $highlight-border-color: rgb(0, 148, 255);
 
       .add-bookmarks-title {
         @include list-title;
+        color: rgb(50, 50, 50);
       }
     }
 

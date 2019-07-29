@@ -1,8 +1,11 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import Scrollbars from 'react-custom-scrollbars';
+import { IconContext } from 'react-icons';
+import { FaChevronLeft } from 'react-icons/fa';
 
 import { Bookmark } from '../Bookmark';
+import { Folder } from '../Folder';
 import { DraggableBookmarkComponent } from './DraggableBookmarkComponent';
 import { BookmarkContainerComponent } from './BookmarkContainerComponent';
 import { AddBookmarksButtonComponent } from './AddBookmarksButtonComponent';
@@ -10,6 +13,7 @@ import { EditBookmarkComponent } from './EditBookmarkComponent';
 import { AppState } from './AppComponent';
 
 interface Props {
+  folder: Folder;
   bookmarks: Bookmark[];
   editingBookmarkId: string | null;
 }
@@ -32,6 +36,8 @@ class BookmarkListComponent extends React.Component<Props, State> {
   }
 
   render() {
+    const folderName = this.props.folder ? this.props.folder.name : 'This should not appear!';
+
     const bookmarkComponents = this.props.bookmarks.map((bookmark: Bookmark, rank: number) => {
       const editing = bookmark.id === this.props.editingBookmarkId;
       return (
@@ -51,6 +57,14 @@ class BookmarkListComponent extends React.Component<Props, State> {
     });
     return (
       <div className="bookmark-list">
+        <div className="bookmark-list-title-container">
+          <IconContext.Provider value={{ size: '1.6em' }}>
+            <FaChevronLeft/>
+          </IconContext.Provider>
+          <div className="bookmark-list-title">
+            { folderName }
+          </div>
+        </div>
         <Scrollbars>
           <div className="bookmark-list-scrollable-area">
             { bookmarkComponents }
@@ -64,6 +78,7 @@ class BookmarkListComponent extends React.Component<Props, State> {
 
 const mapStateToProps = (state: AppState, props: {}) => {
   return {
+    folder: state.foldersState.openFolder,
     bookmarks: state.bookmarksState.bookmarks,
     editingBookmarkId: state.editBookmarkState.editingBookmarkId,
   };

@@ -5,6 +5,19 @@
 
   width: 440px;
 
+  .bookmark-list-title-container {
+    @include list-title-container;
+    padding-left: 16px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .bookmark-list-title {
+      @include list-title;
+    }
+  }
+
   .bookmark-list-scrollable-area {
     @include list-scrollable-area;
 

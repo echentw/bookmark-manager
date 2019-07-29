@@ -11,19 +11,19 @@ export interface SyncBookmarksParams {
 
 export interface SyncFoldersParams {
   folders: Folder[];
-  openFolderId: string | null;
+  openFolder: Folder | null;
 }
 
 export function loadAppData(params: {}) {
   return async (dispatch: Dispatch) => {
     const state: ChromeAppState = await ChromeHelpers.loadAppState();
+    const openFolder = state.folders.find(folder => folder.id === state.openFolderId);
 
     dispatch(syncFolders({
       folders: state.folders,
-      openFolderId: state.openFolderId,
+      openFolder: openFolder,
     }));
 
-    const openFolder = state.folders.find(folder => folder.id === state.openFolderId);
     if (openFolder) {
       dispatch(syncBookmarks({ bookmarks: openFolder.bookmarks }));
     }
