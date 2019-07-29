@@ -33,7 +33,9 @@ class FolderListComponent extends React.Component<Props> {
           </div>
         </div>
         <Scrollbars>
-          { folderComponents }
+          <div className="folder-list-scrollable-area">
+            { folderComponents }
+          </div>
         </Scrollbars>
       </div>
     );

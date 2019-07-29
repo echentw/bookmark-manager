@@ -13,7 +13,11 @@
     }
   }
 
-  .list-item-container {
-    @include list-item-container;
+  .folder-list-scrollable-area {
+    @include list-scrollable-area;
+
+    .list-item-container {
+      @include list-item-container;
+    }
   }
 }

@@ -6,6 +6,7 @@ import { FaChevronLeft } from 'react-icons/fa';
 
 import { Bookmark } from '../Bookmark';
 import { Folder } from '../Folder';
+import * as FolderActions from '../actions/FolderActions';
 import { DraggableBookmarkComponent } from './DraggableBookmarkComponent';
 import { ListItemContainerComponent } from './ListItemContainerComponent';
 import { AddBookmarksButtonComponent } from './AddBookmarksButtonComponent';
@@ -16,6 +17,7 @@ interface Props {
   folder: Folder;
   bookmarks: Bookmark[];
   editingBookmarkId: string | null;
+  closeFolder: (params: {}) => void;
 }
 
 interface State {
@@ -26,6 +28,10 @@ class BookmarkListComponent extends React.Component<Props, State> {
   state: State = {
     hoverRank: null,
   };
+
+  onClickFolderName = () => {
+    this.props.closeFolder({});
+  }
 
   updateHoverRank = (rank: number, hovering: boolean) => {
     if (rank === this.state.hoverRank && !hovering) {
@@ -62,7 +68,7 @@ class BookmarkListComponent extends React.Component<Props, State> {
           <IconContext.Provider value={{ size: '1.6em' }}>
             <FaChevronLeft/>
           </IconContext.Provider>
-          <div className="bookmark-list-title">
+          <div className="bookmark-list-title" onClick={this.onClickFolderName}>
             { folderName }
           </div>
         </div>
@@ -85,5 +91,9 @@ const mapStateToProps = (state: AppState, props: {}) => {
   };
 };
 
-const Component = connect(mapStateToProps)(BookmarkListComponent);
+const mapActionsToProps = {
+  closeFolder: FolderActions.closeFolder,
+};
+
+const Component = connect(mapStateToProps, mapActionsToProps)(BookmarkListComponent);
 export { Component as BookmarkListComponent };

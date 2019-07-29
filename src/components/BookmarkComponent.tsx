@@ -7,7 +7,7 @@ import { EditBookmarkComponent } from './EditBookmarkComponent';
 import { BookmarkButtonsComponent } from './BookmarkButtonsComponent';
 import { Bookmark } from '../Bookmark';
 
-const isMouseOverElement = (element: Element, x: number, y: number) => {
+export const isMouseOverElement = (element: Element, x: number, y: number) => {
   const { left, right, bottom, top } = element.getBoundingClientRect();
   return x > left && x < right && y > top && y < bottom;
 }

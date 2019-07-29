@@ -5,14 +5,14 @@ export interface OpenFolderParams {
   folder: Folder;
 }
 
-function openFolder(params: OpenFolderParams): Action<OpenFolderParams> {
+export function openFolder(params: OpenFolderParams): Action<OpenFolderParams> {
   return {
     type: ActionType.openFolder,
     params: params,
   };
 }
 
-function closeFolder(params: {}): Action {
+export function closeFolder(params: {}): Action {
   return {
     type: ActionType.closeFolder,
     params: params,

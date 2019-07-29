@@ -126,12 +126,8 @@ class AppComponent extends React.Component<Props, State> {
   }
 
   render() {
-    // Set to true to show folder list.
-    // TODO: eventually get rid of this
-    const showFolderList = false;
-
     const classes = this.props.loaded ? 'app loaded' : 'app';
-    const ListComponent = (this.props.openFolder === null || showFolderList) ? (
+    const ListComponent = this.props.openFolder === null ? (
       <FolderListComponent/>
     ) : (
       <BookmarkListComponent/>
