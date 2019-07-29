@@ -3,6 +3,11 @@ export interface Action<Params = {}> {
   params: Params;
 }
 
+export const FolderActionType = {
+  openFolder: 'Folder:openFolder',
+  closeFolder: 'Folder:closeFolder',
+};
+
 export const SyncAppActionType = {
   syncBookmarks: 'SyncApp:syncBookmarks',
   syncFolders: 'SyncApp:syncFolders',
