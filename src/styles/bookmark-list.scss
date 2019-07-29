@@ -21,7 +21,7 @@
   .bookmark-list-scrollable-area {
     @include list-scrollable-area;
 
-    .bookmark-container {
+    .list-item-container {
       @include list-item-container;
     }
 

@@ -16,6 +16,7 @@ import * as SyncAppActions from '../actions/SyncAppActions';
 import { SyncBookmarksParams } from '../actions/SyncAppActions';
 
 import { BookmarkListComponent } from './BookmarkListComponent';
+import { FolderListComponent } from './FolderListComponent';
 import { GreetingComponent } from './GreetingComponent';
 import { DragLayerComponent } from './DragLayerComponent';
 import { CopiedToastComponent } from './CopiedToastComponent';
@@ -30,8 +31,9 @@ declare global {
   }
 }
 
-export const DraggableTypes = {
+export const DraggableType = {
   Bookmark: 'bookmark',
+  Folder: 'folder',
 };
 
 export interface AppState {
@@ -74,6 +76,7 @@ interface Props {
   loaded: boolean;
   loadAppData: (params: {}) => void;
   syncBookmarks: (params: SyncBookmarksParams) => void;
+  openFolder: Folder | null;
 }
 
 interface State {
@@ -123,11 +126,20 @@ class AppComponent extends React.Component<Props, State> {
   }
 
   render() {
+    // Set to true to show folder list.
+    // TODO: eventually get rid of this
+    const showFolderList = false;
+
     const classes = this.props.loaded ? 'app loaded' : 'app';
+    const ListComponent = (this.props.openFolder === null || showFolderList) ? (
+      <FolderListComponent/>
+    ) : (
+      <BookmarkListComponent/>
+    );
     return (
       <div className={classes}>
         <div className="app-list-container">
-          <BookmarkListComponent/>
+          { ListComponent }
         </div>
         <div className="app-greeting-container">
           <GreetingComponent name={'Eric'} date={this.state.date}/>
@@ -146,6 +158,7 @@ class AppComponent extends React.Component<Props, State> {
 const mapStateToProps = (state: AppState, props: {}) => {
   return {
     loaded: state.bookmarksState.loaded,
+    openFolder: state.foldersState.openFolder,
   };
 };
 

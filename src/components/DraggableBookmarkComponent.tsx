@@ -6,7 +6,7 @@ import { Bookmark } from '../Bookmark';
 import * as DragDropActions from '../actions/DragDropActions';
 import { DragDropParams } from '../actions/DragDropActions';
 import { AppState } from './AppComponent';
-import { DraggableTypes } from './AppComponent';
+import { DraggableType } from './AppComponent';
 import { BookmarkComponent } from './BookmarkComponent';
 
 interface ExternalProps {
@@ -26,7 +26,7 @@ interface InternalProps extends ExternalProps {
 function DraggableBookmarkComponent(props: InternalProps) {
   const [{ isDragging }, drag, preview] = useDrag({
     item: {
-      type: DraggableTypes.Bookmark,
+      type: DraggableType.Bookmark,
       id: props.bookmark.id,
     },
     canDrag: monitor => props.bookmark.id !== props.editingBookmarkId,

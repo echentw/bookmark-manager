@@ -1,0 +1,19 @@
+@import './mixins/list';
+
+.folder-list {
+  @include list;
+
+  width: 440px;
+
+  .folder-list-title-container {
+    @include list-title-container;
+
+    .folder-list-title {
+      @include list-title;
+    }
+  }
+
+  .list-item-container {
+    @include list-item-container;
+  }
+}

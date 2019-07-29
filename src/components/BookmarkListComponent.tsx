@@ -7,10 +7,10 @@ import { FaChevronLeft } from 'react-icons/fa';
 import { Bookmark } from '../Bookmark';
 import { Folder } from '../Folder';
 import { DraggableBookmarkComponent } from './DraggableBookmarkComponent';
-import { BookmarkContainerComponent } from './BookmarkContainerComponent';
+import { ListItemContainerComponent } from './ListItemContainerComponent';
 import { AddBookmarksButtonComponent } from './AddBookmarksButtonComponent';
 import { EditBookmarkComponent } from './EditBookmarkComponent';
-import { AppState } from './AppComponent';
+import { AppState, DraggableType } from './AppComponent';
 
 interface Props {
   folder: Folder;
@@ -41,9 +41,10 @@ class BookmarkListComponent extends React.Component<Props, State> {
     const bookmarkComponents = this.props.bookmarks.map((bookmark: Bookmark, rank: number) => {
       const editing = bookmark.id === this.props.editingBookmarkId;
       return (
-        <BookmarkContainerComponent
+        <ListItemContainerComponent
           key={bookmark.id}
           rank={rank}
+          draggableType={DraggableType.Bookmark}
         >
           <DraggableBookmarkComponent
             bookmark={bookmark}
@@ -52,7 +53,7 @@ class BookmarkListComponent extends React.Component<Props, State> {
             hovering={rank === this.state.hoverRank}
             updateHoverRank={this.updateHoverRank}
           />
-        </BookmarkContainerComponent>
+        </ListItemContainerComponent>
       );
     });
     return (

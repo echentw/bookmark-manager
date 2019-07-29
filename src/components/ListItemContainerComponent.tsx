@@ -2,22 +2,23 @@ import * as React from 'react';
 import { useDrop } from 'react-dnd';
 import { connect } from 'react-redux';
 
-import { AppState, DraggableTypes } from './AppComponent';
+import { AppState } from './AppComponent';
 import * as DragDropActions from '../actions/DragDropActions';
 import { DragDropParams } from '../actions/DragDropActions';
 
 interface ExternalProps {
   children: React.ReactElement;
   rank: number;
+  draggableType: string;
 }
 
 interface InternalProps extends ExternalProps {
   isOver: (params: DragDropParams) => void;
 }
 
-function BookmarkContainerComponent(props: InternalProps) {
+function ListItemContainerComponent(props: InternalProps) {
 	const [{ isOver }, drop] = useDrop({
-		accept: DraggableTypes.Bookmark,
+		accept: props.draggableType,
 		collect: monitor => {
       const isOver = !!monitor.isOver();
       if (isOver) {
@@ -28,7 +29,7 @@ function BookmarkContainerComponent(props: InternalProps) {
 	});
 
   return (
-    <div className="bookmark-container" ref={drop}>
+    <div className="list-item-container" ref={drop}>
       { props.children }
     </div>
   );
@@ -42,5 +43,5 @@ const mapActionsToProps = {
   isOver: DragDropActions.isOver,
 };
 
-const Component = connect(mapStateToProps, mapActionsToProps)(BookmarkContainerComponent);
-export { Component as BookmarkContainerComponent };
+const Component = connect(mapStateToProps, mapActionsToProps)(ListItemContainerComponent);
+export { Component as ListItemContainerComponent };
