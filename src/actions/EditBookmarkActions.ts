@@ -12,7 +12,7 @@ export function beginEdit(params: EditBookmarkParams): Action<EditBookmarkParams
   };
 }
 
-export function cancel(params: EditBookmarkParams): Action<EditBookmarkParams> {
+export function cancel(params: {}): Action {
   return {
     type: ActionType.cancel,
     params: params,

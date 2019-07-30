@@ -10,7 +10,6 @@ import * as FolderActions from '../actions/FolderActions';
 import { DraggableBookmarkComponent } from './DraggableBookmarkComponent';
 import { ListItemContainerComponent } from './ListItemContainerComponent';
 import { AddBookmarksButtonComponent } from './AddBookmarksButtonComponent';
-import { EditBookmarkComponent } from './EditBookmarkComponent';
 import { AppState, DraggableType } from './AppComponent';
 
 interface Props {

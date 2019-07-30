@@ -3,9 +3,11 @@ import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 
 import { AppState } from './AppComponent';
-import { EditBookmarkComponent } from './EditBookmarkComponent';
+import { EditTextFieldComponent } from './EditTextFieldComponent';
 import { BookmarkButtonsComponent } from './BookmarkButtonsComponent';
 import { Bookmark } from '../Bookmark';
+import { EditBookmarkParams } from '../actions/EditBookmarkActions';
+import * as EditBookmarkActions from '../actions/EditBookmarkActions';
 
 export const isMouseOverElement = (element: Element, x: number, y: number) => {
   const { left, right, bottom, top } = element.getBoundingClientRect();
@@ -24,6 +26,8 @@ interface ExternalProps {
 
 interface InternalProps extends ExternalProps {
   somethingIsDragging: boolean; // whether the user is dragging anything at all
+  cancelEdit: (params: {}) => void;
+  saveEdit: (params: EditBookmarkParams) => void;
 }
 
 interface State {
@@ -66,11 +70,25 @@ class BookmarkComponent extends React.Component<InternalProps, State> {
     }
   }
 
+  saveEdit = (newName: string) => {
+    const name = (newName.length === 0) ? null : newName;
+    const newBookmark = this.props.bookmark.withName(name);
+    this.props.saveEdit({ bookmark: newBookmark });
+  }
+
+  cancelEdit = () => {
+    this.props.cancelEdit({});
+  }
+
   render() {
     const { editing, isDragging, bookmark } = this.props;
 
     const bookmarkName = editing ? (
-      <EditBookmarkComponent bookmark={bookmark}/>
+      <EditTextFieldComponent
+        initialText={bookmark.displayName()}
+        save={this.saveEdit}
+        cancel={this.cancelEdit}
+      />
     ) : (
       <a className="bookmark-name" href={bookmark.url}>{bookmark.displayName()}</a>
     );
@@ -111,5 +129,10 @@ const mapStateToProps = (state: AppState, props: ExternalProps) => {
   };
 };
 
-const Component = connect(mapStateToProps)(BookmarkComponent);
+const mapActionsToProps = {
+  cancelEdit: EditBookmarkActions.cancel,
+  saveEdit: EditBookmarkActions.save,
+};
+
+const Component = connect(mapStateToProps, mapActionsToProps)(BookmarkComponent);
 export { Component as BookmarkComponent };

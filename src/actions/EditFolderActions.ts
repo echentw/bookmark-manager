@@ -12,7 +12,7 @@ export function beginEdit(params: EditFolderParams): Action<EditFolderParams> {
   };
 }
 
-export function cancel(params: EditFolderParams): Action<EditFolderParams> {
+export function cancel(params: {}): Action {
   return {
     type: ActionType.cancel,
     params: params,
