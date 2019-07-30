@@ -13,7 +13,7 @@ import { ShowToastParams } from '../actions/CopyUrlActions';
 import { AppState } from './AppComponent';
 
 interface ExternalProps {
-  bookmark: Bookmark,
+  bookmark: Bookmark;
 }
 
 interface InternalProps extends ExternalProps {
@@ -24,7 +24,7 @@ interface InternalProps extends ExternalProps {
 
 class BookmarkButtonsComponent extends React.Component<InternalProps> {
 
-  onClickDelete = (event: React.MouseEvent<SVGElement, MouseEvent>) => {
+  onClickDelete = () => {
     this.props.deleteBookmark({ bookmark: this.props.bookmark });
   }
 

@@ -109,6 +109,23 @@ $list-item-color: rgb(222,225,229);
   }
 }
 
+@mixin list-item-buttons-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  -webkit-animation: fade-in 0.3s;
+          animation: fade-in 0.3s;
+}
+
+// Like edit, delete, etc...
+@mixin list-item-button {
+  width: 14px;
+  margin-right: 10px;
+  // The actual size needs to be hard-coded inside the component
+}
+
+// For "add new list item" functionality.
 @mixin list-button {
   @include list-item;
   height: 32px;

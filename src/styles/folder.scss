@@ -10,6 +10,10 @@
   }
 
   .folder-buttons {
-    // TODO
+    @include list-item-buttons-container;
+
+    .folder-button {
+      @include list-item-button;
+    }
   }
 }

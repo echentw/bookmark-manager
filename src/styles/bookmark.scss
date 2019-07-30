@@ -14,16 +14,10 @@
   }
 
   .bookmark-buttons {
-    display: flex;
-    align-items: center;
-
-    -webkit-animation: fade-in 0.3s;
-            animation: fade-in 0.3s;
+    @include list-item-buttons-container;
 
     .bookmark-button {
-      width: 14px;
-      margin-right: 10px;
-      // the size is hard-coded inside the component
+      @include list-item-button;
     }
   }
 }

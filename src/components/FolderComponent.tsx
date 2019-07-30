@@ -10,6 +10,7 @@ import * as EditFolderActions from '../actions/EditFolderActions';
 import { AppState } from './AppComponent';
 import { EditTextFieldComponent } from './EditTextFieldComponent';
 import { HoverableListItemComponent } from './HoverableListItemComponent';
+import { FolderButtonsComponent } from './FolderButtonsComponent';
 
 interface ExternalProps {
   folder: Folder;
@@ -57,7 +58,10 @@ class FolderComponent extends React.Component<InternalProps> {
       </div>
     );
 
+    const shouldShowButtons = hovering && !editing;
     const shouldShowBoxShadow = hovering || editing;
+
+    const maybeButtons = shouldShowButtons ? <FolderButtonsComponent folder={folder}/> : null;
 
     let classes = 'folder';
     if (shouldShowBoxShadow) {
@@ -71,6 +75,7 @@ class FolderComponent extends React.Component<InternalProps> {
       >
         <div>icon</div>
         { folderName }
+        { maybeButtons }
       </HoverableListItemComponent>
     );
   }
