@@ -6,21 +6,27 @@ import { Folder } from '../Folder';
 import { AppState, DraggableType } from './AppComponent';
 import { FolderComponent } from './FolderComponent';
 import { ListItemContainerComponent } from './ListItemContainerComponent';
+import { AddFolderButtonComponent } from './AddFolderButtonComponent';
 
 interface Props {
   folders: Folder[];
+  editingFolder: Folder | null;
 }
 
 class FolderListComponent extends React.Component<Props> {
   render() {
     const folderComponents = this.props.folders.map((folder: Folder, rank: number) => {
+      const editing = this.props.editingFolder && folder.id === this.props.editingFolder.id;
       return (
         <ListItemContainerComponent
           key={folder.id}
           rank={rank}
           draggableType={DraggableType.Folder}
         >
-          <FolderComponent folder={folder}/>
+          <FolderComponent
+            folder={folder}
+            editing={editing}
+          />
         </ListItemContainerComponent>
       );
     });
@@ -35,6 +41,7 @@ class FolderListComponent extends React.Component<Props> {
         <Scrollbars>
           <div className="folder-list-scrollable-area">
             { folderComponents }
+            <AddFolderButtonComponent/>
           </div>
         </Scrollbars>
       </div>
@@ -45,6 +52,7 @@ class FolderListComponent extends React.Component<Props> {
 const mapStateToProps = (state: AppState, props: {}) => {
   return {
     folders: state.foldersState.folders,
+    editingFolder: state.foldersState.editingFolder,
   };
 };
 

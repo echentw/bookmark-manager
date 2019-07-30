@@ -8,6 +8,14 @@ export const FolderActionType = {
   closeFolder: 'Folder:closeFolder',
 };
 
+export const EditFolderActionType = {
+  addFolder: 'EditFolder:addFolder',
+  deleteFolder: 'EditFolder:deleteFolder',
+  beginEdit: 'EditFolder:beginEdit',
+  cancel: 'EditFolder:cancel',
+  save: 'EditFolder:save',
+};
+
 export const SyncAppActionType = {
   syncBookmarks: 'SyncApp:syncBookmarks',
   syncFolders: 'SyncApp:syncFolders',

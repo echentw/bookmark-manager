@@ -5,6 +5,10 @@
     @include list-item-text;
   }
 
+  .edit-folder {
+    @include list-item-text-edit;
+  }
+
   .folder-buttons {
     // TODO
   }

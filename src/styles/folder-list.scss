@@ -19,5 +19,9 @@
     .list-item-container {
       @include list-item-container;
     }
+
+    .add-folder-button {
+      @include list-button;
+    }
   }
 }

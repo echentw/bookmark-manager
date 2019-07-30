@@ -1,14 +1,17 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { AppState } from './AppComponent';
 import { Folder } from '../Folder';
 import { OpenFolderParams } from '../actions/FolderActions';
 import * as FolderActions from '../actions/FolderActions';
 import { isMouseOverElement } from './BookmarkComponent';
 
+import { AppState } from './AppComponent';
+import { EditFolderComponent } from './EditFolderComponent';
+
 interface Props {
   folder: Folder;
+  editing: boolean;
   openFolder: (params: OpenFolderParams) => void;
 }
 
@@ -26,11 +29,19 @@ class FolderComponent extends React.Component<Props> {
   }
 
   render() {
+    const { editing, folder } = this.props;
+
+    const folderName = editing ? (
+      <EditFolderComponent folder={folder}/>
+    ) : (
+      <div className="folder-name" onClick={this.onClick}>
+        { folder.name }
+      </div>
+    );
+
     return (
       <div className="folder">
-        <div className="folder-name" onClick={this.onClick}>
-          { this.props.folder.name }
-        </div>
+        { folderName }
       </div>
     );
   }
