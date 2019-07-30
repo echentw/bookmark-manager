@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { FaFolder } from 'react-icons/fa';
 
 import { Folder } from '../Folder';
 import { OpenFolderParams } from '../actions/FolderActions';
@@ -73,7 +74,7 @@ class FolderComponent extends React.Component<InternalProps> {
         rank={this.props.rank}
         updateHoverRank={this.props.updateHoverRank}
       >
-        <div>icon</div>
+        <FaFolder className="folder-icon"/>
         { folderName }
         { maybeButtons }
       </HoverableListItemComponent>

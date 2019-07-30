@@ -1,6 +1,10 @@
 .folder {
   @include list-item;
 
+  .folder-icon {
+    @include list-item-image;
+  }
+
   .folder-name {
     @include list-item-text;
   }
