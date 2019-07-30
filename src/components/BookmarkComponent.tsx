@@ -1,18 +1,13 @@
 import * as React from 'react';
-import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 
 import { AppState } from './AppComponent';
 import { EditTextFieldComponent } from './EditTextFieldComponent';
 import { BookmarkButtonsComponent } from './BookmarkButtonsComponent';
+import { HoverableListItemComponent } from './HoverableListItemComponent';
 import { Bookmark } from '../Bookmark';
 import { EditBookmarkParams } from '../actions/EditBookmarkActions';
 import * as EditBookmarkActions from '../actions/EditBookmarkActions';
-
-export const isMouseOverElement = (element: Element, x: number, y: number) => {
-  const { left, right, bottom, top } = element.getBoundingClientRect();
-  return x > left && x < right && y > top && y < bottom;
-}
 
 interface ExternalProps {
   bookmark: Bookmark;
@@ -20,55 +15,18 @@ interface ExternalProps {
   isDragging: boolean;
   isDragPreview?: boolean;
   hovering: boolean;
+
+  // These two props just get passed down to HoverableListItemComponent
   updateHoverRank: (rank: number, hovering: boolean) => void;
   rank: number;
 }
 
 interface InternalProps extends ExternalProps {
-  somethingIsDragging: boolean; // whether the user is dragging anything at all
   cancelEdit: (params: {}) => void;
   saveEdit: (params: EditBookmarkParams) => void;
 }
 
-interface State {
-  isMouseOver: boolean;
-}
-
-class BookmarkComponent extends React.Component<InternalProps, State> {
-  state = {
-    isMouseOver: false,
-  };
-
-  private element: HTMLDivElement = null;
-
-  onMouseEnter = () => {
-    if (!this.props.somethingIsDragging) {
-      this.props.updateHoverRank(this.props.rank, true);
-    }
-  }
-
-  onMouseLeave = () => {
-    if (!this.props.somethingIsDragging) {
-      this.props.updateHoverRank(this.props.rank, false);
-    }
-  }
-
-  onDragEnter = () => {
-    this.props.updateHoverRank(this.props.rank, true);
-  }
-
-  onDragLeave = () => {
-    this.props.updateHoverRank(this.props.rank, false);
-  }
-
-  onDragEnd = (event: React.DragEvent) => {
-    const { clientX, clientY } = event;
-    const element = findDOMNode(this.element) as Element;
-    const isMouseOver = isMouseOverElement(element, clientX, clientY);
-    if (isMouseOver !== this.state.isMouseOver) {
-      this.props.updateHoverRank(this.props.rank, isMouseOver);
-    }
-  }
+class BookmarkComponent extends React.Component<InternalProps> {
 
   saveEdit = (newName: string) => {
     const name = (newName.length === 0) ? null : newName;
@@ -81,7 +39,7 @@ class BookmarkComponent extends React.Component<InternalProps, State> {
   }
 
   render() {
-    const { editing, isDragging, bookmark } = this.props;
+    const { editing, hovering, isDragging, bookmark } = this.props;
 
     const bookmarkName = editing ? (
       <EditTextFieldComponent
@@ -93,7 +51,7 @@ class BookmarkComponent extends React.Component<InternalProps, State> {
       <a className="bookmark-name" href={bookmark.url}>{bookmark.displayName()}</a>
     );
 
-    const shouldShowButtons = this.props.isDragPreview || (this.props.hovering && !editing);
+    const shouldShowButtons = this.props.isDragPreview || (hovering && !editing);
     const shouldShowBoxShadow = shouldShowButtons || editing;
 
     const maybeButtons = shouldShowButtons ? <BookmarkButtonsComponent bookmark={bookmark}/> : null;
@@ -107,26 +65,20 @@ class BookmarkComponent extends React.Component<InternalProps, State> {
     }
 
     return (
-      <div className={classes}
-        ref={(elem) => this.element = elem}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
-        onDragEnter={this.onDragEnter}
-        onDragLeave={this.onDragLeave}
-        onDragEnd={this.onDragEnd}
+      <HoverableListItemComponent className={classes}
+        updateHoverRank={this.props.updateHoverRank}
+        rank={this.props.rank}
       >
         <img className="bookmark-favicon" src={bookmark.faviconUrl}/>
         { bookmarkName }
         { maybeButtons }
-      </div>
+      </HoverableListItemComponent>
     );
   }
 }
 
 const mapStateToProps = (state: AppState, props: ExternalProps) => {
-  return {
-    somethingIsDragging: state.dragDropState.dragging,
-  };
+  return {};
 };
 
 const mapActionsToProps = {

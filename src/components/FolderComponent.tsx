@@ -7,14 +7,18 @@ import * as FolderActions from '../actions/FolderActions';
 import { EditFolderParams } from '../actions/EditFolderActions';
 import * as EditFolderActions from '../actions/EditFolderActions';
 
-import { isMouseOverElement } from './BookmarkComponent';
-
 import { AppState } from './AppComponent';
 import { EditTextFieldComponent } from './EditTextFieldComponent';
+import { HoverableListItemComponent } from './HoverableListItemComponent';
 
 interface ExternalProps {
   folder: Folder;
   editing: boolean;
+  hovering: boolean;
+
+  // These two props just get passed down to HoverableListItemComponent
+  updateHoverRank: (rank: number, hovering: boolean) => void;
+  rank: number;
 }
 
 interface InternalProps extends ExternalProps {
@@ -23,14 +27,7 @@ interface InternalProps extends ExternalProps {
   saveEdit: (params: EditFolderParams) => void;
 }
 
-interface State {
-  isMouseOver: boolean;
-}
-
 class FolderComponent extends React.Component<InternalProps> {
-  state = {
-    isMouseOver: false,
-  };
 
   onClick = () => {
     this.props.openFolder({ folder: this.props.folder });
@@ -46,7 +43,7 @@ class FolderComponent extends React.Component<InternalProps> {
   }
 
   render() {
-    const { editing, folder } = this.props;
+    const { editing, folder, hovering } = this.props;
 
     const folderName = editing ? (
       <EditTextFieldComponent
@@ -60,10 +57,21 @@ class FolderComponent extends React.Component<InternalProps> {
       </div>
     );
 
+    const shouldShowBoxShadow = hovering || editing;
+
+    let classes = 'folder';
+    if (shouldShowBoxShadow) {
+      classes += ' with-shadow';
+    }
+
     return (
-      <div className="folder">
+      <HoverableListItemComponent className={classes}
+        rank={this.props.rank}
+        updateHoverRank={this.props.updateHoverRank}
+      >
+        <div>icon</div>
         { folderName }
-      </div>
+      </HoverableListItemComponent>
     );
   }
 }
