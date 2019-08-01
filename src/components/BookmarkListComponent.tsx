@@ -41,6 +41,7 @@ class BookmarkListComponent extends React.Component<InternalProps> {
           <DraggableBookmarkComponent
             bookmark={bookmark}
             editing={editing}
+            hovering={rank === this.props.hoverRank}
             rank={rank}
           />
         </ListItemContainerComponent>

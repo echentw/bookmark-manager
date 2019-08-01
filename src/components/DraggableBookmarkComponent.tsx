@@ -12,6 +12,7 @@ import { BookmarkComponent } from './BookmarkComponent';
 interface ExternalProps {
   bookmark: Bookmark;
   editing: boolean;
+  hovering: boolean;
   rank: number;
 }
 
@@ -51,6 +52,7 @@ function DraggableBookmarkComponent(props: InternalProps) {
           bookmark={props.bookmark}
           editing={props.editing}
           isDragging={isDragging}
+          hovering={props.hovering}
           rank={props.rank}
         />
       </div>

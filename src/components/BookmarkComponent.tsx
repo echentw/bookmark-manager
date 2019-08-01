@@ -14,13 +14,13 @@ interface ExternalProps {
   editing: boolean;
   isDragging: boolean;
   isDragPreview?: boolean;
+  hovering: boolean;
 
   // This just gets passed down to HoverableListItemComponent
   rank: number;
 }
 
 interface InternalProps extends ExternalProps {
-  hoverRank: number | null;
   cancelEdit: (params: {}) => void;
   saveEdit: (params: EditBookmarkParams) => void;
 }
@@ -38,8 +38,7 @@ class BookmarkComponent extends React.Component<InternalProps> {
   }
 
   render() {
-    const { editing, isDragging, bookmark } = this.props;
-    const hovering = this.props.rank === this.props.hoverRank;
+    const { editing, hovering, isDragging, bookmark } = this.props;
 
     const bookmarkName = editing ? (
       <EditTextFieldComponent
@@ -75,9 +74,7 @@ class BookmarkComponent extends React.Component<InternalProps> {
 }
 
 const mapStateToProps = (state: AppState, props: ExternalProps) => {
-  return {
-    hoverRank: state.hoverState.hoverRank,
-  };
+  return {};
 };
 
 const mapActionsToProps = {
