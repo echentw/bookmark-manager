@@ -6,14 +6,14 @@ import thunk from 'redux-thunk';
 import { Bookmark } from '../Bookmark';
 import { Folder } from '../Folder';
 import { addBookmarksReducer, initialAddBookmarksState, AddBookmarksState } from '../reducers/AddBookmarksReducer';
-import { bookmarksReducer, initialBookmarksState, BookmarksState } from '../reducers/BookmarksReducer';
 import { copyUrlReducer, initialCopyUrlState, CopyUrlState } from '../reducers/CopyUrlReducer';
 import { dragDropReducer, initialDragDropState, DragDropState } from '../reducers/DragDropReducer';
 import { editBookmarkReducer, initialEditBookmarkState, EditBookmarkState } from '../reducers/EditBookmarkReducer';
 import { foldersReducer, initialFoldersState, FoldersState } from '../reducers/FoldersReducer';
 import { ChromeHelpers } from '../ChromeHelpers';
 import * as SyncAppActions from '../actions/SyncAppActions';
-import { SyncBookmarksParams } from '../actions/SyncAppActions';
+import { SyncFoldersParams } from '../actions/SyncAppActions';
+import * as FolderActions from '../actions/FolderActions';
 
 import { BookmarkListComponent } from './BookmarkListComponent';
 import { FolderListComponent } from './FolderListComponent';
@@ -38,7 +38,6 @@ export const DraggableType = {
 
 export interface AppState {
   addBookmarksState: AddBookmarksState;
-  bookmarksState: BookmarksState;
   copyUrlState: CopyUrlState;
   dragDropState: DragDropState;
   editBookmarkState: EditBookmarkState;
@@ -47,7 +46,6 @@ export interface AppState {
 
 const allReducers = combineReducers({
   addBookmarksState: addBookmarksReducer,
-  bookmarksState: bookmarksReducer,
   copyUrlState: copyUrlReducer,
   dragDropState: dragDropReducer,
   editBookmarkState: editBookmarkReducer,
@@ -63,7 +61,6 @@ const allStoreEnhancers = window.__REDUX_DEVTOOLS_EXTENSION__ ? (
 
 const initialAppState = {
   addBookmarksState: initialAddBookmarksState,
-  bookmarksState: initialBookmarksState,
   copyUrlState: initialCopyUrlState,
   dragDropState: initialDragDropState,
   editBookmarkState: initialEditBookmarkState,
@@ -75,8 +72,9 @@ export const store = createStore(allReducers, initialAppState, allStoreEnhancers
 interface Props {
   loaded: boolean;
   loadAppData: (params: {}) => void;
-  syncBookmarks: (params: SyncBookmarksParams) => void;
+  syncFolders: (params: SyncFoldersParams) => void;
   openFolder: Folder | null;
+  closeFolder: (params: {}) => void;
 }
 
 interface State {
@@ -84,42 +82,83 @@ interface State {
 }
 
 class AppComponent extends React.Component<Props, State> {
-  state = {
+  state: State = {
     date: new Date(),
   };
 
-  oldBookmarks: Bookmark[] | null = null;
+  private oldFolders: Folder[] | null = null;
+  private oldOpenFolder: Folder | null = null;
 
   componentDidMount = () => {
     this.beginSyncingDate();
     this.beginSyncingStore();
   }
 
-  beginSyncingDate = () => {
+  private beginSyncingDate = () => {
     setInterval(() => {
       this.setState({ date: new Date() });
     }, 2000);
   }
 
-  beginSyncingStore = () => {
-    store.subscribe(async () => {
-      const dragging = store.getState().dragDropState.dragging;
-      const bookmarks = store.getState().bookmarksState.bookmarks;
+  private stateHasChanged = ({ oldState, newState }: {
+    oldState: {
+      folders: Folder[];
+      openFolder: Folder | null;
+    };
+    newState: {
+      folders: Folder[];
+      openFolder: Folder | null;
+    };
+  }): boolean => {
+    if (oldState.openFolder === null && oldState.openFolder !== newState.openFolder) {
+      return true;
+    }
+    if (oldState.openFolder !== null && !oldState.openFolder.equals(newState.openFolder)) {
+      return true;
+    }
+    if (oldState.folders.length !== newState.folders.length) {
+      return true;
+    }
+    return !oldState.folders.every((oldFolder: Folder, index: number) => {
+      return oldFolder.equals(newState.folders[index]);
+    });
+  }
 
-      if (this.oldBookmarks === null) {
-        this.oldBookmarks = bookmarks;
+  private beginSyncingStore = () => {
+    store.subscribe(async () => {
+      const { dragging } = store.getState().dragDropState;
+      const { folders, openFolder } = store.getState().foldersState;
+
+      if (this.oldFolders === null) {
+        this.oldFolders = folders;
+        this.oldOpenFolder = openFolder;
         return;
       }
 
-      if (!dragging && bookmarks !== this.oldBookmarks) {
-        await ChromeHelpers.saveAppState(store.getState());
-        this.oldBookmarks = bookmarks;
+      if (!dragging) {
+        const stateChanged = this.stateHasChanged({
+          oldState: {
+            openFolder: this.oldOpenFolder,
+            folders: this.oldFolders,
+          },
+          newState: {
+            openFolder: openFolder,
+            folders: folders,
+          },
+        });
+        if (stateChanged) {
+          this.oldFolders = folders;
+          this.oldOpenFolder = openFolder;
+          await ChromeHelpers.saveAppState(store.getState());
+        }
       }
     });
 
     ChromeHelpers.addOnChangedListener((newFolders: Folder[]) => {
-      const folder = newFolders[0];
-      this.props.syncBookmarks({ bookmarks: folder.bookmarks });
+      this.props.syncFolders({
+        folders: newFolders,
+        openFolder: this.props.openFolder,
+      });
     });
 
     this.props.loadAppData({});
@@ -127,11 +166,19 @@ class AppComponent extends React.Component<Props, State> {
 
   render() {
     const classes = this.props.loaded ? 'app loaded' : 'app';
-    const ListComponent = this.props.openFolder === null ? (
-      <FolderListComponent/>
+
+    const hasFolderOpen = this.props.openFolder !== null;
+
+    const ListComponent = hasFolderOpen ? (
+      <BookmarkListComponent folder={this.props.openFolder}/>
     ) : (
-      <BookmarkListComponent/>
+      <FolderListComponent/>
     );
+
+    const maybeDragLayer = hasFolderOpen ? (
+      <DragLayerComponent bookmarks={this.props.openFolder.bookmarks}/>
+    ) : null;
+
     return (
       <div className={classes}>
         <div className="app-list-container">
@@ -143,7 +190,7 @@ class AppComponent extends React.Component<Props, State> {
         <div className="app-date-container">
           <DateComponent date={this.state.date}/>
         </div>
-        <DragLayerComponent/>
+        { maybeDragLayer }
         <CopiedToastComponent/>
         <AddBookmarksModalComponent/>
       </div>
@@ -153,14 +200,15 @@ class AppComponent extends React.Component<Props, State> {
 
 const mapStateToProps = (state: AppState, props: {}) => {
   return {
-    loaded: state.bookmarksState.loaded,
+    loaded: state.foldersState.loaded,
     openFolder: state.foldersState.openFolder,
   };
 };
 
 const mapActionsToProps = {
   loadAppData: SyncAppActions.loadAppData,
-  syncBookmarks: SyncAppActions.syncBookmarks,
+  syncFolders: SyncAppActions.syncFolders,
+  closeFolder: FolderActions.closeFolder,
 };
 
 const Component = connect(mapStateToProps, mapActionsToProps)(AppComponent);

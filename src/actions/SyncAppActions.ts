@@ -5,10 +5,6 @@ import { Folder } from '../Folder';
 import { ChromeAppState, ChromeHelpers } from '../ChromeHelpers';
 import { Action, SyncAppActionType as ActionType } from './constants';
 
-export interface SyncBookmarksParams {
-  bookmarks: Bookmark[];
-}
-
 export interface SyncFoldersParams {
   folders: Folder[];
   openFolder: Folder | null;
@@ -17,23 +13,12 @@ export interface SyncFoldersParams {
 export function loadAppData(params: {}) {
   return async (dispatch: Dispatch) => {
     const state: ChromeAppState = await ChromeHelpers.loadAppState();
-    const openFolder = state.folders.find(folder => folder.id === state.openFolderId);
-
+    const maybeFolder = state.folders.find(folder => folder.id === state.openFolderId);
+    const openFolder = maybeFolder ? maybeFolder : null;
     dispatch(syncFolders({
       folders: state.folders,
       openFolder: openFolder,
     }));
-
-    if (openFolder) {
-      dispatch(syncBookmarks({ bookmarks: openFolder.bookmarks }));
-    }
-  };
-}
-
-export function syncBookmarks(params: SyncBookmarksParams): Action<SyncBookmarksParams> {
-  return {
-    type: ActionType.syncBookmarks,
-    params: params,
   };
 }
 

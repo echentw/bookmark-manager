@@ -43,19 +43,14 @@ export class ChromeHelpers {
   }
 
   public static saveAppState = (appState: AppState): Promise<{}> => {
-    const folders = [
-      new Folder({
-        id: 'cool-folder-id',
-        name: 'General',
-        bookmarks: appState.bookmarksState.bookmarks,
-      }),
-    ];
+    const { folders, openFolder } = appState.foldersState;
 
     const folderDatas: FolderData[] = folders.map(folder => folder.toData());
+    const openFolderId = openFolder ? openFolder.id : null;
 
     const appData: AppData = {
       folders: folderDatas,
-      openFolderId: folders[0].id,
+      openFolderId: openFolderId,
     };
 
     return new Promise((resolve, reject) => {
@@ -79,15 +74,13 @@ export class ChromeHelpers {
           };
           return resolve(state);
         } else {
+          const firstFolder = new Folder({
+            name: 'General',
+            bookmarks: [],
+          });
           const initialState: ChromeAppState = {
-            folders: [
-              new Folder({
-                id: 'cool-folder-id',
-                name: 'General',
-                bookmarks: [],
-              }),
-            ],
-            openFolderId: 'cool-folder-id',
+            folders: [firstFolder],
+            openFolderId: firstFolder.id,
           };
           return resolve(initialState);
         }

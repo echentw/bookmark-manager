@@ -12,9 +12,11 @@ import { ListItemContainerComponent } from './ListItemContainerComponent';
 import { AddBookmarksButtonComponent } from './AddBookmarksButtonComponent';
 import { AppState, DraggableType } from './AppComponent';
 
-interface Props {
+interface ExternalProps {
   folder: Folder;
-  bookmarks: Bookmark[];
+}
+
+interface InternalProps extends ExternalProps {
   editingBookmarkId: string | null;
   closeFolder: (params: {}) => void;
 }
@@ -23,7 +25,7 @@ interface State {
   hoverRank: number | null;
 }
 
-class BookmarkListComponent extends React.Component<Props, State> {
+class BookmarkListComponent extends React.Component<InternalProps, State> {
   state: State = {
     hoverRank: null,
   };
@@ -41,9 +43,9 @@ class BookmarkListComponent extends React.Component<Props, State> {
   }
 
   render() {
-    const folderName = this.props.folder ? this.props.folder.name : 'This should not appear!';
+    const { folder } = this.props;
 
-    const bookmarkComponents = this.props.bookmarks.map((bookmark: Bookmark, rank: number) => {
+    const bookmarkComponents = folder.bookmarks.map((bookmark: Bookmark, rank: number) => {
       const editing = bookmark.id === this.props.editingBookmarkId;
       return (
         <ListItemContainerComponent
@@ -68,7 +70,7 @@ class BookmarkListComponent extends React.Component<Props, State> {
             <FaChevronLeft/>
           </IconContext.Provider>
           <div className="bookmark-list-title" onClick={this.onClickFolderName}>
-            { folderName }
+            { folder.name }
           </div>
         </div>
         <Scrollbars>
@@ -84,8 +86,6 @@ class BookmarkListComponent extends React.Component<Props, State> {
 
 const mapStateToProps = (state: AppState, props: {}) => {
   return {
-    folder: state.foldersState.openFolder,
-    bookmarks: state.bookmarksState.bookmarks,
     editingBookmarkId: state.editBookmarkState.editingBookmarkId,
   };
 };

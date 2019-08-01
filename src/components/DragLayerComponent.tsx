@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { DragLayerMonitor, useDragLayer, XYCoord } from 'react-dnd';
-import { connect } from 'react-redux';
 
 import { Bookmark } from '../Bookmark';
 import { BookmarkComponent } from './BookmarkComponent';
@@ -30,7 +29,7 @@ const itemStyles = (currentOffset?: XYCoord): React.CSSProperties => {
   }
 }
 
-function DragLayerComponent(props: Props) {
+export function DragLayerComponent(props: Props) {
   const { isDragging, currentOffset, item }: CollectedProps = useDragLayer(
     (monitor: DragLayerMonitor) => ({
       isDragging: !!monitor.isDragging(),
@@ -66,12 +65,3 @@ function DragLayerComponent(props: Props) {
     </div>
   );
 }
-
-const mapStateToProps = (state: AppState, props: {}) => {
-  return {
-    bookmarks: state.bookmarksState.bookmarks,
-  };
-};
-
-const Component = connect(mapStateToProps)(DragLayerComponent);
-export { Component as DragLayerComponent };

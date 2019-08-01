@@ -1,4 +1,5 @@
 import { Bookmark, BookmarkData } from './Bookmark';
+import { randomId } from './utils';
 
 export interface FolderData {
   id: string;
@@ -16,32 +17,37 @@ export class Folder {
     id?: string,
     bookmarks?: Bookmark[],
   }) {
+    this.id = id ? id : randomId();
     this.name = name;
-    this.id = id ? id : this.randomId();
     this.bookmarks = bookmarks ? bookmarks : [];
   }
 
   public withName = (name: string) => {
     return new Folder({
       id: this.id,
-      bookmarks: this.bookmarks,
       name: name,
+      bookmarks: this.bookmarks,
     });
   }
 
-  public addBookmarks = (bookmarks: Bookmark[]) => {
-    this.bookmarks.push(...bookmarks);
+  public withBookmarks = (bookmarks: Bookmark[]) => {
+    return new Folder({
+      id: this.id,
+      name: this.name,
+      bookmarks: bookmarks,
+    });
   }
 
-  // Copied from Bookmark.ts
-  private randomId(): string {
-    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let id = '';
-    for (let i = 0; i < 8; ++i) {
-      const index = Math.floor(Math.random() * chars.length);
-      id += chars[index];
+  public equals = (other: Folder | null): boolean => {
+    if (other === null) {
+      return false;
     }
-    return id;
+    if (this.id !== other.id || this.name !== other.name || this.bookmarks.length !== other.bookmarks.length) {
+      return false;
+    }
+    return this.bookmarks.every((bookmark: Bookmark, index: number) => {
+      return bookmark.equals(other.bookmarks[index]);
+    });
   }
 
   public static fromData = (data: FolderData): Folder => {

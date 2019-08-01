@@ -1,3 +1,5 @@
+import { randomId } from './utils';
+
 export interface BookmarkData {
   id: string;
   url: string;
@@ -24,7 +26,7 @@ export class Bookmark {
     this.title = title;
     this.faviconUrl = faviconUrl;
 
-    this.id = id ? id : this.randomId();
+    this.id = id ? id : randomId();
     this.name = name ? name : '';
   }
 
@@ -48,14 +50,17 @@ export class Bookmark {
     });
   }
 
-  private randomId(): string {
-    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let id = '';
-    for (let i = 0; i < 8; ++i) {
-      const index = Math.floor(Math.random() * chars.length);
-      id += chars[index];
+  public equals = (other: Bookmark | null): boolean => {
+    if (other === null) {
+      return false;
     }
-    return id;
+    return (
+      this.id === other.id &&
+      this.name === other.name &&
+      this.title === other.title &&
+      this.url === other.url &&
+      this.faviconUrl === other.faviconUrl
+    );
   }
 
   public static fromData = (data: BookmarkData): Bookmark => {
