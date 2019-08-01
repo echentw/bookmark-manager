@@ -16,14 +16,13 @@ import { FolderButtonsComponent } from './FolderButtonsComponent';
 interface ExternalProps {
   folder: Folder;
   editing: boolean;
-  hovering: boolean;
 
-  // These two props just get passed down to HoverableListItemComponent
-  updateHoverRank: (rank: number, hovering: boolean) => void;
+  // This just gets passed down to HoverableListItemComponent
   rank: number;
 }
 
 interface InternalProps extends ExternalProps {
+  hoverRank: number | null;
   openFolder: (params: OpenFolderParams) => void;
   cancelEdit: (params: {}) => void;
   saveEdit: (params: EditFolderParams) => void;
@@ -45,7 +44,8 @@ class FolderComponent extends React.Component<InternalProps> {
   }
 
   render() {
-    const { editing, folder, hovering } = this.props;
+    const { editing, folder } = this.props;
+    const hovering = this.props.rank === this.props.hoverRank;
 
     const folderName = editing ? (
       <EditTextFieldComponent
@@ -70,10 +70,7 @@ class FolderComponent extends React.Component<InternalProps> {
     }
 
     return (
-      <HoverableListItemComponent className={classes}
-        rank={this.props.rank}
-        updateHoverRank={this.props.updateHoverRank}
-      >
+      <HoverableListItemComponent className={classes} rank={this.props.rank}>
         <FaFolder className="folder-icon"/>
         { folderName }
         { maybeButtons }
@@ -83,7 +80,9 @@ class FolderComponent extends React.Component<InternalProps> {
 }
 
 const mapStateToProps = (state: AppState, props: ExternalProps) => {
-  return {};
+  return {
+    hoverRank: state.hoverState.hoverRank,
+  };
 };
 
 const mapActionsToProps = {

@@ -22,14 +22,6 @@ class FolderListComponent extends React.Component<Props> {
     hoverRank: null,
   };
 
-  updateHoverRank = (rank: number, hovering: boolean) => {
-    if (rank === this.state.hoverRank && !hovering) {
-      this.setState({ hoverRank: null });
-    } else if (rank !== this.state.hoverRank && hovering) {
-      this.setState({ hoverRank: rank });
-    }
-  }
-
   render() {
     const folderComponents = this.props.folders.map((folder: Folder, rank: number) => {
       const editing = this.props.editingFolder && folder.id === this.props.editingFolder.id;
@@ -43,8 +35,6 @@ class FolderListComponent extends React.Component<Props> {
             folder={folder}
             editing={editing}
             rank={rank}
-            hovering={rank === this.state.hoverRank}
-            updateHoverRank={this.updateHoverRank}
           />
         </ListItemContainerComponent>
       );

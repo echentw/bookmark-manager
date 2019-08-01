@@ -13,8 +13,6 @@ interface ExternalProps {
   bookmark: Bookmark;
   editing: boolean;
   rank: number;
-  hovering: boolean;
-  updateHoverRank: (rank: number, hovering: boolean) => void;
 }
 
 interface InternalProps extends ExternalProps {
@@ -53,8 +51,6 @@ function DraggableBookmarkComponent(props: InternalProps) {
           bookmark={props.bookmark}
           editing={props.editing}
           isDragging={isDragging}
-          hovering={props.hovering}
-          updateHoverRank={props.updateHoverRank}
           rank={props.rank}
         />
       </div>

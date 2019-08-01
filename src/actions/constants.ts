@@ -32,15 +32,20 @@ export const CopyUrlActionType = {
   hideToast: 'CopyUrl:hideToast',
 };
 
+export const EditBookmarkActionType = {
+  beginEdit: 'EditBookmark:beginEdit',
+  cancel: 'EditBookmark:cancel',
+  save: 'EditBookmark:save',
+  deleteBookmark: 'EditBookmark:deleteBookmark',
+};
+
 export const DragDropActionType = {
   beginDrag: 'DragDrop:beginDrag',
   endDrag: 'DragDrop:endDrag',
   isOver: 'DragDrop:isOver',
 };
 
-export const EditBookmarkActionType = {
-  beginEdit: 'EditBookmark:beginEdit',
-  cancel: 'EditBookmark:cancel',
-  save: 'EditBookmark:save',
-  deleteBookmark: 'EditBookmark:deleteBookmark',
+export const HoverActionType = {
+  enter: 'Hover:enter',
+  exit: 'Hover:exit',
 };

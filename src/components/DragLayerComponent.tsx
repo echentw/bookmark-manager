@@ -51,8 +51,6 @@ export function DragLayerComponent(props: Props) {
           editing={false}
           isDragging={false}
           isDragPreview={true}
-          hovering={false}
-          updateHoverRank={() => {}}
           rank={-1}
         />
       </div>

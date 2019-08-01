@@ -10,6 +10,7 @@ import { copyUrlReducer, initialCopyUrlState, CopyUrlState } from '../reducers/C
 import { dragDropReducer, initialDragDropState, DragDropState } from '../reducers/DragDropReducer';
 import { editBookmarkReducer, initialEditBookmarkState, EditBookmarkState } from '../reducers/EditBookmarkReducer';
 import { foldersReducer, initialFoldersState, FoldersState } from '../reducers/FoldersReducer';
+import { hoverReducer, initialHoverState, HoverState } from '../reducers/HoverReducer';
 import { ChromeHelpers } from '../ChromeHelpers';
 import * as SyncAppActions from '../actions/SyncAppActions';
 import { SyncFoldersParams } from '../actions/SyncAppActions';
@@ -42,6 +43,7 @@ export interface AppState {
   dragDropState: DragDropState;
   editBookmarkState: EditBookmarkState;
   foldersState: FoldersState;
+  hoverState: HoverState;
 }
 
 const allReducers = combineReducers({
@@ -50,6 +52,7 @@ const allReducers = combineReducers({
   dragDropState: dragDropReducer,
   editBookmarkState: editBookmarkReducer,
   foldersState: foldersReducer,
+  hoverState: hoverReducer,
 });
 
 const allStoreEnhancers = window.__REDUX_DEVTOOLS_EXTENSION__ ? (
@@ -65,6 +68,7 @@ const initialAppState = {
   dragDropState: initialDragDropState,
   editBookmarkState: initialEditBookmarkState,
   foldersState: initialFoldersState,
+  hoverState: initialHoverState,
 };
 
 export const store = createStore(allReducers, initialAppState, allStoreEnhancers);

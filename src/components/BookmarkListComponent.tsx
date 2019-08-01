@@ -19,27 +19,12 @@ interface ExternalProps {
 interface InternalProps extends ExternalProps {
   editingBookmarkId: string | null;
   closeFolder: (params: {}) => void;
-}
-
-interface State {
   hoverRank: number | null;
 }
 
-class BookmarkListComponent extends React.Component<InternalProps, State> {
-  state: State = {
-    hoverRank: null,
-  };
-
+class BookmarkListComponent extends React.Component<InternalProps> {
   onClickFolderName = () => {
     this.props.closeFolder({});
-  }
-
-  updateHoverRank = (rank: number, hovering: boolean) => {
-    if (rank === this.state.hoverRank && !hovering) {
-      this.setState({ hoverRank: null });
-    } else if (rank !== this.state.hoverRank && hovering) {
-      this.setState({ hoverRank: rank });
-    }
   }
 
   render() {
@@ -57,8 +42,6 @@ class BookmarkListComponent extends React.Component<InternalProps, State> {
             bookmark={bookmark}
             editing={editing}
             rank={rank}
-            hovering={rank === this.state.hoverRank}
-            updateHoverRank={this.updateHoverRank}
           />
         </ListItemContainerComponent>
       );
@@ -87,6 +70,7 @@ class BookmarkListComponent extends React.Component<InternalProps, State> {
 const mapStateToProps = (state: AppState, props: {}) => {
   return {
     editingBookmarkId: state.editBookmarkState.editingBookmarkId,
+    hoverRank: state.hoverState.hoverRank,
   };
 };
 

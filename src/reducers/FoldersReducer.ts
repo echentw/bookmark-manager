@@ -145,9 +145,6 @@ function handleSyncFolders(state: FoldersState, action: Action<SyncFoldersParams
     openFolder = maybeFolder ? maybeFolder : null;
   }
 
-  console.log('open folder');
-  console.log(openFolder);
-
   return {
     ...state,
     folders: action.params.folders,
