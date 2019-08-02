@@ -10,7 +10,7 @@ import { EditBookmarkParams } from '../actions/EditBookmarkActions';
 
 import { Bookmark } from '../Bookmark';
 import { ShowToastParams } from '../actions/CopyUrlActions';
-import { AppState } from './AppComponent';
+import { AppState } from '../reduxStore';
 
 interface ExternalProps {
   bookmark: Bookmark;

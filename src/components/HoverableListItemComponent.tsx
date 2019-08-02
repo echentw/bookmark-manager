@@ -2,7 +2,7 @@ import * as React from 'react';
 import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 
-import { AppState } from './AppComponent';
+import { AppState } from '../reduxStore';
 import { HoverParams } from '../actions/HoverActions';
 import * as HoverActions from '../actions/HoverActions';
 

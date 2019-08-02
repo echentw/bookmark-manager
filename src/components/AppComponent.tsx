@@ -1,20 +1,14 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Store, compose, applyMiddleware, combineReducers, createStore } from 'redux';
-import thunk from 'redux-thunk';
+import { Store } from 'redux';
 
 import { Bookmark } from '../Bookmark';
 import { Folder } from '../Folder';
-import { addBookmarksReducer, initialAddBookmarksState, AddBookmarksState } from '../reducers/AddBookmarksReducer';
-import { copyUrlReducer, initialCopyUrlState, CopyUrlState } from '../reducers/CopyUrlReducer';
-import { dragDropReducer, initialDragDropState, DragDropState } from '../reducers/DragDropReducer';
-import { editBookmarkReducer, initialEditBookmarkState, EditBookmarkState } from '../reducers/EditBookmarkReducer';
-import { foldersReducer, initialFoldersState, FoldersState } from '../reducers/FoldersReducer';
-import { hoverReducer, initialHoverState, HoverState } from '../reducers/HoverReducer';
 import { ChromeHelpers } from '../ChromeHelpers';
 import * as SyncAppActions from '../actions/SyncAppActions';
 import { SyncFoldersParams } from '../actions/SyncAppActions';
 import * as FolderActions from '../actions/FolderActions';
+import { AppState, reduxStore } from '../reduxStore';
 
 import { BookmarkListComponent } from './BookmarkListComponent';
 import { FolderListComponent } from './FolderListComponent';
@@ -26,52 +20,10 @@ import { DateComponent } from './DateComponent';
 
 const backgroundImage = require('../blue_stars.jpg');
 
-declare global {
-  interface Window {
-    __REDUX_DEVTOOLS_EXTENSION__?: any;
-  }
-}
-
 export const DraggableType = {
   Bookmark: 'bookmark',
   Folder: 'folder',
 };
-
-export interface AppState {
-  addBookmarksState: AddBookmarksState;
-  copyUrlState: CopyUrlState;
-  dragDropState: DragDropState;
-  editBookmarkState: EditBookmarkState;
-  foldersState: FoldersState;
-  hoverState: HoverState;
-}
-
-const allReducers = combineReducers({
-  addBookmarksState: addBookmarksReducer,
-  copyUrlState: copyUrlReducer,
-  dragDropState: dragDropReducer,
-  editBookmarkState: editBookmarkReducer,
-  foldersState: foldersReducer,
-  hoverState: hoverReducer,
-});
-
-const allStoreEnhancers = window.__REDUX_DEVTOOLS_EXTENSION__ ? (
-  compose(
-    applyMiddleware(thunk),
-    window.__REDUX_DEVTOOLS_EXTENSION__()
-  )
-) : applyMiddleware(thunk);
-
-const initialAppState = {
-  addBookmarksState: initialAddBookmarksState,
-  copyUrlState: initialCopyUrlState,
-  dragDropState: initialDragDropState,
-  editBookmarkState: initialEditBookmarkState,
-  foldersState: initialFoldersState,
-  hoverState: initialHoverState,
-};
-
-export const store = createStore(allReducers, initialAppState, allStoreEnhancers);
 
 interface Props {
   loaded: boolean;
@@ -95,7 +47,7 @@ class AppComponent extends React.Component<Props, State> {
 
   componentDidMount = () => {
     this.beginSyncingDate();
-    this.beginSyncingStore();
+    this.beginSyncingStore(reduxStore);
   }
 
   private beginSyncingDate = () => {
@@ -128,7 +80,7 @@ class AppComponent extends React.Component<Props, State> {
     });
   }
 
-  private beginSyncingStore = () => {
+  private beginSyncingStore = (store: Store) => {
     store.subscribe(async () => {
       const { dragging } = store.getState().dragDropState;
       const { folders, openFolder } = store.getState().foldersState;

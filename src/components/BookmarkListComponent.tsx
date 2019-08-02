@@ -10,7 +10,8 @@ import * as FolderActions from '../actions/FolderActions';
 import { DraggableBookmarkComponent } from './DraggableBookmarkComponent';
 import { ListItemContainerComponent } from './ListItemContainerComponent';
 import { AddBookmarksButtonComponent } from './AddBookmarksButtonComponent';
-import { AppState, DraggableType } from './AppComponent';
+import { DraggableType } from './AppComponent';
+import { AppState } from '../reduxStore';
 
 interface ExternalProps {
   folder: Folder;

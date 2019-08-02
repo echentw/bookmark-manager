@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useDrop } from 'react-dnd';
 import { connect } from 'react-redux';
 
-import { AppState } from './AppComponent';
+import { AppState } from '../reduxStore';
 import * as DragDropActions from '../actions/DragDropActions';
 import { DragDropParams } from '../actions/DragDropActions';
 

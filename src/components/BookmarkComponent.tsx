@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { AppState } from './AppComponent';
+import { AppState } from '../reduxStore';
 import { EditTextFieldComponent } from './EditTextFieldComponent';
 import { BookmarkButtonsComponent } from './BookmarkButtonsComponent';
 import { HoverableListItemComponent } from './HoverableListItemComponent';

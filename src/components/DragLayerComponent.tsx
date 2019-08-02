@@ -3,7 +3,7 @@ import { DragLayerMonitor, useDragLayer, XYCoord } from 'react-dnd';
 
 import { Bookmark } from '../Bookmark';
 import { BookmarkComponent } from './BookmarkComponent';
-import { AppState } from './AppComponent';
+import { AppState } from '../reduxStore';
 
 interface Props {
   bookmarks: Bookmark[],

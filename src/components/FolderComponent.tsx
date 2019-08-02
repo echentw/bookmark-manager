@@ -8,7 +8,7 @@ import * as FolderActions from '../actions/FolderActions';
 import { EditFolderParams } from '../actions/EditFolderActions';
 import * as EditFolderActions from '../actions/EditFolderActions';
 
-import { AppState } from './AppComponent';
+import { AppState } from '../reduxStore';
 import { EditTextFieldComponent } from './EditTextFieldComponent';
 import { HoverableListItemComponent } from './HoverableListItemComponent';
 import { FolderButtonsComponent } from './FolderButtonsComponent';

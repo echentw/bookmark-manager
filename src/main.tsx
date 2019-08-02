@@ -6,11 +6,12 @@ import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { Provider } from 'react-redux';
 
-import { AppComponent, store } from './components/AppComponent';
+import { AppComponent } from './components/AppComponent';
+import { reduxStore } from './reduxStore';
 
 const MainComponent = () => {
   return (
-    <Provider store={store}>
+    <Provider store={reduxStore}>
       <DndProvider backend={HTML5Backend}>
         <AppComponent/>
       </DndProvider>

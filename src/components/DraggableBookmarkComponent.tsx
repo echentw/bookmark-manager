@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Bookmark } from '../Bookmark';
 import * as DragDropActions from '../actions/DragDropActions';
 import { DragDropParams } from '../actions/DragDropActions';
-import { AppState } from './AppComponent';
+import { AppState } from '../reduxStore';
 import { DraggableType } from './AppComponent';
 import { BookmarkComponent } from './BookmarkComponent';
 

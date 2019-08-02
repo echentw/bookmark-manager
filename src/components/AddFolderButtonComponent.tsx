@@ -4,7 +4,7 @@ import { FaPlus } from 'react-icons/fa';
 import { connect } from 'react-redux';
 
 import * as EditFolderActions from '../actions/EditFolderActions';
-import { AppState } from './AppComponent';
+import { AppState } from '../reduxStore';
 
 interface Props {
   addFolder: (params: {}) => void;

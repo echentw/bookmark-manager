@@ -5,7 +5,7 @@ import { Bookmark } from '../Bookmark';
 import { TabInfo } from '../ChromeHelpers';
 import * as AddBookmarksActions from '../actions/AddBookmarksActions';
 import { AddBookmarksSaveParams } from '../actions/AddBookmarksActions';
-import { AppState } from './AppComponent';
+import { AppState } from '../reduxStore';
 
 interface Props {
   showingModal: boolean;

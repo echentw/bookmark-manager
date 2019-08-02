@@ -4,7 +4,7 @@ import { FaPen, FaTrash } from 'react-icons/fa';
 import { connect } from 'react-redux';
 
 import { Folder } from '../Folder';
-import { AppState } from './AppComponent';
+import { AppState } from '../reduxStore';
 import * as EditFolderActions from '../actions/EditFolderActions';
 import { EditFolderParams } from '../actions/EditFolderActions';
 

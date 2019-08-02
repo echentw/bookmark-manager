@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import Scrollbars from 'react-custom-scrollbars';
 
 import { Folder } from '../Folder';
-import { AppState, DraggableType } from './AppComponent';
+import { AppState, } from '../reduxStore';
+import { DraggableType } from './AppComponent';
 import { FolderComponent } from './FolderComponent';
 import { ListItemContainerComponent } from './ListItemContainerComponent';
 import { AddFolderButtonComponent } from './AddFolderButtonComponent';

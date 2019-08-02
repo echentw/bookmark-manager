@@ -1,6 +1,6 @@
 import { Bookmark, BookmarkData } from './Bookmark';
 import { Folder, FolderData } from './Folder';
-import { AppState } from './components/AppComponent';
+import { AppState } from './reduxStore';
 
 // What gets returned by some methods in this class
 export interface ChromeAppState {
@@ -43,6 +43,8 @@ export class ChromeHelpers {
   }
 
   public static saveAppState = (appState: AppState): Promise<{}> => {
+    // uncomment when doing dangerous operations
+    // return new Promise((resolve) => resolve());
     const { folders, openFolder } = appState.foldersState;
 
     const folderDatas: FolderData[] = folders.map(folder => folder.toData());
