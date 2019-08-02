@@ -19,10 +19,12 @@ interface ExternalProps {
 interface InternalProps extends ExternalProps {
   editingBookmarkId: string | null;
   closeFolder: (params: {}) => void;
+  draggedRank: number | null;
   hoverRank: number | null;
 }
 
 class BookmarkListComponent extends React.Component<InternalProps> {
+
   onClickFolderName = () => {
     this.props.closeFolder({});
   }
@@ -32,6 +34,8 @@ class BookmarkListComponent extends React.Component<InternalProps> {
 
     const bookmarkComponents = folder.bookmarks.map((bookmark: Bookmark, rank: number) => {
       const editing = bookmark.id === this.props.editingBookmarkId;
+      const dragging = rank === this.props.draggedRank;
+      const hovering = rank === this.props.hoverRank;
       return (
         <ListItemContainerComponent
           key={bookmark.id}
@@ -41,12 +45,14 @@ class BookmarkListComponent extends React.Component<InternalProps> {
           <DraggableBookmarkComponent
             bookmark={bookmark}
             editing={editing}
-            hovering={rank === this.props.hoverRank}
+            dragging={dragging}
+            hovering={hovering}
             rank={rank}
           />
         </ListItemContainerComponent>
       );
     });
+
     return (
       <div className="bookmark-list">
         <div className="bookmark-list-title-container">
@@ -71,6 +77,7 @@ class BookmarkListComponent extends React.Component<InternalProps> {
 const mapStateToProps = (state: AppState, props: {}) => {
   return {
     editingBookmarkId: state.editBookmarkState.editingBookmarkId,
+    draggedRank: state.foldersState.draggedBookmarkRank,
     hoverRank: state.hoverState.hoverRank,
   };
 };

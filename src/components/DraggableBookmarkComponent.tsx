@@ -9,8 +9,12 @@ import { AppState } from './AppComponent';
 import { DraggableType } from './AppComponent';
 import { BookmarkComponent } from './BookmarkComponent';
 
+import { HoverParams } from '../actions/HoverActions';
+import * as HoverActions from '../actions/HoverActions';
+
 interface ExternalProps {
   bookmark: Bookmark;
+  dragging: boolean;
   editing: boolean;
   hovering: boolean;
   rank: number;
@@ -20,6 +24,7 @@ interface InternalProps extends ExternalProps {
   editingBookmarkId: string | null;
   beginDrag: (params: DragDropParams) => void;
   endDrag: (params: DragDropParams) => void;
+  exitHover: (params: HoverParams) => void;
 }
 
 function DraggableBookmarkComponent(props: InternalProps) {
@@ -30,7 +35,9 @@ function DraggableBookmarkComponent(props: InternalProps) {
     },
     canDrag: monitor => props.bookmark.id !== props.editingBookmarkId,
     begin: monitor => {
+      // TODO: fix this please
       props.beginDrag({ rank: props.rank });
+      props.exitHover({ rank: props.rank });
       return;
     },
     end: monitor => {
@@ -51,7 +58,7 @@ function DraggableBookmarkComponent(props: InternalProps) {
         <BookmarkComponent
           bookmark={props.bookmark}
           editing={props.editing}
-          isDragging={isDragging}
+          dragging={props.dragging}
           hovering={props.hovering}
           rank={props.rank}
         />
@@ -69,6 +76,7 @@ const mapStateToProps = (state: AppState, props: ExternalProps) => {
 const mapActionsToProps = {
   beginDrag: DragDropActions.beginDrag,
   endDrag: DragDropActions.endDrag,
+  exitHover: HoverActions.exit,
 };
 
 const Component = connect(mapStateToProps, mapActionsToProps)(DraggableBookmarkComponent);

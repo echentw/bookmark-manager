@@ -12,9 +12,10 @@ import * as EditBookmarkActions from '../actions/EditBookmarkActions';
 interface ExternalProps {
   bookmark: Bookmark;
   editing: boolean;
-  isDragging: boolean;
-  isDragPreview?: boolean;
+  dragging: boolean;
   hovering: boolean;
+
+  isDragPreview?: boolean;
 
   // This just gets passed down to HoverableListItemComponent
   rank: number;
@@ -38,7 +39,7 @@ class BookmarkComponent extends React.Component<InternalProps> {
   }
 
   render() {
-    const { editing, hovering, isDragging, bookmark } = this.props;
+    const { editing, hovering, dragging, bookmark } = this.props;
 
     const bookmarkName = editing ? (
       <EditTextFieldComponent
@@ -56,7 +57,7 @@ class BookmarkComponent extends React.Component<InternalProps> {
     const maybeButtons = shouldShowButtons ? <BookmarkButtonsComponent bookmark={bookmark}/> : null;
 
     let classes = 'bookmark';
-    if (isDragging) {
+    if (dragging) {
       classes += ' vanished';
     }
     if (shouldShowBoxShadow) {

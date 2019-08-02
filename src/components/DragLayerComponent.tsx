@@ -49,7 +49,7 @@ export function DragLayerComponent(props: Props) {
         <BookmarkComponent
           bookmark={bookmark}
           editing={false}
-          isDragging={false}
+          dragging={false}
           isDragPreview={true}
           hovering={false}
           rank={-1}

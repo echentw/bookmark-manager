@@ -40,11 +40,15 @@ class HoverableListItemComponent extends React.Component<InternalProps> {
   }
 
   onDragEnter = () => {
-    this.props.enterHover({ rank: this.props.rank });
+    if (!this.props.somethingIsDragging) {
+      this.props.enterHover({ rank: this.props.rank });
+    }
   }
 
   onDragLeave = () => {
-    this.props.exitHover({ rank: this.props.rank });
+    if (!this.props.somethingIsDragging) {
+      this.props.exitHover({ rank: this.props.rank });
+    }
   }
 
   onDragEnd = (event: React.DragEvent) => {

@@ -212,18 +212,21 @@ function handleEndDrag(state: FoldersState, action: Action<DragDropParams>): Fol
   if (state.openFolder === null) {
     return state;
   }
+  const rank = (state.draggedBookmarkRank === action.params.rank) ? null : state.draggedBookmarkRank;
   return {
     ...state,
-    draggedBookmarkRank: action.params.rank,
+    draggedBookmarkRank: rank,
   };
 }
 
+// So... we manually set the state in this method, which is bad.
+// But we need this for performance.
 function handleDragIsOver(state: FoldersState, action: Action<DragDropParams>): FoldersState {
   if (state.openFolder === null) {
     return state;
   }
 
-  const bookmarks = state.openFolder.bookmarks.splice(0); // copies the array
+  const bookmarks = state.openFolder.bookmarks;
   const draggedRank = state.draggedBookmarkRank;
   const dropTargetRank = action.params.rank;
 
@@ -240,8 +243,8 @@ function handleDragIsOver(state: FoldersState, action: Action<DragDropParams>): 
   }
   bookmarks[dropTargetRank] = draggedBookmark;
 
-  const newFolder = state.openFolder.withBookmarks(bookmarks);
-  const newFolders = withItemReplaced<Folder>(state.folders, newFolder);
+  const newFolder = state.openFolder;
+  const newFolders = state.folders;
 
   return {
     ...state,
