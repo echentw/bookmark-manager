@@ -1,6 +1,8 @@
 import { AddBookmarksSaveParams, ShowModalParams } from '../actions/AddBookmarksActions';
 import { Action, AddBookmarksActionType as ActionType } from '../actions/constants';
 import { TabInfo } from '../ChromeHelpers';
+import { Reducer } from './Reducer';
+import { AppState } from '../reduxStore';
 
 export interface AddBookmarksState {
   showingModal: boolean;
@@ -12,20 +14,24 @@ export const initialAddBookmarksState: AddBookmarksState = {
   tabs: [],
 };
 
-export function addBookmarksReducer(
-  state: AddBookmarksState = initialAddBookmarksState,
+export const addBookmarksReducer: Reducer<AddBookmarksState> = (
+  state: AddBookmarksState,
   action: Action,
-): AddBookmarksState {
+  appState: AppState
+): AddBookmarksState => {
+  let newState = state;
   switch (action.type) {
     case ActionType.showModal:
-      return handleShowModal(state, action as Action<ShowModalParams>);
+      newState = handleShowModal(state, action as Action<ShowModalParams>);
+      break;
     case ActionType.cancel:
-      return handleCancel(state, action);
+      newState = handleCancel(state, action);
+      break;
     case ActionType.save:
-      return handleSave(state, action as Action<AddBookmarksSaveParams>);
-    default:
-      return state;
+      newState = handleSave(state, action as Action<AddBookmarksSaveParams>);
+      break;
   }
+  return newState;
 }
 
 function handleShowModal(state: AddBookmarksState, action: Action<ShowModalParams>): AddBookmarksState {

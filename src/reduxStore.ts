@@ -1,12 +1,16 @@
-import { Store, compose, applyMiddleware, combineReducers, createStore } from 'redux';
+import { Store, compose, applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk';
+
+import { Action } from './actions/constants';
 
 import { addBookmarksReducer, initialAddBookmarksState, AddBookmarksState } from './reducers/AddBookmarksReducer';
 import { copyUrlReducer, initialCopyUrlState, CopyUrlState } from './reducers/CopyUrlReducer';
 import { dragDropReducer, initialDragDropState, DragDropState } from './reducers/DragDropReducer';
 import { editBookmarkReducer, initialEditBookmarkState, EditBookmarkState } from './reducers/EditBookmarkReducer';
+import { editFolderReducer, initialEditFolderState, EditFolderState } from './reducers/EditFolderReducer';
 import { foldersReducer, initialFoldersState, FoldersState } from './reducers/FoldersReducer';
 import { hoverReducer, initialHoverState, HoverState } from './reducers/HoverReducer';
+import { navigationReducer, initialNavigationState, NavigationState } from './reducers/NavigationReducer';
 
 declare global {
   interface Window {
@@ -19,33 +23,42 @@ export interface AppState {
   copyUrlState: CopyUrlState;
   dragDropState: DragDropState;
   editBookmarkState: EditBookmarkState;
+  editFolderState: EditFolderState;
   foldersState: FoldersState;
   hoverState: HoverState;
+  navigationState: NavigationState;
 }
 
-const allStoreEnhancers = window.__REDUX_DEVTOOLS_EXTENSION__ ? (
+const initialAppState: AppState = {
+  addBookmarksState: initialAddBookmarksState,
+  copyUrlState: initialCopyUrlState,
+  dragDropState: initialDragDropState,
+  editBookmarkState: initialEditBookmarkState,
+  editFolderState: initialEditFolderState,
+  foldersState: initialFoldersState,
+  hoverState: initialHoverState,
+  navigationState: initialNavigationState,
+};
+
+const reducer = (state: AppState = initialAppState, action: Action): AppState => {
+  const newState: AppState = {
+    addBookmarksState: addBookmarksReducer(state.addBookmarksState, action, state),
+    copyUrlState: copyUrlReducer(state.copyUrlState, action, state),
+    dragDropState: dragDropReducer(state.dragDropState, action, state),
+    editBookmarkState: editBookmarkReducer(state.editBookmarkState, action, state),
+    editFolderState: editFolderReducer(state.editFolderState, action, state),
+    foldersState: foldersReducer(state.foldersState, action, state),
+    hoverState: hoverReducer(state.hoverState, action, state),
+    navigationState: navigationReducer(state.navigationState, action, state),
+  };
+  return newState;
+};
+
+const enhancers = window.__REDUX_DEVTOOLS_EXTENSION__ ? (
   compose(
     applyMiddleware(thunk),
     window.__REDUX_DEVTOOLS_EXTENSION__()
   )
 ) : applyMiddleware(thunk);
 
-const initialAppState = {
-  addBookmarksState: initialAddBookmarksState,
-  copyUrlState: initialCopyUrlState,
-  dragDropState: initialDragDropState,
-  editBookmarkState: initialEditBookmarkState,
-  foldersState: initialFoldersState,
-  hoverState: initialHoverState,
-};
-
-const allReducers = combineReducers({
-  addBookmarksState: addBookmarksReducer,
-  copyUrlState: copyUrlReducer,
-  dragDropState: dragDropReducer,
-  editBookmarkState: editBookmarkReducer,
-  foldersState: foldersReducer,
-  hoverState: hoverReducer,
-});
-
-export const reduxStore = createStore(allReducers, initialAppState, allStoreEnhancers);
+export const reduxStore = createStore(reducer, initialAppState, enhancers);

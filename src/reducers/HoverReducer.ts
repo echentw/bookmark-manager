@@ -1,5 +1,7 @@
 import { Action, HoverActionType as ActionType } from '../actions/constants';
 import { HoverParams } from '../actions/HoverActions';
+import { Reducer } from './Reducer';
+import { AppState } from '../reduxStore';
 
 export interface HoverState {
   hoverRank: number | null;
@@ -9,15 +11,21 @@ export const initialHoverState: HoverState = {
   hoverRank: null,
 };
 
-export function hoverReducer(state: HoverState = initialHoverState, action: Action): HoverState {
+export const hoverReducer: Reducer<HoverState> = (
+  state: HoverState = initialHoverState,
+  action: Action,
+  appState: AppState,
+): HoverState => {
+  let newState = state;
   switch (action.type) {
     case ActionType.enter:
-      return handleEnter(state, action as Action<HoverParams>);
+      newState = handleEnter(state, action as Action<HoverParams>);
+      break;
     case ActionType.exit:
-      return handleExit(state, action as Action<HoverParams>);
-    default:
-      return state;
+      newState = handleExit(state, action as Action<HoverParams>);
+      break;
   }
+  return newState;
 }
 
 function handleEnter(state: HoverState, action: Action<HoverParams>): HoverState {

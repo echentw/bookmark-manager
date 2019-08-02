@@ -7,17 +7,17 @@ import { Action, SyncAppActionType as ActionType } from './constants';
 
 export interface SyncFoldersParams {
   folders: Folder[];
-  openFolder: Folder | null;
+  currentFolderId: string | null;
 }
 
 export function loadAppData(params: {}) {
   return async (dispatch: Dispatch) => {
     const state: ChromeAppState = await ChromeHelpers.loadAppState();
-    const maybeFolder = state.folders.find(folder => folder.id === state.openFolderId);
-    const openFolder = maybeFolder ? maybeFolder : null;
+    const maybeFolder = state.folders.find(folder => folder.id === state.currentFolderId);
+    const currentFolderId = maybeFolder ? maybeFolder.id : null;
     dispatch(syncFolders({
       folders: state.folders,
-      openFolder: openFolder,
+      currentFolderId: currentFolderId,
     }));
   };
 }

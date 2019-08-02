@@ -78,7 +78,7 @@ class BookmarkListComponent extends React.Component<InternalProps> {
 const mapStateToProps = (state: AppState, props: {}) => {
   return {
     editingBookmarkId: state.editBookmarkState.editingBookmarkId,
-    draggedRank: state.foldersState.draggedBookmarkRank,
+    draggedRank: state.dragDropState.draggedRank,
     hoverRank: state.hoverState.hoverRank,
   };
 };

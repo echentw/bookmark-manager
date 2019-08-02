@@ -9,6 +9,7 @@ import * as SyncAppActions from '../actions/SyncAppActions';
 import { SyncFoldersParams } from '../actions/SyncAppActions';
 import * as FolderActions from '../actions/FolderActions';
 import { AppState, reduxStore } from '../reduxStore';
+import { Action } from '../actions/constants';
 
 import { BookmarkListComponent } from './BookmarkListComponent';
 import { FolderListComponent } from './FolderListComponent';
@@ -27,9 +28,10 @@ export const DraggableType = {
 
 interface Props {
   loaded: boolean;
+  currentFolderId: string | null;
+  folders: Folder[];
   loadAppData: (params: {}) => void;
   syncFolders: (params: SyncFoldersParams) => void;
-  openFolder: Folder | null;
   closeFolder: (params: {}) => void;
 }
 
@@ -43,7 +45,7 @@ class AppComponent extends React.Component<Props, State> {
   };
 
   private oldFolders: Folder[] | null = null;
-  private oldOpenFolder: Folder | null = null;
+  private oldCurrentFolderId: string | null = null;
 
   componentDidMount = () => {
     this.beginSyncingDate();
@@ -59,17 +61,14 @@ class AppComponent extends React.Component<Props, State> {
   private stateHasChanged = ({ oldState, newState }: {
     oldState: {
       folders: Folder[];
-      openFolder: Folder | null;
+      currentFolderId: string | null;
     };
     newState: {
       folders: Folder[];
-      openFolder: Folder | null;
+      currentFolderId: string | null;
     };
   }): boolean => {
-    if (oldState.openFolder === null && oldState.openFolder !== newState.openFolder) {
-      return true;
-    }
-    if (oldState.openFolder !== null && !oldState.openFolder.equals(newState.openFolder)) {
+    if (oldState.currentFolderId !== newState.currentFolderId) {
       return true;
     }
     if (oldState.folders.length !== newState.folders.length) {
@@ -80,32 +79,35 @@ class AppComponent extends React.Component<Props, State> {
     });
   }
 
-  private beginSyncingStore = (store: Store) => {
+  private beginSyncingStore = (store: Store<AppState, Action>) => {
     store.subscribe(async () => {
-      const { dragging } = store.getState().dragDropState;
-      const { folders, openFolder } = store.getState().foldersState;
+      const state = store.getState();
+
+      const dragging = state.dragDropState.draggedRank !== null;
+      const { folders } = state.foldersState;
+      const { currentFolderId } = state.navigationState;
 
       if (this.oldFolders === null) {
         this.oldFolders = folders;
-        this.oldOpenFolder = openFolder;
+        this.oldCurrentFolderId = currentFolderId;
         return;
       }
 
       if (!dragging) {
         const stateChanged = this.stateHasChanged({
           oldState: {
-            openFolder: this.oldOpenFolder,
+            currentFolderId: this.oldCurrentFolderId,
             folders: this.oldFolders,
           },
           newState: {
-            openFolder: openFolder,
+            currentFolderId: currentFolderId,
             folders: folders,
           },
         });
         if (stateChanged) {
           this.oldFolders = folders;
-          this.oldOpenFolder = openFolder;
-          await ChromeHelpers.saveAppState(store.getState());
+          this.oldCurrentFolderId = currentFolderId;
+          await ChromeHelpers.saveAppState(state);
         }
       }
     });
@@ -113,7 +115,7 @@ class AppComponent extends React.Component<Props, State> {
     ChromeHelpers.addOnChangedListener((newFolders: Folder[]) => {
       this.props.syncFolders({
         folders: newFolders,
-        openFolder: this.props.openFolder,
+        currentFolderId: this.props.currentFolderId,
       });
     });
 
@@ -123,17 +125,17 @@ class AppComponent extends React.Component<Props, State> {
   render() {
     const classes = this.props.loaded ? 'app loaded' : 'app';
 
-    const hasFolderOpen = this.props.openFolder !== null;
+    const currentFolder = this.props.folders.find(folder => folder.id === this.props.currentFolderId) || null;
 
-    const ListComponent = hasFolderOpen ? (
-      <BookmarkListComponent folder={this.props.openFolder}/>
-    ) : (
+    const ListComponent = currentFolder === null ? (
       <FolderListComponent/>
+    ) : (
+      <BookmarkListComponent folder={currentFolder}/>
     );
 
-    const maybeDragLayer = hasFolderOpen ? (
-      <DragLayerComponent bookmarks={this.props.openFolder.bookmarks}/>
-    ) : null;
+    const maybeDragLayer = currentFolder === null ? null : (
+      <DragLayerComponent bookmarks={currentFolder.bookmarks}/>
+    );
 
     return (
       <div className={classes}>
@@ -157,7 +159,8 @@ class AppComponent extends React.Component<Props, State> {
 const mapStateToProps = (state: AppState, props: {}) => {
   return {
     loaded: state.foldersState.loaded,
-    openFolder: state.foldersState.openFolder,
+    currentFolderId: state.navigationState.currentFolderId,
+    folders: state.foldersState.folders,
   };
 };
 

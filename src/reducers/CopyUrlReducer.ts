@@ -1,5 +1,7 @@
 import { Action, CopyUrlActionType as ActionType } from '../actions/constants';
 import { _ShowToastParams, HideToastParams } from '../actions/CopyUrlActions';
+import { Reducer } from './Reducer';
+import { AppState } from '../reduxStore';
 
 export interface CopyUrlState {
   showingToast: boolean;
@@ -16,15 +18,21 @@ export const initialCopyUrlState: CopyUrlState = {
   position: null,
 };
 
-export function copyUrlReducer(state: CopyUrlState = initialCopyUrlState, action: Action): CopyUrlState {
+export const copyUrlReducer = (
+  state: CopyUrlState,
+  action: Action,
+  appState: AppState
+): CopyUrlState => {
+  let newState = state;
   switch (action.type) {
     case ActionType.showToast:
-      return handleShowToast(state, action as Action<_ShowToastParams>);
+      newState = handleShowToast(state, action as Action<_ShowToastParams>);
+      break;
     case ActionType.hideToast:
-      return handleHideToast(state, action as Action<HideToastParams>);
-    default:
-      return state;
+      newState = handleHideToast(state, action as Action<HideToastParams>);
+      break;
   }
+  return newState;
 }
 
 function handleShowToast(state: CopyUrlState, action: Action<_ShowToastParams>): CopyUrlState {

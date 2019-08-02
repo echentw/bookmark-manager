@@ -5,7 +5,7 @@ import { AppState } from './reduxStore';
 // What gets returned by some methods in this class
 export interface ChromeAppState {
   folders: Folder[];
-  openFolderId: string;
+  currentFolderId: string | null;
 }
 
 export interface ChromeData {
@@ -14,7 +14,7 @@ export interface ChromeData {
 
 export interface AppData {
   folders: FolderData[];
-  openFolderId: string;
+  currentFolderId: string | null;
 }
 
 export interface TabInfo {
@@ -45,14 +45,14 @@ export class ChromeHelpers {
   public static saveAppState = (appState: AppState): Promise<{}> => {
     // uncomment when doing dangerous operations
     // return new Promise((resolve) => resolve());
-    const { folders, openFolder } = appState.foldersState;
+    const { folders } = appState.foldersState;
+    const { currentFolderId } = appState.navigationState;
 
     const folderDatas: FolderData[] = folders.map(folder => folder.toData());
-    const openFolderId = openFolder ? openFolder.id : null;
 
     const appData: AppData = {
       folders: folderDatas,
-      openFolderId: openFolderId,
+      currentFolderId: currentFolderId,
     };
 
     return new Promise((resolve, reject) => {
@@ -72,7 +72,7 @@ export class ChromeHelpers {
           const folders: Folder[] = folderDatas.map(data => Folder.fromData(data));
           const state: ChromeAppState = {
             folders: folders,
-            openFolderId: result.appData.openFolderId,
+            currentFolderId: result.appData.currentFolderId,
           };
           return resolve(state);
         } else {
@@ -82,7 +82,7 @@ export class ChromeHelpers {
           });
           const initialState: ChromeAppState = {
             folders: [firstFolder],
-            openFolderId: firstFolder.id,
+            currentFolderId: firstFolder.id,
           };
           return resolve(initialState);
         }

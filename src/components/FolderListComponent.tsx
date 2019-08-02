@@ -11,14 +11,14 @@ import { AddFolderButtonComponent } from './AddFolderButtonComponent';
 
 interface Props {
   folders: Folder[];
-  editingFolder: Folder | null;
+  editingFolderId: string | null;
   hoverRank: number | null;
 }
 
 class FolderListComponent extends React.Component<Props> {
   render() {
     const folderComponents = this.props.folders.map((folder: Folder, rank: number) => {
-      const editing = this.props.editingFolder && folder.id === this.props.editingFolder.id;
+      const editing = folder.id === this.props.editingFolderId;
       return (
         <ListItemContainerComponent
           key={folder.id}
@@ -56,7 +56,7 @@ class FolderListComponent extends React.Component<Props> {
 const mapStateToProps = (state: AppState, props: {}) => {
   return {
     folders: state.foldersState.folders,
-    editingFolder: state.foldersState.editingFolder,
+    editingFolderId: state.editFolderState.editingFolderId,
     hoverRank: state.hoverState.hoverRank,
   };
 };

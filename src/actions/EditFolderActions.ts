@@ -26,10 +26,13 @@ export function save(params: EditFolderParams): Action<EditFolderParams> {
   };
 }
 
-export function addFolder(params: {}): Action {
+export function addFolder(params: {}): Action<EditFolderParams> {
+  const folder = new Folder({ name: '' });
   return {
     type: ActionType.addFolder,
-    params: params,
+    params: {
+      folder: folder,
+    },
   };
 }
 

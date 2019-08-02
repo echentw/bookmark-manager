@@ -80,7 +80,7 @@ class HoverableListItemComponent extends React.Component<InternalProps> {
 
 const mapStateToProps = (state: AppState, props: ExternalProps) => {
   return {
-    somethingIsDragging: state.dragDropState.dragging,
+    somethingIsDragging: state.dragDropState.draggedRank !== null,
   };
 };
 

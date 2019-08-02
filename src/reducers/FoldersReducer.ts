@@ -1,5 +1,8 @@
 import { Folder } from '../Folder';
 import { Bookmark } from '../Bookmark';
+import { Reducer } from './Reducer';
+import { AppState } from '../reduxStore';
+
 import { withItemReplaced, withItemDeleted } from '../utils';
 import {
   Action,
@@ -11,7 +14,6 @@ import {
   DragDropActionType,
 } from '../actions/constants';
 import { SyncFoldersParams } from '../actions/SyncAppActions';
-import { OpenFolderParams } from '../actions/FolderActions';
 import { EditFolderParams } from '../actions/EditFolderActions';
 import { AddBookmarksSaveParams } from '../actions/AddBookmarksActions';
 import { EditBookmarkParams } from '../actions/EditBookmarkActions';
@@ -20,67 +22,52 @@ import { DragDropParams } from '../actions/DragDropActions';
 export interface FoldersState {
   folders: Folder[];
   loaded: boolean;
-  openFolder: Folder | null;
-  editingFolder: Folder | null;
-  draggedFolderRank: number | null;
-  draggedBookmarkRank: number | null,
 }
 
 export const initialFoldersState: FoldersState = {
   folders: [],
   loaded: false,
-  openFolder: null,
-  editingFolder: null,
-  draggedFolderRank: null,
-  draggedBookmarkRank: null,
 }
 
-export function foldersReducer(state: FoldersState = initialFoldersState, action: Action): FoldersState {
+export const foldersReducer: Reducer<FoldersState> = (
+  state: FoldersState,
+  action: Action,
+  appState: AppState
+): FoldersState => {
+  let newState = state;
   switch (action.type) {
-
     case EditFolderActionType.addFolder:
-      return handleAddFolder(state, action);
+      newState = handleAddFolder(state, action as Action<EditFolderParams>);
+      break;
     case EditFolderActionType.deleteFolder:
-      return handleDeleteFolder(state, action as Action<EditFolderParams>);
-    case EditFolderActionType.beginEdit:
-      return handleEditFolderBegin(state, action as Action<EditFolderParams>);
-    case EditFolderActionType.cancel:
-      return handleEditFolderCancel(state, action as Action<EditFolderParams>);
+      newState = handleDeleteFolder(state, action as Action<EditFolderParams>);
+      break;
     case EditFolderActionType.save:
-      return handleEditFolderSave(state, action as Action<EditFolderParams>);
-
-    case FolderActionType.openFolder:
-      return handleOpenFolder(state, action as Action<OpenFolderParams>);
-    case FolderActionType.closeFolder:
-      return handleCloseFolder(state, action);
+      newState = handleEditFolderSave(state, action as Action<EditFolderParams>);
+      break;
     case SyncAppActionType.syncFolders:
-      return handleSyncFolders(state, action as Action<SyncFoldersParams>);
-
+      newState = handleSyncFolders(state, action as Action<SyncFoldersParams>);
+      break;
     case AddBookmarksActionType.save:
-      return handleAddBookmarksSave(state, action as Action<AddBookmarksSaveParams>);
+      newState = handleAddBookmarksSave(state, action as Action<AddBookmarksSaveParams>, appState);
+      break;
     case EditBookmarkActionType.save:
-      return handleEditBookmarkSave(state, action as Action<EditBookmarkParams>);
+      newState = handleEditBookmarkSave(state, action as Action<EditBookmarkParams>, appState);
+      break;
     case EditBookmarkActionType.deleteBookmark:
-      return handleEditBookmarkDeleteBookmark(state, action as Action<EditBookmarkParams>);
-
-    case DragDropActionType.beginDrag:
-      return handleBeginDrag(state, action as Action<DragDropParams>);
-    case DragDropActionType.endDrag:
-      return handleEndDrag(state, action as Action<DragDropParams>);
+      newState = handleEditBookmarkDeleteBookmark(state, action as Action<EditBookmarkParams>, appState);
+      break;
     case DragDropActionType.isOver:
-      return handleDragIsOver(state, action as Action<DragDropParams>);
-
-    default:
-      return state;
+      newState = handleDragIsOver(state, action as Action<DragDropParams>, appState);
+      break;
   }
+  return newState;
 }
 
-function handleAddFolder(state: FoldersState, action: Action): FoldersState {
-  const folder = new Folder({ name: '' });
-  const folders = state.folders.concat([folder]);
+function handleAddFolder(state: FoldersState, action: Action<EditFolderParams>): FoldersState {
+  const folders = state.folders.concat([action.params.folder]);
   return {
     ...state,
-    editingFolder: folder,
     folders: folders,
   };
 }
@@ -93,20 +80,6 @@ function handleDeleteFolder(state: FoldersState, action: Action<EditFolderParams
   };
 }
 
-function handleEditFolderBegin(state: FoldersState, action: Action<EditFolderParams>): FoldersState {
-  return {
-    ...state,
-    editingFolder: action.params.folder,
-  };
-}
-
-function handleEditFolderCancel(state: FoldersState, action: Action<EditFolderParams>): FoldersState {
-  return {
-    ...state,
-    editingFolder: null,
-  };
-}
-
 function handleEditFolderSave(state: FoldersState, action: Action<EditFolderParams>): FoldersState {
   const index = state.folders.findIndex((folder: Folder) => {
     return folder.id === action.params.folder.id;
@@ -116,118 +89,97 @@ function handleEditFolderSave(state: FoldersState, action: Action<EditFolderPara
   return {
     ...state,
     folders: folders,
-    editingFolder: null,
-  };
-}
-
-function handleOpenFolder(state: FoldersState, action: Action<OpenFolderParams>): FoldersState {
-  return {
-    ...state,
-    openFolder: action.params.folder,
-  };
-}
-
-function handleCloseFolder(state: FoldersState, action: Action): FoldersState {
-  return {
-    ...state,
-    openFolder: null,
   };
 }
 
 function handleSyncFolders(state: FoldersState, action: Action<SyncFoldersParams>): FoldersState {
-  let openFolder: Folder | null = null;
-  if (state.openFolder === null) {
-    openFolder = action.params.openFolder;
-  } else {
-    const maybeFolder = action.params.folders.find((folder: Folder) => {
-      return folder.id === state.openFolder.id;
-    });
-    openFolder = maybeFolder ? maybeFolder : null;
-  }
-
   return {
     ...state,
     folders: action.params.folders,
-    openFolder: openFolder,
     loaded: true,
   };
 }
 
-function handleAddBookmarksSave(state: FoldersState, action: Action<AddBookmarksSaveParams>): FoldersState {
-  if (state.openFolder === null) {
+function handleAddBookmarksSave(
+  state: FoldersState,
+  action: Action<AddBookmarksSaveParams>,
+  appState: AppState
+): FoldersState {
+  if (appState.navigationState.currentFolderId === null) {
     return state;
   }
-  const folder = state.openFolder;
+  const folder = state.folders.find(folder => folder.id === appState.navigationState.currentFolderId) || null;
+  if (folder === null) {
+    return state;
+  }
   const newBookmarks = folder.bookmarks.concat(action.params.bookmarks);
   const newFolder = folder.withBookmarks(newBookmarks);
   const newFolders = withItemReplaced<Folder>(state.folders, newFolder);
   return {
     ...state,
     folders: newFolders,
-    openFolder: newFolder,
   };
 }
 
-function handleEditBookmarkSave(state: FoldersState, action: Action<EditBookmarkParams>): FoldersState {
-  if (state.openFolder === null) {
+function handleEditBookmarkSave(
+  state: FoldersState,
+  action: Action<EditBookmarkParams>,
+  appState: AppState
+): FoldersState {
+  if (appState.navigationState.currentFolderId === null) {
     return state;
   }
-  const folder = state.openFolder;
+  const folder = state.folders.find(folder => folder.id === appState.navigationState.currentFolderId) || null;
+  if (folder === null) {
+    return state;
+  }
   const newBookmarks = withItemReplaced<Bookmark>(folder.bookmarks, action.params.bookmark);
   const newFolder = folder.withBookmarks(newBookmarks);
   const newFolders = withItemReplaced<Folder>(state.folders, newFolder);
   return {
     ...state,
     folders: newFolders,
-    openFolder: newFolder,
   };
 }
 
-function handleEditBookmarkDeleteBookmark(state: FoldersState, action: Action<EditBookmarkParams>): FoldersState {
-  if (state.openFolder === null) {
+function handleEditBookmarkDeleteBookmark(
+  state: FoldersState,
+  action: Action<EditBookmarkParams>,
+  appState: AppState
+): FoldersState {
+  if (appState.navigationState.currentFolderId === null) {
     return state;
   }
-  const folder = state.openFolder;
+  const folder = state.folders.find(folder => folder.id === appState.navigationState.currentFolderId) || null;
+  if (folder === null) {
+    return state;
+  }
   const newBookmarks = withItemDeleted<Bookmark>(folder.bookmarks, action.params.bookmark);
   const newFolder = folder.withBookmarks(newBookmarks);
   const newFolders = withItemReplaced<Folder>(state.folders, newFolder);
   return {
     ...state,
     folders: newFolders,
-    openFolder: newFolder,
-  };
-}
-
-function handleBeginDrag(state: FoldersState, action: Action<DragDropParams>): FoldersState {
-  if (state.openFolder === null) {
-    return state;
-  }
-  return {
-    ...state,
-    draggedBookmarkRank: action.params.rank,
-  };
-}
-
-function handleEndDrag(state: FoldersState, action: Action<DragDropParams>): FoldersState {
-  if (state.openFolder === null) {
-    return state;
-  }
-  const rank = (state.draggedBookmarkRank === action.params.rank) ? null : state.draggedBookmarkRank;
-  return {
-    ...state,
-    draggedBookmarkRank: rank,
   };
 }
 
 // So... we manually set the state in this method, which is bad.
 // But we need this for performance.
-function handleDragIsOver(state: FoldersState, action: Action<DragDropParams>): FoldersState {
-  if (state.openFolder === null) {
+function handleDragIsOver(
+  state: FoldersState,
+  action: Action<DragDropParams>,
+  appState: AppState
+): FoldersState {
+  if (appState.navigationState.currentFolderId === null) {
     return state;
   }
 
-  const bookmarks = state.openFolder.bookmarks;
-  const draggedRank = state.draggedBookmarkRank;
+  const folder = state.folders.find((folder: Folder) => {
+    return folder.id === appState.navigationState.currentFolderId;
+  });
+
+  const bookmarks = folder.bookmarks;
+  const draggedRank = appState.dragDropState.draggedRank;
   const dropTargetRank = action.params.rank;
 
   // TODO: do the array operations properly
@@ -243,13 +195,10 @@ function handleDragIsOver(state: FoldersState, action: Action<DragDropParams>): 
   }
   bookmarks[dropTargetRank] = draggedBookmark;
 
-  const newFolder = state.openFolder;
   const newFolders = state.folders;
 
   return {
     ...state,
     folders: newFolders,
-    openFolder: newFolder,
-    draggedBookmarkRank: dropTargetRank,
   };
 }
