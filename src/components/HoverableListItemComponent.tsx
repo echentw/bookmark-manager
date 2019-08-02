@@ -18,7 +18,6 @@ interface ExternalProps {
 }
 
 interface InternalProps extends ExternalProps {
-  somethingIsDragging: boolean; // whether the user is dragging anything at all
   enterHover: (params: HoverParams) => void;
   exitHover: (params: HoverParams) => void;
 }
@@ -28,27 +27,19 @@ class HoverableListItemComponent extends React.Component<InternalProps> {
   private element: HTMLDivElement = null;
 
   onMouseEnter = () => {
-    if (!this.props.somethingIsDragging) {
-      this.props.enterHover({ rank: this.props.rank });
-    }
+    this.props.enterHover({ rank: this.props.rank });
   }
 
   onMouseLeave = () => {
-    if (!this.props.somethingIsDragging) {
-      this.props.exitHover({ rank: this.props.rank });
-    }
+    this.props.exitHover({ rank: this.props.rank });
   }
 
   onDragEnter = () => {
-    if (!this.props.somethingIsDragging) {
-      this.props.enterHover({ rank: this.props.rank });
-    }
+    this.props.enterHover({ rank: this.props.rank });
   }
 
   onDragLeave = () => {
-    if (!this.props.somethingIsDragging) {
-      this.props.exitHover({ rank: this.props.rank });
-    }
+    this.props.exitHover({ rank: this.props.rank });
   }
 
   onDragEnd = (event: React.DragEvent) => {
@@ -79,9 +70,7 @@ class HoverableListItemComponent extends React.Component<InternalProps> {
 }
 
 const mapStateToProps = (state: AppState, props: ExternalProps) => {
-  return {
-    somethingIsDragging: state.dragDropState.draggedRank !== null,
-  };
+  return {};
 };
 
 const mapActionsToProps = {

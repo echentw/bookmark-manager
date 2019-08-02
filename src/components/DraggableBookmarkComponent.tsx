@@ -35,9 +35,7 @@ function DraggableBookmarkComponent(props: InternalProps) {
     },
     canDrag: monitor => props.bookmark.id !== props.editingBookmarkId,
     begin: monitor => {
-      // TODO: fix this please
       props.beginDrag({ rank: props.rank });
-      props.exitHover({ rank: props.rank });
       return;
     },
     end: monitor => {
