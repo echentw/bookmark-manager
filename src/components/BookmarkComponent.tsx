@@ -39,7 +39,7 @@ class BookmarkComponent extends React.Component<InternalProps> {
   }
 
   render() {
-    const { editing, hovering, dragging, bookmark } = this.props;
+    const { bookmark, dragging, editing, hovering } = this.props;
 
     const bookmarkName = editing ? (
       <EditTextFieldComponent

@@ -3,37 +3,34 @@ import { useDrag, DragPreviewImage } from 'react-dnd';
 import { connect } from 'react-redux';
 
 import { Bookmark } from '../Bookmark';
+import { Folder } from '../Folder';
 import * as DragDropActions from '../actions/DragDropActions';
 import { DragDropParams } from '../actions/DragDropActions';
 import { AppState } from '../reduxStore';
 import { DraggableType } from './AppComponent';
-import { BookmarkComponent } from './BookmarkComponent';
 
 import { HoverParams } from '../actions/HoverActions';
 import * as HoverActions from '../actions/HoverActions';
 
 interface ExternalProps {
-  bookmark: Bookmark;
-  dragging: boolean;
-  editing: boolean;
-  hovering: boolean;
+  id: string;
+  draggableType: string;
   rank: number;
+  children: React.ReactElement;
 }
 
 interface InternalProps extends ExternalProps {
-  editingBookmarkId: string | null;
   beginDrag: (params: DragDropParams) => void;
   endDrag: (params: DragDropParams) => void;
   exitHover: (params: HoverParams) => void;
 }
 
-function DraggableBookmarkComponent(props: InternalProps) {
+function DraggableListItemWrapperComponent(props: InternalProps) {
   const [{ isDragging }, drag, preview] = useDrag({
     item: {
-      type: DraggableType.Bookmark,
-      id: props.bookmark.id,
+      type: props.draggableType,
+      id: props.id,
     },
-    canDrag: monitor => props.bookmark.id !== props.editingBookmarkId,
     begin: monitor => {
       props.beginDrag({ rank: props.rank });
       return;
@@ -53,22 +50,14 @@ function DraggableBookmarkComponent(props: InternalProps) {
     <div>
       <DragPreviewImage connect={preview} src={emptyImageSrc}/>
       <div ref={drag}>
-        <BookmarkComponent
-          bookmark={props.bookmark}
-          editing={props.editing}
-          dragging={props.dragging}
-          hovering={props.hovering}
-          rank={props.rank}
-        />
+        { props.children }
       </div>
     </div>
   );
 }
 
 const mapStateToProps = (state: AppState, props: ExternalProps) => {
-  return {
-    editingBookmarkId: state.editBookmarkState.editingBookmarkId,
-  };
+  return {};
 };
 
 const mapActionsToProps = {
@@ -77,5 +66,5 @@ const mapActionsToProps = {
   exitHover: HoverActions.exit,
 };
 
-const Component = connect(mapStateToProps, mapActionsToProps)(DraggableBookmarkComponent);
-export { Component as DraggableBookmarkComponent };
+const Component = connect(mapStateToProps, mapActionsToProps)(DraggableListItemWrapperComponent);
+export { Component as DraggableListItemWrapperComponent };

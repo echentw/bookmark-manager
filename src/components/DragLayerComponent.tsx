@@ -6,13 +6,11 @@ import { BookmarkComponent } from './BookmarkComponent';
 import { AppState } from '../reduxStore';
 
 interface Props {
-  bookmarks: Bookmark[],
+  children: React.ReactElement;
 }
 
 interface CollectedProps {
-  isDragging: boolean;
   currentOffset?: XYCoord;
-  item: { type: string, id: string },
 }
 
 const itemStyles = (currentOffset?: XYCoord): React.CSSProperties => {
@@ -30,37 +28,17 @@ const itemStyles = (currentOffset?: XYCoord): React.CSSProperties => {
 }
 
 export function DragLayerComponent(props: Props) {
-  const { isDragging, currentOffset, item }: CollectedProps = useDragLayer(
+  const { currentOffset }: CollectedProps = useDragLayer(
     (monitor: DragLayerMonitor) => ({
-      isDragging: !!monitor.isDragging(),
       currentOffset: monitor.getSourceClientOffset(),
-      item: monitor.getItem(),
     })
   );
 
-  let dragPreviewComponent: React.ReactElement = null;
-
-  if (isDragging) {
-    const bookmarkId = item.id;
-    const bookmark = props.bookmarks.find((bookmark) => bookmark.id === bookmarkId);
-
-    dragPreviewComponent = (
-      <div className="drag-layer-item" style={itemStyles(currentOffset)}>
-        <BookmarkComponent
-          bookmark={bookmark}
-          editing={false}
-          dragging={false}
-          isDragPreview={true}
-          hovering={false}
-          rank={-1}
-        />
-      </div>
-    );
-  }
-
   return (
     <div className="drag-layer">
-      { dragPreviewComponent }
+      <div className="drag-layer-item" style={itemStyles(currentOffset)}>
+        { props.children }
+      </div>
     </div>
   );
 }

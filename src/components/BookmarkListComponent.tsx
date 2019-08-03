@@ -7,9 +7,10 @@ import { FaChevronLeft } from 'react-icons/fa';
 import { Bookmark } from '../Bookmark';
 import { Folder } from '../Folder';
 import * as FolderActions from '../actions/FolderActions';
-import { DraggableBookmarkComponent } from './DraggableBookmarkComponent';
+import { DraggableListItemWrapperComponent } from './DraggableListItemWrapperComponent';
 import { ListItemContainerComponent } from './ListItemContainerComponent';
 import { AddBookmarksButtonComponent } from './AddBookmarksButtonComponent';
+import { BookmarkComponent } from './BookmarkComponent';
 import { DraggableType } from './AppComponent';
 import { AppState } from '../reduxStore';
 
@@ -43,13 +44,19 @@ class BookmarkListComponent extends React.Component<InternalProps> {
           rank={rank}
           draggableType={DraggableType.Bookmark}
         >
-          <DraggableBookmarkComponent
-            bookmark={bookmark}
-            editing={editing}
-            dragging={dragging}
-            hovering={hovering}
+          <DraggableListItemWrapperComponent
+            id={bookmark.id}
+            draggableType={DraggableType.Bookmark}
             rank={rank}
-          />
+          >
+            <BookmarkComponent
+              bookmark={bookmark}
+              editing={editing}
+              dragging={dragging}
+              hovering={hovering}
+              rank={rank}
+            />
+          </DraggableListItemWrapperComponent>
         </ListItemContainerComponent>
       );
     });

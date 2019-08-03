@@ -11,6 +11,8 @@ import * as FolderActions from '../actions/FolderActions';
 import { AppState, reduxStore } from '../reduxStore';
 import { Action } from '../actions/constants';
 
+import { BookmarkComponent } from './BookmarkComponent';
+import { FolderComponent } from './FolderComponent';
 import { BookmarkListComponent } from './BookmarkListComponent';
 import { FolderListComponent } from './FolderListComponent';
 import { GreetingComponent } from './GreetingComponent';
@@ -29,6 +31,7 @@ export const DraggableType = {
 interface Props {
   loaded: boolean;
   currentFolderId: string | null;
+  draggedRank: number | null;
   folders: Folder[];
   loadAppData: (params: {}) => void;
   syncFolders: (params: SyncFoldersParams) => void;
@@ -88,7 +91,7 @@ class AppComponent extends React.Component<Props, State> {
       const { currentFolderId } = state.navigationState;
 
       if (this.oldFolders === null) {
-        this.oldFolders = folders;
+        this.oldFolders = folders.map(folder => folder.copy());
         this.oldCurrentFolderId = currentFolderId;
         return;
       }
@@ -105,7 +108,7 @@ class AppComponent extends React.Component<Props, State> {
           },
         });
         if (stateChanged) {
-          this.oldFolders = folders;
+          this.oldFolders = folders.map(folder => folder.copy());
           this.oldCurrentFolderId = currentFolderId;
           await ChromeHelpers.saveAppState(state);
         }
@@ -133,9 +136,40 @@ class AppComponent extends React.Component<Props, State> {
       <BookmarkListComponent folder={currentFolder}/>
     );
 
-    const maybeDragLayer = currentFolder === null ? null : (
-      <DragLayerComponent bookmarks={currentFolder.bookmarks}/>
-    );
+    let maybeDragLayer: React.ReactElement = null;
+    if (this.props.draggedRank !== null) {
+      let dragPreview: React.ReactElement = null;
+      if (currentFolder === null) {
+        const draggedFolder = this.props.folders[this.props.draggedRank];
+        dragPreview = (
+          <FolderComponent
+            folder={draggedFolder}
+            editing={false}
+            dragging={false}
+            hovering={false}
+            isDragPreview={true}
+            rank={-1}
+          />
+        );
+      } else {
+        const draggedBookmark = currentFolder.bookmarks[this.props.draggedRank];
+        dragPreview = (
+          <BookmarkComponent
+            bookmark={draggedBookmark}
+            editing={false}
+            dragging={false}
+            hovering={false}
+            isDragPreview={true}
+            rank={-1}
+          />
+        );
+      }
+      maybeDragLayer = (
+        <DragLayerComponent>
+          { dragPreview }
+        </DragLayerComponent>
+      );
+    }
 
     return (
       <div className={classes}>
@@ -160,6 +194,7 @@ const mapStateToProps = (state: AppState, props: {}) => {
   return {
     loaded: state.foldersState.loaded,
     currentFolderId: state.navigationState.currentFolderId,
+    draggedRank: state.dragDropState.draggedRank,
     folders: state.foldersState.folders,
   };
 };

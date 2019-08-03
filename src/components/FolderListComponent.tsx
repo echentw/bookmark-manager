@@ -7,11 +7,13 @@ import { AppState, } from '../reduxStore';
 import { DraggableType } from './AppComponent';
 import { FolderComponent } from './FolderComponent';
 import { ListItemContainerComponent } from './ListItemContainerComponent';
+import { DraggableListItemWrapperComponent } from './DraggableListItemWrapperComponent';
 import { AddFolderButtonComponent } from './AddFolderButtonComponent';
 
 interface Props {
   folders: Folder[];
   editingFolderId: string | null;
+  draggedRank: number | null;
   hoverRank: number | null;
 }
 
@@ -19,18 +21,27 @@ class FolderListComponent extends React.Component<Props> {
   render() {
     const folderComponents = this.props.folders.map((folder: Folder, rank: number) => {
       const editing = folder.id === this.props.editingFolderId;
+      const dragging = rank === this.props.draggedRank;
+      const hovering = rank === this.props.hoverRank;
       return (
         <ListItemContainerComponent
           key={folder.id}
           rank={rank}
           draggableType={DraggableType.Folder}
         >
-          <FolderComponent
-            folder={folder}
-            editing={editing}
-            hovering={rank === this.props.hoverRank}
+          <DraggableListItemWrapperComponent
+            id={folder.id}
+            draggableType={DraggableType.Folder}
             rank={rank}
-          />
+          >
+            <FolderComponent
+              folder={folder}
+              editing={editing}
+              dragging={dragging}
+              hovering={hovering}
+              rank={rank}
+            />
+          </DraggableListItemWrapperComponent>
         </ListItemContainerComponent>
       );
     });
@@ -57,6 +68,7 @@ const mapStateToProps = (state: AppState, props: {}) => {
   return {
     folders: state.foldersState.folders,
     editingFolderId: state.editFolderState.editingFolderId,
+    draggedRank: state.dragDropState.draggedRank,
     hoverRank: state.hoverState.hoverRank,
   };
 };

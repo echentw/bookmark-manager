@@ -50,6 +50,14 @@ export class Folder {
     });
   }
 
+  public copy = (): Folder => {
+    return new Folder({
+      id: this.id,
+      name: this.name,
+      bookmarks: this.bookmarks.slice(0),
+    });
+  }
+
   public static fromData = (data: FolderData): Folder => {
     const bookmarks = data.bookmarks.map(bookmarkData => Bookmark.fromData(bookmarkData));
     return new Folder({

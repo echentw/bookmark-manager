@@ -171,13 +171,51 @@ function handleDragIsOver(
   appState: AppState
 ): FoldersState {
   if (appState.navigationState.currentFolderId === null) {
+    return _handleFolderDragIsOver(state, action, appState);
+  } else {
+    return _handleBookmarkDragIsOver(state, action, appState);
+  }
+}
+
+function _handleFolderDragIsOver(
+  state: FoldersState,
+  action: Action<DragDropParams>,
+  appState: AppState
+): FoldersState {
+  const folders = state.folders;
+  const draggedRank = appState.dragDropState.draggedRank;
+  const dropTargetRank = action.params.rank;
+
+  const draggedFolder = folders[draggedRank];
+  if (draggedRank > dropTargetRank) {
+    for (let i = draggedRank; i > dropTargetRank; --i) {
+      folders[i] = folders[i - 1];
+    }
+  } else {
+    for (let i = draggedRank; i < dropTargetRank; ++i) {
+      folders[i] = folders[i + 1];
+    }
+  }
+  folders[dropTargetRank] = draggedFolder;
+
+  return {
+    ...state,
+    folders: folders,
+  };
+}
+
+function _handleBookmarkDragIsOver(
+  state: FoldersState,
+  action: Action<DragDropParams>,
+  appState: AppState
+): FoldersState {
+  if (appState.navigationState.currentFolderId === null) {
     return state;
   }
-
-  const folder = state.folders.find((folder: Folder) => {
-    return folder.id === appState.navigationState.currentFolderId;
-  });
-
+  const folder = state.folders.find(folder => folder.id === appState.navigationState.currentFolderId) || null;
+  if (folder === null) {
+    return state;
+  }
   const bookmarks = folder.bookmarks;
   const draggedRank = appState.dragDropState.draggedRank;
   const dropTargetRank = action.params.rank;

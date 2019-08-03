@@ -16,7 +16,10 @@ import { FolderButtonsComponent } from './FolderButtonsComponent';
 interface ExternalProps {
   folder: Folder;
   editing: boolean;
+  dragging: boolean;
   hovering: boolean;
+
+  isDragPreview?: boolean;
 
   // This just gets passed down to HoverableListItemComponent
   rank: number;
@@ -30,7 +33,8 @@ interface InternalProps extends ExternalProps {
 
 class FolderComponent extends React.Component<InternalProps> {
 
-  onClick = () => {
+  onClick = (event: React.MouseEvent) => {
+    event.preventDefault();
     this.props.openFolder({ folder: this.props.folder });
   }
 
@@ -44,7 +48,7 @@ class FolderComponent extends React.Component<InternalProps> {
   }
 
   render() {
-    const { editing, folder, hovering } = this.props;
+    const { dragging, editing, folder, hovering } = this.props;
 
     const folderName = editing ? (
       <EditTextFieldComponent
@@ -53,17 +57,27 @@ class FolderComponent extends React.Component<InternalProps> {
         cancel={this.cancelEdit}
       />
     ) : (
-      <div className="folder-name" onClick={this.onClick}>
+      // This is a hack. What is even happening here...
+      // Original code:
+      //   <div className="folder-name" onClick={this.onClick}>
+      //     { folder.name }
+      //   </div>
+      // But with above, the onDragEnd hook doesn't fire inside HoverableListItemComponent!
+      // Why???????
+      <a className="folder-name" href={'randomurl'} onClick={this.onClick}>
         { folder.name }
-      </div>
+      </a>
     );
 
-    const shouldShowButtons = hovering && !editing;
-    const shouldShowBoxShadow = hovering || editing;
+    const shouldShowButtons = this.props.isDragPreview || (hovering && !editing);
+    const shouldShowBoxShadow = shouldShowButtons || editing;
 
     const maybeButtons = shouldShowButtons ? <FolderButtonsComponent folder={folder}/> : null;
 
     let classes = 'folder';
+    if (dragging) {
+      classes += ' vanished';
+    }
     if (shouldShowBoxShadow) {
       classes += ' with-shadow';
     }
