@@ -65,7 +65,7 @@ class BookmarkListComponent extends React.Component<InternalProps> {
       <div className="bookmark-list">
         <div className="bookmark-list-title-container">
           <IconContext.Provider value={{ size: '1.6em' }}>
-            <FaChevronLeft/>
+            <FaChevronLeft onClick={this.onClickFolderName}/>
           </IconContext.Provider>
           <div className="bookmark-list-title" onClick={this.onClickFolderName}>
             { folder.name }
