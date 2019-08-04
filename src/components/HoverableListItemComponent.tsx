@@ -30,7 +30,7 @@ class HoverableListItemComponent extends React.Component<InternalProps> {
     }
   }
 
-  onMouseEnter = () => {
+  onMouseOver = () => {
     this.props.enterHover({ rank: this.props.rank });
   }
 
@@ -42,7 +42,7 @@ class HoverableListItemComponent extends React.Component<InternalProps> {
     return (
       <div className={this.props.className}
         ref={(elem) => this.element = elem}
-        onMouseEnter={this.onMouseEnter}
+        onMouseOver={this.onMouseOver}
         onMouseLeave={this.onMouseLeave}
       >
         { this.props.children }

@@ -1,5 +1,13 @@
-import { Action, DragDropActionType, HoverActionType } from '../actions/constants';
+import {
+  Action,
+  DragDropActionType,
+  EditBookmarkActionType,
+  EditFolderActionType,
+  HoverActionType,
+} from '../actions/constants';
 import { DragParams } from '../actions/DragDropActions';
+import { EditBookmarkParams } from '../actions/EditBookmarkActions';
+import { EditFolderParams } from '../actions/EditFolderActions';
 import { HoverParams } from '../actions/HoverActions';
 import { Reducer } from './Reducer';
 import { AppState } from '../reduxStore';
@@ -34,6 +42,12 @@ export const hoverReducer: Reducer<HoverState> = (
     case DragDropActionType.beginDrag:
       newState = handleBeginDrag(state, action as Action<DragParams>);
       break;
+    case EditBookmarkActionType.deleteBookmark:
+      newState = handleDeleteBookmark(state, action as Action<EditBookmarkParams>);
+      break;
+    case EditFolderActionType.deleteFolder:
+      newState = handleDeleteFolder(state, action as Action<EditFolderParams>);
+      break;
   }
   return newState;
 }
@@ -55,6 +69,22 @@ function handleExit(state: HoverState, action: Action<HoverParams>): HoverState 
 
 function handleBeginDrag(state: HoverState, action: Action<DragParams>): HoverState {
   // If something is dragging, then we don't want any hover behavior.
+  return {
+    hoverRank: null,
+  };
+}
+
+function handleDeleteBookmark(state: HoverState, action: Action<EditBookmarkParams>): HoverState {
+  // Deleting something requires that we are hovering over the delete button.
+  // After we delete, then that list item will disappear, so there's nothing hovered over.
+  // Until the next hover event fires :)
+  return {
+    hoverRank: null,
+  };
+}
+
+function handleDeleteFolder(state: HoverState, action: Action<EditFolderParams>): HoverState {
+  // See comment in handleDeleteBookmark above.
   return {
     hoverRank: null,
   };
