@@ -1,3 +1,5 @@
+@import './text';
+
 $list-item-color: rgb(222,225,229);
 
 @mixin list {
@@ -22,6 +24,7 @@ $list-item-color: rgb(222,225,229);
 }
 
 @mixin list-title {
+  @include unselectable;
   font-family: Arial;
   font-size: 18px;
   font-weight: bold;
