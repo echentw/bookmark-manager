@@ -33,6 +33,7 @@ interface Props {
   currentFolderId: string | null;
   draggedRank: number | null;
   folders: Folder[];
+  showAddBookmarksModal: boolean;
   loadAppData: (params: {}) => void;
   syncFolders: (params: SyncFoldersParams) => void;
   closeFolder: (params: {}) => void;
@@ -171,6 +172,10 @@ class AppComponent extends React.Component<Props, State> {
       );
     }
 
+    const maybeAddBookmarksModal = this.props.showAddBookmarksModal ? (
+      <AddBookmarksModalComponent/>
+    ) : null;
+
     return (
       <div className={classes}>
         <div className="app-list-container">
@@ -183,8 +188,8 @@ class AppComponent extends React.Component<Props, State> {
           <DateComponent date={this.state.date}/>
         </div>
         { maybeDragLayer }
+        { maybeAddBookmarksModal }
         <CopiedToastComponent/>
-        <AddBookmarksModalComponent/>
       </div>
     );
   }
@@ -196,6 +201,7 @@ const mapStateToProps = (state: AppState, props: {}) => {
     currentFolderId: state.navigationState.currentFolderId,
     draggedRank: state.dragDropState.draggedRank,
     folders: state.foldersState.folders,
+    showAddBookmarksModal: state.addBookmarksState.showingModal,
   };
 };
 

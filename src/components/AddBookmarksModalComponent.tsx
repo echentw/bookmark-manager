@@ -8,7 +8,6 @@ import { AddBookmarksSaveParams } from '../actions/AddBookmarksActions';
 import { AppState } from '../reduxStore';
 
 interface Props {
-  showingModal: boolean;
   tabs: TabInfo[];
   cancel: () => void;
   save: (params: AddBookmarksSaveParams) => void;
@@ -25,6 +24,14 @@ class AddBookmarksModalComponent extends React.Component<Props, State> {
 
   private innerNode: HTMLElement = null;
 
+  componentDidMount = () => {
+    document.addEventListener('keydown', this.onKeyDown, false);
+  }
+
+  componentWillUnmount = () => {
+    document.removeEventListener('keydown', this.onKeyDown, false);
+  }
+
   onClick = (event: React.MouseEvent) => {
     if (this.innerNode !== null && this.innerNode.contains(event.target as Node)) {
       // Clicked inside the modal. Do nothing.
@@ -33,9 +40,20 @@ class AddBookmarksModalComponent extends React.Component<Props, State> {
     this.onClickCancel();
   }
 
+  onKeyDown = (event: KeyboardEvent) => {
+    if (event.keyCode === 13) {
+      // Pressed enter
+      this.onClickSave();
+    } else if (event.keyCode === 27) {
+      // Pressed escape
+      this.onClickCancel();
+    }
+  }
+
   onClickCancel = () => {
-    this.props.cancel();
-    this.setState({ selectedTabs: new Map<number, TabInfo>() });
+    this.setState({ selectedTabs: new Map<number, TabInfo>() }, () => {
+      this.props.cancel();
+    });
   }
 
   onClickSave = () => {
@@ -47,8 +65,9 @@ class AddBookmarksModalComponent extends React.Component<Props, State> {
         faviconUrl: tab.faviconUrl,
       });
     });
-    this.props.save({ bookmarks: bookmarks });
-    this.setState({ selectedTabs: new Map<number, TabInfo>() });
+    this.setState({ selectedTabs: new Map<number, TabInfo>() }, () => {
+      this.props.save({ bookmarks: bookmarks });
+    });
   }
 
   onClickTab = (index: number) => {
@@ -62,10 +81,6 @@ class AddBookmarksModalComponent extends React.Component<Props, State> {
   }
 
   render() {
-    if (!this.props.showingModal) {
-      return null;
-    }
-
     const tabInfoComponents = this.props.tabs.map((tab: TabInfo, index: number) => {
       const selected = this.state.selectedTabs.has(index);
       const isLast = (index == this.props.tabs.length - 1);
@@ -106,7 +121,6 @@ class AddBookmarksModalComponent extends React.Component<Props, State> {
 
 const mapStateToProps = (state: AppState, props: {}) => {
   return {
-    showingModal: state.addBookmarksState.showingModal,
     tabs: state.addBookmarksState.tabs,
   };
 };
