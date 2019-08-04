@@ -23,6 +23,7 @@ class FolderListComponent extends React.Component<Props> {
       const editing = folder.id === this.props.editingFolderId;
       const dragging = rank === this.props.draggedRank;
       const hovering = rank === this.props.hoverRank;
+      const draggable = !editing;
       return (
         <DroppableListItemContainerComponent
           key={folder.id}
@@ -33,6 +34,7 @@ class FolderListComponent extends React.Component<Props> {
             id={folder.id}
             rank={rank}
             draggableType={DraggableType.Folder}
+            draggable={draggable}
           >
             <FolderComponent
               folder={folder}

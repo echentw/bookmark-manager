@@ -38,6 +38,7 @@ class BookmarkListComponent extends React.Component<InternalProps> {
       const editing = bookmark.id === this.props.editingBookmarkId;
       const dragging = rank === this.props.draggedRank;
       const hovering = rank === this.props.hoverRank;
+      const draggable = !editing;
       return (
         <DroppableListItemContainerComponent
           key={bookmark.id}
@@ -48,6 +49,7 @@ class BookmarkListComponent extends React.Component<InternalProps> {
             id={bookmark.id}
             rank={rank}
             draggableType={DraggableType.Bookmark}
+            draggable={draggable}
           >
             <BookmarkComponent
               bookmark={bookmark}

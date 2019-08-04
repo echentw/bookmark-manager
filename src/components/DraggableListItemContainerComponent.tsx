@@ -16,6 +16,7 @@ interface ExternalProps {
   id: string;
   rank: number;
   draggableType: string;
+  draggable: boolean;
   children: React.ReactElement;
 }
 
@@ -26,12 +27,12 @@ interface InternalProps extends ExternalProps {
 }
 
 function DraggableListItemContainerComponent(props: InternalProps) {
-  const [{ isDragging, clientOffset }, drag, preview] = useDrag({
+  const [_, drag, preview] = useDrag({
     item: {
       type: props.draggableType,
       id: props.id,
     },
-    begin: monitor => {
+    begin: () => {
       props.beginDrag({ rank: props.rank });
       return;
     },
@@ -42,12 +43,7 @@ function DraggableListItemContainerComponent(props: InternalProps) {
       });
       return;
     },
-    collect: (monitor: DragSourceMonitor) => {
-      return {
-        isDragging: !!monitor.isDragging(),
-        clientOffset: monitor.getClientOffset(),
-      };
-    },
+    canDrag: () => props.draggable,
   })
 
   const emptyImageSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
