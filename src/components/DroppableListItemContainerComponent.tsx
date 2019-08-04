@@ -4,27 +4,26 @@ import { connect } from 'react-redux';
 
 import { AppState } from '../reduxStore';
 import * as DragDropActions from '../actions/DragDropActions';
-import { DragDropParams } from '../actions/DragDropActions';
+import { DragParams } from '../actions/DragDropActions';
 
 interface ExternalProps {
-  children: React.ReactElement;
   rank: number;
   draggableType: string;
+  children: React.ReactElement;
 }
 
 interface InternalProps extends ExternalProps {
-  isOver: (params: DragDropParams) => void;
+  isOver: (params: DragParams) => void;
 }
 
-function ListItemContainerComponent(props: InternalProps) {
-	const [{ isOver }, drop] = useDrop({
+function DroppableListItemContainerComponent(props: InternalProps) {
+	const [_, drop] = useDrop({
 		accept: props.draggableType,
 		collect: monitor => {
-      const isOver = !!monitor.isOver();
-      if (isOver) {
+      if (monitor.isOver()) {
         props.isOver({ rank: props.rank });
       }
-      return { isOver };
+      return {};
 		},
 	});
 
@@ -43,5 +42,5 @@ const mapActionsToProps = {
   isOver: DragDropActions.isOver,
 };
 
-const Component = connect(mapStateToProps, mapActionsToProps)(ListItemContainerComponent);
-export { Component as ListItemContainerComponent };
+const Component = connect(mapStateToProps, mapActionsToProps)(DroppableListItemContainerComponent);
+export { Component as DroppableListItemContainerComponent };

@@ -1,24 +1,29 @@
 import { Action, DragDropActionType as ActionType } from './constants';
 
-export interface DragDropParams {
+export interface DragParams {
   rank: number;
 }
 
-export function beginDrag(params: DragDropParams): Action<DragDropParams> {
+export interface DropParams {
+  rank: number;
+  trueDrop: boolean;
+}
+
+export function beginDrag(params: DragParams): Action<DragParams> {
   return {
     type: ActionType.beginDrag,
     params: params,
   };
 }
 
-export function endDrag(params: DragDropParams): Action<DragDropParams> {
+export function endDrag(params: DropParams): Action<DropParams> {
   return {
     type: ActionType.endDrag,
     params: params,
   };
 }
 
-export function isOver(params: DragDropParams): Action<DragDropParams> {
+export function isOver(params: DragParams): Action<DragParams> {
   return {
     type: ActionType.isOver,
     params: params,

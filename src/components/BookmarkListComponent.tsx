@@ -7,8 +7,8 @@ import { FaChevronLeft } from 'react-icons/fa';
 import { Bookmark } from '../Bookmark';
 import { Folder } from '../Folder';
 import * as FolderActions from '../actions/FolderActions';
-import { DraggableListItemWrapperComponent } from './DraggableListItemWrapperComponent';
-import { ListItemContainerComponent } from './ListItemContainerComponent';
+import { DraggableListItemContainerComponent } from './DraggableListItemContainerComponent';
+import { DroppableListItemContainerComponent } from './DroppableListItemContainerComponent';
 import { AddBookmarksButtonComponent } from './AddBookmarksButtonComponent';
 import { BookmarkComponent } from './BookmarkComponent';
 import { DraggableType } from './AppComponent';
@@ -39,15 +39,15 @@ class BookmarkListComponent extends React.Component<InternalProps> {
       const dragging = rank === this.props.draggedRank;
       const hovering = rank === this.props.hoverRank;
       return (
-        <ListItemContainerComponent
+        <DroppableListItemContainerComponent
           key={bookmark.id}
           rank={rank}
           draggableType={DraggableType.Bookmark}
         >
-          <DraggableListItemWrapperComponent
+          <DraggableListItemContainerComponent
             id={bookmark.id}
-            draggableType={DraggableType.Bookmark}
             rank={rank}
+            draggableType={DraggableType.Bookmark}
           >
             <BookmarkComponent
               bookmark={bookmark}
@@ -56,8 +56,8 @@ class BookmarkListComponent extends React.Component<InternalProps> {
               hovering={hovering}
               rank={rank}
             />
-          </DraggableListItemWrapperComponent>
-        </ListItemContainerComponent>
+          </DraggableListItemContainerComponent>
+        </DroppableListItemContainerComponent>
       );
     });
 

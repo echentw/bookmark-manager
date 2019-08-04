@@ -6,8 +6,8 @@ import { Folder } from '../Folder';
 import { AppState, } from '../reduxStore';
 import { DraggableType } from './AppComponent';
 import { FolderComponent } from './FolderComponent';
-import { ListItemContainerComponent } from './ListItemContainerComponent';
-import { DraggableListItemWrapperComponent } from './DraggableListItemWrapperComponent';
+import { DroppableListItemContainerComponent } from './DroppableListItemContainerComponent';
+import { DraggableListItemContainerComponent } from './DraggableListItemContainerComponent';
 import { AddFolderButtonComponent } from './AddFolderButtonComponent';
 
 interface Props {
@@ -24,15 +24,15 @@ class FolderListComponent extends React.Component<Props> {
       const dragging = rank === this.props.draggedRank;
       const hovering = rank === this.props.hoverRank;
       return (
-        <ListItemContainerComponent
+        <DroppableListItemContainerComponent
           key={folder.id}
           rank={rank}
           draggableType={DraggableType.Folder}
         >
-          <DraggableListItemWrapperComponent
+          <DraggableListItemContainerComponent
             id={folder.id}
-            draggableType={DraggableType.Folder}
             rank={rank}
+            draggableType={DraggableType.Folder}
           >
             <FolderComponent
               folder={folder}
@@ -41,8 +41,8 @@ class FolderListComponent extends React.Component<Props> {
               hovering={hovering}
               rank={rank}
             />
-          </DraggableListItemWrapperComponent>
-        </ListItemContainerComponent>
+          </DraggableListItemContainerComponent>
+        </DroppableListItemContainerComponent>
       );
     });
 

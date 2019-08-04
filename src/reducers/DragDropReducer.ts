@@ -1,14 +1,20 @@
 import { Action, DragDropActionType as ActionType } from '../actions/constants';
-import { DragDropParams } from '../actions/DragDropActions';
+import { DragParams, DropParams } from '../actions/DragDropActions';
 import { Reducer } from './Reducer';
 import { AppState } from '../reduxStore';
 
 export interface DragDropState {
   draggedRank: number | null;
+
+  // This is set to the rank at which the last-dropped item was "properly" dropped,
+  // meaning the item was dropped while the mouse was inside the drop container.
+  // If the item wasn't properly dropped, then this is set to null.
+  lastDroppedRank: number | null;
 }
 
 export const initialDragDropState: DragDropState = {
   draggedRank: null,
+  lastDroppedRank: null,
 };
 
 export const dragDropReducer: Reducer<DragDropState> = (
@@ -19,33 +25,43 @@ export const dragDropReducer: Reducer<DragDropState> = (
   let newState = state;
   switch (action.type) {
     case ActionType.beginDrag:
-      newState = handleBeginDrag(state, action as Action<DragDropParams>);
+      newState = handleBeginDrag(state, action as Action<DragParams>);
       break;
     case ActionType.endDrag:
-      newState = handleEndDrag(state, action as Action<DragDropParams>);
+      newState = handleEndDrag(state, action as Action<DropParams>);
       break;
     case ActionType.isOver:
-      newState = handleDragIsOver(state, action as Action<DragDropParams>);
+      newState = handleDragIsOver(state, action as Action<DragParams>);
       break;
   }
   return newState;
 }
 
-function handleBeginDrag(state: DragDropState, action: Action<DragDropParams>): DragDropState {
+function handleBeginDrag(state: DragDropState, action: Action<DragParams>): DragDropState {
   return {
+    ...state,
     draggedRank: action.params.rank,
   };
 }
 
-function handleEndDrag(state: DragDropState, action: Action<DragDropParams>): DragDropState {
-  const rank = (state.draggedRank === action.params.rank) ? null : state.draggedRank;
+function handleEndDrag(state: DragDropState, action: Action<DropParams>): DragDropState {
+  let newDraggedRank = state.draggedRank;
+  let lastDroppedRank = null;
+  if (state.draggedRank === action.params.rank) {
+    newDraggedRank = null;
+    if (action.params.trueDrop) {
+      lastDroppedRank = state.draggedRank;
+    }
+  }
   return {
-    draggedRank: rank,
+    draggedRank: newDraggedRank,
+    lastDroppedRank: lastDroppedRank,
   };
 }
 
-function handleDragIsOver(state: DragDropState, action: Action<DragDropParams>): DragDropState {
+function handleDragIsOver(state: DragDropState, action: Action<DragParams>): DragDropState {
   return {
+    ...state,
     draggedRank: action.params.rank,
   };
 }

@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { useDrag, DragPreviewImage } from 'react-dnd';
+import { useDrag, DragPreviewImage, DragSourceMonitor } from 'react-dnd';
 import { connect } from 'react-redux';
 
 import { Bookmark } from '../Bookmark';
 import { Folder } from '../Folder';
 import * as DragDropActions from '../actions/DragDropActions';
-import { DragDropParams } from '../actions/DragDropActions';
+import { DragParams, DropParams } from '../actions/DragDropActions';
 import { AppState } from '../reduxStore';
 import { DraggableType } from './AppComponent';
 
@@ -14,19 +14,19 @@ import * as HoverActions from '../actions/HoverActions';
 
 interface ExternalProps {
   id: string;
-  draggableType: string;
   rank: number;
+  draggableType: string;
   children: React.ReactElement;
 }
 
 interface InternalProps extends ExternalProps {
-  beginDrag: (params: DragDropParams) => void;
-  endDrag: (params: DragDropParams) => void;
+  beginDrag: (params: DragParams) => void;
+  endDrag: (params: DropParams) => void;
   exitHover: (params: HoverParams) => void;
 }
 
-function DraggableListItemWrapperComponent(props: InternalProps) {
-  const [{ isDragging }, drag, preview] = useDrag({
+function DraggableListItemContainerComponent(props: InternalProps) {
+  const [{ isDragging, clientOffset }, drag, preview] = useDrag({
     item: {
       type: props.draggableType,
       id: props.id,
@@ -35,13 +35,19 @@ function DraggableListItemWrapperComponent(props: InternalProps) {
       props.beginDrag({ rank: props.rank });
       return;
     },
-    end: monitor => {
-      props.endDrag({ rank: props.rank });
+    end: (dropResult: number, monitor: DragSourceMonitor) => {
+      props.endDrag({
+        rank: props.rank,
+        trueDrop: monitor.didDrop(),
+      });
       return;
     },
-    collect: monitor => ({
-      isDragging: !!monitor.isDragging(),
-    }),
+    collect: (monitor: DragSourceMonitor) => {
+      return {
+        isDragging: !!monitor.isDragging(),
+        clientOffset: monitor.getClientOffset(),
+      };
+    },
   })
 
   const emptyImageSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
@@ -66,5 +72,5 @@ const mapActionsToProps = {
   exitHover: HoverActions.exit,
 };
 
-const Component = connect(mapStateToProps, mapActionsToProps)(DraggableListItemWrapperComponent);
-export { Component as DraggableListItemWrapperComponent };
+const Component = connect(mapStateToProps, mapActionsToProps)(DraggableListItemContainerComponent);
+export { Component as DraggableListItemContainerComponent };

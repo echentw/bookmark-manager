@@ -1,5 +1,5 @@
 import { Action, DragDropActionType, HoverActionType } from '../actions/constants';
-import { DragDropParams } from '../actions/DragDropActions';
+import { DragParams } from '../actions/DragDropActions';
 import { HoverParams } from '../actions/HoverActions';
 import { Reducer } from './Reducer';
 import { AppState } from '../reduxStore';
@@ -32,7 +32,7 @@ export const hoverReducer: Reducer<HoverState> = (
       newState = handleExit(state, action as Action<HoverParams>);
       break;
     case DragDropActionType.beginDrag:
-      newState = handleBeginDrag(state, action as Action<DragDropParams>);
+      newState = handleBeginDrag(state, action as Action<DragParams>);
       break;
   }
   return newState;
@@ -53,7 +53,7 @@ function handleExit(state: HoverState, action: Action<HoverParams>): HoverState 
   };
 }
 
-function handleBeginDrag(state: HoverState, action: Action<DragDropParams>): HoverState {
+function handleBeginDrag(state: HoverState, action: Action<DragParams>): HoverState {
   // If something is dragging, then we don't want any hover behavior.
   return {
     hoverRank: null,

@@ -17,7 +17,7 @@ import { SyncFoldersParams } from '../actions/SyncAppActions';
 import { EditFolderParams } from '../actions/EditFolderActions';
 import { AddBookmarksSaveParams } from '../actions/AddBookmarksActions';
 import { EditBookmarkParams } from '../actions/EditBookmarkActions';
-import { DragDropParams } from '../actions/DragDropActions';
+import { DragParams } from '../actions/DragDropActions';
 
 export interface FoldersState {
   folders: Folder[];
@@ -58,7 +58,7 @@ export const foldersReducer: Reducer<FoldersState> = (
       newState = handleEditBookmarkDeleteBookmark(state, action as Action<EditBookmarkParams>, appState);
       break;
     case DragDropActionType.isOver:
-      newState = handleDragIsOver(state, action as Action<DragDropParams>, appState);
+      newState = handleDragIsOver(state, action as Action<DragParams>, appState);
       break;
   }
   return newState;
@@ -167,7 +167,7 @@ function handleEditBookmarkDeleteBookmark(
 // But we need this for performance.
 function handleDragIsOver(
   state: FoldersState,
-  action: Action<DragDropParams>,
+  action: Action<DragParams>,
   appState: AppState
 ): FoldersState {
   if (appState.navigationState.currentFolderId === null) {
@@ -179,7 +179,7 @@ function handleDragIsOver(
 
 function _handleFolderDragIsOver(
   state: FoldersState,
-  action: Action<DragDropParams>,
+  action: Action<DragParams>,
   appState: AppState
 ): FoldersState {
   const folders = state.folders;
@@ -206,7 +206,7 @@ function _handleFolderDragIsOver(
 
 function _handleBookmarkDragIsOver(
   state: FoldersState,
-  action: Action<DragDropParams>,
+  action: Action<DragParams>,
   appState: AppState
 ): FoldersState {
   if (appState.navigationState.currentFolderId === null) {
