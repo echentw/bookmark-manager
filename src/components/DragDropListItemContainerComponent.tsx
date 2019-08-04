@@ -1,16 +1,12 @@
 import * as React from 'react';
-import { useDrag, DragPreviewImage, DragSourceMonitor } from 'react-dnd';
+import { useDrag, useDrop, DragPreviewImage, DragSourceMonitor } from 'react-dnd';
 import { connect } from 'react-redux';
 
-import { Bookmark } from '../Bookmark';
-import { Folder } from '../Folder';
+import { AppState } from '../reduxStore';
 import * as DragDropActions from '../actions/DragDropActions';
 import { DragParams, DropParams } from '../actions/DragDropActions';
-import { AppState } from '../reduxStore';
-import { DraggableType } from './AppComponent';
-
-import { HoverParams } from '../actions/HoverActions';
 import * as HoverActions from '../actions/HoverActions';
+import { HoverParams } from '../actions/HoverActions';
 
 interface ExternalProps {
   id: string;
@@ -24,10 +20,11 @@ interface InternalProps extends ExternalProps {
   beginDrag: (params: DragParams) => void;
   endDrag: (params: DropParams) => void;
   exitHover: (params: HoverParams) => void;
+  isOver: (params: DragParams) => void;
 }
 
-function DraggableListItemContainerComponent(props: InternalProps) {
-  const [_, drag, preview] = useDrag({
+function DragDropListItemContainerComponent(props: InternalProps) {
+  const [, drag, preview] = useDrag({
     item: {
       type: props.draggableType,
       id: props.id,
@@ -44,12 +41,22 @@ function DraggableListItemContainerComponent(props: InternalProps) {
       return;
     },
     canDrag: () => props.draggable,
-  })
+  });
+
+	const [, drop] = useDrop({
+		accept: props.draggableType,
+		collect: monitor => {
+      if (monitor.isOver()) {
+        props.isOver({ rank: props.rank });
+      }
+      return {};
+		},
+	});
 
   const emptyImageSrc = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
 
   return (
-    <div>
+    <div className="list-item-container" ref={drop}>
       <DragPreviewImage connect={preview} src={emptyImageSrc}/>
       <div ref={drag}>
         { props.children }
@@ -66,7 +73,8 @@ const mapActionsToProps = {
   beginDrag: DragDropActions.beginDrag,
   endDrag: DragDropActions.endDrag,
   exitHover: HoverActions.exit,
+  isOver: DragDropActions.isOver,
 };
 
-const Component = connect(mapStateToProps, mapActionsToProps)(DraggableListItemContainerComponent);
-export { Component as DraggableListItemContainerComponent };
+const Component = connect(mapStateToProps, mapActionsToProps)(DragDropListItemContainerComponent);
+export { Component as DragDropListItemContainerComponent };
