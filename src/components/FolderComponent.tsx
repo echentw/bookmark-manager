@@ -34,7 +34,6 @@ interface InternalProps extends ExternalProps {
 class FolderComponent extends React.Component<InternalProps> {
 
   onClick = (event: React.MouseEvent) => {
-    event.preventDefault();
     this.props.openFolder({ folder: this.props.folder });
   }
 
@@ -57,16 +56,9 @@ class FolderComponent extends React.Component<InternalProps> {
         cancel={this.cancelEdit}
       />
     ) : (
-      // This is a hack. What is even happening here...
-      // Original code:
-      //   <div className="folder-name" onClick={this.onClick}>
-      //     { folder.name }
-      //   </div>
-      // But with above, the onDragEnd hook doesn't fire inside HoverableListItemComponent!
-      // Why???????
-      <a className="folder-name" href={'randomurl'} onClick={this.onClick}>
+      <div className="folder-name" onClick={this.onClick}>
         { folder.name }
-      </a>
+      </div>
     );
 
     const shouldShowButtons = this.props.isDragPreview || (hovering && !editing);
