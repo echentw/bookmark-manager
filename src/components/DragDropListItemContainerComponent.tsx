@@ -2,6 +2,8 @@ import * as React from 'react';
 import { useDrag, useDrop, DragPreviewImage, DragSourceMonitor } from 'react-dnd';
 import { connect } from 'react-redux';
 
+import { Bookmark } from '../Bookmark';
+import { Folder } from '../Folder';
 import { AppState } from '../reduxStore';
 import * as DragDropActions from '../actions/DragDropActions';
 import { DragParams, DropParams } from '../actions/DragDropActions';
@@ -23,7 +25,38 @@ interface InternalProps extends ExternalProps {
   isOver: (params: DragParams) => void;
 }
 
-function DragDropListItemContainerComponent(props: InternalProps) {
+// Returns true if the component should NOT re-render.
+// Returns false if the component should re-render.
+function isSame(prevProps: ExternalProps, nextProps: ExternalProps): boolean {
+  const ownPropsSame: boolean = (
+    prevProps.id === nextProps.id &&
+    prevProps.rank === nextProps.rank &&
+    prevProps.draggableType === nextProps.draggableType &&
+    prevProps.draggable === nextProps.draggable
+  );
+
+  const prevChildProps: any = prevProps.children.props;
+  const nextChildProps: any = nextProps.children.props;
+
+  let childPropsSame: boolean = true;
+  Object.entries(prevChildProps).forEach(([key, prevValue]) => {
+    const nextValue = nextChildProps[key];
+    if (prevValue instanceof Bookmark || prevValue instanceof Folder) {
+      if (!prevValue.equals(nextValue)) {
+        childPropsSame = false;
+      }
+    } else {
+      if (prevValue !== nextValue) {
+        childPropsSame = false;
+      }
+    }
+  });
+
+  return ownPropsSame && childPropsSame;
+}
+
+const DragDropListItemContainerComponent = React.memo((props: InternalProps) => {
+
   const [, drag, preview] = useDrag({
     item: {
       type: props.draggableType,
@@ -63,7 +96,8 @@ function DragDropListItemContainerComponent(props: InternalProps) {
       </div>
     </div>
   );
-}
+// });
+}, isSame);
 
 const mapStateToProps = (state: AppState, props: ExternalProps) => {
   return {};
