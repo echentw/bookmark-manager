@@ -1,14 +1,16 @@
 import { Action, EditFolderActionType as ActionType } from '../actions/constants';
-import { EditFolderParams } from '../actions/EditFolderActions';
+import { EditFolderParams, SelectFolderColorParams } from '../actions/EditFolderActions';
 import { Reducer } from './Reducer';
 import { AppState } from '../reduxStore';
 
 export interface EditFolderState {
   editingFolderId: string | null;
+  showingColorPicker: boolean;
 }
 
 export const initialEditFolderState: EditFolderState = {
   editingFolderId: null,
+  showingColorPicker: false,
 };
 
 export const editFolderReducer: Reducer<EditFolderState> = (
@@ -33,6 +35,15 @@ export const editFolderReducer: Reducer<EditFolderState> = (
     case ActionType.deleteFolder:
       newState = handleDeleteFolder(state, action as Action<EditFolderParams>);
       break;
+    case ActionType.showColorPicker:
+      newState = handleShowColorPicker(state, action as Action<EditFolderParams>);
+      break;
+    case ActionType.hideColorPicker:
+      newState = handleHideColorPicker(state, action as Action<EditFolderParams>);
+      break;
+    case ActionType.selectColor:
+      newState = handleSelectColor(state, action as Action<SelectFolderColorParams>);
+      break;
   }
   return newState;
 }
@@ -40,29 +51,63 @@ export const editFolderReducer: Reducer<EditFolderState> = (
 function handleBeginEdit(state: EditFolderState, action: Action<EditFolderParams>): EditFolderState {
   return {
     editingFolderId: action.params.folder.id,
+    showingColorPicker: false,
   };
 }
 
 function handleCancel(state: EditFolderState, action: Action<EditFolderParams>): EditFolderState {
   return {
     editingFolderId: null,
+    showingColorPicker: false,
   };
 }
 
 function handleSave(state: EditFolderState, action: Action<EditFolderParams>): EditFolderState {
   return {
     editingFolderId: null,
+    showingColorPicker: false,
   };
 }
 
 function handleAddFolder(state: EditFolderState, action: Action<EditFolderParams>): EditFolderState {
   return {
     editingFolderId: action.params.folder.id,
+    showingColorPicker: false,
   };
 }
 
 function handleDeleteFolder(state: EditFolderState, action: Action<EditFolderParams>): EditFolderState {
   return {
     editingFolderId: null,
+    showingColorPicker: false,
+  };
+}
+
+function handleShowColorPicker(state: EditFolderState, action: Action<EditFolderParams>): EditFolderState {
+  if (state.editingFolderId !== action.params.folder.id) {
+    // This should never happen...
+    return state;
+  }
+  return {
+    ...state,
+    showingColorPicker: true,
+  };
+}
+
+function handleHideColorPicker(state: EditFolderState, action: Action<EditFolderParams>): EditFolderState {
+  if (state.editingFolderId !== action.params.folder.id) {
+    // This should never happen...
+    return state;
+  }
+  return {
+    ...state,
+    showingColorPicker: false,
+  };
+}
+
+function handleSelectColor(state: EditFolderState, action: Action<SelectFolderColorParams>): EditFolderState {
+  return {
+    ...state,
+    showingColorPicker: false,
   };
 }

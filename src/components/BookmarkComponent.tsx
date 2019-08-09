@@ -28,6 +28,27 @@ interface InternalProps extends ExternalProps {
 
 class BookmarkComponent extends React.Component<InternalProps> {
 
+  private textInputRef: React.RefObject<HTMLInputElement> = React.createRef();
+
+  componentDidMount = () => {
+    document.addEventListener('mousedown', this.onMouseDown);
+  }
+
+  componentWillUnmount = () => {
+    document.removeEventListener('mousedown', this.onMouseDown);
+  }
+
+  onMouseDown = (event: MouseEvent) => {
+    if (!this.props.editing) {
+      return;
+    }
+    if (this.textInputRef.current.contains(event.target as Node)) {
+      return;
+    }
+    // Clicked on something else.
+    this.cancelEdit();
+  }
+
   saveEdit = (newName: string) => {
     const name = (newName.length === 0) ? null : newName;
     const newBookmark = this.props.bookmark.withName(name);
@@ -43,6 +64,7 @@ class BookmarkComponent extends React.Component<InternalProps> {
 
     const bookmarkName = editing ? (
       <EditTextFieldComponent
+        textInputRef={this.textInputRef}
         initialText={bookmark.displayName()}
         save={this.saveEdit}
         cancel={this.cancelEdit}

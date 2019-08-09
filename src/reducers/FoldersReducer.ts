@@ -14,7 +14,7 @@ import {
   DragDropActionType,
 } from '../actions/constants';
 import { SyncFoldersParams } from '../actions/SyncAppActions';
-import { EditFolderParams } from '../actions/EditFolderActions';
+import { EditFolderParams, SelectFolderColorParams  } from '../actions/EditFolderActions';
 import { AddBookmarksSaveParams } from '../actions/AddBookmarksActions';
 import { EditBookmarkParams } from '../actions/EditBookmarkActions';
 import { DragParams } from '../actions/DragDropActions';
@@ -44,6 +44,9 @@ export const foldersReducer: Reducer<FoldersState> = (
       break;
     case EditFolderActionType.save:
       newState = handleEditFolderSave(state, action as Action<EditFolderParams>);
+      break;
+    case EditFolderActionType.selectColor:
+      newState = handleSelectFolderColor(state, action as Action<SelectFolderColorParams>);
       break;
     case SyncAppActionType.syncFolders:
       newState = handleSyncFolders(state, action as Action<SyncFoldersParams>);
@@ -86,6 +89,19 @@ function handleEditFolderSave(state: FoldersState, action: Action<EditFolderPara
   });
   const folders = state.folders.slice(0); // copies the array
   folders[index] = action.params.folder;
+  return {
+    ...state,
+    folders: folders,
+  };
+}
+
+function handleSelectFolderColor(state: FoldersState, action: Action<SelectFolderColorParams>): FoldersState {
+  const index = state.folders.findIndex((folder: Folder) => {
+    return folder.id === action.params.folder.id;
+  });
+  const folders = state.folders.slice(0); // copies the array
+  const newFolder = action.params.folder.withColor(action.params.color);
+  folders[index] = newFolder;
   return {
     ...state,
     folders: folders,

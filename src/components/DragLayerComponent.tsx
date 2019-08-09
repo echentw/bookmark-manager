@@ -25,7 +25,7 @@ const itemStyles = (currentOffset?: XYCoord): React.CSSProperties => {
     transform: transform,
     WebkitTransform: transform,
   }
-}
+};
 
 export function DragLayerComponent(props: Props) {
   const { currentOffset }: CollectedProps = useDragLayer(

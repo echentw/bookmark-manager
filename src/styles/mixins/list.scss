@@ -70,6 +70,11 @@ $list-item-color: rgb(222,225,229);
   height: 16px;
 }
 
+@mixin list-item-image-right {
+  width: 16px;
+  height: 16px;
+}
+
 @mixin list-item-text {
   flex: 1;
   height: 24px;
