@@ -31,6 +31,11 @@ export const hoverReducer: Reducer<HoverState> = (
     return state;
   }
 
+  if (appState.editFolderState.showingColorPicker) {
+    // If the color picker is showing, then we don't want to trigger any hover behavior.
+    return state;
+  }
+
   let newState = state;
   switch (action.type) {
     case HoverActionType.enter:
@@ -48,7 +53,11 @@ export const hoverReducer: Reducer<HoverState> = (
     case EditFolderActionType.deleteFolder:
       newState = handleDeleteFolder(state, action as Action<EditFolderParams>);
       break;
+    case EditFolderActionType.showColorPicker:
+      newState = handleShowColorPicker(state, action as Action<EditFolderParams>);
+      break;
   }
+
   return newState;
 }
 
@@ -84,6 +93,13 @@ function handleDeleteBookmark(state: HoverState, action: Action<EditBookmarkPara
 }
 
 function handleDeleteFolder(state: HoverState, action: Action<EditFolderParams>): HoverState {
+  // See comment in handleDeleteBookmark above.
+  return {
+    hoverRank: null,
+  };
+}
+
+function handleShowColorPicker(state: HoverState, action: Action<EditFolderParams>): HoverState {
   // See comment in handleDeleteBookmark above.
   return {
     hoverRank: null,
