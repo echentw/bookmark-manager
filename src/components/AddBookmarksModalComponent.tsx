@@ -22,7 +22,7 @@ class AddBookmarksModalComponent extends React.Component<Props, State> {
     selectedTabs: new Map<number, TabInfo>(),
   };
 
-  private innerNode: HTMLElement = null;
+  private modalRef: React.RefObject<HTMLDivElement> = React.createRef();
 
   componentDidMount = () => {
     document.addEventListener('keydown', this.onKeyDown, false);
@@ -33,7 +33,7 @@ class AddBookmarksModalComponent extends React.Component<Props, State> {
   }
 
   onClick = (event: React.MouseEvent) => {
-    if (this.innerNode !== null && this.innerNode.contains(event.target as Node)) {
+    if (this.modalRef.current.contains(event.target as Node)) {
       // Clicked inside the modal. Do nothing.
       return;
     }
@@ -98,7 +98,7 @@ class AddBookmarksModalComponent extends React.Component<Props, State> {
 
     return (
       <div className="add-bookmarks-layer" onClick={this.onClick}>
-        <div className="add-bookmarks-modal" ref={(element) => this.innerNode = element}>
+        <div className="add-bookmarks-modal" ref={this.modalRef}>
           <div className="add-bookmarks-title-container">
             <div className="add-bookmarks-title">Open Tabs</div>
           </div>

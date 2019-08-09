@@ -31,10 +31,10 @@ const modalPositionStyles = (referenceRect: Rect): React.CSSProperties => {
 
 export class FolderColorPickerModalComponent extends React.Component<Props> {
 
-  private innerNode: HTMLElement = null;
+  private modalRef: React.RefObject<HTMLDivElement> = React.createRef();
 
   onClickBackdrop = (event: React.MouseEvent) => {
-    if (this.innerNode !== null && this.innerNode.contains(event.target as Node)) {
+    if (this.modalRef.current.contains(event.target as Node)) {
       // Clicked inside the modal. Do nothing.
       return;
     }
@@ -48,8 +48,8 @@ export class FolderColorPickerModalComponent extends React.Component<Props> {
     return (
       <div className="folder-color-picker-layer" onClick={this.onClickBackdrop}>
         <div className="folder-color-picker-modal"
+          ref={this.modalRef}
           style={styles}
-          ref={(element) => this.innerNode = element}
         >
           I am the folder color picker for the folder { this.props.folder.name }
         </div>
