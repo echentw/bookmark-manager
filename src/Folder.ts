@@ -48,10 +48,10 @@ export class Folder {
     bookmarks?: Bookmark[],
     color?: FolderColor,
   }) {
-    this.id = id ? id : randomId();
+    this.id = (id !== undefined) ? id : randomId();
     this.name = name;
-    this.bookmarks = bookmarks ? bookmarks : [];
-    this.color = color ? color : FolderColor.Black;
+    this.bookmarks = (bookmarks !== undefined) ? bookmarks : [];
+    this.color = (color !== undefined) ? color : FolderColor.Black;
   }
 
   public withName = (name: string) => {
