@@ -1,23 +1,86 @@
-@import './mixins/layer';
+@import './mixins/misc';
+@import './mixins/list';
+@import './animations';
 
 .folder-color-picker-layer {
   @include layer;
   pointer-events: auto;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.3);
+  -webkit-animation: darken-backdrop 0.3s;
+          animation: darken-backdrop 0.3s;
 
   .folder-color-picker-modal {
-    background-color: white;
+    background-color: $list-item-color;
 
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
 
     position: absolute;
     top: 0;
     left: 0;
+
+    padding: 4px;
+    border-radius: 4px;
+
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    @include box-shadow;
+
+    .color-option-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .color-option {
+      width: 20px;
+      height: 20px;
+
+      transition: all 0.12s;
+
+      &:hover {
+        width: 26px;
+        height: 26px;
+      }
+    }
+
+    .red {
+      color: #FF4E4E;
+    }
+
+    .green {
+      color: #58B238;
+    }
+
+    .blue {
+      color: #4E55FF;
+    }
+
+    .yellow {
+      color: #D0C456;
+    }
+
+    .violet {
+      color: #CB3CCE;
+    }
+
+    .orange {
+      color: #CC893A;
+    }
+
+    .black {
+      color: black;
+    }
+
+    .grey {
+      color: #8F8F8F;
+    }
+
+    .light-blue {
+      color: #45A8E0;
+    }
   }
 }

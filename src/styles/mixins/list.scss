@@ -1,4 +1,4 @@
-@import './text';
+@import './misc';
 
 $list-item-color: rgb(222,225,229);
 
@@ -55,7 +55,7 @@ $list-item-color: rgb(222,225,229);
   align-items: center;
 
   &.with-shadow {
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.19), 0 4px 6px rgba(0, 0, 0, 0.23);
+    @include box-shadow;
     transition: box-shadow 0.2s ease-in-out;
   }
 

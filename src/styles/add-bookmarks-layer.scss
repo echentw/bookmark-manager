@@ -1,5 +1,6 @@
-@import './mixins/layer';
+@import './mixins/misc';
 @import './mixins/list';
+@import './animations';
 
 $highlight-border-color: rgb(0, 148, 255);
 
@@ -11,7 +12,9 @@ $highlight-border-color: rgb(0, 148, 255);
   justify-content: center;
   align-items: center;
 
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.3);
+  -webkit-animation: darken-backdrop 0.3s;
+          animation: darken-backdrop 0.3s;
 
   .add-bookmarks-modal {
     @include list;

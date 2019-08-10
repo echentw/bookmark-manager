@@ -9,12 +9,15 @@ export interface FolderData {
 }
 
 export enum FolderColor {
-  Black = 1,
   Red,
-  Blue,
   Green,
+  Blue,
   Yellow,
-  Purple,
+  Violet,
+  Orange,
+  Black,
+  Grey,
+  LightBlue,
 }
 
 export class Folder {
