@@ -20,6 +20,22 @@ export enum FolderColor {
   LightBlue,
 }
 
+export const colorsToCssClasses = new Map([
+  [FolderColor.Red, 'red'],
+  [FolderColor.Green, 'green'],
+  [FolderColor.Blue, 'blue'],
+  [FolderColor.Yellow, 'yellow'],
+  [FolderColor.Violet, 'violet'],
+  [FolderColor.Orange, 'orange'],
+  [FolderColor.Black, 'black'],
+  [FolderColor.Grey, 'grey'],
+  [FolderColor.LightBlue, 'light-blue'],
+]);
+
+if (Array.from(colorsToCssClasses.entries()).length !== 9) {
+  throw new Error('There are too many folder color options!');
+}
+
 export class Folder {
   public readonly id: string;
   public readonly name: string;

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { FaFolder, FaPalette } from 'react-icons/fa';
 
-import { Folder } from '../Folder';
+import { Folder, colorsToCssClasses } from '../Folder';
 import { OpenFolderParams } from '../actions/FolderActions';
 import * as FolderActions from '../actions/FolderActions';
 import { EditFolderParams } from '../actions/EditFolderActions';
@@ -128,9 +128,11 @@ class FolderComponent extends React.Component<InternalProps> {
       classes += ' with-shadow';
     }
 
+    const color = colorsToCssClasses.get(folder.color);
+
     return (
       <HoverableListItemComponent className={classes} rank={this.props.rank}>
-        <FaFolder className="folder-icon"/>
+        <FaFolder className={'folder-icon ' + color}/>
         { folderName }
         { maybeButtons }
         { maybeColorPicker }

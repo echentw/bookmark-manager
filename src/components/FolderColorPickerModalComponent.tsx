@@ -1,14 +1,26 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { FaFolder } from 'react-icons/fa';
 
-import { Folder, FolderColor } from '../Folder';
+import { AppState } from '../reduxStore';
+import {
+  Folder,
+  FolderColor,
+  colorsToCssClasses,
+} from '../Folder';
+import * as EditFolderActions from '../actions/EditFolderActions';
+import { SelectFolderColorParams } from '../actions/EditFolderActions';
 
 type Rect = DOMRect | ClientRect;
 
-interface Props {
+interface ExternalProps {
   folder: Folder;
   colorPickerIconBoundingRect: Rect;
   cancel: () => void;
+}
+
+interface InternalProps extends ExternalProps {
+  selectColor: (params: SelectFolderColorParams) => void;
 }
 
 const modalPositionStyles = (referenceRect: Rect): React.CSSProperties => {
@@ -30,19 +42,7 @@ const modalPositionStyles = (referenceRect: Rect): React.CSSProperties => {
   };
 };
 
-const colorsToCssClasses = new Map([
-  [FolderColor.Red, 'red'],
-  [FolderColor.Green, 'green'],
-  [FolderColor.Blue, 'blue'],
-  [FolderColor.Yellow, 'yellow'],
-  [FolderColor.Violet, 'violet'],
-  [FolderColor.Orange, 'orange'],
-  [FolderColor.Black, 'black'],
-  [FolderColor.Grey, 'grey'],
-  [FolderColor.LightBlue, 'light-blue'],
-]);
-
-export class FolderColorPickerModalComponent extends React.Component<Props> {
+class FolderColorPickerModalComponent extends React.Component<InternalProps> {
 
   private modalRef: React.RefObject<HTMLDivElement> = React.createRef();
 
@@ -54,14 +54,26 @@ export class FolderColorPickerModalComponent extends React.Component<Props> {
     this.props.cancel();
   }
 
+  onClickColorOption = (color: FolderColor) => {
+    this.props.selectColor({
+      folder: this.props.folder,
+      color: color,
+    });
+  }
+
   render() {
     const styles = modalPositionStyles(this.props.colorPickerIconBoundingRect);
 
-    const colorOptions = Array.from(colorsToCssClasses.values()).map(color => (
-      <div className="color-option-container" key={color}>
-        <FaFolder className={'color-option ' + color}/>
-      </div>
-    ));
+    const colorOptions = Array.from(colorsToCssClasses.entries()).map(entry => {
+      const [color, cssClass] = entry;
+      return (
+        <div className="color-option-container" key={color}>
+          <FaFolder className={'color-option ' + cssClass}
+            onClick={() => this.onClickColorOption(color)}
+          />
+        </div>
+      );
+    });
 
     return (
       <div className="folder-color-picker-layer" onClick={this.onClickBackdrop}>
@@ -75,3 +87,14 @@ export class FolderColorPickerModalComponent extends React.Component<Props> {
     );
   }
 }
+
+const mapStateToProps = (state: AppState, props: ExternalProps) => {
+  return {};
+};
+
+const mapActionsToProps = {
+  selectColor: EditFolderActions.selectColor,
+};
+
+const Component = connect(mapStateToProps, mapActionsToProps)(FolderColorPickerModalComponent);
+export { Component as FolderColorPickerModalComponent };
