@@ -147,7 +147,7 @@ class FolderComponent extends React.Component<InternalProps> {
     const maybeColorPickerComponent = (editing && this.props.showingColorPicker) ? (
       <FolderColorPickerModalComponent
         folder={folder}
-        referenceRect={this.colorPickerIconRef.current.getBoundingClientRect()}
+        triggerRef={this.colorPickerIconRef}
         cancel={() => {
           this.textInputRef.current.focus();
           this.props.hideColorPicker({ folder: this.props.folder });
@@ -157,7 +157,7 @@ class FolderComponent extends React.Component<InternalProps> {
 
     const maybeConfirmDeleteModalComponent = deleting ? (
       <ConfirmDeleteFolderModalComponent
-        referenceRect={this.deleteIconRef.current.getBoundingClientRect()}
+        triggerRef={this.deleteIconRef}
         confirmDelete={this.confirmDelete}
         cancelDelete={this.cancelDelete}
       />

@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-export type Rect = DOMRect | ClientRect;
+export const modalPositionStyles = (triggerRef: React.RefObject<HTMLDivElement>): React.CSSProperties => {
+  const referenceRect = triggerRef.current.getBoundingClientRect();
 
-export const modalPositionStyles = (referenceRect: Rect): React.CSSProperties => {
   const {
     top: referenceTop,
     bottom: referenceBottom,
@@ -26,7 +26,7 @@ interface Props {
   save?: () => void;
   cancel: () => void;
   modalRef: React.RefObject<HTMLDivElement>;
-  referenceRect?: Rect;
+  triggerRef?: React.RefObject<HTMLDivElement>;
   children: React.ReactElement;
 }
 
@@ -76,8 +76,8 @@ export class ModalBackdropComponent extends React.Component<Props> {
       classes += (' ' + this.props.additionalClasses)
     }
 
-    const childComponent = this.props.referenceRect === undefined ? (this.props.children) : (
-      <div className="modal-container" style={modalPositionStyles(this.props.referenceRect)}>
+    const childComponent = this.props.triggerRef === undefined ? (this.props.children) : (
+      <div className="modal-container" style={modalPositionStyles(this.props.triggerRef)}>
         { this.props.children }
       </div>
     );

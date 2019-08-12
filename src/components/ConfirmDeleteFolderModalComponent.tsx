@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import { ModalBackdropComponent, Rect } from './ModalBackdropComponent';
+import { ModalBackdropComponent } from './ModalBackdropComponent';
 
 interface Props {
-  referenceRect: Rect;
+  triggerRef: React.RefObject<HTMLDivElement>;
   confirmDelete: () => void;
   cancelDelete: () => void;
 }
@@ -21,7 +21,7 @@ export class ConfirmDeleteFolderModalComponent extends React.Component<Props> {
       <ModalBackdropComponent
         cancel={this.cancel}
         modalRef={this.modalRef}
-        referenceRect={this.props.referenceRect}
+        triggerRef={this.props.triggerRef}
       >
         <div className="confirm-delete-folder-modal" ref={this.modalRef}>
           <div className="confirm-delete-title">

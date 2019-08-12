@@ -10,11 +10,11 @@ import {
 } from '../Folder';
 import * as EditFolderActions from '../actions/EditFolderActions';
 import { SelectFolderColorParams } from '../actions/EditFolderActions';
-import { ModalBackdropComponent, Rect } from './ModalBackdropComponent';
+import { ModalBackdropComponent } from './ModalBackdropComponent';
 
 interface ExternalProps {
   folder: Folder;
-  referenceRect: Rect;
+  triggerRef: React.RefObject<HTMLDivElement>;
   cancel: () => void;
 }
 
@@ -49,7 +49,7 @@ class FolderColorPickerModalComponent extends React.Component<InternalProps> {
       <ModalBackdropComponent
         cancel={this.props.cancel}
         modalRef={this.modalRef}
-        referenceRect={this.props.referenceRect}
+        triggerRef={this.props.triggerRef}
       >
         <div className="folder-color-picker-modal" ref={this.modalRef}>
           { colorOptions }
