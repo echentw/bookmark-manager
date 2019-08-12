@@ -40,13 +40,6 @@ export function addFolder(params: {}): Action<EditFolderParams> {
   };
 }
 
-export function deleteFolder(params: EditFolderParams): Action<EditFolderParams> {
-  return {
-    type: ActionType.deleteFolder,
-    params: params,
-  };
-}
-
 export function showColorPicker(params: EditFolderParams): Action<EditFolderParams> {
   return {
     type: ActionType.showColorPicker,

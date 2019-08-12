@@ -1,17 +1,20 @@
 @import './animations';
 @import './colors';
+@import './modal-backdrop';
 
 @import './add-bookmarks-layer';
+@import './copied-toast-layer';
+@import './folder-color-picker';
+@import './delete-folder-modal';
+
 @import './greeting';
 @import './date';
 @import './drag-layer';
-@import './copied-toast-layer';
 
 @import './bookmark-list';
 @import './folder-list';
 @import './bookmark';
 @import './folder';
-@import './folder-color-picker';
 
 @import './app-layout';
 

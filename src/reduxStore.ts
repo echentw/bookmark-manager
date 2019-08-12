@@ -5,6 +5,7 @@ import { Action } from './actions/constants';
 
 import { addBookmarksReducer, initialAddBookmarksState, AddBookmarksState } from './reducers/AddBookmarksReducer';
 import { copyUrlReducer, initialCopyUrlState, CopyUrlState } from './reducers/CopyUrlReducer';
+import { deleteFolderReducer, initialDeleteFolderState, DeleteFolderState } from './reducers/DeleteFolderReducer';
 import { dragDropReducer, initialDragDropState, DragDropState } from './reducers/DragDropReducer';
 import { editBookmarkReducer, initialEditBookmarkState, EditBookmarkState } from './reducers/EditBookmarkReducer';
 import { editFolderReducer, initialEditFolderState, EditFolderState } from './reducers/EditFolderReducer';
@@ -21,6 +22,7 @@ declare global {
 export interface AppState {
   addBookmarksState: AddBookmarksState;
   copyUrlState: CopyUrlState;
+  deleteFolderState: DeleteFolderState;
   dragDropState: DragDropState;
   editBookmarkState: EditBookmarkState;
   editFolderState: EditFolderState;
@@ -32,6 +34,7 @@ export interface AppState {
 const initialAppState: AppState = {
   addBookmarksState: initialAddBookmarksState,
   copyUrlState: initialCopyUrlState,
+  deleteFolderState: initialDeleteFolderState,
   dragDropState: initialDragDropState,
   editBookmarkState: initialEditBookmarkState,
   editFolderState: initialEditFolderState,
@@ -44,6 +47,7 @@ const reducer = (state: AppState = initialAppState, action: Action): AppState =>
   const newState: AppState = {
     addBookmarksState: addBookmarksReducer(state.addBookmarksState, action, state),
     copyUrlState: copyUrlReducer(state.copyUrlState, action, state),
+    deleteFolderState: deleteFolderReducer(state.deleteFolderState, action, state),
     dragDropState: dragDropReducer(state.dragDropState, action, state),
     editBookmarkState: editBookmarkReducer(state.editBookmarkState, action, state),
     editFolderState: editFolderReducer(state.editFolderState, action, state),

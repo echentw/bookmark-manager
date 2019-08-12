@@ -10,13 +10,20 @@ export const FolderActionType = {
 
 export const EditFolderActionType = {
   addFolder: 'EditFolder:addFolder',
-  deleteFolder: 'EditFolder:deleteFolder',
   beginEdit: 'EditFolder:beginEdit',
   cancel: 'EditFolder:cancel',
   save: 'EditFolder:save',
   showColorPicker: 'EditFolder:showColorPicker',
   hideColorPicker: 'EditFolder:hideColorPicker',
   selectColor: 'EditFolder:selectColor',
+  showConfirmDeleteModal: 'EditFolder:showConfirmDeleteModal',
+  hideConfirmDeleteModal: 'EditFolder:hideConfirmDeleteModal',
+};
+
+export const DeleteFolderActionType = {
+  beginDelete: 'EditFolder:beginDelete',
+  confirmDelete: 'EditFolder:confirmDelete',
+  cancelDelete: 'EditFolder:cancelDelete',
 };
 
 export const SyncAppActionType = {

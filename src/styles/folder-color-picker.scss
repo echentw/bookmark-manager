@@ -2,14 +2,7 @@
 @import './mixins/list';
 @import './animations';
 
-.folder-color-picker-layer {
-  @include layer;
-  pointer-events: auto;
-
-  background-color: rgba(0, 0, 0, 0.3);
-  -webkit-animation: darken-backdrop 0.3s;
-          animation: darken-backdrop 0.3s;
-
+.modal-backdrop {
   .folder-color-picker-modal {
     background-color: $list-item-color;
 

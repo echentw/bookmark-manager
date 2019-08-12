@@ -6,6 +6,7 @@ import { AppState } from '../reduxStore';
 import { withItemReplaced, withItemDeleted } from '../utils';
 import {
   Action,
+  DeleteFolderActionType,
   EditFolderActionType,
   FolderActionType,
   SyncAppActionType,
@@ -14,7 +15,8 @@ import {
   DragDropActionType,
 } from '../actions/constants';
 import { SyncFoldersParams } from '../actions/SyncAppActions';
-import { EditFolderParams, SelectFolderColorParams  } from '../actions/EditFolderActions';
+import { DeleteFolderParams } from '../actions/DeleteFolderActions';
+import { EditFolderParams, SelectFolderColorParams } from '../actions/EditFolderActions';
 import { AddBookmarksSaveParams } from '../actions/AddBookmarksActions';
 import { EditBookmarkParams } from '../actions/EditBookmarkActions';
 import { DragParams } from '../actions/DragDropActions';
@@ -36,11 +38,11 @@ export const foldersReducer: Reducer<FoldersState> = (
 ): FoldersState => {
   let newState = state;
   switch (action.type) {
+    case DeleteFolderActionType.confirmDelete:
+      newState = handleDeleteFolder(state, action as Action<DeleteFolderParams>);
+      break;
     case EditFolderActionType.addFolder:
       newState = handleAddFolder(state, action as Action<EditFolderParams>);
-      break;
-    case EditFolderActionType.deleteFolder:
-      newState = handleDeleteFolder(state, action as Action<EditFolderParams>);
       break;
     case EditFolderActionType.save:
       newState = handleEditFolderSave(state, action as Action<EditFolderParams>);
@@ -75,7 +77,7 @@ function handleAddFolder(state: FoldersState, action: Action<EditFolderParams>):
   };
 }
 
-function handleDeleteFolder(state: FoldersState, action: Action<EditFolderParams>): FoldersState {
+function handleDeleteFolder(state: FoldersState, action: Action<DeleteFolderParams>): FoldersState {
   const newFolders = withItemDeleted(state.folders, action.params.folder);
   return {
     ...state,

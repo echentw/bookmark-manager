@@ -145,6 +145,7 @@ class AppComponent extends React.Component<Props, State> {
         dragPreview = (
           <FolderComponent
             folder={draggedFolder}
+            deleting={false}
             editing={false}
             dragging={false}
             hovering={false}

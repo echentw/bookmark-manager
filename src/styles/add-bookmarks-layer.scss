@@ -5,16 +5,9 @@
 $highlight-border-color: rgb(0, 148, 255);
 
 .add-bookmarks-layer {
-  @include layer;
-  pointer-events: auto;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
-  background-color: rgba(0, 0, 0, 0.3);
-  -webkit-animation: darken-backdrop 0.3s;
-          animation: darken-backdrop 0.3s;
 
   .add-bookmarks-modal {
     @include list;

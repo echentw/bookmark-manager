@@ -32,9 +32,6 @@ export const editFolderReducer: Reducer<EditFolderState> = (
     case ActionType.addFolder:
       newState = handleAddFolder(state, action as Action<EditFolderParams>);
       break;
-    case ActionType.deleteFolder:
-      newState = handleDeleteFolder(state, action as Action<EditFolderParams>);
-      break;
     case ActionType.showColorPicker:
       newState = handleShowColorPicker(state, action as Action<EditFolderParams>);
       break;
@@ -72,13 +69,6 @@ function handleSave(state: EditFolderState, action: Action<EditFolderParams>): E
 function handleAddFolder(state: EditFolderState, action: Action<EditFolderParams>): EditFolderState {
   return {
     editingFolderId: action.params.folder.id,
-    showingColorPicker: false,
-  };
-}
-
-function handleDeleteFolder(state: EditFolderState, action: Action<EditFolderParams>): EditFolderState {
-  return {
-    editingFolderId: null,
     showingColorPicker: false,
   };
 }

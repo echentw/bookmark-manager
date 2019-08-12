@@ -1,11 +1,13 @@
 import {
   Action,
+  DeleteFolderActionType,
   DragDropActionType,
   EditBookmarkActionType,
   EditFolderActionType,
   HoverActionType,
 } from '../actions/constants';
 import { DragParams } from '../actions/DragDropActions';
+import { DeleteFolderParams } from '../actions/DeleteFolderActions';
 import { EditBookmarkParams } from '../actions/EditBookmarkActions';
 import { EditFolderParams } from '../actions/EditFolderActions';
 import { HoverParams } from '../actions/HoverActions';
@@ -31,8 +33,8 @@ export const hoverReducer: Reducer<HoverState> = (
     return state;
   }
 
-  if (appState.editFolderState.showingColorPicker) {
-    // If the color picker is showing, then we don't want to trigger any hover behavior.
+  if (appState.editFolderState.showingColorPicker || appState.deleteFolderState.deletingFolderId !== null) {
+    // If a modal is showing, then we don't want to trigger any hover behavior.
     return state;
   }
 
@@ -50,11 +52,14 @@ export const hoverReducer: Reducer<HoverState> = (
     case EditBookmarkActionType.deleteBookmark:
       newState = handleDeleteBookmark(state, action as Action<EditBookmarkParams>);
       break;
-    case EditFolderActionType.deleteFolder:
-      newState = handleDeleteFolder(state, action as Action<EditFolderParams>);
-      break;
     case EditFolderActionType.showColorPicker:
       newState = handleShowColorPicker(state, action as Action<EditFolderParams>);
+      break;
+    case DeleteFolderActionType.beginDelete:
+      newState = handleBeginDeleteFolder(state, action as Action<DeleteFolderParams>);
+      break;
+    case DeleteFolderActionType.confirmDelete:
+      newState = handleConfirmDeleteFolder(state, action as Action<DeleteFolderParams>);
       break;
   }
 
@@ -92,7 +97,7 @@ function handleDeleteBookmark(state: HoverState, action: Action<EditBookmarkPara
   };
 }
 
-function handleDeleteFolder(state: HoverState, action: Action<EditFolderParams>): HoverState {
+function handleConfirmDeleteFolder(state: HoverState, action: Action<DeleteFolderParams>): HoverState {
   // See comment in handleDeleteBookmark above.
   return {
     hoverRank: null,
@@ -100,6 +105,13 @@ function handleDeleteFolder(state: HoverState, action: Action<EditFolderParams>)
 }
 
 function handleShowColorPicker(state: HoverState, action: Action<EditFolderParams>): HoverState {
+  // See comment in handleDeleteBookmark above.
+  return {
+    hoverRank: null,
+  };
+}
+
+function handleBeginDeleteFolder(state: HoverState, action: Action<DeleteFolderParams>): HoverState {
   // See comment in handleDeleteBookmark above.
   return {
     hoverRank: null,

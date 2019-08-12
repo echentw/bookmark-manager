@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import { AppState } from '../reduxStore';
 import { Bookmark } from '../Bookmark';
 import { TabInfo } from '../ChromeHelpers';
 import * as AddBookmarksActions from '../actions/AddBookmarksActions';
 import { AddBookmarksSaveParams } from '../actions/AddBookmarksActions';
-import { AppState } from '../reduxStore';
+import { ModalBackdropComponent } from './ModalBackdropComponent';
 
 interface Props {
   tabs: TabInfo[];
@@ -24,39 +25,13 @@ class AddBookmarksModalComponent extends React.Component<Props, State> {
 
   private modalRef: React.RefObject<HTMLDivElement> = React.createRef();
 
-  componentDidMount = () => {
-    document.addEventListener('keydown', this.onKeyDown, false);
-  }
-
-  componentWillUnmount = () => {
-    document.removeEventListener('keydown', this.onKeyDown, false);
-  }
-
-  onClick = (event: React.MouseEvent) => {
-    if (this.modalRef.current.contains(event.target as Node)) {
-      // Clicked inside the modal. Do nothing.
-      return;
-    }
-    this.onClickCancel();
-  }
-
-  onKeyDown = (event: KeyboardEvent) => {
-    if (event.keyCode === 13) {
-      // Pressed enter
-      this.onClickSave();
-    } else if (event.keyCode === 27) {
-      // Pressed escape
-      this.onClickCancel();
-    }
-  }
-
-  onClickCancel = () => {
+  cancel = () => {
     this.setState({ selectedTabs: new Map<number, TabInfo>() }, () => {
       this.props.cancel();
     });
   }
 
-  onClickSave = () => {
+  save = () => {
     const { selectedTabs } = this.state;
     const bookmarks = Array.from(selectedTabs.values()).map((tab: TabInfo) => {
       return new Bookmark({
@@ -96,25 +71,34 @@ class AddBookmarksModalComponent extends React.Component<Props, State> {
       );
     });
 
-    return (
-      <div className="add-bookmarks-layer" onClick={this.onClick}>
-        <div className="add-bookmarks-modal" ref={this.modalRef}>
-          <div className="add-bookmarks-title-container">
-            <div className="add-bookmarks-title">Open Tabs</div>
+    const modalComponent = (
+      <div className="add-bookmarks-modal" ref={this.modalRef}>
+        <div className="add-bookmarks-title-container">
+          <div className="add-bookmarks-title">Open Tabs</div>
+        </div>
+        <div className="add-bookmarks-modal-scrollable-area">
+          { tabInfoComponents }
+        </div>
+        <div className="add-bookmarks-buttons">
+          <div className="add-bookmarks-cancel-button" onClick={this.cancel}>
+            Cancel
           </div>
-          <div className="add-bookmarks-modal-scrollable-area">
-            { tabInfoComponents }
-          </div>
-          <div className="add-bookmarks-buttons">
-            <div className="add-bookmarks-cancel-button" onClick={this.onClickCancel}>
-              Cancel
-            </div>
-            <div className="add-bookmarks-save-button" onClick={this.onClickSave}>
-              Save
-            </div>
+          <div className="add-bookmarks-save-button" onClick={this.save}>
+            Save
           </div>
         </div>
       </div>
+    );
+
+    return (
+      <ModalBackdropComponent
+        additionalClasses={'add-bookmarks-layer'}
+        save={this.save}
+        cancel={this.cancel}
+        modalRef={this.modalRef}
+      >
+        { modalComponent }
+      </ModalBackdropComponent>
     );
   }
 }
