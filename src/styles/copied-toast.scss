@@ -6,8 +6,8 @@
   @include layer;
 
   .copied-toast {
-    @include rect-border;
     @include rect-border-radius;
+    @include rect-box-shadow;
 
     width: 80px;
     height: 24px;

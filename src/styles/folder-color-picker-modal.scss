@@ -3,7 +3,6 @@
 
 .modal-backdrop {
   .folder-color-picker-modal {
-    @include rect-border;
     @include rect-border-radius;
     @include rect-box-shadow;
 

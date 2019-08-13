@@ -18,11 +18,15 @@
 @mixin rect-border {
   border-style: solid;
   border-width: 1px;
-  border-color: grey;
+  border-color: rgb(150,150,150);
 }
 
 @mixin rect-box-shadow {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.19), 0 0 10px rgba(0, 0, 0, 0.23);
+}
+
+@mixin rect-subtle-box-shadow {
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.19), 0 0 3px rgba(0, 0, 0, 0.23);
 }
 
 @mixin rect-border-radius {
