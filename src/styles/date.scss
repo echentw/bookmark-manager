@@ -1,3 +1,4 @@
+@import './globals';
 @import './mixins/misc';
 
 .date {
@@ -5,14 +6,13 @@
   height: 100%;
 
   color: white;
-  font-family: arial;
+  font-family: $font-family;
   font-size: 24px;
+  text-align: center;
 
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-
-  text-align: center;
 
   .date-text {
     @include unselectable;

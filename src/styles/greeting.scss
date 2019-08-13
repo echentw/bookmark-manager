@@ -1,3 +1,4 @@
+@import './globals';
 @import './mixins/misc';
 
 .greeting {
@@ -5,7 +6,7 @@
   height: 100%;
 
   color: white;
-  font-family: arial;
+  font-family: $font-family;
 
   display: flex;
   flex-direction: column;

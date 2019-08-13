@@ -1,3 +1,4 @@
+@import './globals';
 @import './mixins/misc';
 @import './animations';
 @import './mixins/list';
@@ -22,7 +23,7 @@
     align-items: center;
 
     .confirm-delete-title {
-      font-family: Arial;
+      font-family: $font-family;
       font-size: 14px;
       text-align: center;
     }
