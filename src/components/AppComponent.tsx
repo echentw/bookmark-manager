@@ -21,8 +21,6 @@ import { CopiedToastComponent } from './CopiedToastComponent';
 import { AddBookmarksModalComponent } from './AddBookmarksModalComponent';
 import { DateComponent } from './DateComponent';
 
-const backgroundImage = require('../blue_stars.jpg');
-
 export const DraggableType = {
   Bookmark: 'bookmark',
   Folder: 'folder',
