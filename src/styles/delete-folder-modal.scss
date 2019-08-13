@@ -5,26 +5,23 @@
 
 .modal-backdrop {
   .confirm-delete-folder-modal {
-    width: 200px;
-    height: 100px;
-    background-color: $modal-color;
-
-    border-radius: 4px;
-
-    @include box-shadow;
+    @include rect-border-radius;
+    @include rect-box-shadow;
 
     position: absolute;
     top: 0;
     left: 0;
+    width: 200px;
+    height: 100px;
+    padding: 10px;
+    background-color: white;
 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
 
     .confirm-delete-title {
-      border-radius: 4px;
       font-family: Arial;
       font-size: 14px;
       text-align: center;

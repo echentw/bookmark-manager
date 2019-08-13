@@ -3,8 +3,6 @@
 @import './animations';
 @import './colors';
 
-$highlight-border-color: rgb(0, 148, 255);
-
 .add-bookmarks-layer {
   display: flex;
   justify-content: center;
@@ -12,17 +10,17 @@ $highlight-border-color: rgb(0, 148, 255);
 
   .add-bookmarks-modal {
     @include list;
+    @include rect-box-shadow;
+    background-color: white;
 
     width: 500px;
     max-height: calc(100% - 100px);
-    background-color: rgba(255, 255, 255, 0.5);
 
     .add-bookmarks-title-container {
       @include list-title-container;
 
       .add-bookmarks-title {
         @include list-title;
-        color: rgb(50, 50, 50);
       }
     }
 
@@ -38,14 +36,18 @@ $highlight-border-color: rgb(0, 148, 255);
 
         .open-tab {
           @include list-item;
+
           &:hover {
             cursor: pointer;
+            background-color: rgb(222, 222, 222);
+          }
+
+          &:active {
+            background-color: rgb(200, 200, 200);
           }
 
           &.selected {
-            border-style: solid;
-            border-width: 2px;
-            border-color: $highlight-border-color;
+            background-color: rgb(200, 200, 200);
           }
 
           .open-tab-favicon {

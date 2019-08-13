@@ -1,26 +1,23 @@
 @import './mixins/misc';
-@import './mixins/list';
 @import './animations';
 
 .modal-backdrop {
   .folder-color-picker-modal {
-    background-color: $list-item-color;
-
-    width: 100px;
-    height: 100px;
+    @include rect-border;
+    @include rect-border-radius;
+    @include rect-box-shadow;
 
     position: absolute;
     top: 0;
     left: 0;
-
+    width: 100px;
+    height: 100px;
+    background-color: white;
     padding: 4px;
-    border-radius: 4px;
 
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
-
-    @include box-shadow;
 
     .color-option-container {
       display: flex;
