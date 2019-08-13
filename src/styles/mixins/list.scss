@@ -1,6 +1,7 @@
 @import './misc';
 
-$list-item-color: rgb(222,225,229);
+// $list-item-color: rgb(222,225,229);
+$list-item-color: white;
 
 @mixin list {
   border-radius: 4px;

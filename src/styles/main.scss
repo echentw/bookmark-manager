@@ -64,7 +64,8 @@ body {
 
 .app::before {
   z-index: -1;
-  background: url('../blue_stars.jpg') no-repeat center center fixed;
+  // background: url('../blue_stars.jpg') no-repeat center center fixed;
+  background: url('../../sandbox/wallpapers/spiderman3.jpg') no-repeat center center fixed;
   -webkit-background-size: cover;
      -moz-background-size: cover;
        -o-background-size: cover;

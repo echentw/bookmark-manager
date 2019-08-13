@@ -1,22 +1,49 @@
 @import './mixins/misc';
 @import './animations';
+@import './mixins/list';
 
 .modal-backdrop {
   .confirm-delete-folder-modal {
     width: 200px;
     height: 100px;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: $list-item-color;
+    border-radius: 4px;
+
+    @include box-shadow;
 
     position: absolute;
     top: 0;
     left: 0;
 
-    border-radius: 4px;
-    font-family: Arial;
-    font-size: 12px;
-
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
+    padding: 10px;
+
+    .confirm-delete-title {
+      border-radius: 4px;
+      font-family: Arial;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .delete-modal-buttons {
+      width: 100%;
+
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      .confirm-delete-button {
+        @include list-button;
+        width: 84px;
+      }
+
+      .cancel-delete-button {
+        @include list-button;
+        width: 84px;
+      }
+    }
   }
 }

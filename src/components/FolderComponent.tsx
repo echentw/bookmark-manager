@@ -158,6 +158,7 @@ class FolderComponent extends React.Component<InternalProps> {
     const maybeConfirmDeleteModalComponent = deleting ? (
       <ConfirmDeleteFolderModalComponent
         triggerRef={this.deleteIconRef}
+        folder={this.props.folder}
         confirmDelete={this.confirmDelete}
         cancelDelete={this.cancelDelete}
       />
