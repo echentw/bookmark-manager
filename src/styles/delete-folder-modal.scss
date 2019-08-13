@@ -1,12 +1,14 @@
 @import './mixins/misc';
 @import './animations';
 @import './mixins/list';
+@import './colors';
 
 .modal-backdrop {
   .confirm-delete-folder-modal {
     width: 200px;
     height: 100px;
-    background-color: $list-item-color;
+    background-color: $modal-color;
+
     border-radius: 4px;
 
     @include box-shadow;

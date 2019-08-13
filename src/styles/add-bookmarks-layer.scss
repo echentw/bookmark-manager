@@ -1,6 +1,7 @@
 @import './mixins/misc';
 @import './mixins/list';
 @import './animations';
+@import './colors';
 
 $highlight-border-color: rgb(0, 148, 255);
 
@@ -14,7 +15,7 @@ $highlight-border-color: rgb(0, 148, 255);
 
     width: 500px;
     max-height: calc(100% - 100px);
-    background-color: rgba(150, 150, 150, 0.9);
+    background-color: rgba(255, 255, 255, 0.5);
 
     .add-bookmarks-title-container {
       @include list-title-container;
