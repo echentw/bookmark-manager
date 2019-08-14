@@ -189,6 +189,7 @@ class AppComponent extends React.Component<Props, State> {
         { maybeDragLayer }
         { maybeAddBookmarksModal }
         <CopiedToastComponent/>
+        <div className="app-background"/>
       </div>
     );
   }
