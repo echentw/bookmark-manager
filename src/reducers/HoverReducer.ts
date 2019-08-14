@@ -4,12 +4,14 @@ import {
   DragDropActionType,
   EditBookmarkActionType,
   EditFolderActionType,
+  FolderActionType,
   HoverActionType,
 } from '../actions/constants';
 import { DragParams } from '../actions/DragDropActions';
 import { DeleteFolderParams } from '../actions/DeleteFolderActions';
 import { EditBookmarkParams } from '../actions/EditBookmarkActions';
 import { EditFolderParams } from '../actions/EditFolderActions';
+import { OpenFolderParams } from '../actions/FolderActions';
 import { HoverParams } from '../actions/HoverActions';
 import { Reducer } from './Reducer';
 import { AppState } from '../reduxStore';
@@ -61,8 +63,10 @@ export const hoverReducer: Reducer<HoverState> = (
     case DeleteFolderActionType.confirmDelete:
       newState = handleConfirmDeleteFolder(state, action as Action<DeleteFolderParams>);
       break;
+    case FolderActionType.openFolder:
+      newState = handleOpenFolder(state, action as Action<OpenFolderParams>);
+      break;
   }
-
   return newState;
 }
 
@@ -113,6 +117,13 @@ function handleShowColorPicker(state: HoverState, action: Action<EditFolderParam
 
 function handleBeginDeleteFolder(state: HoverState, action: Action<DeleteFolderParams>): HoverState {
   // See comment in handleDeleteBookmark above.
+  return {
+    hoverRank: null,
+  };
+}
+
+function handleOpenFolder(state: HoverState, action: Action<OpenFolderParams>): HoverState {
+  // Right after we open a folder, we're not hovering over anything.
   return {
     hoverRank: null,
   };
