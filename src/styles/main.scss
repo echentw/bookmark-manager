@@ -18,7 +18,7 @@
 
 @import './app-layout';
 
-$fade-in-time: 0.3s;
+$image-fade-in-time: 0.3s;
 
 * {
   box-sizing: border-box;
@@ -36,8 +36,8 @@ body {
   opacity: 0;
 
   &.loaded {
-    -webkit-animation: fade-in $fade-in-time;
-            animation: fade-in $fade-in-time;
+    -webkit-animation: fade-in calc(#{$image-fade-in-time} + 0.2s);
+            animation: fade-in calc(#{$image-fade-in-time} + 0.2s);
 
     opacity: 1;
   }
@@ -76,8 +76,8 @@ body {
   width: 100%;
   height: 100%;
 
-  -webkit-animation: fade-in $fade-in-time;
-          animation: fade-in $fade-in-time;
+  -webkit-animation: fade-in $image-fade-in-time;
+          animation: fade-in $image-fade-in-time;
 }
 
 // This prevents the background from fading in until it's fully loaded.
