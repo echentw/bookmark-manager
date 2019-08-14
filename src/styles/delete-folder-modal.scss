@@ -45,14 +45,29 @@
       flex-direction: row;
       justify-content: space-between;
 
-      .confirm-delete-button {
+      .cancel-delete-button {
         @include list-button;
         width: 84px;
       }
 
-      .cancel-delete-button {
+      .confirm-delete-button {
         @include list-button;
         width: 84px;
+
+        $lightred: rgb(255, 200, 200);
+        $red: rgb(211, 73, 78); // valencia
+        border-color: $red;
+        color: $red;
+
+        &:hover {
+          background-color: $lightred;
+        }
+
+        &:active {
+          background-color: $red;
+          border-color: $red;
+          color: white;
+        }
       }
     }
   }

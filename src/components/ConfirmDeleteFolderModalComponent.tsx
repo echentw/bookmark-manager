@@ -30,11 +30,11 @@ export class ConfirmDeleteFolderModalComponent extends React.Component<Props> {
             Are you sure you want to delete {this.props.folder.name}?
           </div>
           <div className="delete-modal-buttons">
-            <div className="confirm-delete-button" onClick={this.props.confirmDelete}>
-              Delete
-            </div>
             <div className="cancel-delete-button" onClick={this.props.cancelDelete}>
               Cancel
+            </div>
+            <div className="confirm-delete-button" onClick={this.props.confirmDelete}>
+              Delete
             </div>
           </div>
         </div>
