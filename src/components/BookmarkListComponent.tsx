@@ -24,10 +24,26 @@ interface InternalProps extends ExternalProps {
   hoverRank: number | null;
 }
 
-class BookmarkListComponent extends React.Component<InternalProps> {
+interface State {
+  hoveringFolderTitle: boolean;
+}
+
+class BookmarkListComponent extends React.Component<InternalProps, State> {
+
+  state: State = {
+    hoveringFolderTitle: false,
+  };
 
   onClickFolderName = () => {
     this.props.closeFolder({});
+  }
+
+  onMouseEnterFolderTitle = () => {
+    this.setState({ hoveringFolderTitle: true });
+  }
+
+  onMouseLeaveFolderTitle = () => {
+    this.setState({ hoveringFolderTitle: false });
   }
 
   render() {
@@ -57,14 +73,26 @@ class BookmarkListComponent extends React.Component<InternalProps> {
       );
     });
 
+    const maybeHoveringCssClass = this.state.hoveringFolderTitle ? ' hovering' : '';
+
     return (
       <div className="bookmark-list">
-        <div className="bookmark-list-title-container">
-          <IconContext.Provider value={{ size: '1.6em' }}>
-            <FaChevronLeft onClick={this.onClickFolderName}/>
-          </IconContext.Provider>
-          <div className="bookmark-list-title" onClick={this.onClickFolderName}>
-            { folder.name }
+        <div className="bookmark-list-title-outer-container">
+          <div className="bookmark-list-title-inner-container">
+            <div className="hover-container"
+              onClick={this.onClickFolderName}
+              onMouseEnter={this.onMouseEnterFolderTitle}
+              onMouseLeave={this.onMouseLeaveFolderTitle}
+            >
+              <div className={'back-icon' + maybeHoveringCssClass}>
+                <IconContext.Provider value={{ size: '1.0em' }}>
+                  <FaChevronLeft/>
+                </IconContext.Provider>
+              </div>
+              <div className={'bookmark-list-title' + maybeHoveringCssClass}>
+                { folder.name }
+              </div>
+            </div>
           </div>
         </div>
         <Scrollbars>

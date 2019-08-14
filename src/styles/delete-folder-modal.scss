@@ -13,7 +13,7 @@
     top: 0;
     left: 0;
     width: 200px;
-    height: 100px;
+    max-height: 110px;
     padding: 10px;
     background-color: white;
 
@@ -23,13 +23,23 @@
     align-items: center;
 
     .confirm-delete-title {
+      width: 100%;
+      max-height: 50px;
+
       font-family: $font-family;
       font-size: 14px;
       text-align: center;
+
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
     }
 
     .delete-modal-buttons {
       width: 100%;
+
+      margin-top: 6px;
 
       display: flex;
       flex-direction: row;

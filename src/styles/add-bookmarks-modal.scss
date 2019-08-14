@@ -75,11 +75,13 @@
 
       .add-bookmarks-cancel-button {
         @include list-button;
+        @include unselectable;
         width: 224px;
       }
 
       .add-bookmarks-save-button {
         @include list-button;
+        @include unselectable;
         width: 224px;
       }
     }

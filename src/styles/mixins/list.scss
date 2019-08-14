@@ -18,21 +18,31 @@
 
 @mixin list-title-container {
   width: 100%;
+  min-height: 24px;
 
   padding-left: 24px;
   padding-right: 16px;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 @mixin list-title {
   @include unselectable;
   font-family: $font-family;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
-  height: 100%;
+
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.2),
+               0 0 2px rgba(255, 255, 255, 0.3);
 }
 
 @mixin list-scrollable-area {
+  flex: 1;
+
   width: 100%;
   padding-left: 16px;
   padding-right: 16px;
@@ -67,6 +77,7 @@
 }
 
 @mixin list-item-image {
+  @include unselectable;
   margin-left: 10px;
   width: 16px;
   height: 16px;
@@ -78,6 +89,7 @@
 }
 
 @mixin list-item-text {
+  @include unselectable;
   flex: 1;
   height: 24px;
   border: none;
