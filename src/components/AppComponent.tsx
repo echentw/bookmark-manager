@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Store } from 'redux';
+import { CSSTransitionGroup } from 'react-transition-group';
 
 import { Bookmark } from '../Bookmark';
 import { Folder } from '../Folder';
@@ -20,6 +21,7 @@ import { DragLayerComponent } from './DragLayerComponent';
 import { CopiedToastComponent } from './CopiedToastComponent';
 import { AddBookmarksModalComponent } from './AddBookmarksModalComponent';
 import { DateComponent } from './DateComponent';
+import { NuxComponent } from './NuxComponent';
 
 export const DraggableType = {
   Bookmark: 'bookmark',
@@ -39,11 +41,13 @@ interface Props {
 
 interface State {
   date: Date;
+  showNux: boolean;
 }
 
 class AppComponent extends React.Component<Props, State> {
   state: State = {
     date: new Date(),
+    showNux: true,
   };
 
   private oldFolders: Folder[] | null = null;
@@ -52,6 +56,10 @@ class AppComponent extends React.Component<Props, State> {
   componentDidMount = () => {
     this.beginSyncingDate();
     this.beginSyncingStore(reduxStore);
+
+    setTimeout(() => {
+      this.setState({ showNux: false });
+    }, 2000);
   }
 
   private beginSyncingDate = () => {
@@ -125,8 +133,6 @@ class AppComponent extends React.Component<Props, State> {
   }
 
   render() {
-    const classes = this.props.loaded ? 'app loaded' : 'app';
-
     const currentFolder = this.props.folders.find(folder => folder.id === this.props.currentFolderId) || null;
 
     const ListComponent = currentFolder === null ? (
@@ -175,8 +181,8 @@ class AppComponent extends React.Component<Props, State> {
       <AddBookmarksModalComponent/>
     ) : null;
 
-    return (
-      <div className={classes}>
+    const maybeAppComponent = this.state.showNux ? null : (
+      <div className="app" key="app">
         <div className="app-list-container">
           { ListComponent }
         </div>
@@ -189,8 +195,24 @@ class AppComponent extends React.Component<Props, State> {
         { maybeDragLayer }
         { maybeAddBookmarksModal }
         <CopiedToastComponent/>
-        <div className="app-background"/>
       </div>
+    );
+
+    const maybeNuxComponent = this.state.showNux ? <NuxComponent key="nux"/> : null;
+
+    const classes = this.props.loaded ? 'app-container loaded' : 'app-container';
+
+    return (
+      <CSSTransitionGroup
+        className={classes}
+        transitionName="app-transition"
+        transitionEnterTimeout={1000}
+        transitionLeaveTimeout={300}
+      >
+        { maybeAppComponent }
+        { maybeNuxComponent }
+        <div className="app-background"/>
+      </CSSTransitionGroup>
     );
   }
 }

@@ -2,6 +2,8 @@
 @import './colors';
 @import './modal-backdrop';
 
+@import './nux';
+
 @import './add-bookmarks-modal';
 @import './delete-folder-modal';
 @import './folder-color-picker-modal';
@@ -18,11 +20,11 @@
 
 @import './app-layout';
 
-$fade-in-time: 0.4s;
+$fade-in-time: 400ms;
 
 // This prevents the app from fading in until it's fully loaded.
 .assets-loading {
-  .app {
+  .app-container {
     animation-play-state: paused !important;
   }
 }
@@ -35,7 +37,7 @@ body {
   margin: 0;
 }
 
-.app {
+.app-container {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -48,6 +50,12 @@ body {
 
     opacity: 1;
   }
+}
+
+.app {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
 @media (max-width: 800px) {
@@ -82,4 +90,22 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+.app-transition-enter {
+  opacity: 0;
+  &.app-transition-enter-active {
+    -webkit-animation: delayed-fade-in 1s;
+            animation: delayed-fade-in 1s;
+    opacity: 1;
+  }
+}
+
+.app-transition-leave {
+  opacity: 1;
+  &.app-transition-leave-active {
+    -webkit-animation: fade-out 300ms;
+            animation: fade-out 300ms;
+    opacity: 0;
+  }
 }
