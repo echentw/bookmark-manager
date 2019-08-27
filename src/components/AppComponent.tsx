@@ -145,6 +145,14 @@ class AppComponent extends React.Component<Props, State> {
   }
 
   render() {
+    if (!this.props.loaded) {
+      return (
+        <div className="app-container">
+          <div className="app-background"/>
+        </div>
+      );
+    }
+
     const currentFolder = this.props.folders.find(folder => folder.id === this.props.currentFolderId) || null;
 
     const ListComponent = currentFolder === null ? (
@@ -193,7 +201,26 @@ class AppComponent extends React.Component<Props, State> {
       <AddBookmarksModalComponent/>
     ) : null;
 
-    const showNux = this.props.loaded && this.props.user === null;
+    const showNux = this.props.user === null;
+
+    const innerComponent = showNux ? (
+      <NuxComponent key="nux"/>
+    ) : (
+      <div className="app" key="app">
+        <div className="app-list-container">
+          { ListComponent }
+        </div>
+        <div className="app-greeting-container">
+          <GreetingComponent user={this.props.user} date={this.state.date}/>
+        </div>
+        <div className="app-date-container">
+          <DateComponent date={this.state.date}/>
+        </div>
+        { maybeDragLayer }
+        { maybeAddBookmarksModal }
+        <CopiedToastComponent/>
+      </div>
+    );
 
     const maybeAppComponent = showNux ? null : (
       <div className="app" key="app">
@@ -214,17 +241,14 @@ class AppComponent extends React.Component<Props, State> {
 
     const maybeNuxComponent = showNux ? <NuxComponent key="nux"/> : null;
 
-    const classes = this.props.loaded ? 'app-container loaded' : 'app-container';
-
     return (
       <CSSTransitionGroup
-        className={classes}
+        className="app-container loaded"
         transitionName="app-transition"
         transitionEnterTimeout={1000}
         transitionLeaveTimeout={300}
       >
-        { maybeAppComponent }
-        { maybeNuxComponent }
+        { innerComponent }
         <div className="app-background"/>
       </CSSTransitionGroup>
     );

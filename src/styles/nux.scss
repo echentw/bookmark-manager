@@ -13,6 +13,9 @@ $width: 600px;
   .name-input-label {
     color: white;
     font-size: 48px;
+
+    text-shadow: 0 0 12px rgba(0, 0, 0, 0.2),
+                 0 0 6px rgba(0, 0, 0, 0.3);
   }
 
   .name-input {
@@ -28,6 +31,9 @@ $width: 600px;
 
     text-align: center;
     color: white;
+
+    text-shadow: 0 0 12px rgba(0, 0, 0, 0.2),
+                 0 0 6px rgba(0, 0, 0, 0.3);
 
     &:focus {
       outline: none;
