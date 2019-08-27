@@ -1,6 +1,10 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 
+// Without this, errors found by the checker running in a different process won't be printed.
+// This is needed to display async errors.
+const { CheckerPlugin } = require('awesome-typescript-loader');
+
 module.exports = {
   entry: path.join(__dirname, '/src/main.tsx'),
   output: {
@@ -48,6 +52,7 @@ module.exports = {
     ],
   },
   plugins: [
+    new CheckerPlugin(),
     new CopyPlugin([
       { from: 'index.html', to: 'index.html', toType: 'file', force: true },
       { from: 'manifest.json', to: 'manifest.json', toType: 'file', force: true },
