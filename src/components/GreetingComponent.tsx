@@ -1,8 +1,9 @@
 import * as React from 'react';
 
+import { User } from '../User';
 
 interface Props {
-  name: string,
+  user: User | null;
   date: Date;
 }
 
@@ -32,10 +33,17 @@ export class GreetingComponent extends React.Component<Props> {
   render() {
     const time = this.dateToTime(this.props.date);
     const period = this.dateToPeriod(this.props.date);
+
+    const greeting = this.props.user === null ? (
+      `Good ${period}.`
+    ) : (
+      `Good ${period}, ${this.props.user.name}.`
+    );
+
     return (
       <div className="greeting">
         <div className="time-text">{time}</div>
-        <div className="name-text">Good {period}, {this.props.name}.</div>
+        <div className="name-text">{greeting}</div>
       </div>
     );
   }

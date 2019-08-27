@@ -5,6 +5,7 @@ import { CSSTransitionGroup } from 'react-transition-group';
 
 import { Bookmark } from '../Bookmark';
 import { Folder } from '../Folder';
+import { User } from '../User';
 import { ChromeHelpers } from '../ChromeHelpers';
 import * as SyncAppActions from '../actions/SyncAppActions';
 import { SyncFoldersParams } from '../actions/SyncAppActions';
@@ -29,6 +30,7 @@ export const DraggableType = {
 };
 
 interface Props {
+  user: User | null;
   loaded: boolean;
   currentFolderId: string | null;
   draggedRank: number | null;
@@ -41,25 +43,20 @@ interface Props {
 
 interface State {
   date: Date;
-  showNux: boolean;
 }
 
 class AppComponent extends React.Component<Props, State> {
   state: State = {
     date: new Date(),
-    showNux: true,
   };
 
+  private oldUser: User | null = null;
   private oldFolders: Folder[] | null = null;
   private oldCurrentFolderId: string | null = null;
 
   componentDidMount = () => {
     this.beginSyncingDate();
     this.beginSyncingStore(reduxStore);
-
-    setTimeout(() => {
-      this.setState({ showNux: false });
-    }, 2000);
   }
 
   private beginSyncingDate = () => {
@@ -70,14 +67,23 @@ class AppComponent extends React.Component<Props, State> {
 
   private stateHasChanged = ({ oldState, newState }: {
     oldState: {
+      user: User | null;
       folders: Folder[];
       currentFolderId: string | null;
     };
     newState: {
+      user: User | null;
       folders: Folder[];
       currentFolderId: string | null;
     };
   }): boolean => {
+    if (oldState.user === null) {
+      if (newState.user !== null) {
+        return true;
+      }
+    } else if (!oldState.user.equals(newState.user)) {
+      return true;
+    }
     if (oldState.currentFolderId !== newState.currentFolderId) {
       return true;
     }
@@ -96,8 +102,11 @@ class AppComponent extends React.Component<Props, State> {
       const dragging = state.dragDropState.draggedRank !== null;
       const { folders } = state.foldersState;
       const { currentFolderId } = state.navigationState;
+      const { user } = state.userState;
 
       if (this.oldFolders === null) {
+        // Initialize all these attributes
+        this.oldUser = user;
         this.oldFolders = folders.map(folder => folder.copy());
         this.oldCurrentFolderId = currentFolderId;
         return;
@@ -106,15 +115,18 @@ class AppComponent extends React.Component<Props, State> {
       if (!dragging) {
         const stateChanged = this.stateHasChanged({
           oldState: {
+            user: this.oldUser,
             currentFolderId: this.oldCurrentFolderId,
             folders: this.oldFolders,
           },
           newState: {
+            user: user,
             currentFolderId: currentFolderId,
             folders: folders,
           },
         });
         if (stateChanged) {
+          this.oldUser = user;
           this.oldFolders = folders.map(folder => folder.copy());
           this.oldCurrentFolderId = currentFolderId;
           await ChromeHelpers.saveAppState(state);
@@ -181,13 +193,15 @@ class AppComponent extends React.Component<Props, State> {
       <AddBookmarksModalComponent/>
     ) : null;
 
-    const maybeAppComponent = this.state.showNux ? null : (
+    const showNux = this.props.loaded && this.props.user === null;
+
+    const maybeAppComponent = showNux ? null : (
       <div className="app" key="app">
         <div className="app-list-container">
           { ListComponent }
         </div>
         <div className="app-greeting-container">
-          <GreetingComponent name={'Eric'} date={this.state.date}/>
+          <GreetingComponent user={this.props.user} date={this.state.date}/>
         </div>
         <div className="app-date-container">
           <DateComponent date={this.state.date}/>
@@ -198,7 +212,7 @@ class AppComponent extends React.Component<Props, State> {
       </div>
     );
 
-    const maybeNuxComponent = this.state.showNux ? <NuxComponent key="nux"/> : null;
+    const maybeNuxComponent = showNux ? <NuxComponent key="nux"/> : null;
 
     const classes = this.props.loaded ? 'app-container loaded' : 'app-container';
 
@@ -219,7 +233,8 @@ class AppComponent extends React.Component<Props, State> {
 
 const mapStateToProps = (state: AppState, props: {}) => {
   return {
-    loaded: state.foldersState.loaded,
+    user: state.userState.user,
+    loaded: state.loadedState.loaded,
     currentFolderId: state.navigationState.currentFolderId,
     draggedRank: state.dragDropState.draggedRank,
     folders: state.foldersState.folders,

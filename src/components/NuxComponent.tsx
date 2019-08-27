@@ -1,6 +1,15 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 
-export class NuxComponent extends React.Component {
+import * as UserActions from '../actions/UserActions';
+import { UserParams } from '../actions/UserActions';
+import { AppState } from '../reduxStore';
+
+interface Props {
+  setUserName: (params: UserParams) => void;
+}
+
+class NuxComponent extends React.Component<Props> {
 
   private textInputRef: React.RefObject<HTMLInputElement> = React.createRef();
   private text: string = '';
@@ -17,7 +26,7 @@ export class NuxComponent extends React.Component {
   onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.keyCode === 13) {
       // Pressed enter
-      console.log(`your name is ${this.text}`);
+      this.props.setUserName({ name: this.text });
     }
   }
 
@@ -40,3 +49,14 @@ export class NuxComponent extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state: AppState, props: {}) => {
+  return {};
+};
+
+const mapActionsToProps = {
+  setUserName: UserActions.setName,
+};
+
+const Component = connect(mapStateToProps, mapActionsToProps)(NuxComponent);
+export { Component as NuxComponent };

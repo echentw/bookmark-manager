@@ -1,9 +1,11 @@
 import { Bookmark, BookmarkData } from './Bookmark';
 import { Folder, FolderData } from './Folder';
+import { User, UserData } from './User';
 import { AppState } from './reduxStore';
 
 // What gets returned by some methods in this class
 export interface ChromeAppState {
+  user: User | null;
   folders: Folder[];
   currentFolderId: string | null;
 }
@@ -13,6 +15,7 @@ export interface ChromeData {
 }
 
 export interface AppData {
+  user: UserData | null;
   folders: FolderData[];
   currentFolderId: string | null;
 }
@@ -45,12 +48,15 @@ export class ChromeHelpers {
   public static saveAppState = (appState: AppState): Promise<{}> => {
     // uncomment when doing dangerous operations
     // return new Promise((resolve) => resolve());
+    const { user } = appState.userState;
     const { folders } = appState.foldersState;
     const { currentFolderId } = appState.navigationState;
 
+    const userData: UserData | null = user === null ? null : user.toData();
     const folderDatas: FolderData[] = folders.map(folder => folder.toData());
 
     const appData: AppData = {
+      user: user,
       folders: folderDatas,
       currentFolderId: currentFolderId,
     };
@@ -70,7 +76,12 @@ export class ChromeHelpers {
         if (result.appData) {
           const folderDatas: FolderData[] = result.appData.folders;
           const folders: Folder[] = folderDatas.map(data => Folder.fromData(data));
+
+          const userData: UserData | null = result.appData.user;
+          const user: User | null = userData === null ? null : User.fromData(userData);
+
           const state: ChromeAppState = {
+            user: user,
             folders: folders,
             currentFolderId: result.appData.currentFolderId,
           };
@@ -81,6 +92,7 @@ export class ChromeHelpers {
             bookmarks: [],
           });
           const initialState: ChromeAppState = {
+            user: null,
             folders: [firstFolder],
             currentFolderId: firstFolder.id,
           };

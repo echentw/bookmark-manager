@@ -11,7 +11,9 @@ import { editBookmarkReducer, initialEditBookmarkState, EditBookmarkState } from
 import { editFolderReducer, initialEditFolderState, EditFolderState } from './reducers/EditFolderReducer';
 import { foldersReducer, initialFoldersState, FoldersState } from './reducers/FoldersReducer';
 import { hoverReducer, initialHoverState, HoverState } from './reducers/HoverReducer';
+import { loadedReducer, initialLoadedState, LoadedState } from './reducers/LoadedReducer';
 import { navigationReducer, initialNavigationState, NavigationState } from './reducers/NavigationReducer';
+import { userReducer, initialUserState, UserState } from './reducers/UserReducer';
 
 declare global {
   interface Window {
@@ -28,7 +30,9 @@ export interface AppState {
   editFolderState: EditFolderState;
   foldersState: FoldersState;
   hoverState: HoverState;
+  loadedState: LoadedState;
   navigationState: NavigationState;
+  userState: UserState;
 }
 
 const initialAppState: AppState = {
@@ -40,7 +44,9 @@ const initialAppState: AppState = {
   editFolderState: initialEditFolderState,
   foldersState: initialFoldersState,
   hoverState: initialHoverState,
+  loadedState: initialLoadedState,
   navigationState: initialNavigationState,
+  userState: initialUserState,
 };
 
 const reducer = (state: AppState = initialAppState, action: Action): AppState => {
@@ -53,7 +59,9 @@ const reducer = (state: AppState = initialAppState, action: Action): AppState =>
     editFolderState: editFolderReducer(state.editFolderState, action, state),
     foldersState: foldersReducer(state.foldersState, action, state),
     hoverState: hoverReducer(state.hoverState, action, state),
+    loadedState: loadedReducer(state.loadedState, action, state),
     navigationState: navigationReducer(state.navigationState, action, state),
+    userState: userReducer(state.userState, action, state),
   };
   return newState;
 };

@@ -27,8 +27,9 @@ export const DeleteFolderActionType = {
 };
 
 export const SyncAppActionType = {
-  syncBookmarks: 'SyncApp:syncBookmarks',
   syncFolders: 'SyncApp:syncFolders',
+  syncUser: 'SyncApp:syncUser',
+  markLoaded: 'SyncApp:markLoaded',
 };
 
 export const AddBookmarksActionType = {
@@ -58,4 +59,8 @@ export const DragDropActionType = {
 export const HoverActionType = {
   enter: 'Hover:enter',
   exit: 'Hover:exit',
+};
+
+export const UserActionType = {
+  setName: 'User:setName',
 };

@@ -23,12 +23,10 @@ import { DragParams } from '../actions/DragDropActions';
 
 export interface FoldersState {
   folders: Folder[];
-  loaded: boolean;
 }
 
 export const initialFoldersState: FoldersState = {
   folders: [],
-  loaded: false,
 }
 
 export const foldersReducer: Reducer<FoldersState> = (
@@ -72,7 +70,6 @@ export const foldersReducer: Reducer<FoldersState> = (
 function handleAddFolder(state: FoldersState, action: Action<EditFolderParams>): FoldersState {
   const folders = state.folders.concat([action.params.folder]);
   return {
-    ...state,
     folders: folders,
   };
 }
@@ -80,7 +77,6 @@ function handleAddFolder(state: FoldersState, action: Action<EditFolderParams>):
 function handleDeleteFolder(state: FoldersState, action: Action<DeleteFolderParams>): FoldersState {
   const newFolders = withItemDeleted(state.folders, action.params.folder);
   return {
-    ...state,
     folders: newFolders,
   };
 }
@@ -92,7 +88,6 @@ function handleEditFolderSave(state: FoldersState, action: Action<EditFolderPara
   const folders = state.folders.slice(0); // copies the array
   folders[index] = action.params.folder;
   return {
-    ...state,
     folders: folders,
   };
 }
@@ -105,16 +100,13 @@ function handleSelectFolderColor(state: FoldersState, action: Action<SelectFolde
   const newFolder = action.params.folder.withColor(action.params.color);
   folders[index] = newFolder;
   return {
-    ...state,
     folders: folders,
   };
 }
 
 function handleSyncFolders(state: FoldersState, action: Action<SyncFoldersParams>): FoldersState {
   return {
-    ...state,
     folders: action.params.folders,
-    loaded: true,
   };
 }
 
@@ -134,7 +126,6 @@ function handleAddBookmarksSave(
   const newFolder = folder.withBookmarks(newBookmarks);
   const newFolders = withItemReplaced<Folder>(state.folders, newFolder);
   return {
-    ...state,
     folders: newFolders,
   };
 }
@@ -155,7 +146,6 @@ function handleEditBookmarkSave(
   const newFolder = folder.withBookmarks(newBookmarks);
   const newFolders = withItemReplaced<Folder>(state.folders, newFolder);
   return {
-    ...state,
     folders: newFolders,
   };
 }
@@ -176,7 +166,6 @@ function handleEditBookmarkDeleteBookmark(
   const newFolder = folder.withBookmarks(newBookmarks);
   const newFolders = withItemReplaced<Folder>(state.folders, newFolder);
   return {
-    ...state,
     folders: newFolders,
   };
 }
@@ -217,7 +206,6 @@ function _handleFolderDragIsOver(
   folders[dropTargetRank] = draggedFolder;
 
   return {
-    ...state,
     folders: folders,
   };
 }
@@ -254,7 +242,6 @@ function _handleBookmarkDragIsOver(
   const newFolders = state.folders;
 
   return {
-    ...state,
     folders: newFolders,
   };
 }
