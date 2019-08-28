@@ -9,9 +9,6 @@
     @include list-title-container;
     padding-left: 16px;
 
-    display: flex;
-    flex-direction: row;
-
     .bookmark-list-title-inner-container {
       flex: 1;
       width: 100%;

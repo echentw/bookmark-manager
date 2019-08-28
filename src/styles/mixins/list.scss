@@ -23,6 +23,10 @@
   padding-left: 24px;
   padding-right: 16px;
   margin-bottom: 8px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 @mixin list-title {
@@ -51,7 +55,7 @@
 @mixin list-item-container {
   @include rect-border-radius;
   background-color: rgba(0, 0, 0, 0.5);
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   width: 100%;
 }
 
