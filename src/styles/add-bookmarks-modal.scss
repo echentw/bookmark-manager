@@ -26,6 +26,7 @@
 
     .add-bookmarks-modal-scrollable-area {
       @include list-scrollable-area;
+      overflow-y: scroll;
 
       .open-tab-container {
         @include list-item-container;
