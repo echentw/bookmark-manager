@@ -24,7 +24,7 @@
   }
 
   .greeting-and-name-text-container {
-    $padding-for-large-screens: 20px;
+    $padding-for-large-screens: 10px;
 
     padding-left: $padding-for-large-screens;
 
@@ -65,16 +65,19 @@
         border-radius: 2px;
         max-lines: 1;
 
+        &.pulse {
+          -webkit-animation: pulse 0.6s;
+                  animation: pulse 0.6s;
+        }
+
         &:focus {
           outline-width: 0;
-          -webkit-animation: highlight 0.5s;
-                  animation: highlight 0.5s;
         }
       }
 
       .punctuation {
         position: absolute;
-        right: calc(8px + #{$punctuation-width});
+        right: calc(#{$padding-for-large-screens} - 2px);
         bottom: 0;
       }
 
@@ -108,7 +111,7 @@
     }
 
     .greeting-and-name-text-container {
-      $padding-for-small-screens: 14px;
+      $padding-for-small-screens: 8px;
 
       padding-left: $padding-for-small-screens;
 
@@ -134,7 +137,7 @@
         padding-right: calc(#{$padding-for-small-screens} + #{$punctuation-width});
 
         .punctuation {
-          right: calc(6px + #{$punctuation-width});
+          right: calc(#{$padding-for-small-screens} - 1px);
         }
 
         .bar {
@@ -150,11 +153,11 @@
   }
 }
 
-@-webkit-keyframes highlight {
+@-webkit-keyframes pulse {
   0% { background-color: rgba(255, 255, 255, 0.5) };
   100% { background-color: rgba(255, 255, 255, 0) };
 }
-@keyframes highlight {
+@keyframes pulse {
   0% { background-color: rgba(255, 255, 255, 0.5); }
   100% { background-color: rgba(255, 255, 255, 0); }
 }

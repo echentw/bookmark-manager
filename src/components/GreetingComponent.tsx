@@ -8,6 +8,20 @@ import * as UserActions from '../actions/UserActions';
 import { UserParams } from '../actions/UserActions';
 import { AppState } from '../reduxStore';
 
+// Given an HTML element, if that element is focused, then this function will
+// move the cursor to the end of the text.
+function placeCaretAtEnd(element: HTMLDivElement) {
+  // Chrome supports these methods
+  if (window.getSelection && document.createRange) {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    range.collapse(false);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+}
+
 interface ExternalProps {
   user: User;
   date: Date;
@@ -21,19 +35,10 @@ interface State {
   editing: boolean;
   hovering: boolean;
   name: string;
-}
 
-
-function placeCaretAtEnd(element: HTMLDivElement) {
-  // Chrome supports these methods
-  if (window.getSelection && document.createRange) {
-    const range = document.createRange();
-    range.selectNodeContents(element);
-    range.collapse(false);
-    const selection = window.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(range);
-  }
+  // Whether the name should be pulsing.
+  // Happens when the text starts or stops being editable.
+  pulsing: boolean;
 }
 
 class GreetingComponent extends React.Component<InternalProps, State> {
@@ -44,12 +49,22 @@ class GreetingComponent extends React.Component<InternalProps, State> {
     editing: false,
     hovering: false,
     name: this.props.user.name,
+    pulsing: false,
   };
 
   componentDidUpdate(prevProps: InternalProps) {
     if (prevProps.user.name !== this.props.user.name) {
       this.setState({ name: this.props.user.name });
     }
+  }
+
+  pulse = () => {
+    this.setState({ pulsing: true });
+    setTimeout(() => {
+      if (this.state.pulsing) {
+        this.setState({ pulsing: false });
+      }
+    }, 600);
   }
 
   dateToTime = (date: Date): string => {
@@ -94,6 +109,7 @@ class GreetingComponent extends React.Component<InternalProps, State> {
       this.nameTextRef.current.focus();
       placeCaretAtEnd(this.nameTextRef.current);
     });
+    this.pulse();
   }
 
   onChange = (event: ContentEditableEvent) => {
@@ -113,14 +129,17 @@ class GreetingComponent extends React.Component<InternalProps, State> {
           this.props.setUserName({ name: strippedName });
         });
       }
+      this.pulse();
     } else if (event.keyCode === 27) {
       // Pressed escape
       this.setState({ editing: false, name: this.props.user.name });
+      this.pulse();
     }
   }
 
   onBlur = () => {
     this.setState({ editing: false, name: this.props.user.name });
+    this.pulse();
   }
 
   render() {
@@ -135,6 +154,8 @@ class GreetingComponent extends React.Component<InternalProps, State> {
 
     const maybeBar = this.state.editing ? <div className="bar"/> : null;
 
+    const maybePulseCssClass = this.state.pulsing ? 'pulse' : '';
+
     const nameComponent = (
       <div className="name-text-container"
         onMouseOver={this.onMouseOver}
@@ -142,7 +163,7 @@ class GreetingComponent extends React.Component<InternalProps, State> {
       >
         <ContentEditable
           innerRef={this.nameTextRef}
-          className="name-text"
+          className={'name-text ' + maybePulseCssClass}
           spellCheck={false}
           disabled={!this.state.editing}
           onChange={this.onChange}
