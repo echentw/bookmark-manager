@@ -6,13 +6,15 @@ import { User } from '../User';
 import { ChromeAppState, ChromeHelpers } from '../ChromeHelpers';
 import { Action, SyncAppActionType as ActionType } from './constants';
 
-export interface SyncFoldersParams {
+export interface LoadAppParams {
+  user: User | null;
   folders: Folder[];
   currentFolderId: string | null;
 }
 
-export interface SyncUserParams {
+export interface SyncAppParams {
   user: User | null;
+  folders: Folder[];
 }
 
 export function loadAppData(params: {}) {
@@ -20,34 +22,24 @@ export function loadAppData(params: {}) {
     const state: ChromeAppState = await ChromeHelpers.loadAppState();
     const maybeFolder = state.folders.find(folder => folder.id === state.currentFolderId);
     const currentFolderId = maybeFolder ? maybeFolder.id : null;
-    dispatch(syncUser({
+    dispatch(_loadAppData({
       user: state.user,
-    }));
-    dispatch(syncFolders({
       folders: state.folders,
       currentFolderId: currentFolderId,
     }));
-    dispatch(markLoaded({}));
   };
 }
 
-export function syncFolders(params: SyncFoldersParams): Action<SyncFoldersParams> {
+function _loadAppData(params: LoadAppParams): Action<LoadAppParams> {
   return {
-    type: ActionType.syncFolders,
+    type: ActionType.load,
     params: params,
   };
 }
 
-export function syncUser(params: SyncUserParams): Action<SyncUserParams> {
+export function syncAppData(params: SyncAppParams): Action<SyncAppParams> {
   return {
-    type: ActionType.syncUser,
-    params: params,
-  };
-}
-
-export function markLoaded(params: {}): Action {
-  return {
-    type: ActionType.markLoaded,
+    type: ActionType.sync,
     params: params,
   };
 }

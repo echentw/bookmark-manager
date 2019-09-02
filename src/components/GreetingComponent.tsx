@@ -1,13 +1,57 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
+import { FaPen } from 'react-icons/fa';
+import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 
 import { User } from '../User';
+import * as UserActions from '../actions/UserActions';
+import { UserParams } from '../actions/UserActions';
+import { AppState } from '../reduxStore';
 
-interface Props {
-  user: User | null;
+interface ExternalProps {
+  user: User;
   date: Date;
 }
 
-export class GreetingComponent extends React.Component<Props> {
+interface InternalProps extends ExternalProps {
+  setUserName: (params: UserParams) => void;
+}
+
+interface State {
+  editing: boolean;
+  hovering: boolean;
+  name: string;
+}
+
+
+function placeCaretAtEnd(element: HTMLDivElement) {
+  // Chrome supports these methods
+  if (window.getSelection && document.createRange) {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    range.collapse(false);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+}
+
+class GreetingComponent extends React.Component<InternalProps, State> {
+
+  private nameTextRef: React.RefObject<HTMLDivElement> = React.createRef();
+
+  state: State = {
+    editing: false,
+    hovering: false,
+    name: this.props.user.name,
+  };
+
+  componentDidUpdate(prevProps: InternalProps) {
+    if (prevProps.user.name !== this.props.user.name) {
+      this.setState({ name: this.props.user.name });
+    }
+  }
+
   dateToTime = (date: Date): string => {
     const hoursNumber = date.getHours() <= 12 ? date.getHours() : date.getHours() - 12;
     const minutesNumber = date.getMinutes();
@@ -30,21 +74,107 @@ export class GreetingComponent extends React.Component<Props> {
     }
   }
 
+  onMouseOver = () => {
+    if (!this.state.editing) {
+      this.setState({ hovering: true });
+    }
+  }
+
+  onMouseLeave = () => {
+    if (!this.state.editing) {
+      this.setState({ hovering: false });
+    }
+  }
+
+  onClickEdit = () => {
+    this.setState({
+      editing: true,
+      hovering: false,
+    }, () => {
+      this.nameTextRef.current.focus();
+      placeCaretAtEnd(this.nameTextRef.current);
+    });
+  }
+
+  onChange = (event: ContentEditableEvent) => {
+    // This should get rid of all html tags, i.e. everything that looks like <...>
+    const sanitizedText = event.target.value.replace(/<.*?>/g, '');
+    this.setState({ name: sanitizedText });
+  }
+
+  onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const strippedName = this.state.name.replace(/&nbsp;/g, ' ').trim();
+    if (event.keyCode === 13) {
+      // Pressed enter
+      if (strippedName === '') {
+        this.setState({ editing: false, name: this.props.user.name });
+      } else {
+        this.setState({ editing: false, name: strippedName }, () => {
+          this.props.setUserName({ name: strippedName });
+        });
+      }
+    } else if (event.keyCode === 27) {
+      // Pressed escape
+      this.setState({ editing: false, name: this.props.user.name });
+    }
+  }
+
+  onBlur = () => {
+    this.setState({ editing: false, name: this.props.user.name });
+  }
+
   render() {
     const time = this.dateToTime(this.props.date);
     const period = this.dateToPeriod(this.props.date);
 
-    const greeting = this.props.user === null ? (
-      `Good ${period}.`
-    ) : (
-      `Good ${period}, ${this.props.user.name}.`
+    const greetingText = this.props.user.name === '' ? `Good ${period}.` : `Good ${period},`;
+
+    const maybeEditButton = this.state.hovering ? (
+      <FaPen className="edit-name-button" onClick={this.onClickEdit}/>
+    ) : null;
+
+    const maybeBar = this.state.editing ? <div className="bar"/> : null;
+
+    const nameComponent = (
+      <div className="name-text-container"
+        onMouseOver={this.onMouseOver}
+        onMouseLeave={this.onMouseLeave}
+      >
+        <ContentEditable
+          innerRef={this.nameTextRef}
+          className="name-text"
+          spellCheck={false}
+          disabled={!this.state.editing}
+          onChange={this.onChange}
+          onBlur={this.onBlur}
+          onKeyDown={this.onKeyDown}
+          html={this.state.name}
+        />
+        <div className="punctuation">.</div>
+        { maybeBar }
+        { maybeEditButton }
+      </div>
     );
 
     return (
       <div className="greeting">
         <div className="time-text">{time}</div>
-        <div className="name-text">{greeting}</div>
+        <div className="greeting-and-name-text-container">
+          <div className={'greeting-text ' + period}>{greetingText}</div>
+          { nameComponent }
+        </div>
       </div>
     );
   }
 }
+
+const mapStateToProps = (state: AppState, props: ExternalProps) => {
+  return {};
+};
+
+const mapActionsToProps = {
+  setUserName: UserActions.setName,
+};
+
+const Component = connect(mapStateToProps, mapActionsToProps)(GreetingComponent);
+export { Component as GreetingComponent };

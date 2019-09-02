@@ -1,4 +1,5 @@
 @import './globals';
+@import './animations';
 @import './mixins/misc';
 
 .greeting {
@@ -12,34 +13,148 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
 
-.time-text {
-  @include unselectable;
-  font-size: 72px;
-  text-align: center;
-  margin-bottom: 20px;
-  text-shadow: 0 0 20px rgba(0, 0, 0, 0.2),
-               0 0 10px rgba(0, 0, 0, 0.3);
-}
-
-.name-text {
-  @include unselectable;
-  font-size: 36px;
-  text-align: center;
-  margin-bottom: 40px;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.2),
-               0 0 5px rgba(0, 0, 0, 0.3);
-}
-
-@media (max-width: 800px) {
   .time-text {
-    font-size: 36px;
-    margin-bottom: 0;
+    @include unselectable;
+    font-size: 72px;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.2),
+                 0 0 10px rgba(0, 0, 0, 0.3);
   }
 
-  .name-text {
-    font-size: 24px;
-    margin-bottom: 0;
+  .greeting-and-name-text-container {
+    $padding-for-large-screens: 20px;
+
+    padding-left: $padding-for-large-screens;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+
+    @include unselectable;
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 40px;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.2),
+                 0 0 5px rgba(0, 0, 0, 0.3);
+
+    .greeting-text {
+      &.morning {
+        width: 240px;
+      }
+      &.afternoon {
+        width: 264px;
+      }
+      &.evening {
+        width: 238px;
+      }
+    }
+
+    .name-text-container {
+      $punctuation-width: 10px;
+
+      position: relative;
+      padding-left: 6px;
+      padding-right: calc(#{$padding-for-large-screens} + #{$punctuation-width});
+
+      .name-text {
+        min-width: 10px;
+        border-radius: 2px;
+        max-lines: 1;
+
+        &:focus {
+          outline-width: 0;
+          -webkit-animation: highlight 0.5s;
+                  animation: highlight 0.5s;
+        }
+      }
+
+      .punctuation {
+        position: absolute;
+        right: calc(8px + #{$punctuation-width});
+        bottom: 0;
+      }
+
+      .bar {
+        position: absolute;
+        bottom: 0;
+        background-color: white;
+        width: calc(100% - #{$padding-for-large-screens} - #{$punctuation-width} - 6px);
+        height: 2px;
+      }
+
+      .edit-name-button {
+        position: absolute;
+        top: 0;
+        right: 0px;
+
+        font-size: 14px;
+
+        -webkit-animation: fade-in 0.2s;
+                animation: fade-in 0.2s;
+      }
+    }
   }
+}
+
+@media (max-width: $small-screen-max-width) {
+  .greeting {
+    .time-text {
+      font-size: 36px;
+      margin-bottom: 0;
+    }
+
+    .greeting-and-name-text-container {
+      $padding-for-small-screens: 14px;
+
+      padding-left: $padding-for-small-screens;
+
+      margin-bottom: 0;
+      font-size: 24px;
+
+      .greeting-text {
+        &.morning {
+          width: 160px;
+        }
+        &.afternoon {
+          width: 176px;
+        }
+        &.evening {
+          width: 158px;
+        }
+      }
+
+      .name-text-container {
+        $punctuation-width: 7px;
+
+        padding-left: 4px;
+        padding-right: calc(#{$padding-for-small-screens} + #{$punctuation-width});
+
+        .punctuation {
+          right: calc(6px + #{$punctuation-width});
+        }
+
+        .bar {
+          width: calc(100% - #{$padding-for-small-screens} - #{$punctuation-width} - 4px);
+          height: 1px;
+        }
+
+        .edit-name-button {
+          font-size: 10px;
+        }
+      }
+    }
+  }
+}
+
+@-webkit-keyframes highlight {
+  0% { background-color: rgba(255, 255, 255, 0.5) };
+  100% { background-color: rgba(255, 255, 255, 0) };
+}
+@keyframes highlight {
+  0% { background-color: rgba(255, 255, 255, 0.5); }
+  100% { background-color: rgba(255, 255, 255, 0); }
 }

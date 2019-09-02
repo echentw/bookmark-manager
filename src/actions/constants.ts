@@ -27,9 +27,8 @@ export const DeleteFolderActionType = {
 };
 
 export const SyncAppActionType = {
-  syncFolders: 'SyncApp:syncFolders',
-  syncUser: 'SyncApp:syncUser',
-  markLoaded: 'SyncApp:markLoaded',
+  load: 'SyncApp:load',
+  sync: 'SyncApp:sync',
 };
 
 export const AddBookmarksActionType = {

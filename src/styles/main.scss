@@ -1,3 +1,5 @@
+@import './globals';
+
 @import './animations';
 @import './colors';
 @import './modal-backdrop';
@@ -58,20 +60,18 @@ body {
   height: 100%;
 }
 
-@media (max-width: 800px) {
-  .app {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-}
-
 .app-list-container {
   margin-left: 80px;
   margin-top: 50px;
   margin-bottom: 50px;
 }
 
-@media (max-width: 800px) {
+@media (max-width: $small-screen-max-width) {
+  .app {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
   .app-list-container {
     margin: 0;
   }

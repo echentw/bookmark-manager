@@ -102,17 +102,26 @@ export class ChromeHelpers {
     });
   }
 
-  public static addOnChangedListener = (handleNewAppData: (folders: Folder[]) => void): void => {
+  public static addOnChangedListener = (handleNewAppData: (appState: ChromeAppState) => void): void => {
     chrome.storage.onChanged.addListener((
       changes: { [key: string]: chrome.storage.StorageChange },
       areaName: string
     ) => {
       if (areaName === 'local' && changes[ChromeHelpers.Keys.AppData]) {
         const change: chrome.storage.StorageChange = changes[ChromeHelpers.Keys.AppData];
-        const newAppData: AppData = change.newValue;
-        const newFolderDatas: FolderData[] = newAppData.folders;
-        const newFolders: Folder[] = newFolderDatas.map(data => Folder.fromData(data));
-        handleNewAppData(newFolders);
+        const appData: AppData = change.newValue;
+
+        const folderDatas: FolderData[] = appData.folders;
+        const folders: Folder[] = folderDatas.map(data => Folder.fromData(data));
+
+        const userData: UserData | null = appData.user;
+        const user: User | null = userData === null ? null : User.fromData(userData);
+
+        handleNewAppData({
+          user: user,
+          folders: folders,
+          currentFolderId: appData.currentFolderId,
+        });
       }
     });
   }

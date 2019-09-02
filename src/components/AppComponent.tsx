@@ -6,9 +6,9 @@ import { CSSTransitionGroup } from 'react-transition-group';
 import { Bookmark } from '../Bookmark';
 import { Folder } from '../Folder';
 import { User } from '../User';
-import { ChromeHelpers } from '../ChromeHelpers';
+import { ChromeAppState, ChromeHelpers } from '../ChromeHelpers';
 import * as SyncAppActions from '../actions/SyncAppActions';
-import { SyncFoldersParams } from '../actions/SyncAppActions';
+import { SyncAppParams } from '../actions/SyncAppActions';
 import * as FolderActions from '../actions/FolderActions';
 import { AppState, reduxStore } from '../reduxStore';
 import { Action } from '../actions/constants';
@@ -37,7 +37,7 @@ interface Props {
   folders: Folder[];
   showAddBookmarksModal: boolean;
   loadAppData: (params: {}) => void;
-  syncFolders: (params: SyncFoldersParams) => void;
+  syncAppData: (params: SyncAppParams) => void;
   closeFolder: (params: {}) => void;
 }
 
@@ -134,10 +134,10 @@ class AppComponent extends React.Component<Props, State> {
       }
     });
 
-    ChromeHelpers.addOnChangedListener((newFolders: Folder[]) => {
-      this.props.syncFolders({
-        folders: newFolders,
-        currentFolderId: this.props.currentFolderId,
+    ChromeHelpers.addOnChangedListener((appState: ChromeAppState) => {
+      this.props.syncAppData({
+        user: appState.user,
+        folders: appState.folders,
       });
     });
 
@@ -201,9 +201,7 @@ class AppComponent extends React.Component<Props, State> {
       <AddBookmarksModalComponent/>
     ) : null;
 
-    const showNux = this.props.user === null;
-
-    const innerComponent = showNux ? (
+    const innerComponent = this.props.user === null ? (
       <NuxComponent key="nux"/>
     ) : (
       <div className="app" key="app">
@@ -221,25 +219,6 @@ class AppComponent extends React.Component<Props, State> {
         <CopiedToastComponent/>
       </div>
     );
-
-    const maybeAppComponent = showNux ? null : (
-      <div className="app" key="app">
-        <div className="app-list-container">
-          { ListComponent }
-        </div>
-        <div className="app-greeting-container">
-          <GreetingComponent user={this.props.user} date={this.state.date}/>
-        </div>
-        <div className="app-date-container">
-          <DateComponent date={this.state.date}/>
-        </div>
-        { maybeDragLayer }
-        { maybeAddBookmarksModal }
-        <CopiedToastComponent/>
-      </div>
-    );
-
-    const maybeNuxComponent = showNux ? <NuxComponent key="nux"/> : null;
 
     return (
       <CSSTransitionGroup
@@ -268,7 +247,7 @@ const mapStateToProps = (state: AppState, props: {}) => {
 
 const mapActionsToProps = {
   loadAppData: SyncAppActions.loadAppData,
-  syncFolders: SyncAppActions.syncFolders,
+  syncAppData: SyncAppActions.syncAppData,
   closeFolder: FolderActions.closeFolder,
 };
 

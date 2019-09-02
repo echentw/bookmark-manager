@@ -25,7 +25,7 @@
 }
 
 // Medium screens
-@media (max-width: 1100px) {
+@media (max-width: $medium-screen-max-width) {
   .date {
     justify-content: center;
 
@@ -36,7 +36,7 @@
 }
 
 // Small screens
-@media (max-width: 800px) {
+@media (max-width: $small-screen-max-width) {
   .date {
     justify-content: center;
     align-items: center;

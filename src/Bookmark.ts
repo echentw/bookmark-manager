@@ -13,7 +13,7 @@ export class Bookmark {
   public readonly url: string;
   public readonly faviconUrl: string;
   public readonly title: string;
-  public name: string;
+  public readonly name: string;
 
   constructor({ url, title, faviconUrl, id, name }: {
     url: string,

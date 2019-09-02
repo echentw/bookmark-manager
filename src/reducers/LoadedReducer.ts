@@ -17,14 +17,14 @@ export const loadedReducer: Reducer<LoadedState> = (
 ): LoadedState => {
   let newState = state;
   switch (action.type) {
-    case ActionType.markLoaded:
-      newState = handleMarkLoaded(state, action);
+    case ActionType.load:
+      newState = handleLoad(state, action);
       break;
   }
   return newState;
 };
 
-function handleMarkLoaded(state: LoadedState, action: Action): LoadedState {
+function handleLoad(state: LoadedState, action: Action): LoadedState {
   return {
     loaded: true,
   };
