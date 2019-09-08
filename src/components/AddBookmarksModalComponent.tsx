@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { AppState } from '../reduxStore';
-import { Bookmark } from '../Bookmark';
+import { Bookmark, defaultFaviconUrl } from '../Bookmark';
 import { TabInfo } from '../ChromeHelpers';
 import * as AddBookmarksActions from '../actions/AddBookmarksActions';
 import { AddBookmarksSaveParams } from '../actions/AddBookmarksActions';
@@ -61,10 +61,11 @@ class AddBookmarksModalComponent extends React.Component<Props, State> {
       const isLast = (index == this.props.tabs.length - 1);
       const classes = selected ? 'open-tab selected' : 'open-tab';
       const containerClasses = isLast ? 'open-tab-container last' : 'open-tab-container';
+      const faviconUrl = tab.faviconUrl ? tab.faviconUrl : defaultFaviconUrl;
       return (
         <div className={containerClasses} key={index}>
           <div className={classes} onClick={() => this.onClickTab(index)}>
-            <img className="open-tab-favicon" src={tab.faviconUrl}/>
+            <img className="open-tab-favicon" src={faviconUrl}/>
             <div className="open-tab-name">{tab.title}</div>
           </div>
         </div>

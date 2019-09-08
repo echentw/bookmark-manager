@@ -56,6 +56,7 @@ module.exports = {
     new CopyPlugin([
       { from: 'index.html', to: 'index.html', toType: 'file', force: true },
       { from: 'manifest.json', to: 'manifest.json', toType: 'file', force: true },
+      { from: 'src/assets', to: 'assets', toType: 'dir', force: true },
     ]),
   ],
   resolve: {

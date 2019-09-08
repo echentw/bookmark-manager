@@ -1,5 +1,7 @@
 import { randomId } from './utils';
 
+export const defaultFaviconUrl = 'assets/world_favicon.ico';
+
 export interface BookmarkData {
   id: string;
   url: string;
@@ -24,7 +26,7 @@ export class Bookmark {
   }) {
     this.url = url;
     this.title = title;
-    this.faviconUrl = faviconUrl;
+    this.faviconUrl = faviconUrl ? faviconUrl : defaultFaviconUrl;
 
     this.id = id ? id : randomId();
     this.name = name ? name : '';
