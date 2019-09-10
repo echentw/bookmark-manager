@@ -6,9 +6,12 @@ const CopyPlugin = require('copy-webpack-plugin');
 const { CheckerPlugin } = require('awesome-typescript-loader');
 
 module.exports = {
-  entry: path.join(__dirname, '/src/main.tsx'),
+  entry: {
+    newtab: path.join(__dirname, 'src/main.tsx'),
+    popup: path.join(__dirname, 'src/popup.tsx'),
+  },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist')
   },
   mode: 'development',
@@ -54,7 +57,8 @@ module.exports = {
   plugins: [
     new CheckerPlugin(),
     new CopyPlugin([
-      { from: 'index.html', to: 'index.html', toType: 'file', force: true },
+      { from: 'newtab.html', to: 'newtab.html', toType: 'file', force: true },
+      { from: 'popup.html', to: 'popup.html', toType: 'file', force: true },
       { from: 'manifest.json', to: 'manifest.json', toType: 'file', force: true },
       { from: 'src/assets', to: 'assets', toType: 'dir', force: true },
     ]),

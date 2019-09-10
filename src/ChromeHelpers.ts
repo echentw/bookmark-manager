@@ -32,6 +32,20 @@ export class ChromeHelpers {
     AppData: 'appData',
   };
 
+  public static getCurrentActiveTab = (): Promise<TabInfo> => {
+    return new Promise((resolve, reject) => {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs: chrome.tabs.Tab[]) => {
+        const activeTab = tabs[0];
+        const info: TabInfo = {
+          url: activeTab.url,
+          title: activeTab.title,
+          faviconUrl: activeTab.favIconUrl,
+        };
+        resolve(info);
+      });
+    });
+  }
+
   public static getOpenTabs = (): Promise<TabInfo[]> => {
     return new Promise((resolve, reject) => {
       chrome.tabs.query({}, (tabs: chrome.tabs.Tab[]) => {
