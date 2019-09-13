@@ -59,12 +59,13 @@ class GreetingComponent extends React.Component<InternalProps, State> {
   }
 
   pulse = () => {
-    this.setState({ pulsing: true });
-    setTimeout(() => {
-      if (this.state.pulsing) {
-        this.setState({ pulsing: false });
-      }
-    }, 600);
+    this.setState({ pulsing: true }, () => {
+      setTimeout(() => {
+        if (this.state.pulsing) {
+          this.setState({ pulsing: false });
+        }
+      }, 600);
+    });
   }
 
   dateToTime = (date: Date): string => {

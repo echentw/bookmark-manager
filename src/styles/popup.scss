@@ -1,25 +1,138 @@
+@import './mixins/misc';
+
+* {
+  box-sizing: border-box;
+}
+
+$popup-margin: 18px;
+$popup-width: 300px;
+$popup-height: 180px;
+$label-width: 50px;
+
 body {
-  margin: 0;
+  margin: $popup-margin;
 }
 
 .app {
-  width: 320px;
-  height: 200px;
+  width: $popup-width;
+  height: $popup-height;
 
-  padding: 8px;
+  display: flex;
+  flex-direction: column;
 
-  .title {
-    font-size: 20px;
+  .head {
+    margin-bottom: 18px;
+
+    .title {
+      font-size: 20px;
+
+      display: flex;
+      flex-direction: row;
+
+      .title-action {
+        @include rect-border-radius;
+
+        &.pulse {
+          -webkit-animation: popup-pulse 1.0s;
+                  animation: popup-pulse 1.0s;
+        }
+      }
+
+      .title-object {
+        margin-left: 5px;
+      }
+    }
   }
 
-  .name {
-    font-size: 16px;
-  }
+  .body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-  .name-text-field {
-  }
+    .first-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
 
-  .folder {
-    font-size: 16px;
+      .folder {
+        font-size: 12px;
+        width: $label-width;
+      }
+
+      .react-select-container {
+        flex: 1;
+
+        .react-select__menu {
+          margin-top: 2px;
+          margin-bottom: $popup-margin;
+        }
+      }
+    }
+
+    .second-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .name {
+        font-size: 12px;
+        width: $label-width;
+      }
+
+      .name-text-field {
+        flex: 1;
+        height: 36px;
+        @include rect-border;
+        @include rect-border-radius;
+        padding-left: 10px;
+        padding-right: 10px;
+
+        &:focus {
+          outline: none;
+          border-color: rgb(38, 132, 255);
+          box-shadow: 0 0 0 1px #2684FF;
+        }
+      }
+    }
+
+    .third-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      .popup-button {
+        height: 38px;
+        width: 92px;
+        @include rect-border;
+        @include rect-border-radius;
+
+        outline: none;
+
+        &:hover {
+          background-color: rgb(222, 222, 222);
+        }
+
+        &:active {
+          background-color: rgb(200, 200, 200);
+        }
+
+        &.disabled {
+          border-color: rgb(210, 210, 210);
+          color: rgb(210, 210, 210);
+          pointer-events: none;
+        }
+      }
+    }
   }
+}
+
+@-webkit-keyframes popup-pulse {
+  0% { background-color: rgba(240, 240, 0, 1.0) };
+  100% { background-color: rgba(240, 240, 0, 0) };
+}
+@keyframes popup-pulse {
+  0% { background-color: rgba(240, 240, 0, 1.0); }
+  100% { background-color: rgba(240, 240, 0, 0); }
 }
