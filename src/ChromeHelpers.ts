@@ -59,6 +59,15 @@ export class ChromeHelpers {
     });
   }
 
+  public static saveRawChromeAppState = (appState: ChromeAppState): Promise<{}> => {
+    return new Promise((resolve, reject) => {
+      chrome.storage.local.set({ [ChromeHelpers.Keys.AppData]: appState }, () => {
+        // TODO: error handling
+        resolve();
+      });
+    });
+  }
+
   public static saveAppState = (appState: AppState): Promise<{}> => {
     // uncomment when doing dangerous operations
     // return new Promise((resolve) => resolve());

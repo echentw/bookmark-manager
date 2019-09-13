@@ -4,6 +4,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Select from 'react-select';
 
+import { withItemReplaced, withItemDeleted } from './utils';
 import { Bookmark } from './Bookmark';
 import { Folder } from './Folder';
 import { ChromeAppState, ChromeHelpers, TabInfo } from './ChromeHelpers';
@@ -74,6 +75,36 @@ function findBookmarkInFolder(url: string, folder: Folder) {
   };
 }
 
+function addBookmark(state: ChromeAppState, bookmark: Bookmark, folder: Folder): ChromeAppState {
+  const newBookmarks = folder.bookmarks.concat([bookmark]);
+  const newFolder = folder.withBookmarks(newBookmarks);
+  const newFolders = withItemReplaced<Folder>(state.folders, newFolder);
+  return {
+    ...state,
+    folders: newFolders,
+  };
+}
+
+function editBookmark(state: ChromeAppState, bookmark: Bookmark, folder: Folder): ChromeAppState {
+  const newBookmarks = withItemReplaced<Bookmark>(folder.bookmarks, bookmark);
+  const newFolder = folder.withBookmarks(newBookmarks);
+  const newFolders = withItemReplaced<Folder>(state.folders, newFolder);
+  return {
+    ...state,
+    folders: newFolders,
+  };
+}
+
+function deleteBookmark(state: ChromeAppState, bookmark: Bookmark, folder: Folder): ChromeAppState {
+  const newBookmarks = withItemDeleted<Bookmark>(folder.bookmarks, bookmark);
+  const newFolder = folder.withBookmarks(newBookmarks);
+  const newFolders = withItemReplaced<Folder>(state.folders, newFolder);
+  return {
+    ...state,
+    folders: newFolders,
+  };
+}
+
 interface SelectOption {
   value: string;
   label: string;
@@ -83,7 +114,7 @@ interface State {
   loaded: boolean;
   bookmarkName: string;
   bookmark: Bookmark | null;
-  folders: Folder[] | null;
+  appState: ChromeAppState | null;
   selectedFolder: Folder | null;
 
   // Whether the currently selected folder contains the current tab's url.
@@ -99,7 +130,7 @@ class AppComponent extends React.Component<{}, State> {
     loaded: false,
     bookmarkName: '',
     bookmark: null,
-    folders: null,
+    appState: null,
     selectedFolder: null,
     alreadyBookmarked: false,
     titlePulsing: false,
@@ -144,7 +175,7 @@ class AppComponent extends React.Component<{}, State> {
       loaded: true,
       bookmarkName: bookmark.displayName(),
       bookmark: bookmark,
-      folders: state.folders,
+      appState: state,
       selectedFolder: selectedFolder,
       alreadyBookmarked: alreadyBookmarked,
     });
@@ -155,7 +186,7 @@ class AppComponent extends React.Component<{}, State> {
   }
 
   onChangeSelect = (option: SelectOption) => {
-    const folder = this.state.folders.find(folder => folder.id === option.value);
+    const folder = this.state.appState.folders.find(folder => folder.id === option.value);
     if (folder !== undefined) {
       const foundData: FoundBookmarkInFolderData = findBookmarkInFolder(this.state.bookmark.url, folder);
       if (foundData.found) {
@@ -195,18 +226,23 @@ class AppComponent extends React.Component<{}, State> {
     window.close();
   }
 
-  onClickRemove = () => {
+  onClickRemove = async () => {
     if (this.state.alreadyBookmarked) {
-      // TODO: implement me!
-      console.log('you are trying to remove this bookmark from this folder');
+      const newAppState = deleteBookmark(this.state.appState, this.state.bookmark, this.state.selectedFolder);
+      await ChromeHelpers.saveRawChromeAppState(newAppState);
       window.close();
     }
   }
 
-  onClickSave = () => {
+  onClickSave = async () => {
     if (this.state.loaded) {
-      const bookmark = this.state.bookmark.withName(this.state.bookmarkName);
-      console.log('about to save bookmark', bookmark.title, 'in folder', this.state.selectedFolder.name);
+      const newBookmark = this.state.bookmark.withName(this.state.bookmarkName);
+      const newAppState = this.state.alreadyBookmarked ? (
+        editBookmark(this.state.appState, newBookmark, this.state.selectedFolder)
+      ) : (
+        addBookmark(this.state.appState, newBookmark, this.state.selectedFolder)
+      );
+      await ChromeHelpers.saveRawChromeAppState(newAppState);
       window.close();
     }
   }
@@ -216,7 +252,7 @@ class AppComponent extends React.Component<{}, State> {
     let selectedOption: SelectOption | null = null;
 
     if (this.state.loaded) {
-      options = this.state.folders.map(folder => ({
+      options = this.state.appState.folders.map(folder => ({
         value: folder.id,
         label: folder.name,
       }));
@@ -274,7 +310,7 @@ class AppComponent extends React.Component<{}, State> {
           </div>
           <div className="third-row">
             <button className="popup-button" onClick={this.onClickCancel}>Cancel</button>
-            <button className={this.state.alreadyBookmarked ? 'popup-button' : 'remove-button disabled'}
+            <button className={this.state.alreadyBookmarked ? 'popup-button' : 'popup-button disabled'}
               onClick={this.onClickRemove}
               disabled={!this.state.alreadyBookmarked}
             >
