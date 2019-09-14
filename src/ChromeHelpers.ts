@@ -26,6 +26,9 @@ export interface TabInfo {
   faviconUrl?: string;
 }
 
+const storageEngine = chrome.storage.local;
+// const storageEngine = chrome.storage.sync;
+
 export class ChromeHelpers {
 
   public static Keys = {
@@ -61,8 +64,10 @@ export class ChromeHelpers {
 
   public static saveRawChromeAppState = (appState: ChromeAppState): Promise<{}> => {
     return new Promise((resolve, reject) => {
-      chrome.storage.local.set({ [ChromeHelpers.Keys.AppData]: appState }, () => {
-        // TODO: error handling
+      storageEngine.set({ [ChromeHelpers.Keys.AppData]: appState }, () => {
+        if (chrome.runtime.lastError) {
+          return reject(chrome.runtime.lastError);
+        }
         resolve();
       });
     });
@@ -84,9 +89,13 @@ export class ChromeHelpers {
       currentFolderId: currentFolderId,
     };
 
+    ChromeHelpers.printStorageDetails();
+
     return new Promise((resolve, reject) => {
-      chrome.storage.local.set({ [ChromeHelpers.Keys.AppData]: appData }, () => {
-        // TODO: error handling
+      storageEngine.set({ [ChromeHelpers.Keys.AppData]: appData }, () => {
+        if (chrome.runtime.lastError) {
+          return reject(chrome.runtime.lastError);
+        }
         resolve();
       });
     });
@@ -94,8 +103,11 @@ export class ChromeHelpers {
 
   public static loadAppState = (): Promise<ChromeAppState> => {
     return new Promise((resolve, reject) => {
-      chrome.storage.local.get([ChromeHelpers.Keys.AppData], (result: ChromeData) => {
-        // TODO: error handling
+      storageEngine.get([ChromeHelpers.Keys.AppData], (result: ChromeData) => {
+        if (chrome.runtime.lastError) {
+          return reject(chrome.runtime.lastError);
+        }
+
         if (result.appData) {
           const folderDatas: FolderData[] = result.appData.folders;
           const folders: Folder[] = folderDatas.map(data => Folder.fromData(data));
@@ -130,6 +142,10 @@ export class ChromeHelpers {
       changes: { [key: string]: chrome.storage.StorageChange },
       areaName: string
     ) => {
+      if (chrome.runtime.lastError) {
+        return;
+      }
+
       if (areaName === 'local' && changes[ChromeHelpers.Keys.AppData]) {
         const change: chrome.storage.StorageChange = changes[ChromeHelpers.Keys.AppData];
         const appData: AppData = change.newValue;
@@ -150,10 +166,10 @@ export class ChromeHelpers {
   }
 
   public static printStorageDetails = () => {
-    chrome.storage.local.getBytesInUse((bytes: number) => {
+    storageEngine.getBytesInUse((bytes: number) => {
       console.log('bytes in use', bytes);
     });
-    chrome.storage.local.get([ChromeHelpers.Keys.AppData], result => {
+    storageEngine.get([ChromeHelpers.Keys.AppData], result => {
       console.log('data', result);
     });
   }

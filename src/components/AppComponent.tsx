@@ -129,7 +129,15 @@ class AppComponent extends React.Component<Props, State> {
           this.oldUser = user;
           this.oldFolders = folders.map(folder => folder.copy());
           this.oldCurrentFolderId = currentFolderId;
-          await ChromeHelpers.saveAppState(state);
+          try {
+            await ChromeHelpers.saveAppState(state);
+          } catch (e) {
+            if (e.message.startsWith('QUOTA_BYTES')) {
+              alert('Not enough storage space left! Please refresh this page, and consider deleting some folders/bookmarks to make room.');
+            } else {
+              alert(`Unknown error: ${e.message}`);
+            }
+          }
         }
       }
     });

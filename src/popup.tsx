@@ -241,7 +241,15 @@ class AppComponent extends React.Component<{}, State> {
       ) : (
         addBookmark(this.state.appState, newBookmark, this.state.selectedFolder)
       );
-      await ChromeHelpers.saveRawChromeAppState(newAppState);
+      try {
+        await ChromeHelpers.saveRawChromeAppState(newAppState);
+      } catch (e) {
+        if (e.message.startsWith('QUOTA_BYTES')) {
+          alert('Not enough storage space left! Consider deleting some folders/bookmarks to make room for new bookmarks.');
+        } else {
+          alert(`Unknown error: ${e.message}`);
+        }
+      }
       window.close();
     }
   }
