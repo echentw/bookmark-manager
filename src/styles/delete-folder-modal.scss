@@ -48,6 +48,10 @@
       .cancel-delete-button {
         @include list-button;
         width: 84px;
+
+        &.solo {
+          width: 100%;
+        }
       }
 
       .confirm-delete-button {

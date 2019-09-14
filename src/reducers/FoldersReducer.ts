@@ -79,6 +79,11 @@ function handleAddFolder(state: FoldersState, action: Action<EditFolderParams>):
 
 function handleDeleteFolder(state: FoldersState, action: Action<DeleteFolderParams>): FoldersState {
   const newFolders = withItemDeleted(state.folders, action.params.folder);
+  if (newFolders.length === 0) {
+    // Enforce that there is always at least one folder. But this should be guarded against
+    // on the UI side, so ideally this code never gets run.
+    return state;
+  }
   return {
     folders: newFolders,
   };

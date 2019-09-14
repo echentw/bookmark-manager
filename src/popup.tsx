@@ -145,7 +145,6 @@ class AppComponent extends React.Component<{}, State> {
     // Designate a folder as the active folder.
     let activeFolder = state.folders.find(folder => folder.id === state.currentFolderId);
     if (activeFolder === undefined) {
-      // TODO: enforce that there must be at least one folder
       activeFolder = state.folders[0];
     }
 
