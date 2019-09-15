@@ -35,6 +35,27 @@ export class ChromeHelpers {
     AppData: 'appData',
   };
 
+  public static readonly platformOS: string | null = null;
+  public static getPlatformOS = (): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      if (ChromeHelpers.platformOS !== null) {
+        return resolve(ChromeHelpers.platformOS);
+      }
+      chrome.runtime.getPlatformInfo((info: chrome.runtime.PlatformInfo) => {
+        ChromeHelpers.platformOS = info.os;
+        resolve(ChromeHelpers.platformOS);
+      });
+    });
+  }
+
+  public static openTabWithUrl = (url: string, openInNewTab: boolean): void => {
+    if (openInNewTab) {
+      chrome.tabs.create({ url: url, active: false });
+    } else {
+      chrome.tabs.update({ url: url });
+    }
+  }
+
   public static getCurrentActiveTab = (): Promise<TabInfo> => {
     return new Promise((resolve, reject) => {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs: chrome.tabs.Tab[]) => {

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import { ChromeHelpers } from '../ChromeHelpers';
 import { AppState } from '../reduxStore';
 import { EditTextFieldComponent } from './EditTextFieldComponent';
 import { BookmarkButtonsComponent } from './BookmarkButtonsComponent';
@@ -30,12 +31,43 @@ class BookmarkComponent extends React.Component<InternalProps> {
 
   private textInputRef: React.RefObject<HTMLInputElement> = React.createRef();
 
+  // These are not always accurate, since we only update the state on keydown and keyup events.
+  // For example, the use can right click and then let go of the command key.
+  // For this reason, we only rely on these attributes for special case bookmarks that don't begin with
+  // 'http://' or 'https://'.
+  private holdingCommandKey: boolean = false;
+  private holdingControlKey: boolean = false;
+
   componentDidMount = () => {
     document.addEventListener('mousedown', this.onMouseDown);
+    document.addEventListener('keydown', this.onKeyDown);
+    document.addEventListener('keyup', this.onKeyUp);
   }
 
   componentWillUnmount = () => {
     document.removeEventListener('mousedown', this.onMouseDown);
+    document.removeEventListener('keydown', this.onKeyDown);
+    document.removeEventListener('keyup', this.onKeyUp);
+  }
+
+  onKeyDown = (event: KeyboardEvent) => {
+    if (event.keyCode === 17) {
+      // Started pressing control key.
+      this.holdingControlKey = true;
+    } else if (event.keyCode === 91 || event.keyCode === 93) {
+      // Started pressing command key.
+      this.holdingCommandKey = true;
+    }
+  }
+
+  onKeyUp = (event: KeyboardEvent) => {
+    if (event.keyCode === 17) {
+      // Let go of control key.
+      this.holdingControlKey = false;
+    } else if (event.keyCode === 91 || event.keyCode === 93) {
+       // Let go of command key.
+      this.holdingCommandKey = false;
+    }
   }
 
   onMouseDown = (event: MouseEvent) => {
@@ -47,6 +79,18 @@ class BookmarkComponent extends React.Component<InternalProps> {
     }
     // Clicked on something else.
     this.cancelEdit();
+  }
+
+  onClickBookmark = async (event: React.MouseEvent) => {
+    const url = this.props.bookmark.url;
+    if (!url.startsWith('https://') && !url.startsWith('http://')) {
+      // For security reasons, Google Chrome won't open these a tags.
+      // We'll have to do it manually via the API.
+      event.preventDefault();
+      const os = await ChromeHelpers.getPlatformOS();
+      const openInNewTab = os === 'mac' ? this.holdingCommandKey : this.holdingControlKey;
+      ChromeHelpers.openTabWithUrl(url, openInNewTab);
+    }
   }
 
   saveEdit = (newName: string) => {
@@ -70,7 +114,9 @@ class BookmarkComponent extends React.Component<InternalProps> {
         cancel={this.cancelEdit}
       />
     ) : (
-      <a className="bookmark-name" href={bookmark.url}>{bookmark.displayName()}</a>
+      <a className="bookmark-name" href={bookmark.url} onClick={this.onClickBookmark}>
+        {bookmark.displayName()}
+      </a>
     );
 
     const shouldShowButtons = this.props.isDragPreview || (hovering && !editing);
