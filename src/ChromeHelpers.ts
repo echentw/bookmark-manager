@@ -34,7 +34,7 @@ export class ChromeHelpers {
     AppData: 'appData',
   };
 
-  public static readonly platformOS: string | null = null;
+  public static platformOS: string | null = null;
   public static getPlatformOS = (): Promise<string> => {
     return new Promise((resolve, reject) => {
       if (ChromeHelpers.platformOS !== null) {
@@ -104,12 +104,10 @@ export class ChromeHelpers {
     const folderDatas: FolderData[] = folders.map(folder => folder.toData());
 
     const appData: AppData = {
-      user: user,
+      user: userData,
       folders: folderDatas,
       currentFolderId: currentFolderId,
     };
-
-    ChromeHelpers.printStorageDetails();
 
     return new Promise((resolve, reject) => {
       storageEngine.set({ [ChromeHelpers.Keys.AppData]: appData }, () => {
