@@ -1,6 +1,5 @@
 import { Action, CopyUrlActionType as ActionType } from '../actions/constants';
 import { _ShowToastParams, HideToastParams } from '../actions/CopyUrlActions';
-import { Reducer } from './Reducer';
 import { AppState } from '../reduxStore';
 
 export interface CopyUrlState {
@@ -21,7 +20,7 @@ export const initialCopyUrlState: CopyUrlState = {
 export const copyUrlReducer = (
   state: CopyUrlState,
   action: Action,
-  appState: AppState
+  appState: AppState,
 ): CopyUrlState => {
   let newState = state;
   switch (action.type) {
@@ -33,7 +32,7 @@ export const copyUrlReducer = (
       break;
   }
   return newState;
-}
+};
 
 function handleShowToast(state: CopyUrlState, action: Action<_ShowToastParams>): CopyUrlState {
   return {

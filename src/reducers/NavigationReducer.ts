@@ -1,9 +1,9 @@
-import { Folder } from '../Folder';
+import { Action, FolderActionType, SyncAppActionType } from '../actions/constants';
 import { OpenFolderParams } from '../actions/FolderActions';
 import { LoadAppParams } from '../actions/SyncAppActions';
-import { Reducer } from './Reducer';
+import { Folder } from '../Folder';
 import { AppState } from '../reduxStore';
-import { Action, FolderActionType, SyncAppActionType } from '../actions/constants';
+import { Reducer } from './Reducer';
 
 export interface NavigationState {
   currentFolderId: string | null;
@@ -16,10 +16,10 @@ export const initialNavigationState: NavigationState = {
 export const navigationReducer: Reducer<NavigationState> = (
   state: NavigationState,
   action: Action,
-  appState: AppState
+  appState: AppState,
 ): NavigationState => {
   let newState = state;
-  switch(action.type) {
+  switch (action.type) {
     case FolderActionType.openFolder:
       newState = handleOpenFolder(state, action as Action<OpenFolderParams>);
       break;

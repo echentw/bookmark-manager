@@ -1,9 +1,9 @@
-import { Action, UserActionType, SyncAppActionType } from '../actions/constants';
+import { Action, SyncAppActionType, UserActionType } from '../actions/constants';
 import { LoadAppParams, SyncAppParams } from '../actions/SyncAppActions';
 import { UserParams } from '../actions/UserActions';
-import { Reducer } from './Reducer';
 import { AppState } from '../reduxStore';
 import { User } from '../User';
+import { Reducer } from './Reducer';
 
 export interface UserState {
   user: User | null;
@@ -16,7 +16,7 @@ export const initialUserState: UserState = {
 export const userReducer: Reducer<UserState> = (
   state: UserState,
   action: Action,
-  appState: AppState
+  appState: AppState,
 ): UserState => {
   let newState = state;
   switch (action.type) {

@@ -1,7 +1,6 @@
-import { Bookmark, BookmarkData } from './Bookmark';
 import { Folder, FolderData } from './Folder';
-import { User, UserData } from './User';
 import { AppState } from './reduxStore';
+import { User, UserData } from './User';
 
 // What gets returned by some methods in this class
 export interface ChromeAppState {
@@ -161,7 +160,7 @@ export class ChromeHelpers {
   public static addOnChangedListener = (handleNewAppData: (appState: ChromeAppState) => void): void => {
     chrome.storage.onChanged.addListener((
       changes: { [key: string]: chrome.storage.StorageChange },
-      areaName: string
+      areaName: string,
     ) => {
       if (chrome.runtime.lastError) {
         return;

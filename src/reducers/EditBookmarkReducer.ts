@@ -1,7 +1,7 @@
 import { Action, EditBookmarkActionType as ActionType } from '../actions/constants';
 import { EditBookmarkParams } from '../actions/EditBookmarkActions';
-import { Reducer } from './Reducer';
 import { AppState } from '../reduxStore';
+import { Reducer } from './Reducer';
 
 export interface EditBookmarkState {
   editingBookmarkId: string | null;
@@ -14,7 +14,7 @@ export const initialEditBookmarkState: EditBookmarkState = {
 export const editBookmarkReducer: Reducer<EditBookmarkState> = (
   state: EditBookmarkState,
   action: Action,
-  appState: AppState
+  appState: AppState,
 ): EditBookmarkState => {
   let newState = state;
   switch (action.type) {
@@ -32,7 +32,7 @@ export const editBookmarkReducer: Reducer<EditBookmarkState> = (
       break;
   }
   return newState;
-}
+};
 
 function handleBeginEdit(state: EditBookmarkState, action: Action<EditBookmarkParams>): EditBookmarkState {
   return {

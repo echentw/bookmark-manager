@@ -1,4 +1,3 @@
-import { User } from '../User';
 import { Action, UserActionType as ActionType } from './constants';
 
 export interface UserParams {

@@ -1,7 +1,7 @@
 import { Action, DeleteFolderActionType as ActionType } from '../actions/constants';
 import { DeleteFolderParams } from '../actions/DeleteFolderActions';
-import { Reducer } from './Reducer';
 import { AppState } from '../reduxStore';
+import { Reducer } from './Reducer';
 
 export interface DeleteFolderState {
   deletingFolderId: string | null;
@@ -14,7 +14,7 @@ export const initialDeleteFolderState: DeleteFolderState = {
 export const deleteFolderReducer: Reducer<DeleteFolderState> = (
   state: DeleteFolderState = initialDeleteFolderState,
   action: Action,
-  appState: AppState
+  appState: AppState,
 ): DeleteFolderState => {
   let newState = state;
   switch (action.type) {
@@ -29,7 +29,7 @@ export const deleteFolderReducer: Reducer<DeleteFolderState> = (
       break;
   }
   return newState;
-}
+};
 
 function handleBeginDelete(state: DeleteFolderState, action: Action<DeleteFolderParams>): DeleteFolderState {
   return {

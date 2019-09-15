@@ -1,7 +1,7 @@
 import { Action, EditFolderActionType as ActionType } from '../actions/constants';
 import { EditFolderParams, SelectFolderColorParams } from '../actions/EditFolderActions';
-import { Reducer } from './Reducer';
 import { AppState } from '../reduxStore';
+import { Reducer } from './Reducer';
 
 export interface EditFolderState {
   editingFolderId: string | null;
@@ -16,7 +16,7 @@ export const initialEditFolderState: EditFolderState = {
 export const editFolderReducer: Reducer<EditFolderState> = (
   state: EditFolderState,
   action: Action,
-  appState: AppState
+  appState: AppState,
 ): EditFolderState => {
   let newState = state;
   switch (action.type) {
@@ -43,7 +43,7 @@ export const editFolderReducer: Reducer<EditFolderState> = (
       break;
   }
   return newState;
-}
+};
 
 function handleBeginEdit(state: EditFolderState, action: Action<EditFolderParams>): EditFolderState {
   return {

@@ -1,9 +1,8 @@
 import { Dispatch } from 'redux';
 
-import { Bookmark } from '../Bookmark';
+import { ChromeAppState, ChromeHelpers } from '../ChromeHelpers';
 import { Folder } from '../Folder';
 import { User } from '../User';
-import { ChromeAppState, ChromeHelpers } from '../ChromeHelpers';
 import { Action, SyncAppActionType as ActionType } from './constants';
 
 export interface LoadAppParams {

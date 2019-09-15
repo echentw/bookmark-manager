@@ -1,19 +1,19 @@
-import { Store, compose, applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 
 import { Action } from './actions/constants';
 
-import { addBookmarksReducer, initialAddBookmarksState, AddBookmarksState } from './reducers/AddBookmarksReducer';
-import { copyUrlReducer, initialCopyUrlState, CopyUrlState } from './reducers/CopyUrlReducer';
-import { deleteFolderReducer, initialDeleteFolderState, DeleteFolderState } from './reducers/DeleteFolderReducer';
-import { dragDropReducer, initialDragDropState, DragDropState } from './reducers/DragDropReducer';
-import { editBookmarkReducer, initialEditBookmarkState, EditBookmarkState } from './reducers/EditBookmarkReducer';
-import { editFolderReducer, initialEditFolderState, EditFolderState } from './reducers/EditFolderReducer';
-import { foldersReducer, initialFoldersState, FoldersState } from './reducers/FoldersReducer';
-import { hoverReducer, initialHoverState, HoverState } from './reducers/HoverReducer';
-import { loadedReducer, initialLoadedState, LoadedState } from './reducers/LoadedReducer';
-import { navigationReducer, initialNavigationState, NavigationState } from './reducers/NavigationReducer';
-import { userReducer, initialUserState, UserState } from './reducers/UserReducer';
+import { addBookmarksReducer, AddBookmarksState, initialAddBookmarksState } from './reducers/AddBookmarksReducer';
+import { copyUrlReducer, CopyUrlState, initialCopyUrlState } from './reducers/CopyUrlReducer';
+import { deleteFolderReducer, DeleteFolderState, initialDeleteFolderState } from './reducers/DeleteFolderReducer';
+import { dragDropReducer, DragDropState, initialDragDropState } from './reducers/DragDropReducer';
+import { editBookmarkReducer, EditBookmarkState, initialEditBookmarkState } from './reducers/EditBookmarkReducer';
+import { editFolderReducer, EditFolderState, initialEditFolderState } from './reducers/EditFolderReducer';
+import { foldersReducer, FoldersState, initialFoldersState } from './reducers/FoldersReducer';
+import { hoverReducer, HoverState, initialHoverState } from './reducers/HoverReducer';
+import { initialLoadedState, loadedReducer, LoadedState } from './reducers/LoadedReducer';
+import { initialNavigationState, navigationReducer, NavigationState } from './reducers/NavigationReducer';
+import { initialUserState, userReducer, UserState } from './reducers/UserReducer';
 
 declare global {
   interface Window {
@@ -69,7 +69,7 @@ const reducer = (state: AppState = initialAppState, action: Action): AppState =>
 const enhancers = window.__REDUX_DEVTOOLS_EXTENSION__ ? (
   compose(
     applyMiddleware(thunk),
-    window.__REDUX_DEVTOOLS_EXTENSION__()
+    window.__REDUX_DEVTOOLS_EXTENSION__(),
   )
 ) : applyMiddleware(thunk);
 

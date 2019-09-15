@@ -1,7 +1,7 @@
 import { Action, DragDropActionType as ActionType } from '../actions/constants';
 import { DragParams, DropParams } from '../actions/DragDropActions';
-import { Reducer } from './Reducer';
 import { AppState } from '../reduxStore';
+import { Reducer } from './Reducer';
 
 export interface DragDropState {
   draggedRank: number | null;
@@ -20,7 +20,7 @@ export const initialDragDropState: DragDropState = {
 export const dragDropReducer: Reducer<DragDropState> = (
   state: DragDropState,
   action: Action,
-  appState: AppState
+  appState: AppState,
 ): DragDropState => {
   let newState = state;
   switch (action.type) {
@@ -35,7 +35,7 @@ export const dragDropReducer: Reducer<DragDropState> = (
       break;
   }
   return newState;
-}
+};
 
 function handleBeginDrag(state: DragDropState, action: Action<DragParams>): DragDropState {
   return {

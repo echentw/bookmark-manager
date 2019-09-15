@@ -1,6 +1,6 @@
 import { Action, SyncAppActionType as ActionType } from '../actions/constants';
-import { Reducer } from './Reducer';
 import { AppState } from '../reduxStore';
+import { Reducer } from './Reducer';
 
 export interface LoadedState {
   loaded: boolean;
@@ -13,7 +13,7 @@ export const initialLoadedState: LoadedState = {
 export const loadedReducer: Reducer<LoadedState> = (
   state: LoadedState,
   action: Action,
-  appState: AppState
+  appState: AppState,
 ): LoadedState => {
   let newState = state;
   switch (action.type) {

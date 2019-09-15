@@ -7,14 +7,14 @@ import {
   FolderActionType,
   HoverActionType,
 } from '../actions/constants';
-import { DragParams } from '../actions/DragDropActions';
 import { DeleteFolderParams } from '../actions/DeleteFolderActions';
+import { DragParams } from '../actions/DragDropActions';
 import { EditBookmarkParams } from '../actions/EditBookmarkActions';
 import { EditFolderParams } from '../actions/EditFolderActions';
 import { OpenFolderParams } from '../actions/FolderActions';
 import { HoverParams } from '../actions/HoverActions';
-import { Reducer } from './Reducer';
 import { AppState } from '../reduxStore';
+import { Reducer } from './Reducer';
 
 export interface HoverState {
   hoverRank: number | null;
@@ -68,7 +68,7 @@ export const hoverReducer: Reducer<HoverState> = (
       break;
   }
   return newState;
-}
+};
 
 function handleEnter(state: HoverState, action: Action<HoverParams>): HoverState {
   return {

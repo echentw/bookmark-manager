@@ -1,25 +1,24 @@
-import { Folder } from '../Folder';
 import { Bookmark } from '../Bookmark';
-import { Reducer } from './Reducer';
+import { Folder } from '../Folder';
 import { AppState } from '../reduxStore';
+import { Reducer } from './Reducer';
 
-import { withItemReplaced, withItemDeleted } from '../utils';
+import { AddBookmarksSaveParams } from '../actions/AddBookmarksActions';
 import {
   Action,
-  DeleteFolderActionType,
-  EditFolderActionType,
-  FolderActionType,
-  SyncAppActionType,
   AddBookmarksActionType,
-  EditBookmarkActionType,
+  DeleteFolderActionType,
   DragDropActionType,
+  EditBookmarkActionType,
+  EditFolderActionType,
+  SyncAppActionType,
 } from '../actions/constants';
-import { LoadAppParams, SyncAppParams } from '../actions/SyncAppActions';
 import { DeleteFolderParams } from '../actions/DeleteFolderActions';
-import { EditFolderParams, SelectFolderColorParams } from '../actions/EditFolderActions';
-import { AddBookmarksSaveParams } from '../actions/AddBookmarksActions';
-import { EditBookmarkParams } from '../actions/EditBookmarkActions';
 import { DragParams } from '../actions/DragDropActions';
+import { EditBookmarkParams } from '../actions/EditBookmarkActions';
+import { EditFolderParams, SelectFolderColorParams } from '../actions/EditFolderActions';
+import { LoadAppParams, SyncAppParams } from '../actions/SyncAppActions';
+import { withItemDeleted, withItemReplaced } from '../utils';
 
 export interface FoldersState {
   folders: Folder[];
@@ -27,12 +26,12 @@ export interface FoldersState {
 
 export const initialFoldersState: FoldersState = {
   folders: [],
-}
+};
 
 export const foldersReducer: Reducer<FoldersState> = (
   state: FoldersState,
   action: Action,
-  appState: AppState
+  appState: AppState,
 ): FoldersState => {
   let newState = state;
   switch (action.type) {
@@ -68,7 +67,7 @@ export const foldersReducer: Reducer<FoldersState> = (
       break;
   }
   return newState;
-}
+};
 
 function handleAddFolder(state: FoldersState, action: Action<EditFolderParams>): FoldersState {
   const folders = state.folders.concat([action.params.folder]);
@@ -127,7 +126,7 @@ function handleAppSync(state: FoldersState, action: Action<SyncAppParams>): Fold
 function handleAddBookmarksSave(
   state: FoldersState,
   action: Action<AddBookmarksSaveParams>,
-  appState: AppState
+  appState: AppState,
 ): FoldersState {
   if (appState.navigationState.currentFolderId === null) {
     return state;
@@ -147,7 +146,7 @@ function handleAddBookmarksSave(
 function handleEditBookmarkSave(
   state: FoldersState,
   action: Action<EditBookmarkParams>,
-  appState: AppState
+  appState: AppState,
 ): FoldersState {
   if (appState.navigationState.currentFolderId === null) {
     return state;
@@ -167,7 +166,7 @@ function handleEditBookmarkSave(
 function handleEditBookmarkDeleteBookmark(
   state: FoldersState,
   action: Action<EditBookmarkParams>,
-  appState: AppState
+  appState: AppState,
 ): FoldersState {
   if (appState.navigationState.currentFolderId === null) {
     return state;
@@ -189,7 +188,7 @@ function handleEditBookmarkDeleteBookmark(
 function handleDragIsOver(
   state: FoldersState,
   action: Action<DragParams>,
-  appState: AppState
+  appState: AppState,
 ): FoldersState {
   if (appState.navigationState.currentFolderId === null) {
     return _handleFolderDragIsOver(state, action, appState);
@@ -201,7 +200,7 @@ function handleDragIsOver(
 function _handleFolderDragIsOver(
   state: FoldersState,
   action: Action<DragParams>,
-  appState: AppState
+  appState: AppState,
 ): FoldersState {
   const folders = state.folders;
   const draggedRank = appState.dragDropState.draggedRank;
@@ -227,7 +226,7 @@ function _handleFolderDragIsOver(
 function _handleBookmarkDragIsOver(
   state: FoldersState,
   action: Action<DragParams>,
-  appState: AppState
+  appState: AppState,
 ): FoldersState {
   if (appState.navigationState.currentFolderId === null) {
     return state;
