@@ -1,10 +1,10 @@
 {
   "name": "Axle: New Tab",
-  "version": "1.0",
+  "short_name": "Axle",
+  "version": "0.0.1",
   "description": "Manage all your bookmarks in one place.",
   "permissions": [
     "activeTab",
-    "declarativeContent",
     "storage",
     "tabs"
   ],
