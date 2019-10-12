@@ -13,6 +13,7 @@ import { foldersReducer, FoldersState, initialFoldersState } from './reducers/Fo
 import { hoverReducer, HoverState, initialHoverState } from './reducers/HoverReducer';
 import { initialLoadedState, loadedReducer, LoadedState } from './reducers/LoadedReducer';
 import { initialNavigationState, navigationReducer, NavigationState } from './reducers/NavigationReducer';
+import { initialSettingsState, settingsReducer, SettingsState } from './reducers/SettingsReducer';
 import { initialUserState, userReducer, UserState } from './reducers/UserReducer';
 
 declare global {
@@ -32,6 +33,7 @@ export interface AppState {
   hoverState: HoverState;
   loadedState: LoadedState;
   navigationState: NavigationState;
+  settingsState: SettingsState;
   userState: UserState;
 }
 
@@ -46,6 +48,7 @@ const initialAppState: AppState = {
   hoverState: initialHoverState,
   loadedState: initialLoadedState,
   navigationState: initialNavigationState,
+  settingsState: initialSettingsState,
   userState: initialUserState,
 };
 
@@ -61,6 +64,7 @@ const reducer = (state: AppState = initialAppState, action: Action): AppState =>
     hoverState: hoverReducer(state.hoverState, action, state),
     loadedState: loadedReducer(state.loadedState, action, state),
     navigationState: navigationReducer(state.navigationState, action, state),
+    settingsState: settingsReducer(state.settingsState, action, state),
     userState: userReducer(state.userState, action, state),
   };
   return newState;

@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { FaPen } from 'react-icons/fa';
+import { FaPen, FaCog } from 'react-icons/fa';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 
 import { User } from '../User';
 import * as UserActions from '../actions/UserActions';
 import { UserParams } from '../actions/UserActions';
+import * as SettingsActions from '../actions/SettingsActions';
 import { AppState } from '../reduxStore';
 
 // Given an HTML element, if that element is focused, then this function will
@@ -29,6 +30,7 @@ interface ExternalProps {
 
 interface InternalProps extends ExternalProps {
   setUserName: (params: UserParams) => void;
+  showSettingsModal: (params: {}) => void;
 }
 
 interface State {
@@ -143,6 +145,10 @@ class GreetingComponent extends React.Component<InternalProps, State> {
     this.pulse();
   }
 
+  onClickSettings = () => {
+    this.props.showSettingsModal({});
+  }
+
   render() {
     const time = this.dateToTime(this.props.date);
     const period = this.dateToPeriod(this.props.date);
@@ -185,6 +191,7 @@ class GreetingComponent extends React.Component<InternalProps, State> {
           <div className={'greeting-text ' + period}>{greetingText}</div>
           { nameComponent }
         </div>
+        <FaCog className="settings-cog" onClick={this.onClickSettings}/>
       </div>
     );
   }
@@ -196,6 +203,7 @@ const mapStateToProps = (state: AppState, props: ExternalProps) => {
 
 const mapActionsToProps = {
   setUserName: UserActions.setName,
+  showSettingsModal: SettingsActions.showModal,
 };
 
 const Component = connect(mapStateToProps, mapActionsToProps)(GreetingComponent);

@@ -63,3 +63,9 @@ export const HoverActionType = {
 export const UserActionType = {
   setName: 'User:setName',
 };
+
+export const SettingsActionType = {
+  showModal: 'Settings:showModal',
+  hideModal: 'Settings:hideModal',
+  setImageTimestamp: 'Settings:setImageTimestamp',
+};

@@ -7,6 +7,7 @@ import { Bookmark } from '../Bookmark';
 import { Folder } from '../Folder';
 import { User } from '../User';
 import { ChromeAppState, ChromeHelpers } from '../ChromeHelpers';
+import { LocalStorageHelpers } from '../LocalStorageHelpers';
 import * as SyncAppActions from '../actions/SyncAppActions';
 import { SyncAppParams } from '../actions/SyncAppActions';
 import * as FolderActions from '../actions/FolderActions';
@@ -23,6 +24,7 @@ import { CopiedToastComponent } from './CopiedToastComponent';
 import { AddBookmarksModalComponent } from './AddBookmarksModalComponent';
 import { DateComponent } from './DateComponent';
 import { NuxComponent } from './NuxComponent';
+import { SettingsModalComponent } from './SettingsModalComponent';
 
 export const DraggableType = {
   Bookmark: 'bookmark',
@@ -36,6 +38,7 @@ interface Props {
   draggedRank: number | null;
   folders: Folder[];
   showAddBookmarksModal: boolean;
+  showSettingsModal: boolean;
   loadAppData: (params: {}) => void;
   syncAppData: (params: SyncAppParams) => void;
   closeFolder: (params: {}) => void;
@@ -43,11 +46,13 @@ interface Props {
 
 interface State {
   date: Date;
+  backgroundImageUrl: string;
 }
 
 class AppComponent extends React.Component<Props, State> {
   state: State = {
     date: new Date(),
+    backgroundImageUrl: LocalStorageHelpers.getImageUrl(),
   };
 
   private oldUser: User | null = null;
@@ -209,6 +214,10 @@ class AppComponent extends React.Component<Props, State> {
       <AddBookmarksModalComponent/>
     ) : null;
 
+    const maybeSettingsModal = this.props.showSettingsModal ? (
+      <SettingsModalComponent/>
+    ) : null;
+
     const innerComponent = this.props.user === null ? (
       <NuxComponent key="nux"/>
     ) : (
@@ -224,8 +233,18 @@ class AppComponent extends React.Component<Props, State> {
         </div>
         { maybeDragLayer }
         { maybeAddBookmarksModal }
+        { maybeSettingsModal }
         <CopiedToastComponent/>
       </div>
+    );
+
+    const customStyle = this.state.backgroundImageUrl ? (
+      {
+        background: `url(${this.state.backgroundImageUrl}) no-repeat center center fixed`,
+        backgroundSize: 'cover',
+      }
+    ) : (
+      {}
     );
 
     return (
@@ -236,7 +255,7 @@ class AppComponent extends React.Component<Props, State> {
         transitionLeaveTimeout={300}
       >
         { innerComponent }
-        <div className="app-background"/>
+        <div className="app-background" style={customStyle}/>
       </CSSTransitionGroup>
     );
   }
@@ -250,6 +269,7 @@ const mapStateToProps = (state: AppState, props: {}) => {
     draggedRank: state.dragDropState.draggedRank,
     folders: state.foldersState.folders,
     showAddBookmarksModal: state.addBookmarksState.showingModal,
+    showSettingsModal: state.settingsState.showingModal,
   };
 };
 
