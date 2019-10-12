@@ -69,15 +69,17 @@ export class ChromeHelpers {
     });
   }
 
+  // Note! This filters out the new tab page. We probably don't need it for anything.
   public static getOpenTabs = (): Promise<TabInfo[]> => {
     return new Promise((resolve, reject) => {
       chrome.tabs.query({}, (tabs: chrome.tabs.Tab[]) => {
-        const infos: TabInfo[] = tabs.map((tab: chrome.tabs.Tab) => ({
+        const tabInfos: TabInfo[] = tabs.map((tab: chrome.tabs.Tab) => ({
           url: tab.url,
           title: tab.title,
           faviconUrl: tab.favIconUrl,
         }));
-        resolve(infos);
+        const tabInfosWithoutNewTab = tabInfos.filter(tabInfo => tabInfo.url !== 'chrome://newtab/');
+        resolve(tabInfosWithoutNewTab);
       });
     });
   }
