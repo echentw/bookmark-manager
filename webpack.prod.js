@@ -6,6 +6,8 @@ const CopyPlugin = require('copy-webpack-plugin');
 const { CheckerPlugin } = require('awesome-typescript-loader');
 
 module.exports = {
+  mode: 'production',
+  devtool: 'source-map',
   entry: {
     newtab: path.join(__dirname, 'src/main.tsx'),
     popup: path.join(__dirname, 'src/popup.tsx'),
@@ -14,8 +16,6 @@ module.exports = {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist')
   },
-  mode: 'development',
-  devtool: "source-map",
   module: {
     rules: [
       // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.

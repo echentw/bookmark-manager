@@ -4,7 +4,8 @@
   "description": "",
   "main": "jquery.min.js",
   "scripts": {
-    "start": "webpack --watch --progress",
+    "start": "webpack --config webpack.dev.js --watch --progress",
+    "build": "rm -r dist/ && webpack --config webpack.prod.js && zip -r axle.zip dist/*",
     "tslint": "node_modules/tslint/bin/tslint -c tslint.json --project tsconfig.json 'src/**/*.ts'",
     "tslint-fix": "node_modules/tslint/bin/tslint -c tslint.json --fix --project tsconfig.json 'src/**/*.ts'",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -49,6 +50,7 @@
     "webpack-dev-server": "^3.7.1"
   },
   "devDependencies": {
-    "tslint": "^5.18.0"
+    "tslint": "^5.18.0",
+    "webpack-merge": "^4.2.2"
   }
 }
