@@ -1,3 +1,10 @@
+@-webkit-keyframes spinner {
+  to { transform: rotate(360deg); }
+}
+@keyframes spinner {
+  to { transform: rotate(360deg); }
+}
+
 @-webkit-keyframes fade-in-out {
   0% { opacity: 0; }
   20% { opacity: 1; }

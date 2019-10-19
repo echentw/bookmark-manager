@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { FaUpload } from 'react-icons/fa';
+import { FaCircleNotch, FaUpload } from 'react-icons/fa';
 
 import * as defaultBackgroundImageUrl from '../../sandbox/wallpapers/moon.png';
 
@@ -15,9 +15,17 @@ interface Props {
   setImageTimestamp: (params: SetImageTimestampParams) => void;
 }
 
-class SettingsModalComponent extends React.Component<Props> {
+interface State {
+  imageLoading: boolean;
+}
+
+class SettingsModalComponent extends React.Component<Props, State> {
 
   private modalRef: React.RefObject<HTMLDivElement> = React.createRef();
+
+  state: State = {
+    imageLoading: false,
+  };
 
   onFileInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files.length > 0) {
@@ -29,7 +37,9 @@ class SettingsModalComponent extends React.Component<Props> {
       }
 
       try {
+        this.setState({ imageLoading: true });
         await LocalStorageHelpers.saveImage(file);
+        this.setState({ imageLoading: false });
         this.props.setImageTimestamp({ imageTimestamp: Date.now().toString() });
       } catch(e) {
         alert(e.message);
@@ -47,6 +57,18 @@ class SettingsModalComponent extends React.Component<Props> {
 
   render() {
     const imageUrl = defaultBackgroundImageUrl;
+
+    const maybeImageLoadingIcon = this.state.imageLoading ? (
+      <FaCircleNotch className="background-image-loading-icon"/>
+    ) : null;
+
+    const backgroundImageCustomStyles = this.state.imageLoading ? ({
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    }) : {};
+
+    const maybeUploadIcon = !this.state.imageLoading ? (
+      <FaUpload className="background-image-upload-icon"/>
+    ) : null;
 
     const modalComponent = (
       <div className="settings-modal" ref={this.modalRef}>
@@ -71,8 +93,9 @@ class SettingsModalComponent extends React.Component<Props> {
               onChange={this.onFileInputChange}
             />
             <img src={imageUrl}/>
-            <label htmlFor="file" className="set-background-image-preview">
-              <FaUpload className="background-image-upload-icon"/>
+            <label htmlFor="file" className="set-background-image-preview" style={backgroundImageCustomStyles}>
+              { maybeImageLoadingIcon }
+              { maybeUploadIcon }
             </label>
           </div>
         </div>
