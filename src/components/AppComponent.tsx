@@ -238,13 +238,16 @@ class AppComponent extends React.Component<Props, State> {
       </div>
     );
 
-    const customStyle = this.state.backgroundImageUrl ? (
+    const backgroundCustomStyles = this.state.backgroundImageUrl ? (
       {
         background: `url(${this.state.backgroundImageUrl}) no-repeat center center fixed`,
         backgroundSize: 'cover',
       }
     ) : (
-      {}
+      {
+        background: `url(${require('../../sandbox/wallpapers/moon.png')}) no-repeat center center fixed`,
+        backgroundSize: 'cover',
+      }
     );
 
     return (
@@ -255,7 +258,7 @@ class AppComponent extends React.Component<Props, State> {
         transitionLeaveTimeout={300}
       >
         { innerComponent }
-        <div className="app-background" style={customStyle}/>
+        <div className="app-background" style={backgroundCustomStyles}/>
       </CSSTransitionGroup>
     );
   }

@@ -2,8 +2,6 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { FaCircleNotch, FaUpload } from 'react-icons/fa';
 
-import * as defaultBackgroundImageUrl from '../../sandbox/wallpapers/moon.png';
-
 import { AppState } from '../reduxStore';
 import { LocalStorageHelpers } from '../LocalStorageHelpers';
 import * as SettingsActions from '../actions/SettingsActions';
@@ -56,7 +54,7 @@ class SettingsModalComponent extends React.Component<Props, State> {
   }
 
   render() {
-    const imageUrl = defaultBackgroundImageUrl;
+    const imageUrl = require('../../sandbox/wallpapers/moon.png');
 
     const maybeImageLoadingIcon = this.state.imageLoading ? (
       <FaCircleNotch className="background-image-loading-icon"/>
