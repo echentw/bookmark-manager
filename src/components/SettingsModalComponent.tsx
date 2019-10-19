@@ -22,6 +22,12 @@ class SettingsModalComponent extends React.Component<Props> {
   onFileInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
+
+      if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
+        alert('Please only upload PNG or JPEG images!');
+        return;
+      }
+
       try {
         await LocalStorageHelpers.saveImage(file);
         this.props.setImageTimestamp({ imageTimestamp: Date.now().toString() });
