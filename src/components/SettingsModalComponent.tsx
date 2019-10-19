@@ -32,8 +32,7 @@ class SettingsModalComponent extends React.Component<Props> {
         await LocalStorageHelpers.saveImage(file);
         this.props.setImageTimestamp({ imageTimestamp: Date.now().toString() });
       } catch(e) {
-        console.log(e);
-        alert('That image size is too big!');
+        alert(e.message);
       }
     }
   }
