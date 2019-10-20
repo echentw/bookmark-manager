@@ -8,6 +8,7 @@ import { Folder } from '../Folder';
 import { User } from '../User';
 import { ChromeAppState, ChromeHelpers } from '../ChromeHelpers';
 import { StateBridge } from '../StateBridge';
+import { StateDiffer } from '../StateDiffer';
 import { LocalStorageHelpers } from '../LocalStorageHelpers';
 import * as SyncAppActions from '../actions/SyncAppActions';
 import { SyncAppParams } from '../actions/SyncAppActions';
@@ -56,9 +57,7 @@ class AppComponent extends React.Component<Props, State> {
     backgroundImageUrl: LocalStorageHelpers.getImageUrl(),
   };
 
-  private oldUser: User | null = null;
-  private oldFolders: Folder[] | null = null;
-  private oldCurrentFolderId: string | null = null;
+  private stateDiffer: StateDiffer = new StateDiffer();
 
   componentDidMount = () => {
     this.beginSyncingDate();
@@ -71,82 +70,31 @@ class AppComponent extends React.Component<Props, State> {
     }, 2000);
   }
 
-  private stateHasChanged = ({ oldState, newState }: {
-    oldState: {
-      user: User | null;
-      folders: Folder[];
-      currentFolderId: string | null;
-    };
-    newState: {
-      user: User | null;
-      folders: Folder[];
-      currentFolderId: string | null;
-    };
-  }): boolean => {
-    if (oldState.user === null) {
-      if (newState.user !== null) {
-        return true;
-      }
-    } else if (!oldState.user.equals(newState.user)) {
-      return true;
-    }
-    if (oldState.currentFolderId !== newState.currentFolderId) {
-      return true;
-    }
-    if (oldState.folders.length !== newState.folders.length) {
-      return true;
-    }
-    return !oldState.folders.every((oldFolder: Folder, index: number) => {
-      return oldFolder.equals(newState.folders[index]);
-    });
-  }
-
   private beginSyncingStore = (store: Store<AppState, Action>) => {
     store.subscribe(async () => {
       const state = store.getState();
 
       const dragging = state.dragDropState.draggedRank !== null;
-      const { folders } = state.foldersState;
-      const { currentFolderId } = state.navigationState;
-      const { user } = state.userState;
-
-      if (this.oldFolders === null) {
-        // Initialize all these attributes
-        this.oldUser = user;
-        this.oldFolders = folders.map(folder => folder.copy());
-        this.oldCurrentFolderId = currentFolderId;
+      if (dragging) {
+        // If the user is currently dragging, then they haven't finished their action yet.
         return;
       }
 
-      if (!dragging) {
-        const stateChanged = this.stateHasChanged({
-          oldState: {
-            user: this.oldUser,
-            currentFolderId: this.oldCurrentFolderId,
-            folders: this.oldFolders,
-          },
-          newState: {
-            user: user,
-            currentFolderId: currentFolderId,
-            folders: folders,
-          },
-        });
-        if (stateChanged) {
-          this.oldUser = user;
-          this.oldFolders = folders.map(folder => folder.copy());
-          this.oldCurrentFolderId = currentFolderId;
-          try {
-            const chromeAppState = StateBridge.toPersistedState(state);
-            await ChromeHelpers.saveAppState(chromeAppState);
-          } catch (e) {
-            if (e.message.startsWith('QUOTA_BYTES')) {
-              alert('Not enough storage space left! Please refresh this page, and consider deleting some folders/bookmarks to make room.');
-            } else {
-              alert(`Unknown error: ${e.message}`);
-            }
+      const chromeAppState = StateBridge.toPersistedState(state);
+
+      if (this.stateDiffer.shouldPersistState(chromeAppState)) {
+        try {
+          await ChromeHelpers.saveAppState(chromeAppState);
+        } catch(e) {
+          if (e.message.startsWith('QUOTA_BYTES')) {
+            alert('Not enough storage space left! Please refresh this page, and consider deleting some folders/bookmarks to make room.');
+          } else {
+            alert(`Unknown error: ${e.message}`);
           }
         }
       }
+
+      this.stateDiffer.update(chromeAppState);
     });
 
     ChromeHelpers.addOnChangedListener((appState: ChromeAppState) => {

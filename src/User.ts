@@ -20,6 +20,10 @@ export class User {
     return (this.name === other.name);
   }
 
+  public copy = (): User => {
+    return new User({ name: this.name });
+  }
+
   public static fromData = (data: UserData): User => {
     return new User({ name: data.name });
   }
