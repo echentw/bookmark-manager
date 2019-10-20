@@ -1,5 +1,4 @@
 import { Folder, FolderData } from './Folder';
-import { AppState } from './reduxStore';
 import { User, UserData } from './User';
 
 // What gets returned by some methods in this class
@@ -95,22 +94,8 @@ export class ChromeHelpers {
     });
   }
 
-  public static saveAppState = (appState: AppState): Promise<{}> => {
-    // uncomment when doing dangerous operations
-    // return new Promise((resolve) => resolve());
-    const { user } = appState.userState;
-    const { folders } = appState.foldersState;
-    const { currentFolderId } = appState.navigationState;
-
-    const userData: UserData | null = user === null ? null : user.toData();
-    const folderDatas: FolderData[] = folders.map(folder => folder.toData());
-
-    const appData: AppData = {
-      user: userData,
-      folders: folderDatas,
-      currentFolderId: currentFolderId,
-    };
-
+  public static saveAppState = (appState: ChromeAppState): Promise<{}> => {
+    const appData = ChromeHelpers.toSerializedData(appState);
     return new Promise((resolve, reject) => {
       storageEngine.set({ [ChromeHelpers.Keys.AppData]: appData }, () => {
         if (chrome.runtime.lastError) {
@@ -127,31 +112,12 @@ export class ChromeHelpers {
         if (chrome.runtime.lastError) {
           return reject(chrome.runtime.lastError);
         }
-
         if (result.appData) {
-          const folderDatas: FolderData[] = result.appData.folders;
-          const folders: Folder[] = folderDatas.map(data => Folder.fromData(data));
-
-          const userData: UserData | null = result.appData.user;
-          const user: User | null = userData === null ? null : User.fromData(userData);
-
-          const state: ChromeAppState = {
-            user: user,
-            folders: folders,
-            currentFolderId: result.appData.currentFolderId,
-          };
-          return resolve(state);
+          const appState = ChromeHelpers.toDeserializedState(result.appData);
+          return resolve(appState);
         } else {
-          const firstFolder = new Folder({
-            name: 'General',
-            bookmarks: [],
-          });
-          const initialState: ChromeAppState = {
-            user: null,
-            folders: [firstFolder],
-            currentFolderId: firstFolder.id,
-          };
-          return resolve(initialState);
+          const appState = ChromeHelpers.getCleanInitialState();
+          return resolve(appState);
         }
       });
     });
@@ -165,22 +131,11 @@ export class ChromeHelpers {
       if (chrome.runtime.lastError) {
         return;
       }
-
       if (areaName === 'local' && changes[ChromeHelpers.Keys.AppData]) {
         const change: chrome.storage.StorageChange = changes[ChromeHelpers.Keys.AppData];
         const appData: AppData = change.newValue;
-
-        const folderDatas: FolderData[] = appData.folders;
-        const folders: Folder[] = folderDatas.map(data => Folder.fromData(data));
-
-        const userData: UserData | null = appData.user;
-        const user: User | null = userData === null ? null : User.fromData(userData);
-
-        handleNewAppData({
-          user: user,
-          folders: folders,
-          currentFolderId: appData.currentFolderId,
-        });
+        const appState = ChromeHelpers.toDeserializedState(appData);
+        handleNewAppData(appState);
       }
     });
   }
@@ -192,5 +147,43 @@ export class ChromeHelpers {
     storageEngine.get([ChromeHelpers.Keys.AppData], result => {
       console.log('data', result);
     });
+  }
+
+  private static toSerializedData = (chromeAppState: ChromeAppState): AppData => {
+    const { user, folders, currentFolderId } = chromeAppState;
+
+    const userData: UserData | null = user === null ? null : user.toData();
+    const folderDatas: FolderData[] = folders.map(folder => folder.toData());
+
+    return {
+      user: userData,
+      folders: folderDatas,
+      currentFolderId: currentFolderId,
+    };
+  }
+
+  private static toDeserializedState = (appData: AppData): ChromeAppState => {
+    const { user: userData, folders: folderDatas, currentFolderId } = appData;
+
+    const user: User | null = userData === null ? null : User.fromData(userData);
+    const folders: Folder[] = folderDatas.map(data => Folder.fromData(data));
+
+    return {
+      user: user,
+      folders: folders,
+      currentFolderId: currentFolderId,
+    };
+  }
+
+  private static getCleanInitialState = (): ChromeAppState => {
+    const firstFolder = new Folder({
+      name: 'General',
+      bookmarks: [],
+    });
+    return {
+      user: null,
+      folders: [firstFolder],
+      currentFolderId: firstFolder.id,
+    };
   }
 }

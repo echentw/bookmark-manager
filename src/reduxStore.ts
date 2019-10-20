@@ -2,6 +2,7 @@ import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 
 import { Action } from './actions/constants';
+import { HollowAppState } from './stateBridge';
 
 import { addBookmarksReducer, AddBookmarksState, initialAddBookmarksState } from './reducers/AddBookmarksReducer';
 import { copyUrlReducer, CopyUrlState, initialCopyUrlState } from './reducers/CopyUrlReducer';
@@ -22,7 +23,7 @@ declare global {
   }
 }
 
-export interface AppState {
+export interface AppState extends HollowAppState {
   addBookmarksState: AddBookmarksState;
   copyUrlState: CopyUrlState;
   deleteFolderState: DeleteFolderState;

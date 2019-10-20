@@ -7,6 +7,7 @@ import { Bookmark } from '../Bookmark';
 import { Folder } from '../Folder';
 import { User } from '../User';
 import { ChromeAppState, ChromeHelpers } from '../ChromeHelpers';
+import { StateBridge } from '../StateBridge';
 import { LocalStorageHelpers } from '../LocalStorageHelpers';
 import * as SyncAppActions from '../actions/SyncAppActions';
 import { SyncAppParams } from '../actions/SyncAppActions';
@@ -135,7 +136,8 @@ class AppComponent extends React.Component<Props, State> {
           this.oldFolders = folders.map(folder => folder.copy());
           this.oldCurrentFolderId = currentFolderId;
           try {
-            await ChromeHelpers.saveAppState(state);
+            const chromeAppState = StateBridge.toPersistedState(state);
+            await ChromeHelpers.saveAppState(chromeAppState);
           } catch (e) {
             if (e.message.startsWith('QUOTA_BYTES')) {
               alert('Not enough storage space left! Please refresh this page, and consider deleting some folders/bookmarks to make room.');
