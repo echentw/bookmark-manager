@@ -23,7 +23,7 @@ export class StateDiffer {
 
   update = (state: ChromeAppState) => {
     this.previousState = {
-      user: state.user.copy(),
+      user: state.user,
       folders: state.folders.map(folder => folder.copy()),
       currentFolderId: state.currentFolderId,
     };
