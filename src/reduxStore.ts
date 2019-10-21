@@ -2,7 +2,7 @@ import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 
 import { Action } from './actions/constants';
-import { HollowAppStateForLoading } from './stateBridge';
+import { HollowAppStateForLoad } from './stateBridge';
 
 import { addBookmarksReducer, AddBookmarksState, initialAddBookmarksState } from './reducers/AddBookmarksReducer';
 import { copyUrlReducer, CopyUrlState, initialCopyUrlState } from './reducers/CopyUrlReducer';
@@ -17,13 +17,15 @@ import { initialNavigationState, navigationReducer, NavigationState } from './re
 import { initialSettingsState, settingsReducer, SettingsState } from './reducers/SettingsReducer';
 import { initialUserState, userReducer, UserState } from './reducers/UserReducer';
 
+import { syncReducer } from './reducers/SyncReducer';
+
 declare global {
   interface Window {
     __REDUX_DEVTOOLS_EXTENSION__?: any;
   }
 }
 
-export interface AppState extends HollowAppStateForLoading {
+export interface AppState extends HollowAppStateForLoad {
   addBookmarksState: AddBookmarksState;
   copyUrlState: CopyUrlState;
   deleteFolderState: DeleteFolderState;
@@ -68,7 +70,8 @@ const reducer = (state: AppState = initialAppState, action: Action): AppState =>
     settingsState: settingsReducer(state.settingsState, action, state),
     userState: userReducer(state.userState, action, state),
   };
-  return newState;
+  const syncedState: AppState = syncReducer(newState, action);
+  return syncedState;
 };
 
 const enhancers = window.__REDUX_DEVTOOLS_EXTENSION__ ? (

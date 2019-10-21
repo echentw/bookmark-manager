@@ -1,10 +1,14 @@
 import { Folder, FolderData } from './Folder';
 import { User, UserData } from './User';
 
-// What gets returned by some methods in this class
-export interface ChromeAppState {
+// We don't want to sync *all* the stuff in ChromeAppState to all existing tabs.
+// This is the stuff we want to sync over.
+export interface ChromeAppStateForSync {
   user: User | null;
   folders: Folder[];
+}
+
+export interface ChromeAppState extends ChromeAppStateForSync {
   currentFolderId: string | null;
 }
 
@@ -123,7 +127,7 @@ export class ChromeHelpers {
     });
   }
 
-  public static addOnChangedListener = (handleNewAppData: (appState: ChromeAppState) => void): void => {
+  public static addOnChangedListener = (receive: (appState: ChromeAppStateForSync) => void): void => {
     chrome.storage.onChanged.addListener((
       changes: { [key: string]: chrome.storage.StorageChange },
       areaName: string,
@@ -135,7 +139,10 @@ export class ChromeHelpers {
         const change: chrome.storage.StorageChange = changes[ChromeHelpers.Keys.AppData];
         const appData: AppData = change.newValue;
         const appState = ChromeHelpers.toDeserializedState(appData);
-        handleNewAppData(appState);
+        receive({
+          user: appState.user,
+          folders: appState.folders,
+        });
       }
     });
   }

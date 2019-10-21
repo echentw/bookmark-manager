@@ -6,13 +6,13 @@ import { CSSTransitionGroup } from 'react-transition-group';
 import { Bookmark } from '../Bookmark';
 import { Folder } from '../Folder';
 import { User } from '../User';
-import { ChromeAppState, ChromeHelpers } from '../ChromeHelpers';
+import { ChromeAppState, ChromeAppStateForSync, ChromeHelpers } from '../ChromeHelpers';
 import { StateBridge } from '../StateBridge';
 import { StateDiffer } from '../StateDiffer';
 import { LocalStorageHelpers } from '../LocalStorageHelpers';
-import * as SyncAppActions from '../actions/SyncAppActions';
-import { SyncAppParams } from '../actions/SyncAppActions';
 import * as FolderActions from '../actions/FolderActions';
+import * as SyncActions from '../actions/SyncActions';
+import { LoadParams, SyncParams } from '../actions/SyncActions';
 import { AppState, reduxStore } from '../reduxStore';
 import { Action } from '../actions/constants';
 
@@ -41,9 +41,9 @@ interface Props {
   folders: Folder[];
   showAddBookmarksModal: boolean;
   showSettingsModal: boolean;
-  loadAppData: (params: {}) => void;
-  syncAppData: (params: SyncAppParams) => void;
   closeFolder: (params: {}) => void;
+  loadAppState: (params: LoadParams) => void;
+  syncAppState: (params: SyncParams) => void;
 }
 
 interface State {
@@ -70,7 +70,8 @@ class AppComponent extends React.Component<Props, State> {
     }, 2000);
   }
 
-  private beginSyncingStore = (store: Store<AppState, Action>) => {
+  private beginSyncingStore = async (store: Store<AppState, Action>) => {
+    // When the current react state changes, we might want to persist this state.
     store.subscribe(async () => {
       const state = store.getState();
 
@@ -97,14 +98,14 @@ class AppComponent extends React.Component<Props, State> {
       this.stateDiffer.update(chromeAppState);
     });
 
-    ChromeHelpers.addOnChangedListener((appState: ChromeAppState) => {
-      this.props.syncAppData({
-        user: appState.user,
-        folders: appState.folders,
-      });
+    // When the persisted state changes, we want to update the current react state.
+    ChromeHelpers.addOnChangedListener((appState: ChromeAppStateForSync) => {
+      this.props.syncAppState(appState);
     });
 
-    this.props.loadAppData({});
+    // Do the initial load of state.
+    const loadedState: ChromeAppState = await ChromeHelpers.loadAppState();
+    this.props.loadAppState(loadedState);
   }
 
   render() {
@@ -227,8 +228,8 @@ const mapStateToProps = (state: AppState, props: {}) => {
 };
 
 const mapActionsToProps = {
-  loadAppData: SyncAppActions.loadAppData,
-  syncAppData: SyncAppActions.syncAppData,
+  loadAppState: SyncActions.load,
+  syncAppState: SyncActions.sync,
   closeFolder: FolderActions.closeFolder,
 };
 

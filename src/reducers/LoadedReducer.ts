@@ -1,4 +1,4 @@
-import { Action, SyncAppActionType as ActionType } from '../actions/constants';
+import { Action } from '../actions/constants';
 import { AppState } from '../reduxStore';
 import { Reducer } from './Reducer';
 
@@ -15,17 +15,6 @@ export const loadedReducer: Reducer<LoadedState> = (
   action: Action,
   appState: AppState,
 ): LoadedState => {
-  let newState = state;
-  switch (action.type) {
-    case ActionType.load:
-      newState = handleLoad(state, action);
-      break;
-  }
-  return newState;
+  // This state is completely managed by SyncReducer, so we don't need to do anything.
+  return state;
 };
-
-function handleLoad(state: LoadedState, action: Action): LoadedState {
-  return {
-    loaded: true,
-  };
-}

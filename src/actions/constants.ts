@@ -26,11 +26,6 @@ export const DeleteFolderActionType = {
   cancelDelete: 'EditFolder:cancelDelete',
 };
 
-export const SyncAppActionType = {
-  load: 'SyncApp:load',
-  sync: 'SyncApp:sync',
-};
-
 export const AddBookmarksActionType = {
   showModal: 'AddBookmarks:showModal',
   cancel: 'AddBookmarks:cancel',
@@ -68,4 +63,9 @@ export const SettingsActionType = {
   showModal: 'Settings:showModal',
   hideModal: 'Settings:hideModal',
   setImageTimestamp: 'Settings:setImageTimestamp',
+};
+
+export const SyncActionType = {
+  load: 'Sync:load',
+  sync: 'Sync:sync',
 };

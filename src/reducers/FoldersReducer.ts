@@ -11,13 +11,11 @@ import {
   DragDropActionType,
   EditBookmarkActionType,
   EditFolderActionType,
-  SyncAppActionType,
 } from '../actions/constants';
 import { DeleteFolderParams } from '../actions/DeleteFolderActions';
 import { DragParams } from '../actions/DragDropActions';
 import { EditBookmarkParams } from '../actions/EditBookmarkActions';
 import { EditFolderParams, SelectFolderColorParams } from '../actions/EditFolderActions';
-import { LoadAppParams, SyncAppParams } from '../actions/SyncAppActions';
 import { withItemDeleted, withItemReplaced } from '../utils';
 
 export interface FoldersState {
@@ -46,12 +44,6 @@ export const foldersReducer: Reducer<FoldersState> = (
       break;
     case EditFolderActionType.selectColor:
       newState = handleSelectFolderColor(state, action as Action<SelectFolderColorParams>);
-      break;
-    case SyncAppActionType.load:
-      newState = handleAppLoad(state, action as Action<LoadAppParams>);
-      break;
-    case SyncAppActionType.sync:
-      newState = handleAppSync(state, action as Action<SyncAppParams>);
       break;
     case AddBookmarksActionType.save:
       newState = handleAddBookmarksSave(state, action as Action<AddBookmarksSaveParams>, appState);
@@ -108,18 +100,6 @@ function handleSelectFolderColor(state: FoldersState, action: Action<SelectFolde
   folders[index] = newFolder;
   return {
     folders: folders,
-  };
-}
-
-function handleAppLoad(state: FoldersState, action: Action<LoadAppParams>): FoldersState {
-  return {
-    folders: action.params.folders,
-  };
-}
-
-function handleAppSync(state: FoldersState, action: Action<SyncAppParams>): FoldersState {
-  return {
-    folders: action.params.folders,
   };
 }
 

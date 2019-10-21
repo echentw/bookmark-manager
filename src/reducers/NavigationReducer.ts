@@ -1,6 +1,5 @@
-import { Action, FolderActionType, SyncAppActionType } from '../actions/constants';
+import { Action, FolderActionType } from '../actions/constants';
 import { OpenFolderParams } from '../actions/FolderActions';
-import { LoadAppParams } from '../actions/SyncAppActions';
 import { Folder } from '../Folder';
 import { AppState } from '../reduxStore';
 import { Reducer } from './Reducer';
@@ -26,9 +25,6 @@ export const navigationReducer: Reducer<NavigationState> = (
     case FolderActionType.closeFolder:
       newState = handleCloseFolder(state, action);
       break;
-    case SyncAppActionType.load:
-      newState = handleAppLoad(state, action as Action<LoadAppParams>);
-      break;
   }
   return newState;
 };
@@ -42,18 +38,5 @@ function handleOpenFolder(state: NavigationState, action: Action<OpenFolderParam
 function handleCloseFolder(state: NavigationState, action: Action): NavigationState {
   return {
     currentFolderId: null,
-  };
-}
-
-function handleAppLoad(state: NavigationState, action: Action<LoadAppParams>): NavigationState {
-  let currentFolderId: string | null = null;
-  if (state.currentFolderId === null) {
-    currentFolderId = action.params.currentFolderId;
-  } else {
-    const folderExists = action.params.folders.some((folder: Folder) => folder.id === state.currentFolderId);
-    currentFolderId = folderExists ? state.currentFolderId : null;
-  }
-  return {
-    currentFolderId: currentFolderId,
   };
 }
