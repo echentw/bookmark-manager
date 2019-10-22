@@ -1,7 +1,7 @@
 import { Action, SettingsActionType as ActionType } from '../actions/constants';
 import { AppState } from '../reduxStore';
 import { Reducer } from './Reducer';
-import { SetImageTimestampParams } from '../actions/SettingsActions';
+import { SetBackgroundImageTimestampParams } from '../actions/SettingsActions';
 
 export interface SettingsState {
   showingModal: boolean;
@@ -10,12 +10,12 @@ export interface SettingsState {
   // It's used to automatically change the background image on all tabs when a new background image is set.
   // We're doing it this way because LocalStorage doesn't give us listeners.
   // (Unix timestamp in milliseconds)
-  imageTimestamp: string;
+  backgroundImageTimestamp: string;
 }
 
 export const initialSettingsState: SettingsState = {
   showingModal: false,
-  imageTimestamp: '',
+  backgroundImageTimestamp: '',
 };
 
 export const settingsReducer: Reducer<SettingsState> = (
@@ -31,8 +31,8 @@ export const settingsReducer: Reducer<SettingsState> = (
     case ActionType.hideModal:
       newState = handleHideModal(state, action);
       break;
-    case ActionType.setImageTimestamp:
-      newState = handleSetImageTimestamp(state, action as Action<SetImageTimestampParams>);
+    case ActionType.setBackgroundImageTimestamp:
+      newState = handleSetBackgroundImageTimestamp(state, action as Action<SetBackgroundImageTimestampParams>);
   }
   return newState;
 }
@@ -51,9 +51,12 @@ function handleHideModal(state: SettingsState, action: Action): SettingsState {
   };
 }
 
-function handleSetImageTimestamp(state: SettingsState, action: Action<SetImageTimestampParams>): SettingsState {
+function handleSetBackgroundImageTimestamp(
+  state: SettingsState,
+  action: Action<SetBackgroundImageTimestampParams>
+): SettingsState {
   return {
     ...state,
-    imageTimestamp: action.params.imageTimestamp,
+    backgroundImageTimestamp: action.params.backgroundImageTimestamp,
   };
 }

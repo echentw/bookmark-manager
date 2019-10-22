@@ -54,7 +54,7 @@ interface State {
 class AppComponent extends React.Component<Props, State> {
   state: State = {
     date: new Date(),
-    backgroundImageUrl: LocalStorageHelpers.getImageUrl(),
+    backgroundImageUrl: LocalStorageHelpers.getBackgroundImageUrl(),
   };
 
   private stateDiffer: StateDiffer = new StateDiffer();

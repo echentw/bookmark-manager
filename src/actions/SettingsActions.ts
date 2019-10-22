@@ -1,7 +1,7 @@
 import { Action, SettingsActionType as ActionType } from './constants';
 
-export interface SetImageTimestampParams {
-  imageTimestamp: string;
+export interface SetBackgroundImageTimestampParams {
+  backgroundImageTimestamp: string;
 }
 
 export function showModal(): Action {
@@ -18,9 +18,11 @@ export function hideModal(): Action {
   };
 }
 
-export function setImageTimestamp(params: SetImageTimestampParams): Action<SetImageTimestampParams> {
+export function setBackgroundImageTimestamp(
+  params: SetBackgroundImageTimestampParams
+): Action<SetBackgroundImageTimestampParams> {
   return {
-    type: ActionType.setImageTimestamp,
+    type: ActionType.setBackgroundImageTimestamp,
     params: params,
   };
 }

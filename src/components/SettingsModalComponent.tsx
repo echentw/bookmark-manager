@@ -5,12 +5,12 @@ import { FaCircleNotch, FaUpload } from 'react-icons/fa';
 import { AppState } from '../reduxStore';
 import { LocalStorageHelpers } from '../LocalStorageHelpers';
 import * as SettingsActions from '../actions/SettingsActions';
-import { SetImageTimestampParams } from '../actions/SettingsActions';
+import { SetBackgroundImageTimestampParams } from '../actions/SettingsActions';
 import { ModalBackdropComponent } from './ModalBackdropComponent';
 
 interface Props {
   hideModal: () => void;
-  setImageTimestamp: (params: SetImageTimestampParams) => void;
+  setBackgroundImageTimestamp: (params: SetBackgroundImageTimestampParams) => void;
 }
 
 interface State {
@@ -36,9 +36,9 @@ class SettingsModalComponent extends React.Component<Props, State> {
 
       try {
         this.setState({ imageLoading: true });
-        await LocalStorageHelpers.saveImage(file);
+        await LocalStorageHelpers.saveBackgroundImage(file);
         this.setState({ imageLoading: false });
-        this.props.setImageTimestamp({ imageTimestamp: Date.now().toString() });
+        this.props.setBackgroundImageTimestamp({ backgroundImageTimestamp: Date.now().toString() });
       } catch(e) {
         alert(e.message);
       }
@@ -50,7 +50,7 @@ class SettingsModalComponent extends React.Component<Props, State> {
   }
 
   onClickResetBackgroundImage = () => {
-    LocalStorageHelpers.clearImage();
+    LocalStorageHelpers.clearBackgroundImage();
   }
 
   render() {
@@ -118,7 +118,7 @@ const mapStateToProps = (state: AppState, props: {}) => {
 
 const mapActionsToProps = {
   hideModal: SettingsActions.hideModal,
-  setImageTimestamp: SettingsActions.setImageTimestamp,
+  setBackgroundImageTimestamp: SettingsActions.setBackgroundImageTimestamp,
 };
 
 const Component = connect(mapStateToProps, mapActionsToProps)(SettingsModalComponent);

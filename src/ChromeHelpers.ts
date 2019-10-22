@@ -6,7 +6,7 @@ import { User, UserData } from './User';
 export interface ChromeAppStateForSync {
   user: User | null;
   folders: Folder[];
-  imageTimestamp: string;
+  backgroundImageTimestamp: string;
 }
 
 export interface ChromeAppState extends ChromeAppStateForSync {
@@ -21,7 +21,7 @@ export interface AppData {
   user: UserData | null;
   folders: FolderData[];
   currentFolderId: string | null;
-  imageTimestamp: string | null;
+  backgroundImageTimestamp: string | null;
 }
 
 export interface TabInfo {
@@ -144,7 +144,7 @@ export class ChromeHelpers {
         receive({
           user: appState.user,
           folders: appState.folders,
-          imageTimestamp: appState.imageTimestamp,
+          backgroundImageTimestamp: appState.backgroundImageTimestamp,
         });
       }
     });
@@ -160,7 +160,7 @@ export class ChromeHelpers {
   }
 
   private static toSerializedData = (chromeAppState: ChromeAppState): AppData => {
-    const { user, folders, currentFolderId, imageTimestamp } = chromeAppState;
+    const { user, folders, currentFolderId, backgroundImageTimestamp } = chromeAppState;
 
     const userData: UserData | null = user === null ? null : user.toData();
     const folderDatas: FolderData[] = folders.map(folder => folder.toData());
@@ -169,7 +169,7 @@ export class ChromeHelpers {
       user: userData,
       folders: folderDatas,
       currentFolderId: currentFolderId,
-      imageTimestamp: imageTimestamp,
+      backgroundImageTimestamp: backgroundImageTimestamp,
     };
   }
 
@@ -178,19 +178,19 @@ export class ChromeHelpers {
       user: userData,
       folders: folderDatas,
       currentFolderId: currentFolderIdData,
-      imageTimestamp: imageTimestampData,
+      backgroundImageTimestamp: backgroundImageTimestampData,
     } = appData;
 
     const user: User | null = userData === null ? null : User.fromData(userData);
     const folders: Folder[] = folderDatas.map(data => Folder.fromData(data));
     const currentFolderId: string | null = currentFolderIdData;
-    const imageTimestamp: string = imageTimestampData ? imageTimestampData : '';
+    const backgroundImageTimestamp: string = backgroundImageTimestampData ? backgroundImageTimestampData : '';
 
     return {
       user: user,
       folders: folders,
       currentFolderId: currentFolderId,
-      imageTimestamp: imageTimestamp,
+      backgroundImageTimestamp: backgroundImageTimestamp,
     };
   }
 
@@ -203,7 +203,7 @@ export class ChromeHelpers {
       user: null,
       folders: [firstFolder],
       currentFolderId: firstFolder.id,
-      imageTimestamp: '',
+      backgroundImageTimestamp: '',
     };
   }
 }

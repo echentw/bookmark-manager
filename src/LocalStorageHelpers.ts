@@ -6,7 +6,7 @@ export class LocalStorageHelpers {
     backgroundImageKey: 'backgroundImage',
   };
 
-  public static saveImage = (file: Blob): Promise<{}> => {
+  public static saveBackgroundImage = (file: Blob): Promise<{}> => {
     const error = {
       message: 'The image size is too big. Please try a smaller image.',
     };
@@ -71,11 +71,11 @@ export class LocalStorageHelpers {
     });
   }
 
-  public static clearImage = (): void => {
+  public static clearBackgroundImage = (): void => {
     localStorage.setItem(LocalStorageHelpers.Keys.backgroundImageKey, '');
   }
 
-  public static getImageUrl = (): string => {
+  public static getBackgroundImageUrl = (): string => {
     return localStorage.getItem(LocalStorageHelpers.Keys.backgroundImageKey);
   }
 

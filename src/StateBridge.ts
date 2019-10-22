@@ -24,7 +24,7 @@ export interface HollowAppStateForSync {
     loaded: boolean;
   };
   settingsState: {
-    imageTimestamp: string;
+    backgroundImageTimestamp: string;
   };
 }
 
@@ -35,7 +35,7 @@ export class StateBridge {
       user: appState.userState.user,
       folders: appState.foldersState.folders,
       currentFolderId: appState.navigationState.currentFolderId,
-      imageTimestamp: appState.settingsState.imageTimestamp,
+      backgroundImageTimestamp: appState.settingsState.backgroundImageTimestamp,
     };
   }
 
@@ -55,7 +55,7 @@ export class StateBridge {
         loaded: true,
       },
       settingsState: {
-        imageTimestamp: chromeAppState.imageTimestamp,
+        backgroundImageTimestamp: chromeAppState.backgroundImageTimestamp,
       },
     };
   }
@@ -72,7 +72,7 @@ export class StateBridge {
         loaded: true,
       },
       settingsState: {
-        imageTimestamp: chromeAppState.imageTimestamp,
+        backgroundImageTimestamp: chromeAppState.backgroundImageTimestamp,
       },
     };
   }
