@@ -24,6 +24,10 @@ function handleLoad(state: AppState, action: Action<LoadParams>): AppState {
   return {
     ...state,
     ...hollowState,
+    settingsState: {
+      ...state.settingsState,
+      ...hollowState.settingsState,
+    },
   };
 }
 
@@ -32,5 +36,9 @@ function handleSync(state: AppState, action: Action<SyncParams>): AppState {
   return {
     ...state,
     ...hollowState,
+    settingsState: {
+      ...state.settingsState,
+      ...hollowState.settingsState,
+    },
   };
 }

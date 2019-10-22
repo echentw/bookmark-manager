@@ -3,7 +3,9 @@ import { AppState } from '../reduxStore';
 import { Reducer } from './Reducer';
 import { SetImageTimestampParams } from '../actions/SettingsActions';
 
-interface Settings {
+export interface SettingsState {
+  showingModal: boolean;
+
   // The timestamp which the image was last set.
   // It's used to automatically change the background image on all tabs when a new background image is set.
   // We're doing it this way because LocalStorage doesn't give us listeners.
@@ -11,16 +13,9 @@ interface Settings {
   imageTimestamp: string;
 }
 
-export interface SettingsState {
-  showingModal: boolean;
-  settings: Settings;
-}
-
 export const initialSettingsState: SettingsState = {
   showingModal: false,
-  settings: {
-    imageTimestamp: '',
-  },
+  imageTimestamp: '',
 };
 
 export const settingsReducer: Reducer<SettingsState> = (
@@ -59,9 +54,6 @@ function handleHideModal(state: SettingsState, action: Action): SettingsState {
 function handleSetImageTimestamp(state: SettingsState, action: Action<SetImageTimestampParams>): SettingsState {
   return {
     ...state,
-    settings: {
-      ...state.settings,
-      imageTimestamp: action.params.imageTimestamp,
-    },
+    imageTimestamp: action.params.imageTimestamp,
   };
 }

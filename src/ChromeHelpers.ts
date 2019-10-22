@@ -6,6 +6,7 @@ import { User, UserData } from './User';
 export interface ChromeAppStateForSync {
   user: User | null;
   folders: Folder[];
+  imageTimestamp: string;
 }
 
 export interface ChromeAppState extends ChromeAppStateForSync {
@@ -20,6 +21,7 @@ export interface AppData {
   user: UserData | null;
   folders: FolderData[];
   currentFolderId: string | null;
+  imageTimestamp: string | null;
 }
 
 export interface TabInfo {
@@ -142,6 +144,7 @@ export class ChromeHelpers {
         receive({
           user: appState.user,
           folders: appState.folders,
+          imageTimestamp: appState.imageTimestamp,
         });
       }
     });
@@ -157,7 +160,7 @@ export class ChromeHelpers {
   }
 
   private static toSerializedData = (chromeAppState: ChromeAppState): AppData => {
-    const { user, folders, currentFolderId } = chromeAppState;
+    const { user, folders, currentFolderId, imageTimestamp } = chromeAppState;
 
     const userData: UserData | null = user === null ? null : user.toData();
     const folderDatas: FolderData[] = folders.map(folder => folder.toData());
@@ -166,19 +169,28 @@ export class ChromeHelpers {
       user: userData,
       folders: folderDatas,
       currentFolderId: currentFolderId,
+      imageTimestamp: imageTimestamp,
     };
   }
 
   private static toDeserializedState = (appData: AppData): ChromeAppState => {
-    const { user: userData, folders: folderDatas, currentFolderId } = appData;
+    const {
+      user: userData,
+      folders: folderDatas,
+      currentFolderId: currentFolderIdData,
+      imageTimestamp: imageTimestampData,
+    } = appData;
 
     const user: User | null = userData === null ? null : User.fromData(userData);
     const folders: Folder[] = folderDatas.map(data => Folder.fromData(data));
+    const currentFolderId: string | null = currentFolderIdData;
+    const imageTimestamp: string = imageTimestampData ? imageTimestampData : '';
 
     return {
       user: user,
       folders: folders,
       currentFolderId: currentFolderId,
+      imageTimestamp: imageTimestamp,
     };
   }
 
@@ -191,6 +203,7 @@ export class ChromeHelpers {
       user: null,
       folders: [firstFolder],
       currentFolderId: firstFolder.id,
+      imageTimestamp: '',
     };
   }
 }
