@@ -5,12 +5,13 @@ import { FaCircleNotch, FaUpload } from 'react-icons/fa';
 import { AppState } from '../reduxStore';
 import { LocalStorageHelpers } from '../LocalStorageHelpers';
 import * as SettingsActions from '../actions/SettingsActions';
-import { SetBackgroundImageTimestampParams } from '../actions/SettingsActions';
+import { SetBackgroundImageParams } from '../actions/SettingsActions';
 import { ModalBackdropComponent } from './ModalBackdropComponent';
 
 interface Props {
   hideModal: () => void;
-  setBackgroundImageTimestamp: (params: SetBackgroundImageTimestampParams) => void;
+  setBackgroundImage: (params: SetBackgroundImageParams) => void;
+  backgroundImageUrl: string;
 }
 
 interface State {
@@ -36,9 +37,12 @@ class SettingsModalComponent extends React.Component<Props, State> {
 
       try {
         this.setState({ imageLoading: true });
-        await LocalStorageHelpers.saveBackgroundImage(file);
+        const backgroundImageUrl = await LocalStorageHelpers.saveBackgroundImage(file);
         this.setState({ imageLoading: false });
-        this.props.setBackgroundImageTimestamp({ backgroundImageTimestamp: Date.now().toString() });
+        this.props.setBackgroundImage({
+          timestamp: Date.now().toString(),
+          url: backgroundImageUrl,
+        });
       } catch(e) {
         alert(e.message);
       }
@@ -54,7 +58,11 @@ class SettingsModalComponent extends React.Component<Props, State> {
   }
 
   render() {
-    const imageUrl = require('../../sandbox/wallpapers/moon.png');
+    const imageUrl = this.props.backgroundImageUrl ? (
+      this.props.backgroundImageUrl
+    ) : (
+      require('../../sandbox/wallpapers/moon.png')
+    );
 
     const maybeImageLoadingIcon = this.state.imageLoading ? (
       <FaCircleNotch className="background-image-loading-icon"/>
@@ -113,12 +121,14 @@ class SettingsModalComponent extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: AppState, props: {}) => {
-  return {};
+  return {
+    backgroundImageUrl: state.settingsState.backgroundImageUrl,
+  };
 };
 
 const mapActionsToProps = {
   hideModal: SettingsActions.hideModal,
-  setBackgroundImageTimestamp: SettingsActions.setBackgroundImageTimestamp,
+  setBackgroundImage: SettingsActions.setBackgroundImage,
 };
 
 const Component = connect(mapStateToProps, mapActionsToProps)(SettingsModalComponent);

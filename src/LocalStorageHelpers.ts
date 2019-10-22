@@ -6,7 +6,7 @@ export class LocalStorageHelpers {
     backgroundImageKey: 'backgroundImage',
   };
 
-  public static saveBackgroundImage = (file: Blob): Promise<{}> => {
+  public static saveBackgroundImage = (file: Blob): Promise<string> => {
     const error = {
       message: 'The image size is too big. Please try a smaller image.',
     };
@@ -52,7 +52,7 @@ export class LocalStorageHelpers {
 
           try {
             localStorage.setItem(LocalStorageHelpers.Keys.backgroundImageKey, dataURL);
-            return resolve();
+            return resolve(dataURL);
           } catch(e) {
             // If we're ever here, then probably the QuotaLength changed from 5MB to something else...
             // This would be pretty concerning.

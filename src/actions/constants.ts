@@ -62,7 +62,7 @@ export const UserActionType = {
 export const SettingsActionType = {
   showModal: 'Settings:showModal',
   hideModal: 'Settings:hideModal',
-  setBackgroundImageTimestamp: 'Settings:setBackgroundImageTimestamp',
+  setBackgroundImage: 'Settings:setBackgroundImage',
 };
 
 export const SyncActionType = {

@@ -1,7 +1,7 @@
 import { Action, SettingsActionType as ActionType } from '../actions/constants';
 import { AppState } from '../reduxStore';
 import { Reducer } from './Reducer';
-import { SetBackgroundImageTimestampParams } from '../actions/SettingsActions';
+import { SetBackgroundImageParams } from '../actions/SettingsActions';
 
 export interface SettingsState {
   showingModal: boolean;
@@ -11,11 +11,16 @@ export interface SettingsState {
   // We're doing it this way because LocalStorage doesn't give us listeners.
   // (Unix timestamp in milliseconds)
   backgroundImageTimestamp: string;
+
+  // Do not persist this! This could be a big as 5MB worth of pure string.
+  // This state is completely managed by SyncReducer, so we don't need to worry about it here.
+  backgroundImageUrl: string;
 }
 
 export const initialSettingsState: SettingsState = {
   showingModal: false,
   backgroundImageTimestamp: '',
+  backgroundImageUrl: '',
 };
 
 export const settingsReducer: Reducer<SettingsState> = (
@@ -31,8 +36,8 @@ export const settingsReducer: Reducer<SettingsState> = (
     case ActionType.hideModal:
       newState = handleHideModal(state, action);
       break;
-    case ActionType.setBackgroundImageTimestamp:
-      newState = handleSetBackgroundImageTimestamp(state, action as Action<SetBackgroundImageTimestampParams>);
+    case ActionType.setBackgroundImage:
+      newState = handleSetBackgroundImage(state, action as Action<SetBackgroundImageParams>);
   }
   return newState;
 }
@@ -51,12 +56,10 @@ function handleHideModal(state: SettingsState, action: Action): SettingsState {
   };
 }
 
-function handleSetBackgroundImageTimestamp(
-  state: SettingsState,
-  action: Action<SetBackgroundImageTimestampParams>
-): SettingsState {
+function handleSetBackgroundImage(state: SettingsState, action: Action<SetBackgroundImageParams>): SettingsState {
   return {
     ...state,
-    backgroundImageTimestamp: action.params.backgroundImageTimestamp,
+    backgroundImageTimestamp: action.params.timestamp,
+    backgroundImageUrl: action.params.url,
   };
 }

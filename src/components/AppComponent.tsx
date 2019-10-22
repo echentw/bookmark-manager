@@ -37,6 +37,7 @@ interface Props {
   user: User | null;
   loaded: boolean;
   currentFolderId: string | null;
+  backgroundImageUrl: string;
   draggedRank: number | null;
   folders: Folder[];
   showAddBookmarksModal: boolean;
@@ -48,13 +49,11 @@ interface Props {
 
 interface State {
   date: Date;
-  backgroundImageUrl: string;
 }
 
 class AppComponent extends React.Component<Props, State> {
   state: State = {
     date: new Date(),
-    backgroundImageUrl: LocalStorageHelpers.getBackgroundImageUrl(),
   };
 
   private stateDiffer: StateDiffer = new StateDiffer();
@@ -110,9 +109,13 @@ class AppComponent extends React.Component<Props, State> {
 
   render() {
     if (!this.props.loaded) {
+      const backgroundImageUrl = LocalStorageHelpers.getBackgroundImageUrl();
+      const styles = {
+        background: `url(${this.props.backgroundImageUrl}) center center / cover no-repeat fixed`,
+      };
       return (
         <div className="app-container">
-          <div className="app-background"/>
+          <div className="app-background" style={styles}/>
         </div>
       );
     }
@@ -189,17 +192,11 @@ class AppComponent extends React.Component<Props, State> {
       </div>
     );
 
-    const backgroundCustomStyles = this.state.backgroundImageUrl ? (
-      {
-        background: `url(${this.state.backgroundImageUrl}) no-repeat center center fixed`,
-        backgroundSize: 'cover',
-      }
-    ) : (
-      {
-        background: `url(${require('../../sandbox/wallpapers/moon.png')}) no-repeat center center fixed`,
-        backgroundSize: 'cover',
-      }
-    );
+    const backgroundCustomStyles = this.props.backgroundImageUrl ? {
+      background: `url(${this.props.backgroundImageUrl}) center center / cover no-repeat fixed`,
+    } : {
+      background: `url(${require('../../sandbox/wallpapers/dark_clouds.jpg')}) center center / cover no-repeat fixed`,
+    };
 
     return (
       <CSSTransitionGroup
@@ -217,13 +214,14 @@ class AppComponent extends React.Component<Props, State> {
 
 const mapStateToProps = (state: AppState, props: {}) => {
   return {
-    user: state.userState.user,
-    loaded: state.loadedState.loaded,
+    backgroundImageUrl: state.settingsState.backgroundImageUrl,
     currentFolderId: state.navigationState.currentFolderId,
     draggedRank: state.dragDropState.draggedRank,
     folders: state.foldersState.folders,
+    loaded: state.loadedState.loaded,
     showAddBookmarksModal: state.addBookmarksState.showingModal,
     showSettingsModal: state.settingsState.showingModal,
+    user: state.userState.user,
   };
 };
 
