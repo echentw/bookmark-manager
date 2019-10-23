@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Axle: New Tab",
   "short_name": "Axle",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Manage your bookmarks in your new tab page.",
   "permissions": [
     "activeTab",
