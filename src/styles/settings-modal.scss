@@ -40,9 +40,10 @@
     .set-background-image-container {
       display: grid;
       grid-template-rows: 50% 50%;
-      grid-template-columns: 200px auto;
+      grid-template-columns: 50% 50%;
 
       .set-background-image-label {
+        padding: 10px;
         font-family: $font-family;
         font-size: 20px;
 
@@ -53,6 +54,8 @@
       }
 
       .set-background-image-reset-container {
+        padding: 10px;
+
         grid-column-start: 1;
         grid-column-end: 2;
         grid-row-start: 2;
