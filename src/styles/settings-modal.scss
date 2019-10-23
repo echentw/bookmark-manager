@@ -52,20 +52,23 @@
         grid-row-end: 2;
       }
 
-      .set-background-image-reset {
-        font-family: $font-family;
-        font-size: 14px;
-        font-weight: bold;
-        color: rgb(100, 100, 255);
-
+      .set-background-image-reset-container {
         grid-column-start: 1;
         grid-column-end: 2;
         grid-row-start: 2;
         grid-row-end: 3;
 
-        &:hover {
-          cursor: pointer;
-          color: rgb(0, 0, 200);
+        .set-background-image-reset {
+          display: inline-block;
+          font-family: $font-family;
+          font-size: 14px;
+          font-weight: bold;
+          color: rgb(100, 100, 255);
+
+          &:hover {
+            cursor: pointer;
+            color: rgb(0, 0, 200);
+          }
         }
       }
 
@@ -123,6 +126,7 @@
 
           &:hover {
             background-color: rgba(0, 0, 0, 0.5);
+            cursor: pointer;
 
             .background-image-upload-icon {
               opacity: 0.6;

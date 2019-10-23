@@ -55,6 +55,10 @@ class SettingsModalComponent extends React.Component<Props, State> {
 
   onClickResetBackgroundImage = () => {
     LocalStorageHelpers.clearBackgroundImage();
+    this.props.setBackgroundImage({
+      timestamp: Date.now().toString(),
+      url: '',
+    });
   }
 
   render() {

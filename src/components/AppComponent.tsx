@@ -195,7 +195,7 @@ class AppComponent extends React.Component<Props, State> {
     const backgroundStyles = this.props.backgroundImageUrl ? {
       background: `url(${this.props.backgroundImageUrl}) center center / cover no-repeat fixed`,
     } : {
-      background: `url(${require('../../sandbox/wallpapers/dark_clouds.jpg')}) center center / cover no-repeat fixed`,
+      background: `url(${require('../../sandbox/wallpapers/moon.png')}) center center / cover no-repeat fixed`,
     };
 
     return (
