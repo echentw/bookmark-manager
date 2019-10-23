@@ -14,8 +14,12 @@
     width: 24px;
     height: 24px;
     color: white;
-    &.hovering {
+
+    // The .hovering class is managed by react state, so in case something goes awry with that,
+    // at least this one will not look ugly.
+    &:hover {
       color: rgb(200, 200, 200);
+      cursor: pointer;
     }
   }
 
