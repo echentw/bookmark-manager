@@ -21,6 +21,7 @@ interface State {
 class SettingsModalComponent extends React.Component<Props, State> {
 
   private modalRef: React.RefObject<HTMLDivElement> = React.createRef();
+  private fileInputRef: React.RefObject<HTMLInputElement> = React.createRef();
 
   state: State = {
     imageLoading: false,
@@ -46,6 +47,9 @@ class SettingsModalComponent extends React.Component<Props, State> {
       } catch(e) {
         alert(e.message);
       }
+
+      // Clear the input, in case the user uploads the same image again after hitting reset.
+      this.fileInputRef.current.value = '';
     }
   }
 
@@ -100,6 +104,7 @@ class SettingsModalComponent extends React.Component<Props, State> {
               id="file"
               className="set-background-image-input"
               type="file"
+              ref={this.fileInputRef}
               onChange={this.onFileInputChange}
             />
             <img src={imageUrl}/>
