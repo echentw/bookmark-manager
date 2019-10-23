@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { FaPen, FaCog } from 'react-icons/fa';
+import { FaPen } from 'react-icons/fa';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 
 import { User } from '../User';
@@ -8,6 +8,7 @@ import * as UserActions from '../actions/UserActions';
 import { UserParams } from '../actions/UserActions';
 import * as SettingsActions from '../actions/SettingsActions';
 import { AppState } from '../reduxStore';
+import { SettingsCogComponent } from './SettingsCogComponent';
 
 // Given an HTML element, if that element is focused, then this function will
 // move the cursor to the end of the text.
@@ -191,7 +192,7 @@ class GreetingComponent extends React.Component<InternalProps, State> {
           <div className={'greeting-text ' + period}>{greetingText}</div>
           { nameComponent }
         </div>
-        <FaCog className="settings-cog" onClick={this.onClickSettings}/>
+        <SettingsCogComponent onClick={this.onClickSettings}/>
       </div>
     );
   }

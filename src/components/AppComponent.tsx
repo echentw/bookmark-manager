@@ -192,7 +192,7 @@ class AppComponent extends React.Component<Props, State> {
       </div>
     );
 
-    const backgroundCustomStyles = this.props.backgroundImageUrl ? {
+    const backgroundStyles = this.props.backgroundImageUrl ? {
       background: `url(${this.props.backgroundImageUrl}) center center / cover no-repeat fixed`,
     } : {
       background: `url(${require('../../sandbox/wallpapers/dark_clouds.jpg')}) center center / cover no-repeat fixed`,
@@ -206,7 +206,7 @@ class AppComponent extends React.Component<Props, State> {
         transitionLeaveTimeout={300}
       >
         { innerComponent }
-        <div className="app-background" style={backgroundCustomStyles}/>
+        <div className="app-background" style={backgroundStyles}/>
       </CSSTransitionGroup>
     );
   }

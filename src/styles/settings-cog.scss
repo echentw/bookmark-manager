@@ -1,0 +1,41 @@
+.settings-cog-container {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  width: 24px;
+  height: 24px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .settings-cog {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    color: white;
+    &.hovering {
+      color: rgb(200, 200, 200);
+    }
+  }
+
+  .settings-cog-outside-shadow {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    color: rgba(0, 0, 0, 0.15);
+    &.hovering {
+      color: rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  .settings-cog-inside-shadow {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    color: rgba(0, 0, 0, 0.2);
+    &.hovering {
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
+}
