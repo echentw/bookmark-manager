@@ -9,6 +9,7 @@ module.exports = {
   mode: 'production',
   devtool: 'source-map',
   entry: {
+    background: path.join(__dirname, 'src/background.ts'),
     newtab: path.join(__dirname, 'src/main.tsx'),
     popup: path.join(__dirname, 'src/popup.tsx'),
   },
