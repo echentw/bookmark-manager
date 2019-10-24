@@ -111,7 +111,7 @@ class AppComponent extends React.Component<Props, State> {
     if (!this.props.loaded) {
       const backgroundImageUrl = LocalStorageHelpers.getBackgroundImageUrl();
       const styles = {
-        background: `url(${this.props.backgroundImageUrl}) center center / cover no-repeat fixed`,
+        background: `url(${require('../../sandbox/wallpapers/moon.png')}) center center / cover no-repeat fixed`,
       };
       return (
         <div className="app-container">
