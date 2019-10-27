@@ -1,4 +1,6 @@
 dist/
+src/assets/generated/
 axle.zip
 node_modules/
 sandbox/
+.DS_Store
