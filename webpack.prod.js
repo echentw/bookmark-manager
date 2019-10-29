@@ -62,6 +62,9 @@ module.exports = {
       { from: 'src/assets/generated', to: 'assets', toType: 'dir', force: true },
       { from: 'newtab.html', to: 'newtab.html', toType: 'file', force: true },
       { from: 'popup.html', to: 'popup.html', toType: 'file', force: true },
+
+      // Google analytics
+      { from: 'analytics', to: 'analytics', toType: 'dir', force: true },
     ]),
   ],
   resolve: {

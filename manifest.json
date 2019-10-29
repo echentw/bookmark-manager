@@ -4,6 +4,7 @@
   "short_name": "Axle",
   "version": "0.0.5",
   "description": "Transform your new tab page into a beautiful customizable dashboard, and easy-to-use bookmark manager.",
+  "content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
   "permissions": [
     "activeTab",
     "storage",
