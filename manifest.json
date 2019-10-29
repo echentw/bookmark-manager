@@ -3,7 +3,7 @@
   "name": "Axle: New Tab",
   "short_name": "Axle",
   "version": "0.0.5",
-  "description": "Manage your bookmarks on your new tab page.",
+  "description": "Transform your new tab page into a beautiful customizable dashboard, and easy-to-use bookmark manager.",
   "permissions": [
     "activeTab",
     "storage",

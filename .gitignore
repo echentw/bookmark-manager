@@ -3,4 +3,5 @@ src/assets/generated/
 axle.zip
 node_modules/
 sandbox/
+design/
 .DS_Store
