@@ -128,6 +128,68 @@ body {
   }
 }
 
+@media (prefers-color-scheme: dark) {
+  $dark-mode-color: #323539;
+  .app {
+    .head {
+      .title {
+        color: white;
+      }
+    }
+    .body {
+      .first-row {
+        .folder {
+          color: white;
+        }
+        .react-select-container {
+          .react-select__control {
+            background-color: rgb(36, 36, 36);
+            .react-select__value-container {
+              .react-select__single-value {
+                color: white;
+              }
+            }
+          }
+          .react-select__menu {
+            color: white;
+            background-color: rgb(36, 36, 36);
+            .react-select__menu-list {
+              .react-select__option--is-focused {
+                background-color: rgb(70, 70, 70);
+              }
+            }
+          }
+        }
+      }
+      .second-row {
+        .name {
+          color: white;
+        }
+        .name-text-field {
+          color: white;
+          background-color: rgb(36, 36, 36);
+        }
+      }
+      .third-row {
+        .popup-button {
+          color: white;
+          background-color: $dark-mode-color;
+          &:hover {
+            background-color: rgb(36, 36, 36);
+          }
+          &:active {
+            background-color: rgb(16, 16, 16);
+          }
+          &.disabled {
+            border-color: rgb(100, 100, 100);
+            color: rgb(100, 100, 100);
+          }
+        }
+      }
+    }
+  }
+}
+
 @-webkit-keyframes popup-pulse {
   0% { background-color: rgba(240, 240, 0, 1.0) };
   100% { background-color: rgba(240, 240, 0, 0) };
