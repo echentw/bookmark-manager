@@ -172,4 +172,11 @@
   &:active {
     background-color: rgb(200, 200, 200);
   }
+
+  &.disabled {
+    $color: rgb(210, 210, 210);
+    color: $color;
+    border-color: $color;
+    pointer-events: none;
+  }
 }

@@ -72,6 +72,11 @@ class AddBookmarksModalComponent extends React.Component<Props, State> {
       );
     });
 
+    // If no open tabs are selected, then we disable the save button.
+    const saveButtonDisabled = this.state.selectedTabs.size === 0;
+    const saveDisabledCss = saveButtonDisabled ? 'disabled' : '';
+    const maybeSave = saveButtonDisabled ? null : this.save;
+
     const modalComponent = (
       <div className="add-bookmarks-modal" ref={this.modalRef}>
         <div className="add-bookmarks-title-container">
@@ -84,7 +89,7 @@ class AddBookmarksModalComponent extends React.Component<Props, State> {
           <div className="add-bookmarks-cancel-button" onClick={this.cancel}>
             Cancel
           </div>
-          <div className="add-bookmarks-save-button" onClick={this.save}>
+          <div className={'add-bookmarks-save-button ' + saveDisabledCss} onClick={maybeSave}>
             Save
           </div>
         </div>
