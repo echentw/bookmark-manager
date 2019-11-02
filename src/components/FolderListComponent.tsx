@@ -49,7 +49,7 @@ class FolderListComponent extends React.Component<Props> {
       <div className="folder-list">
         <div className="folder-list-title-container">
           <div className="folder-list-title">
-            Folders
+            Home
           </div>
         </div>
         <Scrollbars>
