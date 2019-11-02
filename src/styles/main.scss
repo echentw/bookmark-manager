@@ -61,14 +61,20 @@ body {
   margin-bottom: 50px;
 }
 
+.app-greeting-container {
+  padding-top: 50px;
+}
+
 @media (max-width: $small-screen-max-width) {
   .app {
     padding-left: 20px;
     padding-right: 20px;
   }
-
   .app-list-container {
     margin: 0;
+  }
+  .app-greeting-container {
+    padding-top: 0;
   }
 }
 
