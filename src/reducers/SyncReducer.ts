@@ -22,7 +22,7 @@ export const syncReducer = (state: AppState, action: Action): AppState => {
 
 function handleLoad(state: AppState, action: Action<LoadParams>): AppState {
   const hollowState: HollowAppStateForLoad = StateBridge.toHollowAppStateForLoad(action.params);
-  const backgroundImageUrl: string = LocalStorageHelpers.getBackgroundImageUrl();
+  const backgroundImageUrl = _loadBackgroundImageUrl();
   return {
     ...state,
     ...hollowState,
@@ -53,7 +53,11 @@ function _getBackgroundImageUrl(state: AppState, loadedState: HollowAppStateForS
   if (state.settingsState.backgroundImageTimestamp === loadedState.settingsState.backgroundImageTimestamp) {
     imageUrl = state.settingsState.backgroundImageUrl;
   } else {
-    imageUrl = LocalStorageHelpers.getBackgroundImageUrl();
+    imageUrl = _loadBackgroundImageUrl();
   }
   return imageUrl;
+}
+
+function _loadBackgroundImageUrl(): string {
+  return LocalStorageHelpers.getBackgroundImageUrl() || require('../../sandbox/wallpapers/moon.png');
 }

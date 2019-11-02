@@ -61,17 +61,11 @@ class SettingsModalComponent extends React.Component<Props, State> {
     LocalStorageHelpers.clearBackgroundImage();
     this.props.setBackgroundImage({
       timestamp: Date.now().toString(),
-      url: '',
+      url: require('../../sandbox/wallpapers/moon.png'),
     });
   }
 
   render() {
-    const imageUrl = this.props.backgroundImageUrl ? (
-      this.props.backgroundImageUrl
-    ) : (
-      require('../../sandbox/wallpapers/moon.png')
-    );
-
     const maybeImageLoadingIcon = this.state.imageLoading ? (
       <FaCircleNotch className="background-image-loading-icon"/>
     ) : null;
@@ -107,7 +101,7 @@ class SettingsModalComponent extends React.Component<Props, State> {
               ref={this.fileInputRef}
               onChange={this.onFileInputChange}
             />
-            <img src={imageUrl}/>
+            <img src={this.props.backgroundImageUrl}/>
             <label htmlFor="file" className="set-background-image-preview" style={backgroundImageCustomStyles}>
               { maybeImageLoadingIcon }
               { maybeUploadIcon }

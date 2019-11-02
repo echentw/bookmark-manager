@@ -26,13 +26,6 @@
 
 $fade-in-time: 400ms;
 
-// This prevents the app from fading in until it's fully loaded.
-.assets-loading {
-  .app-container {
-    animation-play-state: paused !important;
-  }
-}
-
 * {
   box-sizing: border-box;
 }

@@ -49,11 +49,13 @@ interface Props {
 
 interface State {
   date: Date;
+  backgroundImageLoaded: boolean;
 }
 
 class AppComponent extends React.Component<Props, State> {
   state: State = {
     date: new Date(),
+    backgroundImageLoaded: false,
   };
 
   private stateDiffer: StateDiffer = new StateDiffer();
@@ -61,6 +63,18 @@ class AppComponent extends React.Component<Props, State> {
   componentDidMount = () => {
     this.beginSyncingDate();
     this.beginSyncingStore(reduxStore);
+  }
+
+  componentDidUpdate = (prevProps: Props) => {
+    // This is to prevent the background image from fading in until it's fully loaded.
+    // Without this, the image will look super ugly if it's loading slowly.
+    if (!prevProps.loaded && this.props.loaded) {
+      const image = new Image();
+      image.src = this.props.backgroundImageUrl;
+      image.onload = () => {
+        this.setState({ backgroundImageLoaded: true });
+      }
+    }
   }
 
   private beginSyncingDate = () => {
@@ -109,15 +123,7 @@ class AppComponent extends React.Component<Props, State> {
 
   render() {
     if (!this.props.loaded) {
-      const backgroundImageUrl = LocalStorageHelpers.getBackgroundImageUrl();
-      const styles = {
-        background: `url(${require('../../sandbox/wallpapers/moon.png')}) center center / cover no-repeat fixed`,
-      };
-      return (
-        <div className="app-container">
-          <div className="app-background" style={styles}/>
-        </div>
-      );
+      return <div className="app-container"/>;
     }
 
     const currentFolder = this.props.folders.find(folder => folder.id === this.props.currentFolderId) || null;
@@ -192,15 +198,16 @@ class AppComponent extends React.Component<Props, State> {
       </div>
     );
 
-    const backgroundStyles = this.props.backgroundImageUrl ? {
+    const backgroundStyles = {
       background: `url(${this.props.backgroundImageUrl}) center center / cover no-repeat fixed`,
-    } : {
-      background: `url(${require('../../sandbox/wallpapers/moon.png')}) center center / cover no-repeat fixed`,
     };
 
+    const loadedCssClass = this.state.backgroundImageLoaded ? 'loaded' : '';
+
+    // CSSTransitionGroup is to help transition between the NuxComponent and the main app components.
     return (
       <CSSTransitionGroup
-        className="app-container loaded"
+        className={'app-container ' + loadedCssClass}
         transitionName="app-transition"
         transitionEnterTimeout={1000}
         transitionLeaveTimeout={300}
@@ -210,6 +217,8 @@ class AppComponent extends React.Component<Props, State> {
       </CSSTransitionGroup>
     );
   }
+
+  private firstTime = true;
 }
 
 const mapStateToProps = (state: AppState, props: {}) => {

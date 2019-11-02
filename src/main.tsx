@@ -9,18 +9,6 @@ import { Provider } from 'react-redux';
 import { AppComponent } from './components/AppComponent';
 import { reduxStore } from './reduxStore';
 
-// This is to prevent the background image from fading in until it's fully loaded.
-// Without this, the image will look super ugly if it's loading slowly.
-function waitForAssetsToLoad() {
-  document.body.classList.add('assets-loading');
-  window.addEventListener('load', showPage);
-  function showPage() {
-    document.body.classList.remove('assets-loading');
-  }
-}
-
-waitForAssetsToLoad();
-
 const MainComponent = () => {
   return (
     <Provider store={reduxStore}>
