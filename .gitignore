@@ -1,7 +1,9 @@
 dist/
-src/assets/generated/
 axle.zip
 node_modules/
 sandbox/
-design/
 .DS_Store
+
+design/promo/
+design/screenshots/
+design/logo/generated/

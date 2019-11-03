@@ -59,9 +59,14 @@ module.exports = {
     new CheckerPlugin(),
     new CopyPlugin([
       { from: 'manifest.json', to: 'manifest.json', toType: 'file', force: true },
-      { from: 'src/assets/generated', to: 'assets', toType: 'dir', force: true },
+      { from: 'src/assets', to: 'assets', toType: 'dir', force: true },
+
+      // HTML files
       { from: 'newtab.html', to: 'newtab.html', toType: 'file', force: true },
       { from: 'popup.html', to: 'popup.html', toType: 'file', force: true },
+
+      // Axle logos
+      { from: 'design/logo/generated', to: 'logo', toType: 'dir', force: true },
 
       // Google analytics
       { from: 'analytics', to: 'analytics', toType: 'dir', force: true },
