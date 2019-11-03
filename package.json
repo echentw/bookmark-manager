@@ -5,7 +5,7 @@
   "main": "jquery.min.js",
   "scripts": {
     "start": "webpack --config webpack.dev.js --watch --progress",
-    "build": "rm -r dist/ && webpack --config webpack.prod.js && zip -r axle.zip dist/*",
+    "build": "rm -rf dist/ && webpack --config webpack.prod.js && cd dist/ && zip -r ../axle.zip .",
     "tslint": "node_modules/tslint/bin/tslint -c tslint.json --project tsconfig.json 'src/**/*.ts'",
     "tslint-fix": "node_modules/tslint/bin/tslint -c tslint.json --fix --project tsconfig.json 'src/**/*.ts'",
     "test": "echo \"Error: no test specified\" && exit 1"
