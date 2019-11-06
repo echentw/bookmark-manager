@@ -10,7 +10,7 @@ import { ChromeAppState, ChromeAppStateForSync, ChromeHelpers } from '../ChromeH
 import { StateBridge } from '../StateBridge';
 import { StateDiffer } from '../StateDiffer';
 import { LocalStorageHelpers } from '../LocalStorageHelpers';
-import * as FolderActions from '../actions/FolderActions';
+import * as NavigationActions from '../actions/NavigationActions';
 import * as SyncActions from '../actions/SyncActions';
 import { LoadParams, SyncParams } from '../actions/SyncActions';
 import { AppState, reduxStore } from '../reduxStore';
@@ -237,7 +237,7 @@ const mapStateToProps = (state: AppState, props: {}) => {
 const mapActionsToProps = {
   loadAppState: SyncActions.load,
   syncAppState: SyncActions.sync,
-  closeFolder: FolderActions.closeFolder,
+  closeFolder: NavigationActions.closeFolder,
 };
 
 const Component = connect(mapStateToProps, mapActionsToProps)(AppComponent);

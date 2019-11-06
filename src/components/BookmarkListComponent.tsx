@@ -6,7 +6,7 @@ import { FaChevronLeft } from 'react-icons/fa';
 
 import { Bookmark } from '../Bookmark';
 import { Folder } from '../Folder';
-import * as FolderActions from '../actions/FolderActions';
+import * as NavigationActions from '../actions/NavigationActions';
 import { DragDropListItemContainerComponent } from './DragDropListItemContainerComponent';
 import { AddBookmarksButtonComponent } from './AddBookmarksButtonComponent';
 import { BookmarkComponent } from './BookmarkComponent';
@@ -115,7 +115,7 @@ const mapStateToProps = (state: AppState, props: {}) => {
 };
 
 const mapActionsToProps = {
-  closeFolder: FolderActions.closeFolder,
+  closeFolder: NavigationActions.closeFolder,
 };
 
 const Component = connect(mapStateToProps, mapActionsToProps)(BookmarkListComponent);

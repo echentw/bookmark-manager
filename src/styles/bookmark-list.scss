@@ -8,6 +8,7 @@
   .bookmark-list-title-outer-container {
     @include list-title-container;
     padding-left: 16px;
+    padding-right: 16px;
 
     .bookmark-list-title-inner-container {
       flex: 1;

@@ -7,9 +7,28 @@
 
   .folder-list-title-container {
     @include list-title-container;
+    justify-content: space-between;
 
     .folder-list-title {
       @include list-title;
+    }
+
+    .pin-icon {
+      height: 22px;
+      width: 30px;
+      padding-top: 2px;
+      padding-bottom: 2px;
+      color: rgb(128, 128, 128);
+
+      &:hover {
+        cursor: pointer;
+        padding-top: 4px;
+        padding-bottom: 0;
+      }
+
+      &.pinned {
+        color: black;
+      }
     }
   }
 

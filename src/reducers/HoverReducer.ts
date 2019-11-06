@@ -4,14 +4,14 @@ import {
   DragDropActionType,
   EditBookmarkActionType,
   EditFolderActionType,
-  FolderActionType,
+  NavigationActionType,
   HoverActionType,
 } from '../actions/constants';
 import { DeleteFolderParams } from '../actions/DeleteFolderActions';
 import { DragParams } from '../actions/DragDropActions';
 import { EditBookmarkParams } from '../actions/EditBookmarkActions';
 import { EditFolderParams } from '../actions/EditFolderActions';
-import { OpenFolderParams } from '../actions/FolderActions';
+import { OpenFolderParams } from '../actions/NavigationActions';
 import { HoverParams } from '../actions/HoverActions';
 import { AppState } from '../reduxStore';
 import { Reducer } from './Reducer';
@@ -63,7 +63,7 @@ export const hoverReducer: Reducer<HoverState> = (
     case DeleteFolderActionType.confirmDelete:
       newState = handleConfirmDeleteFolder(state, action as Action<DeleteFolderParams>);
       break;
-    case FolderActionType.openFolder:
+    case NavigationActionType.openFolder:
       newState = handleOpenFolder(state, action as Action<OpenFolderParams>);
       break;
   }

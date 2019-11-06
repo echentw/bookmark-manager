@@ -9,6 +9,7 @@ import { Folder } from './Folder';
 export interface HollowAppStateForLoad extends HollowAppStateForSync {
   navigationState: {
     currentFolderId: string | null;
+    homePagePinned: boolean;
   };
 }
 
@@ -36,6 +37,7 @@ export class StateBridge {
       folders: appState.foldersState.folders,
       currentFolderId: appState.navigationState.currentFolderId,
       backgroundImageTimestamp: appState.settingsState.backgroundImageTimestamp,
+      homePagePinned: appState.navigationState.homePagePinned,
     };
   }
 
@@ -49,6 +51,7 @@ export class StateBridge {
         folders: chromeAppState.folders,
       },
       navigationState: {
+        homePagePinned: chromeAppState.homePagePinned,
         currentFolderId: chromeAppState.currentFolderId,
       },
       loadedState: {

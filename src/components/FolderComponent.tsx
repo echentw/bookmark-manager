@@ -11,8 +11,8 @@ import {
 import { Folder, colorsToCssClasses } from '../Folder';
 import { DeleteFolderParams } from '../actions/DeleteFolderActions';
 import * as DeleteFolderActions from '../actions/DeleteFolderActions';
-import { OpenFolderParams } from '../actions/FolderActions';
-import * as FolderActions from '../actions/FolderActions';
+import { OpenFolderParams } from '../actions/NavigationActions';
+import * as NavigationActions from '../actions/NavigationActions';
 import { EditFolderParams } from '../actions/EditFolderActions';
 import * as EditFolderActions from '../actions/EditFolderActions';
 
@@ -193,7 +193,7 @@ const mapStateToProps = (state: AppState, props: ExternalProps) => {
 };
 
 const mapActionsToProps = {
-  openFolder: FolderActions.openFolder,
+  openFolder: NavigationActions.openFolder,
   beginEdit: EditFolderActions.beginEdit,
   cancelEdit: EditFolderActions.cancel,
   saveEdit: EditFolderActions.save,

@@ -1,5 +1,5 @@
 import { Folder } from '../Folder';
-import { Action, FolderActionType as ActionType } from './constants';
+import { Action, NavigationActionType as ActionType } from './constants';
 
 export interface OpenFolderParams {
   folder: Folder;
@@ -15,6 +15,13 @@ export function openFolder(params: OpenFolderParams): Action<OpenFolderParams> {
 export function closeFolder(params: {}): Action {
   return {
     type: ActionType.closeFolder,
+    params: params,
+  };
+}
+
+export function toggleHomePagePin(params: {}): Action {
+  return {
+    type: ActionType.toggleHomePagePin,
     params: params,
   };
 }

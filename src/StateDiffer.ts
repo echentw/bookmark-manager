@@ -27,6 +27,7 @@ export class StateDiffer {
       folders: state.folders.map(folder => folder.copy()),
       currentFolderId: state.currentFolderId,
       backgroundImageTimestamp: state.backgroundImageTimestamp,
+      homePagePinned: state.homePagePinned,
     };
     this.initialized = true;
   }
@@ -36,7 +37,8 @@ export class StateDiffer {
       this.userStatesAreDifferent(state1, state2) ||
       this.currentFolderIdStatesAreDifferent(state1, state2) ||
       this.folderStatesAreDifferent(state1, state2) ||
-      this.settingsStatesAreDifferent(state1, state2)
+      this.settingsStatesAreDifferent(state1, state2) ||
+      this.navigationStatesAreDifferent(state1, state2)
     );
   }
 
@@ -63,5 +65,9 @@ export class StateDiffer {
 
   private settingsStatesAreDifferent = (state1: ChromeAppState, state2: ChromeAppState): boolean => {
     return state1.backgroundImageTimestamp !== state2.backgroundImageTimestamp;
+  }
+
+  private navigationStatesAreDifferent = (state1: ChromeAppState, state2: ChromeAppState): boolean => {
+    return state1.homePagePinned !== state2.homePagePinned;
   }
 }

@@ -3,9 +3,10 @@ export interface Action<Params = {}> {
   params: Params;
 }
 
-export const FolderActionType = {
-  openFolder: 'Folder:openFolder',
-  closeFolder: 'Folder:closeFolder',
+export const NavigationActionType = {
+  openFolder: 'Navigation:openFolder',
+  closeFolder: 'Navigation:closeFolder',
+  toggleHomePagePin: 'Navigation:toggleHomePagePin',
 };
 
 export const EditFolderActionType = {

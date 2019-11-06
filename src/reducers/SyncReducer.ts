@@ -23,9 +23,21 @@ export const syncReducer = (state: AppState, action: Action): AppState => {
 function handleLoad(state: AppState, action: Action<LoadParams>): AppState {
   const hollowState: HollowAppStateForLoad = StateBridge.toHollowAppStateForLoad(action.params);
   const backgroundImageUrl = _loadBackgroundImageUrl();
+
+  // If the home page is pinned, then we clear the currentFolderId because we want the new tab
+  // to open to the home page.
+  const currentFolderId = hollowState.navigationState.homePagePinned ? null : (
+    hollowState.navigationState.currentFolderId
+  );
+
   return {
     ...state,
     ...hollowState,
+    navigationState: {
+      ...state.navigationState,
+      ...hollowState.navigationState,
+      currentFolderId: currentFolderId,
+    },
     settingsState: {
       ...state.settingsState,
       ...hollowState.settingsState,
