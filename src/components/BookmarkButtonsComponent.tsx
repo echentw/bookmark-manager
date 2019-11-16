@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IconContext } from 'react-icons';
-import { FaPen, FaCopy, FaTrash } from 'react-icons/fa';
+import { FaLink, FaPen, FaCopy, FaTrash } from 'react-icons/fa';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 import { connect } from 'react-redux';
 
@@ -42,7 +42,7 @@ class BookmarkButtonsComponent extends React.Component<InternalProps> {
       <div className="bookmark-buttons">
         <IconContext.Provider value={{ size: '1.2em' }}>
           <CopyToClipboard text={this.props.bookmark.url}>
-            <FaCopy className="bookmark-button" onClick={this.onClickCopy}/>
+            <FaLink className="bookmark-button" onClick={this.onClickCopy}/>
           </CopyToClipboard>
           <FaPen className="bookmark-button" onClick={this.onClickEdit}/>
           <FaTrash className="bookmark-button" onClick={this.onClickDelete}/>

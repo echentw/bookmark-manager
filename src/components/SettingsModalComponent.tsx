@@ -1,30 +1,42 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { FaCircleNotch, FaUpload } from 'react-icons/fa';
+import { FaCircleNotch, FaLink, FaUpload } from 'react-icons/fa';
+import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 import { AppState } from '../reduxStore';
 import { LocalStorageHelpers } from '../LocalStorageHelpers';
+import * as CopyUrlActions from '../actions/CopyUrlActions';
+import { ShowToastParams } from '../actions/CopyUrlActions';
 import * as SettingsActions from '../actions/SettingsActions';
 import { SetBackgroundImageParams } from '../actions/SettingsActions';
 import { ModalBackdropComponent } from './ModalBackdropComponent';
 
 interface Props {
+  backgroundImageUrl: string;
   hideModal: () => void;
   setBackgroundImage: (params: SetBackgroundImageParams) => void;
-  backgroundImageUrl: string;
+  showCopyUrlToast: (params: ShowToastParams) => void;
+}
+
+enum Section {
+  Settings,
+  About,
 }
 
 interface State {
   imageLoading: boolean;
+  activeSection: Section;
 }
 
 class SettingsModalComponent extends React.Component<Props, State> {
 
   private modalRef: React.RefObject<HTMLDivElement> = React.createRef();
   private fileInputRef: React.RefObject<HTMLInputElement> = React.createRef();
+  private axleLinkRef: React.RefObject<HTMLInputElement> = React.createRef();
 
   state: State = {
     imageLoading: false,
+    activeSection: Section.Settings,
   };
 
   onFileInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,7 +77,7 @@ class SettingsModalComponent extends React.Component<Props, State> {
     });
   }
 
-  render() {
+  settingsSectionComponent = () => {
     const maybeImageLoadingIcon = this.state.imageLoading ? (
       <FaCircleNotch className="background-image-loading-icon"/>
     ) : null;
@@ -78,12 +90,8 @@ class SettingsModalComponent extends React.Component<Props, State> {
       <FaUpload className="background-image-upload-icon"/>
     ) : null;
 
-    const modalComponent = (
-      <div className="settings-modal" ref={this.modalRef}>
-        <div className="settings-title">
-          Settings
-        </div>
-        <div className="horizontal-bar"/>
+    return (
+      <div className="settings-section">
         <div className="set-background-image-container">
           <div className="set-background-image-label">
             Background Image
@@ -110,6 +118,103 @@ class SettingsModalComponent extends React.Component<Props, State> {
         </div>
       </div>
     );
+  }
+
+  highlightAxleLink = () => {
+    this.axleLinkRef.current.select();
+  }
+
+  onClickCopy = (event: React.MouseEvent<SVGElement, MouseEvent>) => {
+    const { clientX, clientY } = event;
+    this.props.showCopyUrlToast({ x: clientX, y: clientY });
+    this.highlightAxleLink();
+  }
+
+  aboutSectionComponent = () => {
+    const axleLink = 'https://chrome.google.com/webstore/detail/axle-new-tab/emdkiniaoljcedckfnpmpgbpdophfmdk';
+    return (
+      <div className="about-section">
+        <div className="about-text-container">
+          <p>
+            Hi, I'm Eric, the developer of Axle.
+            First and foremost, thanks for installing!
+            I hope you find it useful and pleasant to use.
+            Axle was created to meet the following needs:
+          </p>
+          <ul>
+            <li>Have a crisp, personalized new tab experience.</li>
+            <li>Have easy access to your bookmarks.</li>
+            <li>Not have the default bookmarks bar clutter up screen space when you're browsing the web.</li>
+          </ul>
+          <p>
+            I'm actively working to make Axle better.
+            Stay tuned, and don't hesitate to reach out to me with comments, suggestions, or questions.
+          </p>
+        </div>
+        <div className="shareable-link-container">
+          <div className="shareable-link-label">
+            Share Axle with your friends!
+          </div>
+          <div className="shareable-link">
+            <input
+              type="text"
+              value={axleLink}
+              className="shareable-link-url"
+              readOnly
+              onClick={this.highlightAxleLink}
+              ref={this.axleLinkRef}
+            />
+            <CopyToClipboard text={axleLink}>
+              <FaLink className="shareable-link-icon" onClick={this.onClickCopy}/>
+            </CopyToClipboard>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  onClickSettingsTitle = () => {
+    this.setState({ activeSection: Section.Settings });
+  }
+
+  onClickAboutTitle = () => {
+    this.setState({ activeSection: Section.About });
+  }
+
+  render() {
+    let sectionComponent: React.ReactElement;
+    let settingsTitleCssClass: string;
+    let aboutTitleCssClass: string;
+    if (this.state.activeSection === Section.Settings) {
+      sectionComponent = this.settingsSectionComponent();
+      settingsTitleCssClass = 'active';
+      aboutTitleCssClass = '';
+    } else {
+      sectionComponent = this.aboutSectionComponent();
+      settingsTitleCssClass = '';
+      aboutTitleCssClass = 'active';
+    }
+
+    const modalComponent = (
+      <div className="settings-modal" ref={this.modalRef}>
+        <div className="titles-container">
+          <div
+            className={'title settings-title ' + settingsTitleCssClass}
+            onClick={this.onClickSettingsTitle}
+          >
+            Settings
+          </div>
+          <div
+            className={'title about-title ' + aboutTitleCssClass}
+            onClick={this.onClickAboutTitle}
+          >
+            About
+          </div>
+        </div>
+        <div className="horizontal-bar"/>
+        { sectionComponent }
+      </div>
+    );
 
     return (
       <ModalBackdropComponent
@@ -132,6 +237,7 @@ const mapStateToProps = (state: AppState, props: {}) => {
 const mapActionsToProps = {
   hideModal: SettingsActions.hideModal,
   setBackgroundImage: SettingsActions.setBackgroundImage,
+  showCopyUrlToast: CopyUrlActions.showToast,
 };
 
 const Component = connect(mapStateToProps, mapActionsToProps)(SettingsModalComponent);
