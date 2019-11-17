@@ -131,7 +131,7 @@ class SettingsModalComponent extends React.Component<Props, State> {
   }
 
   aboutSectionComponent = () => {
-    const axleLink = 'https://chrome.google.com/webstore/detail/axle-new-tab/emdkiniaoljcedckfnpmpgbpdophfmdk';
+    const axleLink = 'http://bit.ly/axle-new-tab';
     return (
       <div className="about-section">
         <div className="about-text-container">
@@ -144,11 +144,13 @@ class SettingsModalComponent extends React.Component<Props, State> {
           <ul>
             <li>Have a crisp, personalized new tab experience.</li>
             <li>Have easy access to your bookmarks.</li>
-            <li>Not have the default bookmarks bar clutter up screen space when you're browsing the web.</li>
+            <li>Remove bookmarks bar clutter, freeing up screen space.</li>
           </ul>
           <p>
             I'm actively working to make Axle better.
             Stay tuned, and don't hesitate to reach out to me with comments, suggestions, or questions.
+            Feel free to leave a comment on the Chrome extension page (link below) or email me directly
+            at <a href="mailto:ericchen098@gmail.com">ericchen098@gmail.com</a>.
           </p>
         </div>
         <div className="shareable-link-container">
