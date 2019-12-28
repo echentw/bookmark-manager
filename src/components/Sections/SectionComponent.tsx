@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { FaPlus } from 'react-icons/fa';
 
 import { AppState } from 'reduxStore';
 import { Folder } from 'Folder';
@@ -40,6 +41,11 @@ class SectionComponent extends React.Component<Props> {
         </div>
         <div className="section-bookmarks">
           { bookmarkComponents }
+        </div>
+        <div className="add-bookmark-button-container">
+          <div className="add-bookmark-button">
+            <FaPlus className="add-bookmark-icon" onClick={() => console.log('you clicked')}/>
+          </div>
         </div>
       </div>
     );

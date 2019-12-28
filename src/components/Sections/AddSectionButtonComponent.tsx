@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { IconContext } from 'react-icons';
 import { FaPlus } from 'react-icons/fa';
 import { connect } from 'react-redux';
 
@@ -14,9 +13,7 @@ class AddSectionButtonComponent extends React.Component<Props> {
   render() {
     return (
       <div className="add-section-button" onClick={this.props.addFolder}>
-        <IconContext.Provider value={{ className: 'fa-plus' }}>
-          <FaPlus/>
-        </IconContext.Provider>
+        <FaPlus className="add-section-icon"/>
       </div>
     );
   }
