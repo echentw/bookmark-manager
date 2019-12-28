@@ -128,13 +128,9 @@ function handleEditBookmarkSave(
   action: Action<EditBookmarkParams>,
   appState: AppState,
 ): FoldersState {
-  if (appState.navigationState.currentFolderId === null) {
-    return state;
-  }
-  const folder = state.folders.find(folder => folder.id === appState.navigationState.currentFolderId) || null;
-  if (folder === null) {
-    return state;
-  }
+  const folder = state.folders.find(folder =>
+    folder.bookmarks.some(bookmark => bookmark.id === action.params.bookmark.id)
+  );
   const newBookmarks = withItemReplaced<Bookmark>(folder.bookmarks, action.params.bookmark);
   const newFolder = folder.withBookmarks(newBookmarks);
   const newFolders = withItemReplaced<Folder>(state.folders, newFolder);
@@ -148,13 +144,9 @@ function handleEditBookmarkDeleteBookmark(
   action: Action<EditBookmarkParams>,
   appState: AppState,
 ): FoldersState {
-  if (appState.navigationState.currentFolderId === null) {
-    return state;
-  }
-  const folder = state.folders.find(folder => folder.id === appState.navigationState.currentFolderId) || null;
-  if (folder === null) {
-    return state;
-  }
+  const folder = state.folders.find(folder =>
+    folder.bookmarks.some(bookmark => bookmark.id === action.params.bookmark.id)
+  );
   const newBookmarks = withItemDeleted<Bookmark>(folder.bookmarks, action.params.bookmark);
   const newFolder = folder.withBookmarks(newBookmarks);
   const newFolders = withItemReplaced<Folder>(state.folders, newFolder);

@@ -13,6 +13,7 @@ interface ExternalProps {
 }
 
 interface InternalProps extends ExternalProps {
+  editingBookmarkId: string | null;
   hoverItemId: string | null;
 }
 
@@ -21,7 +22,7 @@ class SectionComponent extends React.Component<InternalProps> {
     const { folder } = this.props;
 
     const bookmarkComponents = folder.bookmarks.map((bookmark: Bookmark, rank: number) => {
-      // const editing = bookmark.id === this.props.editingBookmarkId;
+      const editing = bookmark.id === this.props.editingBookmarkId;
       // const dragging = rank === this.props.draggedRank;
       const hovering = bookmark.id === this.props.hoverItemId;
       // const draggable = !editing;
@@ -29,7 +30,7 @@ class SectionComponent extends React.Component<InternalProps> {
         <div className="list-item-container" key={bookmark.id}>
           <BookmarkComponent
             bookmark={bookmark}
-            editing={false}
+            editing={editing}
             dragging={false}
             hovering={hovering}
             rank={rank}
@@ -60,6 +61,7 @@ class SectionComponent extends React.Component<InternalProps> {
 
 const mapStateToProps = (state: AppState, props: {}) => {
   return {
+    editingBookmarkId: state.editBookmarkState.editingBookmarkId,
     hoverItemId: state.hoverState.hoverItemId,
   };
 };

@@ -1,4 +1,5 @@
 import { Bookmark } from 'Bookmark';
+import { Folder } from 'Folder';
 import { Action, EditBookmarkActionType as ActionType } from 'actions/constants';
 
 export interface EditBookmarkParams {
