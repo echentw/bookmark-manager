@@ -17,11 +17,11 @@ import { AppState } from 'reduxStore';
 import { Reducer } from 'reducers/Reducer';
 
 export interface HoverState {
-  hoverRank: number | null;
+  hoverItemId: string | null;
 }
 
 export const initialHoverState: HoverState = {
-  hoverRank: null,
+  hoverItemId: null,
 };
 
 export const hoverReducer: Reducer<HoverState> = (
@@ -72,23 +72,23 @@ export const hoverReducer: Reducer<HoverState> = (
 
 function handleEnter(state: HoverState, action: Action<HoverParams>): HoverState {
   return {
-    hoverRank: action.params.rank,
+    hoverItemId: action.params.itemId,
   };
 }
 
 function handleExit(state: HoverState, action: Action<HoverParams>): HoverState {
-  if (state.hoverRank !== action.params.rank) {
+  if (state.hoverItemId !== action.params.itemId) {
     return state;
   }
   return {
-    hoverRank: null,
+    hoverItemId: null,
   };
 }
 
 function handleBeginDrag(state: HoverState, action: Action<DragParams>): HoverState {
   // If something is dragging, then we don't want any hover behavior.
   return {
-    hoverRank: null,
+    hoverItemId: null,
   };
 }
 
@@ -97,34 +97,34 @@ function handleDeleteBookmark(state: HoverState, action: Action<EditBookmarkPara
   // After we delete, then that list item will disappear, so there's nothing hovered over.
   // Until the next hover event fires :)
   return {
-    hoverRank: null,
+    hoverItemId: null,
   };
 }
 
 function handleConfirmDeleteFolder(state: HoverState, action: Action<DeleteFolderParams>): HoverState {
   // See comment in handleDeleteBookmark above.
   return {
-    hoverRank: null,
+    hoverItemId: null,
   };
 }
 
 function handleShowColorPicker(state: HoverState, action: Action<EditFolderParams>): HoverState {
   // See comment in handleDeleteBookmark above.
   return {
-    hoverRank: null,
+    hoverItemId: null,
   };
 }
 
 function handleBeginDeleteFolder(state: HoverState, action: Action<DeleteFolderParams>): HoverState {
   // See comment in handleDeleteBookmark above.
   return {
-    hoverRank: null,
+    hoverItemId: null,
   };
 }
 
 function handleOpenFolder(state: HoverState, action: Action<OpenFolderParams>): HoverState {
   // Right after we open a folder, we're not hovering over anything.
   return {
-    hoverRank: null,
+    hoverItemId: null,
   };
 }

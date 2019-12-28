@@ -34,6 +34,8 @@ export const DraggableType = {
   Folder: 'folder',
 };
 
+export const USE_SECTIONSSS = true;
+
 interface Props {
   user: User | null;
   loaded: boolean;
@@ -127,12 +129,10 @@ class AppComponent extends React.Component<Props, State> {
       return <div className="app-container"/>;
     }
 
-    const sectionsssss = false;
-
     let currentFolder: Folder | null;
     let ListComponent;
 
-    if (sectionsssss) {
+    if (USE_SECTIONSSS) {
       currentFolder = null;
       ListComponent = <SectionListComponent/>;
     } else {

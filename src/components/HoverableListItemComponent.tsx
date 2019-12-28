@@ -8,7 +8,7 @@ import * as HoverActions from 'actions/HoverActions';
 
 interface ExternalProps {
   className: string;
-  rank: number;
+  itemId: string;
   children: React.ReactElement[];
 }
 
@@ -26,16 +26,16 @@ class HoverableListItemComponent extends React.Component<InternalProps> {
   componentDidUpdate = (prevProps: InternalProps) => {
     if (prevProps.somethingIsDragging && !this.props.somethingIsDragging) {
       // We just stopped dragging. Time to check for hover behavior.
-      this.props.enterHover({ rank: this.props.lastDroppedRank });
+      this.props.enterHover({ itemId: `${this.props.lastDroppedRank}` });
     }
   }
 
   onMouseOver = () => {
-    this.props.enterHover({ rank: this.props.rank });
+    this.props.enterHover({ itemId: this.props.itemId });
   }
 
   onMouseLeave = () => {
-    this.props.exitHover({ rank: this.props.rank });
+    this.props.exitHover({ itemId: this.props.itemId });
   }
 
   render() {

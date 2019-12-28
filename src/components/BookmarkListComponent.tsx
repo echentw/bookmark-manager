@@ -21,7 +21,7 @@ interface InternalProps extends ExternalProps {
   editingBookmarkId: string | null;
   closeFolder: (params: {}) => void;
   draggedRank: number | null;
-  hoverRank: number | null;
+  hoverItemId: string | null;
 }
 
 interface State {
@@ -52,7 +52,7 @@ class BookmarkListComponent extends React.Component<InternalProps, State> {
     const bookmarkComponents = folder.bookmarks.map((bookmark: Bookmark, rank: number) => {
       const editing = bookmark.id === this.props.editingBookmarkId;
       const dragging = rank === this.props.draggedRank;
-      const hovering = rank === this.props.hoverRank;
+      const hovering = String(rank) === this.props.hoverItemId;
       const draggable = !editing;
       return (
         <DragDropListItemContainerComponent
@@ -110,7 +110,7 @@ const mapStateToProps = (state: AppState, props: {}) => {
   return {
     editingBookmarkId: state.editBookmarkState.editingBookmarkId,
     draggedRank: state.dragDropState.draggedRank,
-    hoverRank: state.hoverState.hoverRank,
+    hoverItemId: state.hoverState.hoverItemId,
   };
 };
 

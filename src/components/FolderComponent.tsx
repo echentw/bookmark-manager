@@ -175,7 +175,7 @@ class FolderComponent extends React.Component<InternalProps> {
     const color = colorsToCssClasses.get(folder.color);
 
     return (
-      <HoverableListItemComponent className={classes} rank={this.props.rank}>
+      <HoverableListItemComponent className={classes} itemId={String(this.props.rank)}>
         <FaFolder className={'folder-icon ' + color}/>
         { folderNameComponent }
         { maybeButtonsComponent }

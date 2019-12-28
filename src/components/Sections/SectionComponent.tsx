@@ -8,26 +8,30 @@ import { Bookmark } from 'Bookmark';
 import { DraggableType } from 'components/AppComponent';
 import { BookmarkComponent } from 'components/BookmarkComponent';
 
-interface Props {
+interface ExternalProps {
   folder: Folder;
 }
 
-class SectionComponent extends React.Component<Props> {
+interface InternalProps extends ExternalProps {
+  hoverItemId: string | null;
+}
+
+class SectionComponent extends React.Component<InternalProps> {
   render() {
     const { folder } = this.props;
 
     const bookmarkComponents = folder.bookmarks.map((bookmark: Bookmark, rank: number) => {
       // const editing = bookmark.id === this.props.editingBookmarkId;
       // const dragging = rank === this.props.draggedRank;
-      // const hovering = rank === this.props.hoverRank;
+      const hovering = bookmark.id === this.props.hoverItemId;
       // const draggable = !editing;
       return (
-        <div className="list-item-container">
+        <div className="list-item-container" key={bookmark.id}>
           <BookmarkComponent
             bookmark={bookmark}
             editing={false}
             dragging={false}
-            hovering={false}
+            hovering={hovering}
             rank={rank}
           />
         </div>
@@ -55,7 +59,9 @@ class SectionComponent extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: AppState, props: {}) => {
-  return {};
+  return {
+    hoverItemId: state.hoverState.hoverItemId,
+  };
 };
 
 const Component = connect(mapStateToProps)(SectionComponent);

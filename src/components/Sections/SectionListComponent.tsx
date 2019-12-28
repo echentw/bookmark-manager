@@ -14,7 +14,7 @@ interface Props {
   deletingFolderId: string | null;
   editingFolderId: string | null;
   draggedRank: number | null;
-  hoverRank: number | null;
+  hoverItemId: string | null;
 }
 
 class SectionListComponent extends React.Component<Props> {
@@ -23,7 +23,7 @@ class SectionListComponent extends React.Component<Props> {
       const deleting = folder.id === this.props.deletingFolderId;
       const editing = folder.id === this.props.editingFolderId;
       const dragging = rank === this.props.draggedRank;
-      const hovering = rank === this.props.hoverRank;
+      const hovering = folder.id === this.props.hoverItemId;
       const draggable = !deleting && !editing;
       return (
         <DragDropListItemContainerComponent
@@ -59,7 +59,7 @@ const mapStateToProps = (state: AppState, props: {}) => {
     deletingFolderId: state.deleteFolderState.deletingFolderId,
     editingFolderId: state.editFolderState.editingFolderId,
     draggedRank: state.dragDropState.draggedRank,
-    hoverRank: state.hoverState.hoverRank,
+    hoverItemId: state.hoverState.hoverItemId,
   };
 };
 

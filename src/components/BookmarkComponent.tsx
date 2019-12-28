@@ -10,6 +10,8 @@ import { Bookmark } from 'Bookmark';
 import { EditBookmarkParams } from 'actions/EditBookmarkActions';
 import * as EditBookmarkActions from 'actions/EditBookmarkActions';
 
+import { USE_SECTIONSSS } from 'components/AppComponent';
+
 interface ExternalProps {
   bookmark: Bookmark;
   editing: boolean;
@@ -132,8 +134,10 @@ class BookmarkComponent extends React.Component<InternalProps> {
       classes += ' with-shadow';
     }
 
+    const itemId = USE_SECTIONSSS ? bookmark.id : String(this.props.rank);
+
     return (
-      <HoverableListItemComponent className={classes} rank={this.props.rank}>
+      <HoverableListItemComponent className={classes} itemId={itemId}>
         <img className="bookmark-favicon" src={bookmark.faviconUrl}/>
         { bookmarkName }
         { maybeButtons }

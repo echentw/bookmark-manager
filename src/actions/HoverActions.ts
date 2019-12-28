@@ -1,7 +1,7 @@
 import { Action, HoverActionType as ActionType } from 'actions/constants';
 
 export interface HoverParams {
-  rank: number;
+  itemId: string;
 }
 
 export function enter(params: HoverParams): Action<HoverParams> {
