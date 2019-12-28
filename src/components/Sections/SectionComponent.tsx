@@ -36,8 +36,10 @@ class SectionComponent extends React.Component<Props> {
 
     return (
       <div className="section">
-        <div className="section-name">
-          { folder.name }
+        <div className="section-name-container">
+          <div className="section-name">
+            { folder.name }
+          </div>
         </div>
         <div className="section-bookmarks">
           { bookmarkComponents }
