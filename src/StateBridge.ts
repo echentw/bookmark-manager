@@ -1,9 +1,9 @@
 // To act as a bridge between react state and persisted state.
 
-import { AppState } from './reduxStore';
-import { ChromeAppState, ChromeAppStateForSync } from './ChromeHelpers';
-import { User } from './User';
-import { Folder } from './Folder';
+import { AppState } from 'reduxStore';
+import { ChromeAppState, ChromeAppStateForSync } from 'ChromeHelpers';
+import { User } from 'User';
+import { Folder } from 'Folder';
 
 // When a user opens a new tab, this is the state that we want to load.
 export interface HollowAppStateForLoad extends HollowAppStateForSync {

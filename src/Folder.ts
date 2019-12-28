@@ -1,5 +1,5 @@
-import { Bookmark, BookmarkData } from './Bookmark';
-import { randomId } from './utils';
+import { Bookmark, BookmarkData } from 'Bookmark';
+import { randomId } from 'utils';
 
 export interface FolderData {
   id: string;

@@ -1,8 +1,8 @@
-import { Action, FolderActionType } from '../actions/constants';
-import { OpenFolderParams } from '../actions/FolderActions';
-import { Folder } from '../Folder';
-import { AppState } from '../reduxStore';
-import { Reducer } from './Reducer';
+import { Action, FolderActionType } from 'actions/constants';
+import { OpenFolderParams } from 'actions/FolderActions';
+import { Folder } from 'Folder';
+import { AppState } from 'reduxStore';
+import { Reducer } from 'reducers/Reducer';
 
 export interface NavigationState {
   currentFolderId: string | null;

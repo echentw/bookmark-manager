@@ -1,4 +1,4 @@
-import { Action, DragDropActionType as ActionType } from './constants';
+import { Action, DragDropActionType as ActionType } from 'actions/constants';
 
 export interface DragParams {
   rank: number;

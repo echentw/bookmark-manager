@@ -1,8 +1,8 @@
-import { AddBookmarksSaveParams, ShowModalParams } from '../actions/AddBookmarksActions';
-import { Action, AddBookmarksActionType as ActionType } from '../actions/constants';
-import { TabInfo } from '../ChromeHelpers';
-import { AppState } from '../reduxStore';
-import { Reducer } from './Reducer';
+import { AddBookmarksSaveParams, ShowModalParams } from 'actions/AddBookmarksActions';
+import { Action, AddBookmarksActionType as ActionType } from 'actions/constants';
+import { TabInfo } from 'ChromeHelpers';
+import { AppState } from 'reduxStore';
+import { Reducer } from 'reducers/Reducer';
 
 export interface AddBookmarksState {
   showingModal: boolean;

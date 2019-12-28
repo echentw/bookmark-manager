@@ -1,7 +1,7 @@
-import { Action, DragDropActionType as ActionType } from '../actions/constants';
-import { DragParams, DropParams } from '../actions/DragDropActions';
-import { AppState } from '../reduxStore';
-import { Reducer } from './Reducer';
+import { Action, DragDropActionType as ActionType } from 'actions/constants';
+import { DragParams, DropParams } from 'actions/DragDropActions';
+import { AppState } from 'reduxStore';
+import { Reducer } from 'reducers/Reducer';
 
 export interface DragDropState {
   draggedRank: number | null;

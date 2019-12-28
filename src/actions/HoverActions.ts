@@ -1,4 +1,4 @@
-import { Action, HoverActionType as ActionType } from './constants';
+import { Action, HoverActionType as ActionType } from 'actions/constants';
 
 export interface HoverParams {
   rank: number;

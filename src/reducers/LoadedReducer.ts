@@ -1,6 +1,6 @@
-import { Action } from '../actions/constants';
-import { AppState } from '../reduxStore';
-import { Reducer } from './Reducer';
+import { Action } from 'actions/constants';
+import { AppState } from 'reduxStore';
+import { Reducer } from 'reducers/Reducer';
 
 export interface LoadedState {
   loaded: boolean;

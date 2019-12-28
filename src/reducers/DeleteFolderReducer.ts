@@ -1,7 +1,7 @@
-import { Action, DeleteFolderActionType as ActionType } from '../actions/constants';
-import { DeleteFolderParams } from '../actions/DeleteFolderActions';
-import { AppState } from '../reduxStore';
-import { Reducer } from './Reducer';
+import { Action, DeleteFolderActionType as ActionType } from 'actions/constants';
+import { DeleteFolderParams } from 'actions/DeleteFolderActions';
+import { AppState } from 'reduxStore';
+import { Reducer } from 'reducers/Reducer';
 
 export interface DeleteFolderState {
   deletingFolderId: string | null;

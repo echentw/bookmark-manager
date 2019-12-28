@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { AppState } from '../../reduxStore';
-import { Folder } from '../../Folder';
-import { Bookmark } from '../../Bookmark';
-import { DraggableType } from '../AppComponent';
-
-import { BookmarkComponent } from '../BookmarkComponent';
+import { AppState } from 'reduxStore';
+import { Folder } from 'Folder';
+import { Bookmark } from 'Bookmark';
+import { DraggableType } from 'components/AppComponent';
+import { BookmarkComponent } from 'components/BookmarkComponent';
 
 interface Props {
   folder: Folder;

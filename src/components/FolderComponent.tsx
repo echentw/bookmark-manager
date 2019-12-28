@@ -8,19 +8,19 @@ import {
   FaTrash,
 } from 'react-icons/fa';
 
-import { Folder, colorsToCssClasses } from '../Folder';
-import { DeleteFolderParams } from '../actions/DeleteFolderActions';
-import * as DeleteFolderActions from '../actions/DeleteFolderActions';
-import { OpenFolderParams } from '../actions/FolderActions';
-import * as FolderActions from '../actions/FolderActions';
-import { EditFolderParams } from '../actions/EditFolderActions';
-import * as EditFolderActions from '../actions/EditFolderActions';
+import { Folder, colorsToCssClasses } from 'Folder';
+import { DeleteFolderParams } from 'actions/DeleteFolderActions';
+import * as DeleteFolderActions from 'actions/DeleteFolderActions';
+import { OpenFolderParams } from 'actions/FolderActions';
+import * as FolderActions from 'actions/FolderActions';
+import { EditFolderParams } from 'actions/EditFolderActions';
+import * as EditFolderActions from 'actions/EditFolderActions';
 
-import { AppState } from '../reduxStore';
-import { EditTextFieldComponent } from './EditTextFieldComponent';
-import { HoverableListItemComponent } from './HoverableListItemComponent';
-import { FolderColorPickerModalComponent } from './FolderColorPickerModalComponent';
-import { ConfirmDeleteFolderModalComponent } from './ConfirmDeleteFolderModalComponent';
+import { AppState } from 'reduxStore';
+import { EditTextFieldComponent } from 'components/EditTextFieldComponent';
+import { HoverableListItemComponent } from 'components/HoverableListItemComponent';
+import { FolderColorPickerModalComponent } from 'components/FolderColorPickerModalComponent';
+import { ConfirmDeleteFolderModalComponent } from 'components/ConfirmDeleteFolderModalComponent';
 
 interface ExternalProps {
   folder: Folder;

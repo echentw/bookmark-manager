@@ -1,5 +1,5 @@
-import { Folder, FolderData } from './Folder';
-import { User, UserData } from './User';
+import { Folder, FolderData } from 'Folder';
+import { User, UserData } from 'User';
 
 // We don't want to sync *all* the stuff in ChromeAppState to all existing tabs.
 // This is the stuff we want to sync over.

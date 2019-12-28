@@ -1,8 +1,8 @@
-import { Action, UserActionType  as ActionType } from '../actions/constants';
-import { UserParams } from '../actions/UserActions';
-import { AppState } from '../reduxStore';
-import { User } from '../User';
-import { Reducer } from './Reducer';
+import { Action, UserActionType  as ActionType } from 'actions/constants';
+import { UserParams } from 'actions/UserActions';
+import { AppState } from 'reduxStore';
+import { User } from 'User';
+import { Reducer } from 'reducers/Reducer';
 
 export interface UserState {
   user: User | null;

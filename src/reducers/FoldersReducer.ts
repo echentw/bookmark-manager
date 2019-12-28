@@ -1,9 +1,9 @@
-import { Bookmark } from '../Bookmark';
-import { Folder } from '../Folder';
-import { AppState } from '../reduxStore';
-import { Reducer } from './Reducer';
+import { Bookmark } from 'Bookmark';
+import { Folder } from 'Folder';
+import { AppState } from 'reduxStore';
+import { Reducer } from 'reducers/Reducer';
 
-import { AddBookmarksSaveParams } from '../actions/AddBookmarksActions';
+import { AddBookmarksSaveParams } from 'actions/AddBookmarksActions';
 import {
   Action,
   AddBookmarksActionType,
@@ -11,12 +11,12 @@ import {
   DragDropActionType,
   EditBookmarkActionType,
   EditFolderActionType,
-} from '../actions/constants';
-import { DeleteFolderParams } from '../actions/DeleteFolderActions';
-import { DragParams } from '../actions/DragDropActions';
-import { EditBookmarkParams } from '../actions/EditBookmarkActions';
-import { EditFolderParams, SelectFolderColorParams } from '../actions/EditFolderActions';
-import { withItemDeleted, withItemReplaced } from '../utils';
+} from 'actions/constants';
+import { DeleteFolderParams } from 'actions/DeleteFolderActions';
+import { DragParams } from 'actions/DragDropActions';
+import { EditBookmarkParams } from 'actions/EditBookmarkActions';
+import { EditFolderParams, SelectFolderColorParams } from 'actions/EditFolderActions';
+import { withItemDeleted, withItemReplaced } from 'utils';
 
 export interface FoldersState {
   folders: Folder[];

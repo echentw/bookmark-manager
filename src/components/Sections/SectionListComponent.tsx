@@ -2,12 +2,12 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import Scrollbars from 'react-custom-scrollbars';
 
-import { Folder } from '../../Folder';
-import { AppState } from '../../reduxStore';
-import { DraggableType } from '../AppComponent';
-import { SectionComponent } from './SectionComponent';
-import { DragDropListItemContainerComponent } from '../DragDropListItemContainerComponent';
-import { AddSectionButtonComponent } from './AddSectionButtonComponent';
+import { Folder } from 'Folder';
+import { AppState } from 'reduxStore';
+import { DraggableType } from 'components/AppComponent';
+import { DragDropListItemContainerComponent } from 'components/DragDropListItemContainerComponent';
+import { SectionComponent } from 'components/Sections/SectionComponent';
+import { AddSectionButtonComponent } from 'components/Sections/AddSectionButtonComponent';
 
 interface Props {
   folders: Folder[];

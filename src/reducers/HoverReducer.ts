@@ -6,15 +6,15 @@ import {
   EditFolderActionType,
   FolderActionType,
   HoverActionType,
-} from '../actions/constants';
-import { DeleteFolderParams } from '../actions/DeleteFolderActions';
-import { DragParams } from '../actions/DragDropActions';
-import { EditBookmarkParams } from '../actions/EditBookmarkActions';
-import { EditFolderParams } from '../actions/EditFolderActions';
-import { OpenFolderParams } from '../actions/FolderActions';
-import { HoverParams } from '../actions/HoverActions';
-import { AppState } from '../reduxStore';
-import { Reducer } from './Reducer';
+} from 'actions/constants';
+import { DeleteFolderParams } from 'actions/DeleteFolderActions';
+import { DragParams } from 'actions/DragDropActions';
+import { EditBookmarkParams } from 'actions/EditBookmarkActions';
+import { EditFolderParams } from 'actions/EditFolderActions';
+import { OpenFolderParams } from 'actions/FolderActions';
+import { HoverParams } from 'actions/HoverActions';
+import { AppState } from 'reduxStore';
+import { Reducer } from 'reducers/Reducer';
 
 export interface HoverState {
   hoverRank: number | null;

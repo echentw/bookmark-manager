@@ -3,31 +3,31 @@ import { connect } from 'react-redux';
 import { Store } from 'redux';
 import { CSSTransitionGroup } from 'react-transition-group';
 
-import { Bookmark } from '../Bookmark';
-import { Folder } from '../Folder';
-import { User } from '../User';
-import { ChromeAppState, ChromeAppStateForSync, ChromeHelpers } from '../ChromeHelpers';
-import { StateBridge } from '../StateBridge';
-import { StateDiffer } from '../StateDiffer';
-import { LocalStorageHelpers } from '../LocalStorageHelpers';
-import * as FolderActions from '../actions/FolderActions';
-import * as SyncActions from '../actions/SyncActions';
-import { LoadParams, SyncParams } from '../actions/SyncActions';
-import { AppState, reduxStore } from '../reduxStore';
-import { Action } from '../actions/constants';
+import { Bookmark } from 'Bookmark';
+import { Folder } from 'Folder';
+import { User } from 'User';
+import { ChromeAppState, ChromeAppStateForSync, ChromeHelpers } from 'ChromeHelpers';
+import { StateBridge } from 'StateBridge';
+import { StateDiffer } from 'StateDiffer';
+import { LocalStorageHelpers } from 'LocalStorageHelpers';
+import * as FolderActions from 'actions/FolderActions';
+import * as SyncActions from 'actions/SyncActions';
+import { LoadParams, SyncParams } from 'actions/SyncActions';
+import { AppState, reduxStore } from 'reduxStore';
+import { Action } from 'actions/constants';
 
-import { BookmarkComponent } from './BookmarkComponent';
-import { FolderComponent } from './FolderComponent';
-import { BookmarkListComponent } from './BookmarkListComponent';
-import { FolderListComponent } from './FolderListComponent';
-import { GreetingComponent } from './GreetingComponent';
-import { DragLayerComponent } from './DragLayerComponent';
-import { CopiedToastComponent } from './CopiedToastComponent';
-import { AddBookmarksModalComponent } from './AddBookmarksModalComponent';
-import { DateComponent } from './DateComponent';
-import { NuxComponent } from './NuxComponent';
-import { SettingsModalComponent } from './SettingsModalComponent';
-import { SectionListComponent } from './Sections/SectionListComponent';
+import { BookmarkComponent } from 'components/BookmarkComponent';
+import { FolderComponent } from 'components/FolderComponent';
+import { BookmarkListComponent } from 'components/BookmarkListComponent';
+import { FolderListComponent } from 'components/FolderListComponent';
+import { GreetingComponent } from 'components/GreetingComponent';
+import { DragLayerComponent } from 'components/DragLayerComponent';
+import { CopiedToastComponent } from 'components/CopiedToastComponent';
+import { AddBookmarksModalComponent } from 'components/AddBookmarksModalComponent';
+import { DateComponent } from 'components/DateComponent';
+import { NuxComponent } from 'components/NuxComponent';
+import { SettingsModalComponent } from 'components/SettingsModalComponent';
+import { SectionListComponent } from 'components/Sections/SectionListComponent';
 
 export const DraggableType = {
   Bookmark: 'bookmark',

@@ -2,13 +2,13 @@ import * as React from 'react';
 import { useDrag, useDrop, DragPreviewImage, DragSourceMonitor } from 'react-dnd';
 import { connect } from 'react-redux';
 
-import { Bookmark } from '../Bookmark';
-import { Folder } from '../Folder';
-import { AppState } from '../reduxStore';
-import * as DragDropActions from '../actions/DragDropActions';
-import { DragParams, DropParams } from '../actions/DragDropActions';
-import * as HoverActions from '../actions/HoverActions';
-import { HoverParams } from '../actions/HoverActions';
+import { Bookmark } from 'Bookmark';
+import { Folder } from 'Folder';
+import { AppState } from 'reduxStore';
+import * as DragDropActions from 'actions/DragDropActions';
+import { DragParams, DropParams } from 'actions/DragDropActions';
+import * as HoverActions from 'actions/HoverActions';
+import { HoverParams } from 'actions/HoverActions';
 
 interface ExternalProps {
   id: string;

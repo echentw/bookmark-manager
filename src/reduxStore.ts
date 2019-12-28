@@ -1,23 +1,23 @@
 import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 
-import { Action } from './actions/constants';
-import { HollowAppStateForLoad } from './stateBridge';
+import { Action } from 'actions/constants';
+import { HollowAppStateForLoad } from 'stateBridge';
 
-import { addBookmarksReducer, AddBookmarksState, initialAddBookmarksState } from './reducers/AddBookmarksReducer';
-import { copyUrlReducer, CopyUrlState, initialCopyUrlState } from './reducers/CopyUrlReducer';
-import { deleteFolderReducer, DeleteFolderState, initialDeleteFolderState } from './reducers/DeleteFolderReducer';
-import { dragDropReducer, DragDropState, initialDragDropState } from './reducers/DragDropReducer';
-import { editBookmarkReducer, EditBookmarkState, initialEditBookmarkState } from './reducers/EditBookmarkReducer';
-import { editFolderReducer, EditFolderState, initialEditFolderState } from './reducers/EditFolderReducer';
-import { foldersReducer, FoldersState, initialFoldersState } from './reducers/FoldersReducer';
-import { hoverReducer, HoverState, initialHoverState } from './reducers/HoverReducer';
-import { initialLoadedState, loadedReducer, LoadedState } from './reducers/LoadedReducer';
-import { initialNavigationState, navigationReducer, NavigationState } from './reducers/NavigationReducer';
-import { initialSettingsState, settingsReducer, SettingsState } from './reducers/SettingsReducer';
-import { initialUserState, userReducer, UserState } from './reducers/UserReducer';
+import { addBookmarksReducer, AddBookmarksState, initialAddBookmarksState } from 'reducers/AddBookmarksReducer';
+import { copyUrlReducer, CopyUrlState, initialCopyUrlState } from 'reducers/CopyUrlReducer';
+import { deleteFolderReducer, DeleteFolderState, initialDeleteFolderState } from 'reducers/DeleteFolderReducer';
+import { dragDropReducer, DragDropState, initialDragDropState } from 'reducers/DragDropReducer';
+import { editBookmarkReducer, EditBookmarkState, initialEditBookmarkState } from 'reducers/EditBookmarkReducer';
+import { editFolderReducer, EditFolderState, initialEditFolderState } from 'reducers/EditFolderReducer';
+import { foldersReducer, FoldersState, initialFoldersState } from 'reducers/FoldersReducer';
+import { hoverReducer, HoverState, initialHoverState } from 'reducers/HoverReducer';
+import { initialLoadedState, loadedReducer, LoadedState } from 'reducers/LoadedReducer';
+import { initialNavigationState, navigationReducer, NavigationState } from 'reducers/NavigationReducer';
+import { initialSettingsState, settingsReducer, SettingsState } from 'reducers/SettingsReducer';
+import { initialUserState, userReducer, UserState } from 'reducers/UserReducer';
 
-import { syncReducer } from './reducers/SyncReducer';
+import { syncReducer } from 'reducers/SyncReducer';
 
 declare global {
   interface Window {

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import * as UserActions from '../actions/UserActions';
-import { UserParams } from '../actions/UserActions';
-import { AppState } from '../reduxStore';
+import * as UserActions from 'actions/UserActions';
+import { UserParams } from 'actions/UserActions';
+import { AppState } from 'reduxStore';
 
 interface Props {
   setUserName: (params: UserParams) => void;

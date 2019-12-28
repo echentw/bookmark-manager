@@ -1,7 +1,7 @@
-import { Action, EditBookmarkActionType as ActionType } from '../actions/constants';
-import { EditBookmarkParams } from '../actions/EditBookmarkActions';
-import { AppState } from '../reduxStore';
-import { Reducer } from './Reducer';
+import { Action, EditBookmarkActionType as ActionType } from 'actions/constants';
+import { EditBookmarkParams } from 'actions/EditBookmarkActions';
+import { AppState } from 'reduxStore';
+import { Reducer } from 'reducers/Reducer';
 
 export interface EditBookmarkState {
   editingBookmarkId: string | null;

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { AppState } from '../reduxStore';
-import { Folder } from '../Folder';
-import { ModalBackdropComponent } from './ModalBackdropComponent';
+import { AppState } from 'reduxStore';
+import { Folder } from 'Folder';
+import { ModalBackdropComponent } from 'components/ModalBackdropComponent';
 
 interface ExternalProps {
   triggerRef: React.RefObject<HTMLDivElement>;

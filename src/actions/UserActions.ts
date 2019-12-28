@@ -1,4 +1,4 @@
-import { Action, UserActionType as ActionType } from './constants';
+import { Action, UserActionType as ActionType } from 'actions/constants';
 
 export interface UserParams {
   name: string;

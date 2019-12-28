@@ -1,5 +1,5 @@
-import { Folder, FolderColor } from '../Folder';
-import { Action, EditFolderActionType as ActionType } from './constants';
+import { Folder, FolderColor } from 'Folder';
+import { Action, EditFolderActionType as ActionType } from 'actions/constants';
 
 export interface EditFolderParams {
   folder: Folder;

@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { AppState } from '../reduxStore';
-import { Bookmark, defaultFaviconUrl } from '../Bookmark';
-import { TabInfo } from '../ChromeHelpers';
-import * as AddBookmarksActions from '../actions/AddBookmarksActions';
-import { AddBookmarksSaveParams } from '../actions/AddBookmarksActions';
-import { ModalBackdropComponent } from './ModalBackdropComponent';
+import { AppState } from 'reduxStore';
+import { Bookmark, defaultFaviconUrl } from 'Bookmark';
+import { TabInfo } from 'ChromeHelpers';
+import * as AddBookmarksActions from 'actions/AddBookmarksActions';
+import { AddBookmarksSaveParams } from 'actions/AddBookmarksActions';
+import { ModalBackdropComponent } from 'components/ModalBackdropComponent';
 
 interface Props {
   tabs: TabInfo[];

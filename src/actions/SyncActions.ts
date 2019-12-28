@@ -1,5 +1,5 @@
-import { ChromeAppState, ChromeAppStateForSync } from '../ChromeHelpers';
-import { Action, SyncActionType as ActionType } from './constants';
+import { ChromeAppState, ChromeAppStateForSync } from 'ChromeHelpers';
+import { Action, SyncActionType as ActionType } from 'actions/constants';
 
 export interface LoadParams extends ChromeAppState {}
 

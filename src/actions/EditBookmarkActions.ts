@@ -1,5 +1,5 @@
-import { Bookmark } from '../Bookmark';
-import { Action, EditBookmarkActionType as ActionType } from './constants';
+import { Bookmark } from 'Bookmark';
+import { Action, EditBookmarkActionType as ActionType } from 'actions/constants';
 
 export interface EditBookmarkParams {
   bookmark: Bookmark;

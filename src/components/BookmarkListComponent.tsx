@@ -4,14 +4,14 @@ import Scrollbars from 'react-custom-scrollbars';
 import { IconContext } from 'react-icons';
 import { FaChevronLeft } from 'react-icons/fa';
 
-import { Bookmark } from '../Bookmark';
-import { Folder } from '../Folder';
-import * as FolderActions from '../actions/FolderActions';
-import { DragDropListItemContainerComponent } from './DragDropListItemContainerComponent';
-import { AddBookmarksButtonComponent } from './AddBookmarksButtonComponent';
-import { BookmarkComponent } from './BookmarkComponent';
-import { DraggableType } from './AppComponent';
-import { AppState } from '../reduxStore';
+import { Bookmark } from 'Bookmark';
+import { Folder } from 'Folder';
+import * as FolderActions from 'actions/FolderActions';
+import { DragDropListItemContainerComponent } from 'components/DragDropListItemContainerComponent';
+import { AddBookmarksButtonComponent } from 'components/AddBookmarksButtonComponent';
+import { BookmarkComponent } from 'components/BookmarkComponent';
+import { DraggableType } from 'components/AppComponent';
+import { AppState } from 'reduxStore';
 
 interface ExternalProps {
   folder: Folder;

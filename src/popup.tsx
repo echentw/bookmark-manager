@@ -1,13 +1,13 @@
-import './styles/popup.scss';
+import 'styles/popup.scss';
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Select from 'react-select';
 
-import { withItemReplaced, withItemDeleted } from './utils';
-import { Bookmark } from './Bookmark';
-import { Folder } from './Folder';
-import { ChromeAppState, ChromeHelpers, TabInfo } from './ChromeHelpers';
+import { withItemReplaced, withItemDeleted } from 'utils';
+import { Bookmark } from 'Bookmark';
+import { Folder } from 'Folder';
+import { ChromeAppState, ChromeHelpers, TabInfo } from 'ChromeHelpers';
 
 interface FoundBookmarkInFoldersData {
   found: boolean;

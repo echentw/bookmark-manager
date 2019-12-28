@@ -1,6 +1,6 @@
-import { Action, CopyUrlActionType as ActionType } from '../actions/constants';
-import { _ShowToastParams, HideToastParams } from '../actions/CopyUrlActions';
-import { AppState } from '../reduxStore';
+import { Action, CopyUrlActionType as ActionType } from 'actions/constants';
+import { _ShowToastParams, HideToastParams } from 'actions/CopyUrlActions';
+import { AppState } from 'reduxStore';
 
 export interface CopyUrlState {
   showingToast: boolean;

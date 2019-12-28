@@ -1,11 +1,11 @@
 // This reducer is unlike the others. It gets called at the very end, and serves to merge
 // loaded AppState from Chrome with the current react AppState.
 
-import { AppState } from '../reduxStore';
-import { LocalStorageHelpers } from '../LocalStorageHelpers';
-import { HollowAppStateForLoad, HollowAppStateForSync, StateBridge } from '../StateBridge';
-import { Action, SyncActionType as ActionType } from '../actions/constants';
-import { LoadParams, SyncParams } from '../actions/SyncActions';
+import { AppState } from 'reduxStore';
+import { LocalStorageHelpers } from 'LocalStorageHelpers';
+import { HollowAppStateForLoad, HollowAppStateForSync, StateBridge } from 'StateBridge';
+import { Action, SyncActionType as ActionType } from 'actions/constants';
+import { LoadParams, SyncParams } from 'actions/SyncActions';
 
 export const syncReducer = (state: AppState, action: Action): AppState => {
   let newState = state;

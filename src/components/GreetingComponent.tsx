@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import { FaPen } from 'react-icons/fa';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 
-import { User } from '../User';
-import * as UserActions from '../actions/UserActions';
-import { UserParams } from '../actions/UserActions';
-import * as SettingsActions from '../actions/SettingsActions';
-import { AppState } from '../reduxStore';
-import { SettingsCogComponent } from './SettingsCogComponent';
+import { User } from 'User';
+import * as UserActions from 'actions/UserActions';
+import { UserParams } from 'actions/UserActions';
+import * as SettingsActions from 'actions/SettingsActions';
+import { AppState } from 'reduxStore';
+import { SettingsCogComponent } from 'components/SettingsCogComponent';
 
 // Given an HTML element, if that element is focused, then this function will
 // move the cursor to the end of the text.

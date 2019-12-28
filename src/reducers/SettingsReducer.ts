@@ -1,7 +1,7 @@
-import { Action, SettingsActionType as ActionType } from '../actions/constants';
-import { AppState } from '../reduxStore';
-import { Reducer } from './Reducer';
-import { SetBackgroundImageParams } from '../actions/SettingsActions';
+import { Action, SettingsActionType as ActionType } from 'actions/constants';
+import { AppState } from 'reduxStore';
+import { Reducer } from 'reducers/Reducer';
+import { SetBackgroundImageParams } from 'actions/SettingsActions';
 
 export interface SettingsState {
   showingModal: boolean;

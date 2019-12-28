@@ -4,13 +4,13 @@ import { FaLink, FaPen, FaCopy, FaTrash } from 'react-icons/fa';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 import { connect } from 'react-redux';
 
-import * as CopyUrlActions from '../actions/CopyUrlActions';
-import * as EditBookmarkActions from '../actions/EditBookmarkActions';
-import { EditBookmarkParams } from '../actions/EditBookmarkActions';
+import * as CopyUrlActions from 'actions/CopyUrlActions';
+import * as EditBookmarkActions from 'actions/EditBookmarkActions';
+import { EditBookmarkParams } from 'actions/EditBookmarkActions';
 
-import { Bookmark } from '../Bookmark';
-import { ShowToastParams } from '../actions/CopyUrlActions';
-import { AppState } from '../reduxStore';
+import { Bookmark } from 'Bookmark';
+import { ShowToastParams } from 'actions/CopyUrlActions';
+import { AppState } from 'reduxStore';
 
 interface ExternalProps {
   bookmark: Bookmark;

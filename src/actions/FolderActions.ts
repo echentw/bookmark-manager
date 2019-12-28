@@ -1,5 +1,5 @@
-import { Folder } from '../Folder';
-import { Action, FolderActionType as ActionType } from './constants';
+import { Folder } from 'Folder';
+import { Action, FolderActionType as ActionType } from 'actions/constants';
 
 export interface OpenFolderParams {
   folder: Folder;

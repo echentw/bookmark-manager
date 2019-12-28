@@ -1,4 +1,4 @@
-import { Action, SettingsActionType as ActionType } from './constants';
+import { Action, SettingsActionType as ActionType } from 'actions/constants';
 
 export interface SetBackgroundImageParams {
   timestamp: string;

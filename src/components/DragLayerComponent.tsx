@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { DragLayerMonitor, useDragLayer, XYCoord } from 'react-dnd';
 
-import { Bookmark } from '../Bookmark';
-import { BookmarkComponent } from './BookmarkComponent';
-import { AppState } from '../reduxStore';
+import { Bookmark } from 'Bookmark';
+import { BookmarkComponent } from 'components/BookmarkComponent';
+import { AppState } from 'reduxStore';
 
 interface Props {
   children: React.ReactElement;

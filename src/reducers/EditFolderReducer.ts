@@ -1,7 +1,7 @@
-import { Action, EditFolderActionType as ActionType } from '../actions/constants';
-import { EditFolderParams, SelectFolderColorParams } from '../actions/EditFolderActions';
-import { AppState } from '../reduxStore';
-import { Reducer } from './Reducer';
+import { Action, EditFolderActionType as ActionType } from 'actions/constants';
+import { EditFolderParams, SelectFolderColorParams } from 'actions/EditFolderActions';
+import { AppState } from 'reduxStore';
+import { Reducer } from 'reducers/Reducer';
 
 export interface EditFolderState {
   editingFolderId: string | null;

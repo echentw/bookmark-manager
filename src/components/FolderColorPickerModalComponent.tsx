@@ -2,15 +2,15 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { FaFolder } from 'react-icons/fa';
 
-import { AppState } from '../reduxStore';
+import { AppState } from 'reduxStore';
 import {
   Folder,
   FolderColor,
   colorsToCssClasses,
-} from '../Folder';
-import * as EditFolderActions from '../actions/EditFolderActions';
-import { SelectFolderColorParams } from '../actions/EditFolderActions';
-import { ModalBackdropComponent } from './ModalBackdropComponent';
+} from 'Folder';
+import * as EditFolderActions from 'actions/EditFolderActions';
+import { SelectFolderColorParams } from 'actions/EditFolderActions';
+import { ModalBackdropComponent } from 'components/ModalBackdropComponent';
 
 interface ExternalProps {
   folder: Folder;

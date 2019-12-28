@@ -3,8 +3,8 @@ import { IconContext } from 'react-icons';
 import { FaPlus } from 'react-icons/fa';
 import { connect } from 'react-redux';
 
-import * as AddBookmarksActions from '../actions/AddBookmarksActions';
-import { AppState } from '../reduxStore';
+import * as AddBookmarksActions from 'actions/AddBookmarksActions';
+import { AppState } from 'reduxStore';
 
 interface Props {
   showModal: () => void;

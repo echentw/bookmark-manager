@@ -1,5 +1,5 @@
-import { Folder } from '../Folder';
-import { Action, DeleteFolderActionType as ActionType } from './constants';
+import { Folder } from 'Folder';
+import { Action, DeleteFolderActionType as ActionType } from 'actions/constants';
 
 export interface DeleteFolderParams {
   folder: Folder;

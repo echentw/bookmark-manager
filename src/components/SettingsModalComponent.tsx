@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import { FaCircleNotch, FaLink, FaUpload } from 'react-icons/fa';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
-import { AppState } from '../reduxStore';
-import { LocalStorageHelpers } from '../LocalStorageHelpers';
-import * as CopyUrlActions from '../actions/CopyUrlActions';
-import { ShowToastParams } from '../actions/CopyUrlActions';
-import * as SettingsActions from '../actions/SettingsActions';
-import { SetBackgroundImageParams } from '../actions/SettingsActions';
-import { ModalBackdropComponent } from './ModalBackdropComponent';
+import { AppState } from 'reduxStore';
+import { LocalStorageHelpers } from 'LocalStorageHelpers';
+import * as CopyUrlActions from 'actions/CopyUrlActions';
+import { ShowToastParams } from 'actions/CopyUrlActions';
+import * as SettingsActions from 'actions/SettingsActions';
+import { SetBackgroundImageParams } from 'actions/SettingsActions';
+import { ModalBackdropComponent } from 'components/ModalBackdropComponent';
 
 interface Props {
   backgroundImageUrl: string;

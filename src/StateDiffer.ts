@@ -1,5 +1,5 @@
-import { ChromeAppState } from './ChromeHelpers';
-import { Folder } from './Folder';
+import { ChromeAppState } from 'ChromeHelpers';
+import { Folder } from 'Folder';
 
 // Tells you whether two ChromeAppStates are the same or not.
 export class StateDiffer {

@@ -73,6 +73,10 @@ module.exports = {
     ]),
   ],
   resolve: {
-    extensions: [".tsx", ".ts", ".js", ".scss"]
+    extensions: [".tsx", ".ts", ".js", ".scss"],
+    modules: [
+      path.resolve('./node_modules'),
+      path.resolve('./src'),
+    ],
   },
 };

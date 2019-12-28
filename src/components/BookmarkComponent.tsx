@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { ChromeHelpers } from '../ChromeHelpers';
-import { AppState } from '../reduxStore';
-import { EditTextFieldComponent } from './EditTextFieldComponent';
-import { BookmarkButtonsComponent } from './BookmarkButtonsComponent';
-import { HoverableListItemComponent } from './HoverableListItemComponent';
-import { Bookmark } from '../Bookmark';
-import { EditBookmarkParams } from '../actions/EditBookmarkActions';
-import * as EditBookmarkActions from '../actions/EditBookmarkActions';
+import { ChromeHelpers } from 'ChromeHelpers';
+import { AppState } from 'reduxStore';
+import { EditTextFieldComponent } from 'components/EditTextFieldComponent';
+import { BookmarkButtonsComponent } from 'components/BookmarkButtonsComponent';
+import { HoverableListItemComponent } from 'components/HoverableListItemComponent';
+import { Bookmark } from 'Bookmark';
+import { EditBookmarkParams } from 'actions/EditBookmarkActions';
+import * as EditBookmarkActions from 'actions/EditBookmarkActions';
 
 interface ExternalProps {
   bookmark: Bookmark;

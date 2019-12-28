@@ -1,4 +1,4 @@
-import { randomId } from './utils';
+import { randomId } from 'utils';
 
 export const defaultFaviconUrl = 'assets/world_favicon.ico';
 
