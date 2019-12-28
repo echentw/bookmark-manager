@@ -55,14 +55,13 @@
 @mixin list-item-container {
   @include rect-border-radius;
   background-color: rgba(0, 0, 0, 0.5);
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   width: 100%;
 }
 
 @mixin list-item {
   @include rect-border;
   @include rect-border-radius;
-  height: 40px;
   background-color: white;
 
   display: flex;

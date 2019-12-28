@@ -2,6 +2,7 @@
 
 .folder {
   @include list-item;
+  height: 36px;
 
   .folder-icon {
     @include list-item-image;

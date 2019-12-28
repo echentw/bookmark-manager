@@ -1,5 +1,6 @@
 .bookmark {
   @include list-item;
+  height: 36px;
 
   .bookmark-favicon {
     @include list-item-image;

@@ -1,0 +1,43 @@
+@import './mixins/list';
+
+.section-list {
+  @include list;
+
+  width: 440px;
+  background-color: rgba(255, 255, 255, 0.5);
+  // background-color: blue;
+
+  .section-list-scrollable-area {
+    @include list-scrollable-area;
+    padding-left: 8px;
+    padding-right: 8px;
+
+    .add-section-button {
+      @include list-button;
+    }
+  }
+}
+
+.section {
+  @include list-item;
+  flex-direction: column;
+  align-items: flex-start;
+
+  margin-bottom: 8px;
+  background-color: rgba(255, 255, 255, 0.65);
+  border: none;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.19), 0 4px 6px rgba(0, 0, 0, 0.23);
+
+  .section-name {
+    @include list-item-text;
+  }
+
+  .section-bookmarks {
+    width: 100%;
+    padding: 10px;
+
+    .list-item-container {
+      @include list-item-container;
+    }
+  }
+}

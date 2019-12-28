@@ -27,6 +27,7 @@ import { AddBookmarksModalComponent } from './AddBookmarksModalComponent';
 import { DateComponent } from './DateComponent';
 import { NuxComponent } from './NuxComponent';
 import { SettingsModalComponent } from './SettingsModalComponent';
+import { SectionListComponent } from './Sections/SectionListComponent';
 
 export const DraggableType = {
   Bookmark: 'bookmark',
@@ -126,13 +127,22 @@ class AppComponent extends React.Component<Props, State> {
       return <div className="app-container"/>;
     }
 
-    const currentFolder = this.props.folders.find(folder => folder.id === this.props.currentFolderId) || null;
+    const sectionsssss = false;
 
-    const ListComponent = currentFolder === null ? (
-      <FolderListComponent/>
-    ) : (
-      <BookmarkListComponent folder={currentFolder}/>
-    );
+    let currentFolder: Folder | null;
+    let ListComponent;
+
+    if (sectionsssss) {
+      currentFolder = null;
+      ListComponent = <SectionListComponent/>;
+    } else {
+      currentFolder = this.props.folders.find(folder => folder.id === this.props.currentFolderId) || null;
+      ListComponent = currentFolder === null ? (
+        <FolderListComponent/>
+      ) : (
+        <BookmarkListComponent folder={currentFolder}/>
+      );
+    }
 
     let maybeDragLayer: React.ReactElement = null;
     if (this.props.draggedRank !== null) {
