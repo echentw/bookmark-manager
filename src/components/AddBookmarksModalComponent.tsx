@@ -3,12 +3,19 @@ import { connect } from 'react-redux';
 
 import { AppState } from 'reduxStore';
 import { Bookmark, defaultFaviconUrl } from 'Bookmark';
+import { Folder } from 'Folder';
 import { TabInfo } from 'ChromeHelpers';
 import * as AddBookmarksActions from 'actions/AddBookmarksActions';
 import { AddBookmarksSaveParams } from 'actions/AddBookmarksActions';
 import { ModalBackdropComponent } from 'components/ModalBackdropComponent';
 
-interface Props {
+import { USE_SECTIONSSS } from 'components/AppComponent';
+
+interface ExternalProps {
+  folder?: Folder;
+}
+
+interface Props extends ExternalProps {
   tabs: TabInfo[];
   cancel: () => void;
   save: (params: AddBookmarksSaveParams) => void;

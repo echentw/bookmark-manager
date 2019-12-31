@@ -227,8 +227,6 @@ class AppComponent extends React.Component<Props, State> {
       </CSSTransitionGroup>
     );
   }
-
-  private firstTime = true;
 }
 
 const mapStateToProps = (state: AppState, props: {}) => {

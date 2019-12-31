@@ -37,6 +37,7 @@
 
         .open-tab {
           @include list-item;
+          height: 36px;
 
           &:hover {
             cursor: pointer;

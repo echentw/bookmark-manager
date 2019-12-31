@@ -18,6 +18,8 @@ import { EditBookmarkParams } from 'actions/EditBookmarkActions';
 import { EditFolderParams, SelectFolderColorParams } from 'actions/EditFolderActions';
 import { withItemDeleted, withItemReplaced } from 'utils';
 
+import { USE_SECTIONSSS } from 'components/AppComponent';
+
 export interface FoldersState {
   folders: Folder[];
 }
@@ -108,12 +110,17 @@ function handleAddBookmarksSave(
   action: Action<AddBookmarksSaveParams>,
   appState: AppState,
 ): FoldersState {
-  if (appState.navigationState.currentFolderId === null) {
-    return state;
-  }
-  const folder = state.folders.find(folder => folder.id === appState.navigationState.currentFolderId) || null;
-  if (folder === null) {
-    return state;
+  let folder: Folder;
+  if (USE_SECTIONSSS) {
+    folder = appState.addBookmarksState.folder;
+  } else {
+    if (appState.navigationState.currentFolderId === null) {
+      return state;
+    }
+    folder = state.folders.find(folder => folder.id === appState.navigationState.currentFolderId) || null;
+    if (folder === null) {
+      return state;
+    }
   }
   const newBookmarks = folder.bookmarks.concat(action.params.bookmarks);
   const newFolder = folder.withBookmarks(newBookmarks);

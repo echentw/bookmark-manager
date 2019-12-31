@@ -4,16 +4,17 @@ import { FaPlus } from 'react-icons/fa';
 import { connect } from 'react-redux';
 
 import * as AddBookmarksActions from 'actions/AddBookmarksActions';
+import { ExternalShowModalParams } from 'actions/AddBookmarksActions';
 import { AppState } from 'reduxStore';
 
 interface Props {
-  showModal: () => void;
+  showModal: (params: ExternalShowModalParams) => void;
 }
 
 class AddBookmarksButtonComponent extends React.Component<Props> {
   render() {
     return (
-      <div className="add-bookmarks-button" onClick={this.props.showModal}>
+      <div className="add-bookmarks-button" onClick={() => this.props.showModal({})}>
         <IconContext.Provider value={{ className: 'fa-plus' }}>
           <FaPlus/>
         </IconContext.Provider>

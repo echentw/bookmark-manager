@@ -1,14 +1,17 @@
 import { Dispatch } from 'redux';
 
 import { Bookmark } from 'Bookmark';
+import { Folder } from 'Folder';
 import { ChromeHelpers, TabInfo } from 'ChromeHelpers';
 import { Action, AddBookmarksActionType as ActionType } from 'actions/constants';
+
+import { USE_SECTIONSSS } from 'components/AppComponent';
 
 export interface AddBookmarksSaveParams {
   bookmarks: Bookmark[];
 }
 
-export interface ShowModalParams {
+export interface ShowModalParams extends ExternalShowModalParams {
   tabs: TabInfo[];
 }
 
@@ -19,10 +22,21 @@ function _showModal(params: ShowModalParams): Action<ShowModalParams> {
   };
 }
 
-export function showModal() {
+export interface ExternalShowModalParams {
+  folder?: Folder;
+}
+
+export function showModal(params: ExternalShowModalParams) {
   return async (dispatch: Dispatch<Action<ShowModalParams>>) => {
     const tabInfos = await ChromeHelpers.getOpenTabs();
-    dispatch(_showModal({ tabs: tabInfos }));
+    if (USE_SECTIONSSS) {
+      dispatch(_showModal({
+        folder: params.folder,
+        tabs: tabInfos,
+      }));
+    } else {
+      dispatch(_showModal({ tabs: tabInfos }));
+    }
   };
 }
 

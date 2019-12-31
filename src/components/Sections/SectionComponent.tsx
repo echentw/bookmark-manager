@@ -6,6 +6,9 @@ import { AppState } from 'reduxStore';
 import { Folder } from 'Folder';
 import { Bookmark } from 'Bookmark';
 import { DraggableType } from 'components/AppComponent';
+import * as AddBookmarksActions from 'actions/AddBookmarksActions';
+import { ExternalShowModalParams } from 'actions/AddBookmarksActions';
+
 import { BookmarkComponent } from 'components/BookmarkComponent';
 
 interface ExternalProps {
@@ -15,9 +18,14 @@ interface ExternalProps {
 interface InternalProps extends ExternalProps {
   editingBookmarkId: string | null;
   hoverItemId: string | null;
+  showAddBookmarksModal: (params: ExternalShowModalParams) => void;
 }
 
 class SectionComponent extends React.Component<InternalProps> {
+  onClickAddBookmarks = () => {
+    this.props.showAddBookmarksModal({ folder: this.props.folder });
+  }
+
   render() {
     const { folder } = this.props;
 
@@ -50,8 +58,8 @@ class SectionComponent extends React.Component<InternalProps> {
           { bookmarkComponents }
         </div>
         <div className="add-bookmark-button-container">
-          <div className="add-bookmark-button">
-            <FaPlus className="add-bookmark-icon" onClick={() => console.log('you clicked')}/>
+          <div className="add-bookmark-button" onClick={this.onClickAddBookmarks}>
+            <FaPlus className="add-bookmark-icon"/>
           </div>
         </div>
       </div>
@@ -66,5 +74,9 @@ const mapStateToProps = (state: AppState, props: {}) => {
   };
 };
 
-const Component = connect(mapStateToProps)(SectionComponent);
+const mapActionsToProps = {
+  showAddBookmarksModal: AddBookmarksActions.showModal,
+};
+
+const Component = connect(mapStateToProps, mapActionsToProps)(SectionComponent);
 export { Component as SectionComponent };
