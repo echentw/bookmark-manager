@@ -10,14 +10,18 @@ import * as AddBookmarksActions from 'actions/AddBookmarksActions';
 import { ExternalShowModalParams } from 'actions/AddBookmarksActions';
 
 import { BookmarkComponent } from 'components/BookmarkComponent';
+import { DraggableBookmarkContainerComponent } from 'components/Sections/DraggableBookmarkContainerComponent';
 
 interface ExternalProps {
   folder: Folder;
+  rank: number;
 }
 
 interface InternalProps extends ExternalProps {
   editingBookmarkId: string | null;
   hoverItemId: string | null;
+  draggedFolderRank: number | null;
+  draggedBookmarkRank: number | null;
   showAddBookmarksModal: (params: ExternalShowModalParams) => void;
 }
 
@@ -31,19 +35,27 @@ class SectionComponent extends React.Component<InternalProps> {
 
     const bookmarkComponents = folder.bookmarks.map((bookmark: Bookmark, rank: number) => {
       const editing = bookmark.id === this.props.editingBookmarkId;
-      // const dragging = rank === this.props.draggedRank;
+      const dragging = (
+        this.props.rank === this.props.draggedFolderRank && rank === this.props.draggedBookmarkRank
+      );
       const hovering = bookmark.id === this.props.hoverItemId;
-      // const draggable = !editing;
+      const draggable = !editing;
       return (
-        <div className="list-item-container" key={bookmark.id}>
+        <DraggableBookmarkContainerComponent
+          key={bookmark.id}
+          id={bookmark.id}
+          folderRank={this.props.rank}
+          bookmarkRank={rank}
+          draggable={draggable}
+        >
           <BookmarkComponent
             bookmark={bookmark}
             editing={editing}
-            dragging={false}
+            dragging={dragging}
             hovering={hovering}
             rank={rank}
           />
-        </div>
+        </DraggableBookmarkContainerComponent>
       );
     });
 
@@ -70,6 +82,8 @@ class SectionComponent extends React.Component<InternalProps> {
 const mapStateToProps = (state: AppState, props: {}) => {
   return {
     editingBookmarkId: state.editBookmarkState.editingBookmarkId,
+    draggedBookmarkRank: state.dragBookmarkState.bookmarkRank,
+    draggedFolderRank: state.dragBookmarkState.folderRank,
     hoverItemId: state.hoverState.hoverItemId,
   };
 };

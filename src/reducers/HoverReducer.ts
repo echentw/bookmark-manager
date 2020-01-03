@@ -1,6 +1,7 @@
 import {
   Action,
   DeleteFolderActionType,
+  DragBookmarkActionType,
   DragDropActionType,
   EditBookmarkActionType,
   EditFolderActionType,
@@ -8,13 +9,16 @@ import {
   HoverActionType,
 } from 'actions/constants';
 import { DeleteFolderParams } from 'actions/DeleteFolderActions';
-import { DragParams } from 'actions/DragDropActions';
+import { DragParams, DropParams } from 'actions/DragDropActions';
+import { DragBookmarkParams, DropBookmarkParams } from 'actions/DragBookmarkActions';
 import { EditBookmarkParams } from 'actions/EditBookmarkActions';
 import { EditFolderParams } from 'actions/EditFolderActions';
 import { OpenFolderParams } from 'actions/FolderActions';
 import { HoverParams } from 'actions/HoverActions';
 import { AppState } from 'reduxStore';
 import { Reducer } from 'reducers/Reducer';
+
+import { USE_SECTIONSSS } from 'components/AppComponent';
 
 export interface HoverState {
   hoverItemId: string | null;
@@ -30,7 +34,16 @@ export const hoverReducer: Reducer<HoverState> = (
   appState: AppState,
 ): HoverState => {
 
-  if (appState.dragDropState.draggedRank !== null) {
+  const dragging = USE_SECTIONSSS ? (
+    action.type !== DragBookmarkActionType.end &&
+    appState.dragBookmarkState.folderRank !== null &&
+    appState.dragBookmarkState.bookmarkRank !== null
+  ) : (
+    action.type !== DragDropActionType.endDrag &&
+    appState.dragDropState.draggedRank !== null
+  );
+
+  if (dragging) {
     // If something is currently being dragged, then we don't want to trigger any hover behavior.
     return state;
   }
@@ -50,6 +63,15 @@ export const hoverReducer: Reducer<HoverState> = (
       break;
     case DragDropActionType.beginDrag:
       newState = handleBeginDrag(state, action as Action<DragParams>);
+      break;
+    case DragDropActionType.endDrag:
+      newState = handleEndDrag(state, action as Action<DropParams>);
+      break;
+    case DragBookmarkActionType.begin:
+      newState = handleDragBookmarkBegin(state, action as Action<DragBookmarkParams>);
+      break;
+    case DragBookmarkActionType.end:
+      newState = handleDragBookmarkEnd(state, action as Action<DropBookmarkParams>, appState);
       break;
     case EditBookmarkActionType.deleteBookmark:
       newState = handleDeleteBookmark(state, action as Action<EditBookmarkParams>);
@@ -87,8 +109,47 @@ function handleExit(state: HoverState, action: Action<HoverParams>): HoverState 
 
 function handleBeginDrag(state: HoverState, action: Action<DragParams>): HoverState {
   // If something is dragging, then we don't want any hover behavior.
+  // TODO: deprecated
   return {
     hoverItemId: null,
+  };
+}
+
+function handleEndDrag(state: HoverState, action: Action<DropParams>): HoverState {
+  // TODO: deprecated
+  let hoverItemId = null;
+  if (action.params.trueDrop) {
+    hoverItemId = String(action.params.rank);
+  }
+  return {
+    hoverItemId: hoverItemId,
+  };
+}
+
+
+function handleDragBookmarkBegin(state: HoverState, action: Action<DragBookmarkParams>): HoverState {
+  // If something is dragging, then we don't want any hover behavior.
+  return {
+    hoverItemId: null,
+  };
+}
+
+function handleDragBookmarkEnd(
+  state: HoverState,
+  action: Action<DropBookmarkParams>,
+  appState: AppState
+): HoverState {
+  // If the drop is a "true" drop (the mouse is inside the drop container), then the user is
+  // currently hovered over that item.
+  let hoverItemId = null;
+  if (action.params.trueDrop) {
+    const { folderRank, bookmarkRank } = action.params;
+    const folder = appState.foldersState.folders[folderRank];
+    const bookmark = folder.bookmarks[bookmarkRank];
+    hoverItemId = bookmark.id;
+  }
+  return {
+    hoverItemId: hoverItemId,
   };
 }
 

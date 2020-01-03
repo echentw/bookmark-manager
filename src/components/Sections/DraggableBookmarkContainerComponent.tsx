@@ -5,24 +5,25 @@ import { connect } from 'react-redux';
 import { Bookmark } from 'Bookmark';
 import { Folder } from 'Folder';
 import { AppState } from 'reduxStore';
-import * as DragDropActions from 'actions/DragDropActions';
-import { DragParams, DropParams } from 'actions/DragDropActions';
+import * as DragBookmarkActions from 'actions/DragBookmarkActions';
+import { DragBookmarkParams, DropBookmarkParams } from 'actions/DragBookmarkActions';
 import * as HoverActions from 'actions/HoverActions';
 import { HoverParams } from 'actions/HoverActions';
+import { DraggableType } from 'components/AppComponent';
 
 interface ExternalProps {
   id: string;
-  rank: number;
-  draggableType: string;
+  folderRank: number;
+  bookmarkRank: number;
   draggable: boolean;
   children: React.ReactElement;
 }
 
 interface InternalProps extends ExternalProps {
-  beginDrag: (params: DragParams) => void;
-  endDrag: (params: DropParams) => void;
+  beginDrag: (params: DragBookmarkParams) => void;
+  endDrag: (params: DropBookmarkParams) => void;
   exitHover: (params: HoverParams) => void;
-  isOver: (params: DragParams) => void;
+  isOver: (params: DragBookmarkParams) => void;
 }
 
 // Returns true if the component should NOT re-render.
@@ -30,8 +31,8 @@ interface InternalProps extends ExternalProps {
 function isSame(prevProps: ExternalProps, nextProps: ExternalProps): boolean {
   const ownPropsSame: boolean = (
     prevProps.id === nextProps.id &&
-    prevProps.rank === nextProps.rank &&
-    prevProps.draggableType === nextProps.draggableType &&
+    prevProps.folderRank === nextProps.folderRank &&
+    prevProps.bookmarkRank === nextProps.bookmarkRank &&
     prevProps.draggable === nextProps.draggable
   );
 
@@ -44,6 +45,7 @@ function isSame(prevProps: ExternalProps, nextProps: ExternalProps): boolean {
     if (prevValue instanceof Bookmark || prevValue instanceof Folder) {
       if (!prevValue.equals(nextValue)) {
         childPropsSame = false;
+      } else {
       }
     } else {
       if (prevValue !== nextValue) {
@@ -55,20 +57,25 @@ function isSame(prevProps: ExternalProps, nextProps: ExternalProps): boolean {
   return ownPropsSame && childPropsSame;
 }
 
-const DragDropListItemContainerComponent = React.memo((props: InternalProps) => {
+const DraggableBookmarkContainerComponent = React.memo((props: InternalProps) => {
 
   const [, drag, preview] = useDrag({
     item: {
-      type: props.draggableType,
+      type: DraggableType.Bookmark,
       id: props.id,
     },
     begin: () => {
-      props.beginDrag({ rank: props.rank });
+      console.log('dragging', props.id);
+      props.beginDrag({
+        folderRank: props.folderRank,
+        bookmarkRank: props.bookmarkRank,
+      });
       return;
     },
     end: (dropResult: number, monitor: DragSourceMonitor) => {
       props.endDrag({
-        rank: props.rank,
+        folderRank: props.folderRank,
+        bookmarkRank: props.bookmarkRank,
         trueDrop: monitor.didDrop(),
       });
       return;
@@ -77,10 +84,13 @@ const DragDropListItemContainerComponent = React.memo((props: InternalProps) => 
   });
 
 	const [, drop] = useDrop({
-		accept: props.draggableType,
+		accept: DraggableType.Bookmark,
 		collect: monitor => {
       if (monitor.isOver()) {
-        props.isOver({ rank: props.rank });
+        props.isOver({
+          folderRank: props.folderRank,
+          bookmarkRank: props.bookmarkRank,
+        });
       }
       return {};
 		},
@@ -103,11 +113,11 @@ const mapStateToProps = (state: AppState, props: ExternalProps) => {
 };
 
 const mapActionsToProps = {
-  beginDrag: DragDropActions.beginDrag,
-  endDrag: DragDropActions.endDrag,
+  beginDrag: DragBookmarkActions.begin,
+  endDrag: DragBookmarkActions.end,
   exitHover: HoverActions.exit,
-  isOver: DragDropActions.isOver,
+  isOver: DragBookmarkActions.isOver,
 };
 
-const Component = connect(mapStateToProps, mapActionsToProps)(DragDropListItemContainerComponent);
-export { Component as DragDropListItemContainerComponent };
+const Component = connect(mapStateToProps, mapActionsToProps)(DraggableBookmarkContainerComponent);
+export { Component as DraggableBookmarkContainerComponent };

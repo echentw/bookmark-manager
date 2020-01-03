@@ -50,6 +50,12 @@ export const DragDropActionType = {
   isOver: 'DragDrop:isOver',
 };
 
+export const DragBookmarkActionType = {
+  begin: 'DragBookmark:begin',
+  end: 'DragBookmark:end',
+  isOver: 'DragBookmark:isOver',
+};
+
 export const HoverActionType = {
   enter: 'Hover:enter',
   exit: 'Hover:exit',

@@ -6,6 +6,8 @@ import { AppState } from 'reduxStore';
 import { HoverParams } from 'actions/HoverActions';
 import * as HoverActions from 'actions/HoverActions';
 
+import { USE_SECTIONSSS } from 'components/AppComponent';
+
 interface ExternalProps {
   className: string;
   itemId: string;
@@ -13,8 +15,6 @@ interface ExternalProps {
 }
 
 interface InternalProps extends ExternalProps {
-  somethingIsDragging: boolean;
-  lastDroppedRank: number | null;
   enterHover: (params: HoverParams) => void;
   exitHover: (params: HoverParams) => void;
 }
@@ -22,13 +22,6 @@ interface InternalProps extends ExternalProps {
 class HoverableListItemComponent extends React.Component<InternalProps> {
 
   private element: HTMLDivElement = null;
-
-  componentDidUpdate = (prevProps: InternalProps) => {
-    if (prevProps.somethingIsDragging && !this.props.somethingIsDragging) {
-      // We just stopped dragging. Time to check for hover behavior.
-      this.props.enterHover({ itemId: `${this.props.lastDroppedRank}` });
-    }
-  }
 
   onMouseOver = () => {
     this.props.enterHover({ itemId: this.props.itemId });
@@ -52,10 +45,7 @@ class HoverableListItemComponent extends React.Component<InternalProps> {
 }
 
 const mapStateToProps = (state: AppState, props: ExternalProps) => {
-  return {
-    somethingIsDragging: state.dragDropState.draggedRank !== null,
-    lastDroppedRank: state.dragDropState.lastDroppedRank,
-  };
+  return {};
 };
 
 const mapActionsToProps = {

@@ -8,12 +8,14 @@ import {
   Action,
   AddBookmarksActionType,
   DeleteFolderActionType,
+  DragBookmarkActionType,
   DragDropActionType,
   EditBookmarkActionType,
   EditFolderActionType,
 } from 'actions/constants';
 import { DeleteFolderParams } from 'actions/DeleteFolderActions';
 import { DragParams } from 'actions/DragDropActions';
+import { DragBookmarkParams } from 'actions/DragBookmarkActions';
 import { EditBookmarkParams } from 'actions/EditBookmarkActions';
 import { EditFolderParams, SelectFolderColorParams } from 'actions/EditFolderActions';
 import { withItemDeleted, withItemReplaced } from 'utils';
@@ -58,6 +60,9 @@ export const foldersReducer: Reducer<FoldersState> = (
       break;
     case DragDropActionType.isOver:
       newState = handleDragIsOver(state, action as Action<DragParams>, appState);
+      break;
+    case DragBookmarkActionType.isOver:
+      newState = handleDragBookmarkIsOver(state, action as Action<DragBookmarkParams>, appState);
       break;
   }
   return newState;
@@ -233,6 +238,49 @@ function _handleBookmarkDragIsOver(
 
   const newFolders = state.folders;
 
+  return {
+    folders: newFolders,
+  };
+}
+
+function handleDragBookmarkIsOver(
+  state: FoldersState,
+  action: Action<DragBookmarkParams>,
+  appState: AppState,
+): FoldersState {
+  const { folderRank: draggedFolderRank, bookmarkRank: draggedBookmarkRank } = appState.dragBookmarkState;
+  const { folderRank: targetFolderRank, bookmarkRank: targetBookmarkRank } = action.params;
+
+  // console.log(`(${draggedFolderRank}, ${draggedBookmarkRank}) -> (${targetFolderRank}, ${targetBookmarkRank})`);
+
+  const startFolder = state.folders[draggedFolderRank];
+  const draggedBookmark = startFolder.bookmarks[draggedBookmarkRank];
+
+  if (draggedFolderRank === targetFolderRank) {
+    const bookmarks = startFolder.bookmarks;
+    if (draggedBookmarkRank > targetBookmarkRank) {
+      for (let i = draggedBookmarkRank; i > targetBookmarkRank; --i) {
+        bookmarks[i] = bookmarks[i - 1];
+      }
+    } else {
+      for (let i = draggedBookmarkRank; i < targetBookmarkRank; ++i) {
+        bookmarks[i] = bookmarks[i + 1];
+      }
+    }
+    bookmarks[targetBookmarkRank] = draggedBookmark;
+  } else {
+    startFolder.bookmarks.splice(draggedBookmarkRank, 1);
+    const targetFolder = state.folders[targetFolderRank];
+    if (draggedFolderRank < targetFolderRank) {
+      // We want to insert the dragged bookmark after the bookmark we're hovering over.
+      targetFolder.bookmarks.splice(targetBookmarkRank + 1, 0, draggedBookmark);
+    } else {
+      // We want to insert the dragged bookmark before the bookmark we're hovering over.
+      targetFolder.bookmarks.splice(targetBookmarkRank, 0, draggedBookmark);
+    }
+  }
+
+  const newFolders = state.folders;
   return {
     folders: newFolders,
   };

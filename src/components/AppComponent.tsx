@@ -14,6 +14,7 @@ import * as FolderActions from 'actions/FolderActions';
 import * as SyncActions from 'actions/SyncActions';
 import { LoadParams, SyncParams } from 'actions/SyncActions';
 import { AppState, reduxStore } from 'reduxStore';
+import { DragBookmarkState } from 'reducers/DragBookmarkReducer';
 import { Action } from 'actions/constants';
 
 import { BookmarkComponent } from 'components/BookmarkComponent';
@@ -42,6 +43,7 @@ interface Props {
   currentFolderId: string | null;
   backgroundImageUrl: string;
   draggedRank: number | null;
+  dragBookmarkState: DragBookmarkState;
   folders: Folder[];
   showAddBookmarksModal: boolean;
   showSettingsModal: boolean;
@@ -91,7 +93,12 @@ class AppComponent extends React.Component<Props, State> {
     store.subscribe(async () => {
       const state = store.getState();
 
-      const dragging = state.dragDropState.draggedRank !== null;
+      const dragging = USE_SECTIONSSS ? (
+        state.dragBookmarkState.folderRank !== null &&
+        state.dragBookmarkState.bookmarkRank !== null
+      ) : (
+        state.dragDropState.draggedRank !== null
+      );
       if (dragging) {
         // If the user is currently dragging, then they haven't finished their action yet.
         return;
@@ -145,39 +152,59 @@ class AppComponent extends React.Component<Props, State> {
     }
 
     let maybeDragLayer: React.ReactElement = null;
-    if (this.props.draggedRank !== null) {
-      let dragPreview: React.ReactElement = null;
-      if (currentFolder === null) {
-        const draggedFolder = this.props.folders[this.props.draggedRank];
-        dragPreview = (
-          <FolderComponent
-            folder={draggedFolder}
-            deleting={false}
-            editing={false}
-            dragging={false}
-            hovering={false}
-            isDragPreview={true}
-            rank={-1}
-          />
-        );
-      } else {
-        const draggedBookmark = currentFolder.bookmarks[this.props.draggedRank];
-        dragPreview = (
-          <BookmarkComponent
-            bookmark={draggedBookmark}
-            editing={false}
-            dragging={false}
-            hovering={false}
-            isDragPreview={true}
-            rank={-1}
-          />
+    if (USE_SECTIONSSS) {
+      const { folderRank, bookmarkRank } = this.props.dragBookmarkState;
+      if (folderRank !== null && bookmarkRank !== null) {
+        const folder = this.props.folders[folderRank];
+        const bookmark = folder.bookmarks[bookmarkRank];
+        maybeDragLayer = (
+          <DragLayerComponent>
+            <BookmarkComponent
+              bookmark={bookmark}
+              editing={false}
+              dragging={false}
+              hovering={false}
+              isDragPreview={true}
+              rank={-1}
+            />
+          </DragLayerComponent>
         );
       }
-      maybeDragLayer = (
-        <DragLayerComponent>
-          { dragPreview }
-        </DragLayerComponent>
-      );
+    } else {
+      if (this.props.draggedRank !== null) {
+        let dragPreview: React.ReactElement = null;
+        if (currentFolder === null) {
+          const draggedFolder = this.props.folders[this.props.draggedRank];
+          dragPreview = (
+            <FolderComponent
+              folder={draggedFolder}
+              deleting={false}
+              editing={false}
+              dragging={false}
+              hovering={false}
+              isDragPreview={true}
+              rank={-1}
+            />
+          );
+        } else {
+          const draggedBookmark = currentFolder.bookmarks[this.props.draggedRank];
+          dragPreview = (
+            <BookmarkComponent
+              bookmark={draggedBookmark}
+              editing={false}
+              dragging={false}
+              hovering={false}
+              isDragPreview={true}
+              rank={-1}
+            />
+          );
+        }
+        maybeDragLayer = (
+          <DragLayerComponent>
+            { dragPreview }
+          </DragLayerComponent>
+        );
+      }
     }
 
     const maybeAddBookmarksModal = this.props.showAddBookmarksModal ? (
@@ -234,6 +261,7 @@ const mapStateToProps = (state: AppState, props: {}) => {
     backgroundImageUrl: state.settingsState.backgroundImageUrl,
     currentFolderId: state.navigationState.currentFolderId,
     draggedRank: state.dragDropState.draggedRank,
+    dragBookmarkState: state.dragBookmarkState,
     folders: state.foldersState.folders,
     loaded: state.loadedState.loaded,
     showAddBookmarksModal: state.addBookmarksState.showingModal,
