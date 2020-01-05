@@ -53,6 +53,7 @@ class SectionComponent extends React.Component<InternalProps> {
           className="list-item-container"
           draggableType={DraggableType.Bookmark}
           isOver={() => this.props.isOver({ folderRank: this.props.rank, bookmarkRank: rank })}
+          rerenderProps={[draggable, bookmark, editing, dragging, hovering, rank]}
         >
           <DragSourceContainerComponent
             draggableType={DraggableType.Bookmark}
@@ -78,6 +79,7 @@ class SectionComponent extends React.Component<InternalProps> {
           className="section-name-container"
           draggableType={DraggableType.Bookmark}
           isOver={() => this.props.isOver({ folderRank: this.props.rank, bookmarkRank: -1 })}
+          rerenderProps={[folder.name]}
         >
           <div className="section-name">
             { folder.name }
@@ -90,6 +92,7 @@ class SectionComponent extends React.Component<InternalProps> {
           className="add-bookmark-button-container"
           draggableType={DraggableType.Bookmark}
           isOver={() => this.props.isOver({ folderRank: this.props.rank, bookmarkRank: folder.bookmarks.length })}
+          rerenderProps={[]}
         >
           <div className="add-bookmark-button" onClick={this.onClickAddBookmarks}>
             <FaPlus className="add-bookmark-icon"/>
