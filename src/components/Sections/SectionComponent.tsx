@@ -6,11 +6,15 @@ import { AppState } from 'reduxStore';
 import { Folder } from 'Folder';
 import { Bookmark } from 'Bookmark';
 import { DraggableType } from 'components/AppComponent';
+
 import * as AddBookmarksActions from 'actions/AddBookmarksActions';
 import { ExternalShowModalParams } from 'actions/AddBookmarksActions';
+import * as DragBookmarkActions from 'actions/DragBookmarkActions';
+import { DragBookmarkParams, DropBookmarkParams } from 'actions/DragBookmarkActions';
 
 import { BookmarkComponent } from 'components/BookmarkComponent';
-import { DraggableBookmarkContainerComponent } from 'components/Sections/DraggableBookmarkContainerComponent';
+import { DragSourceContainerComponent } from 'components/Sections/DragSourceContainerComponent';
+import { DropTargetContainerComponent } from 'components/Sections/DropTargetContainerComponent';
 
 interface ExternalProps {
   folder: Folder;
@@ -23,6 +27,9 @@ interface InternalProps extends ExternalProps {
   draggedFolderRank: number | null;
   draggedBookmarkRank: number | null;
   showAddBookmarksModal: (params: ExternalShowModalParams) => void;
+  beginDrag: (params: DragBookmarkParams) => void;
+  endDrag: (params: DropBookmarkParams) => void;
+  isOver: (params: DragBookmarkParams) => void;
 }
 
 class SectionComponent extends React.Component<InternalProps> {
@@ -38,45 +45,56 @@ class SectionComponent extends React.Component<InternalProps> {
       const dragging = (
         this.props.rank === this.props.draggedFolderRank && rank === this.props.draggedBookmarkRank
       );
-      if (bookmark.id === 'hrIincnr') {
-        console.log(`bookmark: ${bookmark.id}, ${this.props.rank}, ${rank}`);
-      }
       const hovering = bookmark.id === this.props.hoverItemId;
       const draggable = !editing;
       return (
-        <DraggableBookmarkContainerComponent
+        <DropTargetContainerComponent
           key={bookmark.id}
-          id={bookmark.id}
-          folderRank={this.props.rank}
-          bookmarkRank={rank}
-          draggable={draggable}
+          className="list-item-container"
+          draggableType={DraggableType.Bookmark}
+          isOver={() => this.props.isOver({ folderRank: this.props.rank, bookmarkRank: rank })}
         >
-          <BookmarkComponent
-            bookmark={bookmark}
-            editing={editing}
-            dragging={dragging}
-            hovering={hovering}
-            rank={rank}
-          />
-        </DraggableBookmarkContainerComponent>
+          <DragSourceContainerComponent
+            draggableType={DraggableType.Bookmark}
+            beginDrag={() => this.props.beginDrag({ folderRank: this.props.rank, bookmarkRank: rank })}
+            endDrag={(trueDrop: boolean) => this.props.endDrag({ trueDrop })}
+            draggable={draggable}
+          >
+            <BookmarkComponent
+              bookmark={bookmark}
+              editing={editing}
+              dragging={dragging}
+              hovering={hovering}
+              rank={rank}
+            />
+          </DragSourceContainerComponent>
+        </DropTargetContainerComponent>
       );
     });
 
     return (
       <div className="section">
-        <div className="section-name-container">
+        <DropTargetContainerComponent
+          className="section-name-container"
+          draggableType={DraggableType.Bookmark}
+          isOver={() => this.props.isOver({ folderRank: this.props.rank, bookmarkRank: -1 })}
+        >
           <div className="section-name">
             { folder.name }
           </div>
-        </div>
+        </DropTargetContainerComponent>
         <div className="section-bookmarks">
           { bookmarkComponents }
         </div>
-        <div className="add-bookmark-button-container">
+        <DropTargetContainerComponent
+          className="add-bookmark-button-container"
+          draggableType={DraggableType.Bookmark}
+          isOver={() => this.props.isOver({ folderRank: this.props.rank, bookmarkRank: folder.bookmarks.length })}
+        >
           <div className="add-bookmark-button" onClick={this.onClickAddBookmarks}>
             <FaPlus className="add-bookmark-icon"/>
           </div>
-        </div>
+        </DropTargetContainerComponent>
       </div>
     );
   }
@@ -93,6 +111,9 @@ const mapStateToProps = (state: AppState, props: {}) => {
 
 const mapActionsToProps = {
   showAddBookmarksModal: AddBookmarksActions.showModal,
+  beginDrag: DragBookmarkActions.begin,
+  endDrag: DragBookmarkActions.end,
+  isOver: DragBookmarkActions.isOver,
 };
 
 const Component = connect(mapStateToProps, mapActionsToProps)(SectionComponent);

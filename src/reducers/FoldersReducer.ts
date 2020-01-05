@@ -251,31 +251,37 @@ function handleDragBookmarkIsOver(
   const { folderRank: draggedFolderRank, bookmarkRank: draggedBookmarkRank } = appState.dragBookmarkState;
   const { folderRank: targetFolderRank, bookmarkRank: targetBookmarkRank } = action.params;
 
-  // console.log(`(${draggedFolderRank}, ${draggedBookmarkRank}) -> (${targetFolderRank}, ${targetBookmarkRank})`);
-
   const startFolder = state.folders[draggedFolderRank];
   const draggedBookmark = startFolder.bookmarks[draggedBookmarkRank];
 
+  const targetFolder = state.folders[targetFolderRank];
+
   if (draggedFolderRank === targetFolderRank) {
-    const bookmarks = startFolder.bookmarks;
-    if (draggedBookmarkRank > targetBookmarkRank) {
-      for (let i = draggedBookmarkRank; i > targetBookmarkRank; --i) {
-        bookmarks[i] = bookmarks[i - 1];
+    if (targetBookmarkRank >= 0 && targetBookmarkRank < startFolder.bookmarks.length) {
+      const bookmarks = startFolder.bookmarks;
+      if (draggedBookmarkRank > targetBookmarkRank) {
+        for (let i = draggedBookmarkRank; i > targetBookmarkRank; --i) {
+          bookmarks[i] = bookmarks[i - 1];
+        }
+      } else {
+        for (let i = draggedBookmarkRank; i < targetBookmarkRank; ++i) {
+          bookmarks[i] = bookmarks[i + 1];
+        }
       }
-    } else {
-      for (let i = draggedBookmarkRank; i < targetBookmarkRank; ++i) {
-        bookmarks[i] = bookmarks[i + 1];
-      }
+      bookmarks[targetBookmarkRank] = draggedBookmark;
     }
-    bookmarks[targetBookmarkRank] = draggedBookmark;
-  } else {
-    startFolder.bookmarks.splice(draggedBookmarkRank, 1);
-    const targetFolder = state.folders[targetFolderRank];
-    if (draggedFolderRank < targetFolderRank) {
-      // We want to insert the dragged bookmark after the bookmark we're hovering over.
+  } else if (draggedFolderRank < targetFolderRank) {
+    // We are moving the Bookmark from a Section above to a Section below.
+    if (targetBookmarkRank < targetFolder.bookmarks.length) {
+      // Insert the dragged bookmark after the bookmark we're hovering over.
+      startFolder.bookmarks.splice(draggedBookmarkRank, 1);
       targetFolder.bookmarks.splice(targetBookmarkRank + 1, 0, draggedBookmark);
-    } else {
-      // We want to insert the dragged bookmark before the bookmark we're hovering over.
+    }
+  } else {
+    // We are moving the Bookmark from a Section below to a Section above.
+    if (targetBookmarkRank > -1) {
+      // Insert the dragged bookmark before the bookmark we're hovering over.
+      startFolder.bookmarks.splice(draggedBookmarkRank, 1);
       targetFolder.bookmarks.splice(targetBookmarkRank, 0, draggedBookmark);
     }
   }
