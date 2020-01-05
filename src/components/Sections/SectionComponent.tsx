@@ -38,6 +38,9 @@ class SectionComponent extends React.Component<InternalProps> {
       const dragging = (
         this.props.rank === this.props.draggedFolderRank && rank === this.props.draggedBookmarkRank
       );
+      if (bookmark.id === 'hrIincnr') {
+        console.log(`bookmark: ${bookmark.id}, ${this.props.rank}, ${rank}`);
+      }
       const hovering = bookmark.id === this.props.hoverItemId;
       const draggable = !editing;
       return (

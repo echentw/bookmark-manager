@@ -65,7 +65,6 @@ const DraggableBookmarkContainerComponent = React.memo((props: InternalProps) =>
       id: props.id,
     },
     begin: () => {
-      console.log('dragging', props.id);
       props.beginDrag({
         folderRank: props.folderRank,
         bookmarkRank: props.bookmarkRank,
@@ -73,11 +72,7 @@ const DraggableBookmarkContainerComponent = React.memo((props: InternalProps) =>
       return;
     },
     end: (dropResult: number, monitor: DragSourceMonitor) => {
-      props.endDrag({
-        folderRank: props.folderRank,
-        bookmarkRank: props.bookmarkRank,
-        trueDrop: monitor.didDrop(),
-      });
+      props.endDrag({ trueDrop: monitor.didDrop() });
       return;
     },
     canDrag: () => props.draggable,

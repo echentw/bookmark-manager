@@ -6,8 +6,6 @@ export interface DragBookmarkParams {
 }
 
 export interface DropBookmarkParams {
-  folderRank: number;
-  bookmarkRank: number;
   trueDrop: boolean;
 }
 

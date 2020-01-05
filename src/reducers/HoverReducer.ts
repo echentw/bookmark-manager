@@ -143,7 +143,7 @@ function handleDragBookmarkEnd(
   // currently hovered over that item.
   let hoverItemId = null;
   if (action.params.trueDrop) {
-    const { folderRank, bookmarkRank } = action.params;
+    const { folderRank, bookmarkRank } = appState.dragBookmarkState;
     const folder = appState.foldersState.folders[folderRank];
     const bookmark = folder.bookmarks[bookmarkRank];
     hoverItemId = bookmark.id;
