@@ -92,7 +92,7 @@ class SectionComponent extends React.Component<InternalProps> {
           className="add-bookmark-button-container"
           draggableType={DraggableType.Bookmark}
           isOver={() => this.props.isOver({ folderRank: this.props.rank, bookmarkRank: folder.bookmarks.length })}
-          rerenderProps={[]}
+          rerenderProps={[this.props.rank, folder.bookmarks.length]}
         >
           <div className="add-bookmark-button" onClick={this.onClickAddBookmarks}>
             <FaPlus className="add-bookmark-icon"/>
