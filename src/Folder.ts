@@ -6,6 +6,7 @@ export interface FolderData {
   name: string;
   bookmarks: BookmarkData[];
   color: FolderColor;
+  collapsed: boolean;
 }
 
 export enum FolderColor {
@@ -41,17 +42,20 @@ export class Folder {
   public readonly name: string;
   public readonly bookmarks: Bookmark[];
   public readonly color: FolderColor;
+  public readonly collapsed: boolean;
 
-  constructor({ name, id, bookmarks, color }: {
+  constructor({ name, id, bookmarks, color, collapsed }: {
     name: string,
     id?: string,
     bookmarks?: Bookmark[],
     color?: FolderColor,
+    collapsed?: boolean,
   }) {
     this.id = (id !== undefined) ? id : randomId();
     this.name = name;
     this.bookmarks = (bookmarks !== undefined) ? bookmarks : [];
     this.color = (color !== undefined) ? color : FolderColor.Black;
+    this.collapsed = collapsed || false;
   }
 
   public withName = (name: string) => {
@@ -60,6 +64,7 @@ export class Folder {
       name: name,
       bookmarks: this.bookmarks,
       color: this.color,
+      collapsed: this.collapsed,
     });
   }
 
@@ -69,6 +74,7 @@ export class Folder {
       name: this.name,
       bookmarks: bookmarks,
       color: this.color,
+      collapsed: this.collapsed,
     });
   }
 
@@ -78,6 +84,17 @@ export class Folder {
       name: this.name,
       bookmarks: this.bookmarks,
       color: color,
+      collapsed: this.collapsed,
+    });
+  }
+
+  public withCollapsed = (collapsed: boolean) => {
+    return new Folder({
+      id: this.id,
+      name: this.name,
+      bookmarks: this.bookmarks,
+      color: this.color,
+      collapsed: collapsed,
     });
   }
 
@@ -88,7 +105,8 @@ export class Folder {
     if (this.id !== other.id ||
         this.name !== other.name ||
         this.bookmarks.length !== other.bookmarks.length ||
-        this.color !== other.color) {
+        this.color !== other.color ||
+        this.collapsed !== other.collapsed) {
       return false;
     }
     return this.bookmarks.every((bookmark: Bookmark, index: number) => {
@@ -102,6 +120,7 @@ export class Folder {
       name: this.name,
       bookmarks: this.bookmarks.slice(0),
       color: this.color,
+      collapsed: this.collapsed,
     });
   }
 
@@ -112,6 +131,7 @@ export class Folder {
       name: data.name,
       bookmarks: bookmarks,
       color: data.color,
+      collapsed: data.collapsed === undefined ? true : data.collapsed,
     });
   }
 
@@ -122,6 +142,7 @@ export class Folder {
       name: this.name,
       bookmarks: bookmarkDatas,
       color: this.color,
+      collapsed: this.collapsed,
     };
   }
 }

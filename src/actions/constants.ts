@@ -8,6 +8,11 @@ export const FolderActionType = {
   closeFolder: 'Folder:closeFolder',
 };
 
+export const SectionActionType = {
+  expand: 'Section:expand',
+  collapse: 'Section:collapse',
+};
+
 export const EditFolderActionType = {
   addFolder: 'EditFolder:addFolder',
   beginEdit: 'EditFolder:beginEdit',

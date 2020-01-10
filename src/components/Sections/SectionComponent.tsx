@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { FaPlus } from 'react-icons/fa';
+import { FaChevronDown, FaChevronUp, FaPlus } from 'react-icons/fa';
 
 import { AppState } from 'reduxStore';
 import { Folder } from 'Folder';
@@ -11,6 +11,8 @@ import * as AddBookmarksActions from 'actions/AddBookmarksActions';
 import { ExternalShowModalParams } from 'actions/AddBookmarksActions';
 import * as DragBookmarkActions from 'actions/DragBookmarkActions';
 import { DragBookmarkParams, DropBookmarkParams } from 'actions/DragBookmarkActions';
+import * as SectionActions from 'actions/SectionActions';
+import { SectionParams } from 'actions/SectionActions';
 
 import { BookmarkComponent } from 'components/BookmarkComponent';
 import { DragSourceContainerComponent } from 'components/Sections/DragSourceContainerComponent';
@@ -30,6 +32,8 @@ interface InternalProps extends ExternalProps {
   beginDrag: (params: DragBookmarkParams) => void;
   endDrag: (params: DropBookmarkParams) => void;
   isOver: (params: DragBookmarkParams) => void;
+  expandSection: (params: SectionParams) => void;
+  collapseSection: (params: SectionParams) => void;
 }
 
 class SectionComponent extends React.Component<InternalProps> {
@@ -37,10 +41,18 @@ class SectionComponent extends React.Component<InternalProps> {
     this.props.showAddBookmarksModal({ folder: this.props.folder });
   }
 
-  render() {
-    const { folder } = this.props;
+  expandFolder = () => {
+    console.log('expanding');
+    this.props.expandSection({ folder: this.props.folder });
+  }
 
-    const bookmarkComponents = folder.bookmarks.map((bookmark: Bookmark, rank: number) => {
+  collapseFolder = () => {
+    console.log('collapsing');
+    this.props.collapseSection({ folder: this.props.folder });
+  }
+
+  bookmarkComponents = () => {
+    const bookmarkComponents = this.props.folder.bookmarks.map((bookmark: Bookmark, rank: number) => {
       const editing = bookmark.id === this.props.editingBookmarkId;
       const dragging = (
         this.props.rank === this.props.draggedFolderRank && rank === this.props.draggedBookmarkRank
@@ -72,6 +84,28 @@ class SectionComponent extends React.Component<InternalProps> {
         </DropTargetContainerComponent>
       );
     });
+    return bookmarkComponents;
+  }
+
+  render() {
+    const { folder } = this.props;
+
+    if (folder.collapsed) {
+      return (
+        <div className="section collapsed">
+          <div className="section-name-container" onClick={this.expandFolder}>
+            <div className="icon-and-name-container">
+              <div className="down-icon">
+                <FaChevronDown/>
+              </div>
+              <div className="section-name">
+                { folder.name }
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div className="section">
@@ -81,12 +115,17 @@ class SectionComponent extends React.Component<InternalProps> {
           isOver={() => this.props.isOver({ folderRank: this.props.rank, bookmarkRank: -1 })}
           rerenderProps={[folder.name]}
         >
-          <div className="section-name">
-            { folder.name }
+          <div className="icon-and-name-container" onClick={this.collapseFolder}>
+            <div className="up-icon">
+              <FaChevronUp/>
+            </div>
+            <div className="section-name">
+              { folder.name }
+            </div>
           </div>
         </DropTargetContainerComponent>
         <div className="section-bookmarks">
-          { bookmarkComponents }
+          { this.bookmarkComponents() }
         </div>
         <DropTargetContainerComponent
           className="add-bookmark-button-container"
@@ -117,6 +156,8 @@ const mapActionsToProps = {
   beginDrag: DragBookmarkActions.begin,
   endDrag: DragBookmarkActions.end,
   isOver: DragBookmarkActions.isOver,
+  expandSection: SectionActions.expandSection,
+  collapseSection: SectionActions.collapseSection,
 };
 
 const Component = connect(mapStateToProps, mapActionsToProps)(SectionComponent);

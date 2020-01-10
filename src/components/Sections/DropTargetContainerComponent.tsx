@@ -10,6 +10,7 @@ interface Props {
   draggableType: string;
   children: React.ReactElement;
 
+  // We re-render this component iff these props change or the className changes.
   rerenderProps: any[];
 }
 

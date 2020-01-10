@@ -12,7 +12,9 @@ import {
   DragDropActionType,
   EditBookmarkActionType,
   EditFolderActionType,
+  SectionActionType,
 } from 'actions/constants';
+import { SectionParams } from 'actions/SectionActions';
 import { DeleteFolderParams } from 'actions/DeleteFolderActions';
 import { DragParams } from 'actions/DragDropActions';
 import { DragBookmarkParams } from 'actions/DragBookmarkActions';
@@ -64,6 +66,13 @@ export const foldersReducer: Reducer<FoldersState> = (
     case DragBookmarkActionType.isOver:
       newState = handleDragBookmarkIsOver(state, action as Action<DragBookmarkParams>, appState);
       break;
+    case SectionActionType.expand:
+      newState = handleExpandSection(state, action as Action<SectionParams>);
+      break;
+    case SectionActionType.collapse:
+      newState = handleCollapseSection(state, action as Action<SectionParams>);
+      break;
+
   }
   return newState;
 };
@@ -287,6 +296,30 @@ function handleDragBookmarkIsOver(
   }
 
   const newFolders = state.folders;
+  return {
+    folders: newFolders,
+  };
+}
+
+function handleExpandSection(state: FoldersState, action: Action<SectionParams>): FoldersState {
+  const folder = state.folders.find(folder => folder.id === action.params.folder.id) || null;
+  if (folder === null) {
+    return state;
+  }
+  const newFolder = folder.withCollapsed(false);
+  const newFolders = withItemReplaced<Folder>(state.folders, newFolder);
+  return {
+    folders: newFolders,
+  };
+}
+
+function handleCollapseSection(state: FoldersState, action: Action<SectionParams>): FoldersState {
+  const folder = state.folders.find(folder => folder.id === action.params.folder.id) || null;
+  if (folder === null) {
+    return state;
+  }
+  const newFolder = folder.withCollapsed(true);
+  const newFolders = withItemReplaced<Folder>(state.folders, newFolder);
   return {
     folders: newFolders,
   };
