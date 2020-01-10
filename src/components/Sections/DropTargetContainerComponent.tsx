@@ -8,7 +8,7 @@ interface Props {
   className: string;
   isOver: () => void;
   draggableType: string;
-  children: React.ReactElement;
+  children: React.ReactElement | React.ReactElement[];
 
   // We re-render this component iff these props change or the className changes.
   rerenderProps: any[];

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { FaChevronDown, FaChevronUp, FaPlus } from 'react-icons/fa';
+import { IconContext } from 'react-icons';
+import { FaChevronDown, FaChevronUp, FaPen, FaPlus, FaTrash } from 'react-icons/fa';
 
 import { AppState } from 'reduxStore';
 import { Folder } from 'Folder';
@@ -42,13 +43,22 @@ class SectionComponent extends React.Component<InternalProps> {
   }
 
   expandFolder = () => {
-    console.log('expanding');
     this.props.expandSection({ folder: this.props.folder });
   }
 
   collapseFolder = () => {
-    console.log('collapsing');
     this.props.collapseSection({ folder: this.props.folder });
+  }
+
+  buttonsComponent = () => {
+    return (
+      <div className="section-buttons-container">
+        <IconContext.Provider value={{ size: '1.0em' }}>
+          <FaPen className="section-button" onClick={() => console.log('you want to edit')}/>
+          <FaTrash className="section-button" onClick={() => console.log('you want to delete')}/>
+        </IconContext.Provider>
+      </div>
+    );
   }
 
   bookmarkComponents = () => {
@@ -93,8 +103,8 @@ class SectionComponent extends React.Component<InternalProps> {
     if (folder.collapsed) {
       return (
         <div className="section collapsed">
-          <div className="section-name-container" onClick={this.expandFolder}>
-            <div className="icon-and-name-container">
+          <div className="section-name-container">
+            <div className="icon-and-name-container" onClick={this.expandFolder}>
               <div className="down-icon">
                 <FaChevronDown/>
               </div>
@@ -102,6 +112,7 @@ class SectionComponent extends React.Component<InternalProps> {
                 { folder.name }
               </div>
             </div>
+            { this.buttonsComponent() }
           </div>
         </div>
       );
@@ -123,6 +134,7 @@ class SectionComponent extends React.Component<InternalProps> {
               { folder.name }
             </div>
           </div>
+          { this.buttonsComponent() }
         </DropTargetContainerComponent>
         <div className="section-bookmarks">
           { this.bookmarkComponents() }

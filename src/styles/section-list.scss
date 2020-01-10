@@ -55,27 +55,33 @@
           font-size: 14px;
           font-weight: 600;
         }
-      }
 
-      &:hover {
-        cursor: pointer;
+        &:hover {
+          cursor: pointer;
+        }
       }
     }
   }
 
   .section-name-container {
     @include list-title-container;
+    height: 20px;
     min-height: 20px;
     padding-left: 16px;
-    padding-right: 16px;
+    padding-right: 4px;
     margin-bottom: 4px;
 
+    display: flex;
+    flex-direction: row;
+
+    $buttons-container-width: 40px;
+
     .icon-and-name-container {
-      max-width: 100%;
+      flex: 1;
+      max-width: calc(100% - #{$buttons-container-width});
+
       display: flex;
       flex-direction: row;
-      justify-content: center;
-      align-items: center;
 
       .up-icon {
         margin-right: 4px;
@@ -89,6 +95,28 @@
 
       &:hover {
         cursor: pointer;
+      }
+    }
+
+    .section-buttons-container {
+      @include list-item-buttons-container;
+      width: $buttons-container-width;
+      height: 100%;
+      display: none;
+
+      .section-button {
+        @include list-item-button;
+        margin-right: 4px;
+      }
+
+      &:hover {
+        cursor: default;
+      }
+    }
+
+    &:hover {
+      .section-buttons-container {
+        display: flex;
       }
     }
   }
