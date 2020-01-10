@@ -14,14 +14,18 @@ import * as DragBookmarkActions from 'actions/DragBookmarkActions';
 import { DragBookmarkParams, DropBookmarkParams } from 'actions/DragBookmarkActions';
 import * as SectionActions from 'actions/SectionActions';
 import { SectionParams } from 'actions/SectionActions';
+import * as EditFolderActions from 'actions/EditFolderActions';
+import { EditFolderParams } from 'actions/EditFolderActions';
 
 import { BookmarkComponent } from 'components/BookmarkComponent';
 import { DragSourceContainerComponent } from 'components/Sections/DragSourceContainerComponent';
 import { DropTargetContainerComponent } from 'components/Sections/DropTargetContainerComponent';
+import { EditTextFieldComponent } from 'components/EditTextFieldComponent';
 
 interface ExternalProps {
   folder: Folder;
   rank: number;
+  editing: boolean;
 }
 
 interface InternalProps extends ExternalProps {
@@ -35,18 +39,68 @@ interface InternalProps extends ExternalProps {
   isOver: (params: DragBookmarkParams) => void;
   expandSection: (params: SectionParams) => void;
   collapseSection: (params: SectionParams) => void;
+  beginEdit: (params: EditFolderParams) => void;
+  cancelEdit: (params: {}) => void;
+  saveEdit: (params: EditFolderParams) => void;
 }
 
 class SectionComponent extends React.Component<InternalProps> {
+
+  private textInputRef: React.RefObject<HTMLInputElement> = React.createRef();
+
+  componentDidMount = () => {
+    document.addEventListener('mousedown', this.onMouseDown);
+  }
+
+  componentWillUnmount = () => {
+    document.removeEventListener('mousedown', this.onMouseDown);
+  }
+
+  // The purpose of this is to appropriately cancel editing the Folder name.
+  onMouseDown = (event: MouseEvent) => {
+    if (!this.props.editing) {
+      return;
+    }
+    if (this.textInputRef.current.contains(event.target as Node)) {
+      return;
+    }
+    // Clicked on something else.
+    this.cancelEdit();
+  }
+
+  onClickEdit = () => {
+    this.props.beginEdit({ folder: this.props.folder });
+  }
+
+  cancelEdit = () => {
+    this.props.cancelEdit({});
+  }
+
+  saveEdit = (newName: string) => {
+    const newFolder = this.props.folder.withName(newName);
+    this.props.saveEdit({ folder: newFolder });
+  }
+
+  onClickDelete = () => {
+    // TODO
+    console.log('so you wanna delete huh');
+  }
+
   onClickAddBookmarks = () => {
     this.props.showAddBookmarksModal({ folder: this.props.folder });
   }
 
   expandFolder = () => {
+    if (this.props.editing) {
+      return;
+    }
     this.props.expandSection({ folder: this.props.folder });
   }
 
   collapseFolder = () => {
+    if (this.props.editing) {
+      return;
+    }
     this.props.collapseSection({ folder: this.props.folder });
   }
 
@@ -54,8 +108,8 @@ class SectionComponent extends React.Component<InternalProps> {
     return (
       <div className="section-buttons-container">
         <IconContext.Provider value={{ size: '1.0em' }}>
-          <FaPen className="section-button" onClick={() => console.log('you want to edit')}/>
-          <FaTrash className="section-button" onClick={() => console.log('you want to delete')}/>
+          <FaPen className="section-button" onClick={this.onClickEdit}/>
+          <FaTrash className="section-button" onClick={this.onClickDelete}/>
         </IconContext.Provider>
       </div>
     );
@@ -100,6 +154,19 @@ class SectionComponent extends React.Component<InternalProps> {
   render() {
     const { folder } = this.props;
 
+    const sectionNameComponent = this.props.editing ? (
+      <EditTextFieldComponent
+        textInputRef={this.textInputRef}
+        initialText={folder.name}
+        save={this.saveEdit}
+        cancel={this.cancelEdit}
+      />
+    ) : (
+      <div className="section-name">
+        { folder.name }
+      </div>
+    );
+
     if (folder.collapsed) {
       return (
         <div className="section collapsed">
@@ -108,9 +175,7 @@ class SectionComponent extends React.Component<InternalProps> {
               <div className="down-icon">
                 <FaChevronDown/>
               </div>
-              <div className="section-name">
-                { folder.name }
-              </div>
+              { sectionNameComponent }
             </div>
             { this.buttonsComponent() }
           </div>
@@ -124,15 +189,13 @@ class SectionComponent extends React.Component<InternalProps> {
           className="section-name-container"
           draggableType={DraggableType.Bookmark}
           isOver={() => this.props.isOver({ folderRank: this.props.rank, bookmarkRank: -1 })}
-          rerenderProps={[folder.name]}
+          rerenderProps={[folder.name, this.props.editing]}
         >
           <div className="icon-and-name-container" onClick={this.collapseFolder}>
             <div className="up-icon">
               <FaChevronUp/>
             </div>
-            <div className="section-name">
-              { folder.name }
-            </div>
+            { sectionNameComponent }
           </div>
           { this.buttonsComponent() }
         </DropTargetContainerComponent>
@@ -170,6 +233,9 @@ const mapActionsToProps = {
   isOver: DragBookmarkActions.isOver,
   expandSection: SectionActions.expandSection,
   collapseSection: SectionActions.collapseSection,
+  beginEdit: EditFolderActions.beginEdit,
+  cancelEdit: EditFolderActions.cancel,
+  saveEdit: EditFolderActions.save,
 };
 
 const Component = connect(mapStateToProps, mapActionsToProps)(SectionComponent);

@@ -21,7 +21,7 @@ class SectionListComponent extends React.Component<Props> {
   render() {
     const sectionComponents = this.props.folders.map((folder: Folder, rank: number) => {
       // const deleting = folder.id === this.props.deletingFolderId;
-      // const editing = folder.id === this.props.editingFolderId;
+      const editing = folder.id === this.props.editingFolderId;
       // const dragging = rank === this.props.draggedRank;
       // const hovering = folder.id === this.props.hoverItemId;
       // const draggable = !deleting && !editing;
@@ -29,6 +29,7 @@ class SectionListComponent extends React.Component<Props> {
         <SectionComponent
           key={folder.id}
           folder={folder}
+          editing={editing}
           rank={rank}
         />
       );
