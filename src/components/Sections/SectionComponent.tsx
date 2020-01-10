@@ -16,16 +16,20 @@ import * as SectionActions from 'actions/SectionActions';
 import { SectionParams } from 'actions/SectionActions';
 import * as EditFolderActions from 'actions/EditFolderActions';
 import { EditFolderParams } from 'actions/EditFolderActions';
+import * as DeleteFolderActions from 'actions/DeleteFolderActions';
+import { DeleteFolderParams } from 'actions/DeleteFolderActions';
 
 import { BookmarkComponent } from 'components/BookmarkComponent';
 import { DragSourceContainerComponent } from 'components/Sections/DragSourceContainerComponent';
 import { DropTargetContainerComponent } from 'components/Sections/DropTargetContainerComponent';
 import { EditTextFieldComponent } from 'components/EditTextFieldComponent';
+import { ConfirmDeleteFolderModalComponent } from 'components/ConfirmDeleteFolderModalComponent';
 
 interface ExternalProps {
   folder: Folder;
   rank: number;
   editing: boolean;
+  deleting: boolean;
 }
 
 interface InternalProps extends ExternalProps {
@@ -42,11 +46,15 @@ interface InternalProps extends ExternalProps {
   beginEdit: (params: EditFolderParams) => void;
   cancelEdit: (params: {}) => void;
   saveEdit: (params: EditFolderParams) => void;
+  beginDelete: (params: DeleteFolderParams) => void;
+  confirmDelete: (params: DeleteFolderParams) => void;
+  cancelDelete: (params: DeleteFolderParams) => void;
 }
 
 class SectionComponent extends React.Component<InternalProps> {
 
   private textInputRef: React.RefObject<HTMLInputElement> = React.createRef();
+  private deleteIconRef: React.RefObject<HTMLDivElement> = React.createRef();
 
   componentDidMount = () => {
     document.addEventListener('mousedown', this.onMouseDown);
@@ -82,8 +90,15 @@ class SectionComponent extends React.Component<InternalProps> {
   }
 
   onClickDelete = () => {
-    // TODO
-    console.log('so you wanna delete huh');
+    this.props.beginDelete({ folder: this.props.folder });
+  }
+
+  confirmDelete = () => {
+    this.props.confirmDelete({ folder: this.props.folder });
+  }
+
+  cancelDelete = () => {
+    this.props.cancelDelete({ folder: this.props.folder });
   }
 
   onClickAddBookmarks = () => {
@@ -109,7 +124,9 @@ class SectionComponent extends React.Component<InternalProps> {
       <div className="section-buttons-container">
         <IconContext.Provider value={{ size: '1.0em' }}>
           <FaPen className="section-button" onClick={this.onClickEdit}/>
-          <FaTrash className="section-button" onClick={this.onClickDelete}/>
+          <div className="delete-icon-container" ref={this.deleteIconRef} onClick={this.onClickDelete}>
+            <FaTrash className="section-button"/>
+          </div>
         </IconContext.Provider>
       </div>
     );
@@ -167,6 +184,15 @@ class SectionComponent extends React.Component<InternalProps> {
       </div>
     );
 
+    const maybeConfirmDeleteModalComponent = this.props.deleting ? (
+      <ConfirmDeleteFolderModalComponent
+        triggerRef={this.deleteIconRef}
+        folder={this.props.folder}
+        confirmDelete={this.confirmDelete}
+        cancelDelete={this.cancelDelete}
+      />
+    ) : null;
+
     if (folder.collapsed) {
       return (
         <div className="section collapsed">
@@ -179,6 +205,7 @@ class SectionComponent extends React.Component<InternalProps> {
             </div>
             { this.buttonsComponent() }
           </div>
+          { maybeConfirmDeleteModalComponent }
         </div>
       );
     }
@@ -212,6 +239,7 @@ class SectionComponent extends React.Component<InternalProps> {
             <FaPlus className="add-bookmark-icon"/>
           </div>
         </DropTargetContainerComponent>
+        { maybeConfirmDeleteModalComponent }
       </div>
     );
   }
@@ -236,6 +264,9 @@ const mapActionsToProps = {
   beginEdit: EditFolderActions.beginEdit,
   cancelEdit: EditFolderActions.cancel,
   saveEdit: EditFolderActions.save,
+  beginDelete: DeleteFolderActions.beginDelete,
+  confirmDelete: DeleteFolderActions.confirmDelete,
+  cancelDelete: DeleteFolderActions.cancelDelete,
 };
 
 const Component = connect(mapStateToProps, mapActionsToProps)(SectionComponent);

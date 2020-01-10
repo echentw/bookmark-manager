@@ -20,7 +20,7 @@ interface Props {
 class SectionListComponent extends React.Component<Props> {
   render() {
     const sectionComponents = this.props.folders.map((folder: Folder, rank: number) => {
-      // const deleting = folder.id === this.props.deletingFolderId;
+      const deleting = folder.id === this.props.deletingFolderId;
       const editing = folder.id === this.props.editingFolderId;
       // const dragging = rank === this.props.draggedRank;
       // const hovering = folder.id === this.props.hoverItemId;
@@ -30,6 +30,7 @@ class SectionListComponent extends React.Component<Props> {
           key={folder.id}
           folder={folder}
           editing={editing}
+          deleting={deleting}
           rank={rank}
         />
       );
