@@ -11,7 +11,7 @@ import { USE_SECTIONSSS } from 'components/AppComponent';
 interface ExternalProps {
   className: string;
   itemId: string;
-  children: React.ReactElement[];
+  children: React.ReactElement | React.ReactElement[];
 }
 
 interface InternalProps extends ExternalProps {
@@ -19,7 +19,7 @@ interface InternalProps extends ExternalProps {
   exitHover: (params: HoverParams) => void;
 }
 
-class HoverableListItemComponent extends React.Component<InternalProps> {
+class HoverableContainerComponent extends React.Component<InternalProps> {
 
   private element: HTMLDivElement = null;
 
@@ -53,5 +53,5 @@ const mapActionsToProps = {
   exitHover: HoverActions.exit,
 };
 
-const Component = connect(mapStateToProps, mapActionsToProps)(HoverableListItemComponent);
-export { Component as HoverableListItemComponent };
+const Component = connect(mapStateToProps, mapActionsToProps)(HoverableContainerComponent);
+export { Component as HoverableContainerComponent };

@@ -24,12 +24,14 @@ import { DragSourceContainerComponent } from 'components/Sections/DragSourceCont
 import { DropTargetContainerComponent } from 'components/Sections/DropTargetContainerComponent';
 import { EditTextFieldComponent } from 'components/EditTextFieldComponent';
 import { ConfirmDeleteFolderModalComponent } from 'components/ConfirmDeleteFolderModalComponent';
+import { HoverableContainerComponent } from 'components/HoverableContainerComponent';
 
 interface ExternalProps {
   folder: Folder;
   rank: number;
   editing: boolean;
   deleting: boolean;
+  hovering: boolean;
 }
 
 interface InternalProps extends ExternalProps {
@@ -119,17 +121,21 @@ class SectionComponent extends React.Component<InternalProps> {
     this.props.collapseSection({ folder: this.props.folder });
   }
 
-  buttonsComponent = () => {
-    return (
-      <div className="section-buttons-container">
-        <IconContext.Provider value={{ size: '1.0em' }}>
-          <FaPen className="section-button" onClick={this.onClickEdit}/>
-          <div className="delete-icon-container" ref={this.deleteIconRef} onClick={this.onClickDelete}>
-            <FaTrash className="section-button"/>
-          </div>
-        </IconContext.Provider>
-      </div>
-    );
+  maybeButtonsComponent = () => {
+    if (this.props.deleting || (this.props.hovering && !this.props.editing)) {
+      return (
+        <div className="section-buttons-container">
+          <IconContext.Provider value={{ size: '1.0em' }}>
+            <FaPen className="section-button" onClick={this.onClickEdit}/>
+            <div className="delete-icon-container" ref={this.deleteIconRef} onClick={this.onClickDelete}>
+              <FaTrash className="section-button"/>
+            </div>
+          </IconContext.Provider>
+        </div>
+      );
+    } else {
+      return null;
+    }
   }
 
   bookmarkComponents = () => {
@@ -193,18 +199,20 @@ class SectionComponent extends React.Component<InternalProps> {
       />
     ) : null;
 
+    const maybeEditingClass = this.props.editing ? 'editing' : '';
+
     if (folder.collapsed) {
       return (
         <div className="section collapsed">
-          <div className="section-name-container">
-            <div className="icon-and-name-container" onClick={this.expandFolder}>
+          <HoverableContainerComponent className="section-name-container" itemId={folder.id}>
+            <div className={'icon-and-name-container ' + maybeEditingClass} onClick={this.expandFolder}>
               <div className="down-icon">
                 <FaChevronDown/>
               </div>
               { sectionNameComponent }
             </div>
-            { this.buttonsComponent() }
-          </div>
+            { this.maybeButtonsComponent() }
+          </HoverableContainerComponent>
           { maybeConfirmDeleteModalComponent }
         </div>
       );
@@ -216,15 +224,17 @@ class SectionComponent extends React.Component<InternalProps> {
           className="section-name-container"
           draggableType={DraggableType.Bookmark}
           isOver={() => this.props.isOver({ folderRank: this.props.rank, bookmarkRank: -1 })}
-          rerenderProps={[folder.name, this.props.editing]}
+          rerenderProps={[folder.name, this.props.editing, this.props.hovering]}
         >
-          <div className="icon-and-name-container" onClick={this.collapseFolder}>
-            <div className="up-icon">
-              <FaChevronUp/>
+          <HoverableContainerComponent className="section-name-hoverable-container" itemId={folder.id}>
+            <div className={'icon-and-name-container ' + maybeEditingClass} onClick={this.collapseFolder}>
+              <div className="up-icon">
+                <FaChevronUp/>
+              </div>
+              { sectionNameComponent }
             </div>
-            { sectionNameComponent }
-          </div>
-          { this.buttonsComponent() }
+            { this.maybeButtonsComponent() }
+          </HoverableContainerComponent>
         </DropTargetContainerComponent>
         <div className="section-bookmarks">
           { this.bookmarkComponents() }

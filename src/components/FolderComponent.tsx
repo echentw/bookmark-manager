@@ -18,7 +18,7 @@ import * as EditFolderActions from 'actions/EditFolderActions';
 
 import { AppState } from 'reduxStore';
 import { EditTextFieldComponent } from 'components/EditTextFieldComponent';
-import { HoverableListItemComponent } from 'components/HoverableListItemComponent';
+import { HoverableContainerComponent } from 'components/HoverableContainerComponent';
 import { FolderColorPickerModalComponent } from 'components/FolderColorPickerModalComponent';
 import { ConfirmDeleteFolderModalComponent } from 'components/ConfirmDeleteFolderModalComponent';
 
@@ -31,7 +31,7 @@ interface ExternalProps {
 
   isDragPreview?: boolean;
 
-  // This just gets passed down to HoverableListItemComponent
+  // This just gets passed down to HoverableContainerComponent
   rank: number;
 }
 
@@ -175,13 +175,13 @@ class FolderComponent extends React.Component<InternalProps> {
     const color = colorsToCssClasses.get(folder.color);
 
     return (
-      <HoverableListItemComponent className={classes} itemId={String(this.props.rank)}>
+      <HoverableContainerComponent className={classes} itemId={String(this.props.rank)}>
         <FaFolder className={'folder-icon ' + color}/>
         { folderNameComponent }
         { maybeButtonsComponent }
         { maybeColorPickerComponent }
         { maybeConfirmDeleteModalComponent }
-      </HoverableListItemComponent>
+      </HoverableContainerComponent>
     );
   }
 }

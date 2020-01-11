@@ -5,7 +5,7 @@ import { ChromeHelpers } from 'ChromeHelpers';
 import { AppState } from 'reduxStore';
 import { EditTextFieldComponent } from 'components/EditTextFieldComponent';
 import { BookmarkButtonsComponent } from 'components/BookmarkButtonsComponent';
-import { HoverableListItemComponent } from 'components/HoverableListItemComponent';
+import { HoverableContainerComponent } from 'components/HoverableContainerComponent';
 import { Bookmark } from 'Bookmark';
 import { EditBookmarkParams } from 'actions/EditBookmarkActions';
 import * as EditBookmarkActions from 'actions/EditBookmarkActions';
@@ -20,7 +20,7 @@ interface ExternalProps {
 
   isDragPreview?: boolean;
 
-  // This just gets passed down to HoverableListItemComponent
+  // This just gets passed down to HoverableContainerComponent
   rank: number;
 }
 
@@ -137,11 +137,11 @@ class BookmarkComponent extends React.Component<InternalProps> {
     const itemId = USE_SECTIONSSS ? bookmark.id : String(this.props.rank);
 
     return (
-      <HoverableListItemComponent className={classes} itemId={itemId}>
+      <HoverableContainerComponent className={classes} itemId={itemId}>
         <img className="bookmark-favicon" src={bookmark.faviconUrl}/>
         { bookmarkName }
         { maybeButtons }
-      </HoverableListItemComponent>
+      </HoverableContainerComponent>
     );
   }
 }

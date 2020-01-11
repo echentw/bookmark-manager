@@ -74,11 +74,23 @@
     display: flex;
     flex-direction: row;
 
+    .section-name-hoverable-container {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+    }
+
     $buttons-container-width: 40px;
 
     .icon-and-name-container {
       flex: 1;
       max-width: calc(100% - #{$buttons-container-width});
+
+      &.editing {
+        // When editing, make the text box take up the whole width
+        // (leave no room for buttons)
+        max-width: 100%;
+      }
 
       display: flex;
       flex-direction: row;
@@ -109,7 +121,6 @@
       @include list-item-buttons-container;
       width: $buttons-container-width;
       height: 100%;
-      display: none;
 
       .section-button {
         @include list-item-button;
@@ -118,12 +129,6 @@
 
       &:hover {
         cursor: default;
-      }
-    }
-
-    &:hover {
-      .section-buttons-container {
-        display: flex;
       }
     }
   }
