@@ -36,8 +36,7 @@ export const hoverReducer: Reducer<HoverState> = (
 
   const dragging = USE_SECTIONSSS ? (
     action.type !== DragActionType.end &&
-    appState.dragState.folderRank !== null &&
-    appState.dragState.bookmarkRank !== null
+    appState.dragState.draggableType !== null
   ) : (
     action.type !== DragDropActionType.endDrag &&
     appState.dragDropState.draggedRank !== null
@@ -73,6 +72,8 @@ export const hoverReducer: Reducer<HoverState> = (
     case DragActionType.end:
       if (appState.dragState.draggableType === DraggableType.Bookmark) {
         newState = handleDragBookmarkEnd(state, action as Action<DropParams>, appState);
+      } else if (appState.dragState.draggableType === DraggableType.Folder) {
+        newState = handleDragFolderEnd(state, action as Action<DropParams>, appState);
       }
       break;
     case EditBookmarkActionType.deleteBookmark:
@@ -149,6 +150,24 @@ function handleDragBookmarkEnd(
     const folder = appState.foldersState.folders[folderRank];
     const bookmark = folder.bookmarks[bookmarkRank];
     hoverItemId = bookmark.id;
+  }
+  return {
+    hoverItemId: hoverItemId,
+  };
+}
+
+function handleDragFolderEnd(
+  state: HoverState,
+  action: Action<DropParams>,
+  appState: AppState
+): HoverState {
+  // If the drop is a "true" drop (the mouse is inside the drop container), then the user is
+  // currently hovered over that item.
+  let hoverItemId = null;
+  if (action.params.trueDrop) {
+    const { folderRank } = appState.dragState;
+    const folder = appState.foldersState.folders[folderRank];
+    hoverItemId = folder.id;
   }
   return {
     hoverItemId: hoverItemId,
