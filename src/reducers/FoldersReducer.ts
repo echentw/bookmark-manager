@@ -8,7 +8,7 @@ import {
   Action,
   AddBookmarksActionType,
   DeleteFolderActionType,
-  DragBookmarkActionType,
+  DragActionType,
   DragDropActionType,
   EditBookmarkActionType,
   EditFolderActionType,
@@ -16,13 +16,13 @@ import {
 } from 'actions/constants';
 import { SectionParams } from 'actions/SectionActions';
 import { DeleteFolderParams } from 'actions/DeleteFolderActions';
-import { DragParams } from 'actions/DragDropActions';
-import { DragBookmarkParams } from 'actions/DragBookmarkActions';
+import { DragParams as LegacyDragParams } from 'actions/DragDropActions';
+import { DragParams } from 'actions/DragActions';
 import { EditBookmarkParams } from 'actions/EditBookmarkActions';
 import { EditFolderParams, SelectFolderColorParams } from 'actions/EditFolderActions';
 import { withItemDeleted, withItemReplaced } from 'utils';
 
-import { USE_SECTIONSSS } from 'components/AppComponent';
+import { DraggableType, USE_SECTIONSSS } from 'components/AppComponent';
 
 export interface FoldersState {
   folders: Folder[];
@@ -61,10 +61,14 @@ export const foldersReducer: Reducer<FoldersState> = (
       newState = handleEditBookmarkDeleteBookmark(state, action as Action<EditBookmarkParams>, appState);
       break;
     case DragDropActionType.isOver:
-      newState = handleDragIsOver(state, action as Action<DragParams>, appState);
+      newState = handleLegacyDragIsOver(state, action as Action<LegacyDragParams>, appState);
       break;
-    case DragBookmarkActionType.isOver:
-      newState = handleDragBookmarkIsOver(state, action as Action<DragBookmarkParams>, appState);
+    case DragActionType.isOver:
+      if (appState.dragState.draggableType === DraggableType.Bookmark) {
+        newState = handleDragIsOverBookmark(state, action as Action<DragParams>, appState);
+      } else if (appState.dragState.draggableType === DraggableType.Folder) {
+        newState = handleDragIsOverFolder(state, action as Action<DragParams>, appState);
+      }
       break;
     case SectionActionType.expand:
       newState = handleExpandSection(state, action as Action<SectionParams>);
@@ -178,9 +182,9 @@ function handleEditBookmarkDeleteBookmark(
 
 // So... we manually set the state in this method, which is bad.
 // But we need this for performance.
-function handleDragIsOver(
+function handleLegacyDragIsOver(
   state: FoldersState,
-  action: Action<DragParams>,
+  action: Action<LegacyDragParams>,
   appState: AppState,
 ): FoldersState {
   if (appState.navigationState.currentFolderId === null) {
@@ -192,7 +196,7 @@ function handleDragIsOver(
 
 function _handleFolderDragIsOver(
   state: FoldersState,
-  action: Action<DragParams>,
+  action: Action<LegacyDragParams>,
   appState: AppState,
 ): FoldersState {
   const folders = state.folders;
@@ -218,7 +222,7 @@ function _handleFolderDragIsOver(
 
 function _handleBookmarkDragIsOver(
   state: FoldersState,
-  action: Action<DragParams>,
+  action: Action<LegacyDragParams>,
   appState: AppState,
 ): FoldersState {
   if (appState.navigationState.currentFolderId === null) {
@@ -252,12 +256,12 @@ function _handleBookmarkDragIsOver(
   };
 }
 
-function handleDragBookmarkIsOver(
+function handleDragIsOverBookmark(
   state: FoldersState,
-  action: Action<DragBookmarkParams>,
+  action: Action<DragParams>,
   appState: AppState,
 ): FoldersState {
-  const { folderRank: draggedFolderRank, bookmarkRank: draggedBookmarkRank } = appState.dragBookmarkState;
+  const { folderRank: draggedFolderRank, bookmarkRank: draggedBookmarkRank } = appState.dragState;
   const { folderRank: targetFolderRank, bookmarkRank: targetBookmarkRank } = action.params;
 
   const startFolder = state.folders[draggedFolderRank];
@@ -300,6 +304,34 @@ function handleDragBookmarkIsOver(
     folders: newFolders,
   };
 }
+
+function handleDragIsOverFolder(
+  state: FoldersState,
+  action: Action<DragParams>,
+  appState: AppState,
+): FoldersState {
+  const newFolders = state.folders;
+
+  const draggedRank = appState.dragState.folderRank;
+  const dropTargetRank = action.params.folderRank;
+
+  const draggedFolder = newFolders[draggedRank];
+  if (draggedRank > dropTargetRank) {
+    for (let i = draggedRank; i > dropTargetRank; --i) {
+      newFolders[i] = newFolders[i - 1];
+    }
+  } else {
+    for (let i = draggedRank; i < dropTargetRank; ++i) {
+      newFolders[i] = newFolders[i + 1];
+    }
+  }
+  newFolders[dropTargetRank] = draggedFolder;
+
+  return {
+    folders: newFolders,
+  };
+}
+
 
 function handleExpandSection(state: FoldersState, action: Action<SectionParams>): FoldersState {
   const folder = state.folders.find(folder => folder.id === action.params.folder.id) || null;

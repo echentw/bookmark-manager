@@ -13,8 +13,9 @@ interface Props {
   folders: Folder[];
   deletingFolderId: string | null;
   editingFolderId: string | null;
-  draggedRank: number | null;
   hoverItemId: string | null;
+  draggedType: DraggableType | null;
+  draggedFolderRank: number | null;
 }
 
 class SectionListComponent extends React.Component<Props> {
@@ -22,7 +23,7 @@ class SectionListComponent extends React.Component<Props> {
     const sectionComponents = this.props.folders.map((folder: Folder, rank: number) => {
       const deleting = folder.id === this.props.deletingFolderId;
       const editing = folder.id === this.props.editingFolderId;
-      // const dragging = rank === this.props.draggedRank;
+      const dragging = (this.props.draggedType === DraggableType.Folder && rank === this.props.draggedFolderRank);
       const hovering = folder.id === this.props.hoverItemId;
       // const draggable = !deleting && !editing;
       return (
@@ -33,6 +34,7 @@ class SectionListComponent extends React.Component<Props> {
           deleting={deleting}
           hovering={hovering}
           rank={rank}
+          dragging={dragging}
         />
       );
     });
@@ -55,7 +57,8 @@ const mapStateToProps = (state: AppState, props: {}) => {
     folders: state.foldersState.folders,
     deletingFolderId: state.deleteFolderState.deletingFolderId,
     editingFolderId: state.editFolderState.editingFolderId,
-    draggedRank: state.dragDropState.draggedRank,
+    draggedType: state.dragState.draggableType,
+    draggedFolderRank: state.dragState.folderRank,
     hoverItemId: state.hoverState.hoverItemId,
   };
 };

@@ -1,61 +1,70 @@
-import { Action, DragBookmarkActionType as ActionType } from 'actions/constants';
-import { DragBookmarkParams, DropBookmarkParams } from 'actions/DragBookmarkActions';
+import { Action, DragActionType as ActionType } from 'actions/constants';
+import { DragParams, DropParams } from 'actions/DragActions';
 import { AppState } from 'reduxStore';
 import { Reducer } from 'reducers/Reducer';
+import { DraggableType } from 'components/AppComponent';
 
-export interface DragBookmarkState {
+export interface DragState {
+  draggableType: DraggableType | null;
   folderRank: number | null;
   bookmarkRank: number | null;
 }
 
-export const initialDragBookmarkState: DragBookmarkState = {
+export const initialDragState: DragState = {
+  draggableType: null,
   folderRank: null,
   bookmarkRank: null,
 };
 
-export const dragBookmarkReducer: Reducer<DragBookmarkState> = (
-  state: DragBookmarkState,
+export const dragReducer: Reducer<DragState> = (
+  state: DragState,
   action: Action,
   appState: AppState,
-): DragBookmarkState => {
+): DragState => {
   let newState = state;
   switch (action.type) {
     case ActionType.begin:
-      newState = handleBegin(state, action as Action<DragBookmarkParams>);
+      newState = handleBegin(state, action as Action<DragParams>);
       break;
     case ActionType.end:
-      newState = handleEnd(state, action as Action<DropBookmarkParams>, appState);
+      newState = handleEnd(state, action as Action<DropParams>, appState);
       break;
     case ActionType.isOver:
-      newState = handleIsOver(state, action as Action<DragBookmarkParams>, appState);
+      if (state.draggableType === DraggableType.Bookmark) {
+        newState = handleIsOverBookmark(state, action as Action<DragParams>, appState);
+      } else if (state.draggableType === DraggableType.Folder) {
+        newState = handleIsOverFolder(state, action as Action<DragParams>, appState);
+      }
       break;
   }
   return newState;
 }
 
-function handleBegin(state: DragBookmarkState, action: Action<DragBookmarkParams>): DragBookmarkState {
+function handleBegin(state: DragState, action: Action<DragParams>): DragState {
   return {
+    draggableType: action.params.draggableType,
     folderRank: action.params.folderRank,
     bookmarkRank: action.params.bookmarkRank,
   };
 }
 
 function handleEnd(
-  state: DragBookmarkState,
-  action: Action<DropBookmarkParams>,
+  state: DragState,
+  action: Action<DropParams>,
   appState: AppState
-): DragBookmarkState {
+): DragState {
   return {
+    draggableType: null,
     folderRank: null,
     bookmarkRank: null,
   };
 }
 
-function handleIsOver(
-  state: DragBookmarkState,
-  action: Action<DragBookmarkParams>,
+function handleIsOverBookmark(
+  state: DragState,
+  action: Action<DragParams>,
   appState: AppState
-): DragBookmarkState {
+): DragState {
   const targetFolder = appState.foldersState.folders[action.params.folderRank];
 
   let newFolderRank = state.folderRank;
@@ -82,7 +91,19 @@ function handleIsOver(
   }
 
   return {
+    ...state,
     folderRank: newFolderRank,
     bookmarkRank: newBookmarkRank,
+  };
+}
+
+function handleIsOverFolder(
+  state: DragState,
+  action: Action<DragParams>,
+  appState: AppState
+): DragState {
+  return {
+    ...state,
+    folderRank: action.params.folderRank,
   };
 }

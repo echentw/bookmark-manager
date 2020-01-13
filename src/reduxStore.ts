@@ -8,7 +8,7 @@ import { addBookmarksReducer, AddBookmarksState, initialAddBookmarksState } from
 import { copyUrlReducer, CopyUrlState, initialCopyUrlState } from 'reducers/CopyUrlReducer';
 import { deleteFolderReducer, DeleteFolderState, initialDeleteFolderState } from 'reducers/DeleteFolderReducer';
 import { dragDropReducer, DragDropState, initialDragDropState } from 'reducers/DragDropReducer';
-import { dragBookmarkReducer, DragBookmarkState, initialDragBookmarkState } from 'reducers/DragBookmarkReducer';
+import { dragReducer, DragState, initialDragState } from 'reducers/DragReducer';
 import { editBookmarkReducer, EditBookmarkState, initialEditBookmarkState } from 'reducers/EditBookmarkReducer';
 import { editFolderReducer, EditFolderState, initialEditFolderState } from 'reducers/EditFolderReducer';
 import { foldersReducer, FoldersState, initialFoldersState } from 'reducers/FoldersReducer';
@@ -31,7 +31,7 @@ export interface AppState extends HollowAppStateForLoad {
   copyUrlState: CopyUrlState;
   deleteFolderState: DeleteFolderState;
   dragDropState: DragDropState;
-  dragBookmarkState: DragBookmarkState;
+  dragState: DragState;
   editBookmarkState: EditBookmarkState;
   editFolderState: EditFolderState;
   foldersState: FoldersState;
@@ -47,7 +47,7 @@ const initialAppState: AppState = {
   copyUrlState: initialCopyUrlState,
   deleteFolderState: initialDeleteFolderState,
   dragDropState: initialDragDropState,
-  dragBookmarkState: initialDragBookmarkState,
+  dragState: initialDragState,
   editBookmarkState: initialEditBookmarkState,
   editFolderState: initialEditFolderState,
   foldersState: initialFoldersState,
@@ -64,7 +64,7 @@ const reducer = (state: AppState = initialAppState, action: Action): AppState =>
     copyUrlState: copyUrlReducer(state.copyUrlState, action, state),
     deleteFolderState: deleteFolderReducer(state.deleteFolderState, action, state),
     dragDropState: dragDropReducer(state.dragDropState, action, state),
-    dragBookmarkState: dragBookmarkReducer(state.dragBookmarkState, action, state),
+    dragState: dragReducer(state.dragState, action, state),
     editBookmarkState: editBookmarkReducer(state.editBookmarkState, action, state),
     editFolderState: editFolderReducer(state.editFolderState, action, state),
     foldersState: foldersReducer(state.foldersState, action, state),

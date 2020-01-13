@@ -10,8 +10,8 @@ import { DraggableType } from 'components/AppComponent';
 
 import * as AddBookmarksActions from 'actions/AddBookmarksActions';
 import { ExternalShowModalParams } from 'actions/AddBookmarksActions';
-import * as DragBookmarkActions from 'actions/DragBookmarkActions';
-import { DragBookmarkParams, DropBookmarkParams } from 'actions/DragBookmarkActions';
+import * as DragActions from 'actions/DragActions';
+import { DragParams, DropParams } from 'actions/DragActions';
 import * as SectionActions from 'actions/SectionActions';
 import { SectionParams } from 'actions/SectionActions';
 import * as EditFolderActions from 'actions/EditFolderActions';
@@ -32,6 +32,8 @@ interface ExternalProps {
   editing: boolean;
   deleting: boolean;
   hovering: boolean;
+  dragging: boolean;
+  isDragPreview?: boolean;
 }
 
 interface InternalProps extends ExternalProps {
@@ -40,9 +42,9 @@ interface InternalProps extends ExternalProps {
   draggedFolderRank: number | null;
   draggedBookmarkRank: number | null;
   showAddBookmarksModal: (params: ExternalShowModalParams) => void;
-  beginDrag: (params: DragBookmarkParams) => void;
-  endDrag: (params: DropBookmarkParams) => void;
-  isOver: (params: DragBookmarkParams) => void;
+  beginDrag: (params: DragParams) => void;
+  endDrag: (params: DropParams) => void;
+  isOver: (params: DragParams) => void;
   expandSection: (params: SectionParams) => void;
   collapseSection: (params: SectionParams) => void;
   beginEdit: (params: EditFolderParams) => void;
@@ -151,12 +153,24 @@ class SectionComponent extends React.Component<InternalProps> {
           key={bookmark.id}
           className="list-item-container"
           draggableType={DraggableType.Bookmark}
-          isOver={() => this.props.isOver({ folderRank: this.props.rank, bookmarkRank: rank })}
+          isOver={() =>
+            this.props.isOver({
+              draggableType: DraggableType.Bookmark,
+              folderRank: this.props.rank,
+              bookmarkRank: rank,
+            })
+          }
           rerenderProps={[draggable, bookmark, editing, dragging, hovering, rank]}
         >
           <DragSourceContainerComponent
             draggableType={DraggableType.Bookmark}
-            beginDrag={() => this.props.beginDrag({ folderRank: this.props.rank, bookmarkRank: rank })}
+            beginDrag={() =>
+              this.props.beginDrag({
+                draggableType: DraggableType.Bookmark,
+                folderRank: this.props.rank,
+                bookmarkRank: rank,
+              })
+            }
             endDrag={(trueDrop: boolean) => this.props.endDrag({ trueDrop })}
             draggable={draggable}
           >
@@ -200,30 +214,34 @@ class SectionComponent extends React.Component<InternalProps> {
     ) : null;
 
     const maybeEditingClass = this.props.editing ? 'editing' : '';
+    const maybeVanishedClass = this.props.dragging ? 'vanished' : '';
+    const maybeSolidBackgroundClass = this.props.isDragPreview ? 'solid-background' : '';
 
-    if (folder.collapsed) {
-      return (
-        <div className="section collapsed">
-          <HoverableContainerComponent className="section-name-container" itemId={folder.id}>
-            <div className={'icon-and-name-container ' + maybeEditingClass} onClick={this.expandFolder}>
-              <div className="down-icon">
-                <FaChevronDown/>
-              </div>
-              { sectionNameComponent }
+    const sectionInnerComponent = folder.collapsed ? (
+      <div className={'section collapsed ' + maybeVanishedClass + ' ' + maybeSolidBackgroundClass}>
+        <HoverableContainerComponent className="section-name-container" itemId={folder.id}>
+          <div className={'icon-and-name-container ' + maybeEditingClass} onClick={this.expandFolder}>
+            <div className="down-icon">
+              <FaChevronDown/>
             </div>
-            { this.maybeButtonsComponent() }
-          </HoverableContainerComponent>
-          { maybeConfirmDeleteModalComponent }
-        </div>
-      );
-    }
-
-    return (
-      <div className="section">
+            { sectionNameComponent }
+          </div>
+          { this.maybeButtonsComponent() }
+        </HoverableContainerComponent>
+        { maybeConfirmDeleteModalComponent }
+      </div>
+    ) : (
+      <div className={'section ' + maybeVanishedClass + ' ' + maybeSolidBackgroundClass}>
         <DropTargetContainerComponent
           className="section-name-container"
           draggableType={DraggableType.Bookmark}
-          isOver={() => this.props.isOver({ folderRank: this.props.rank, bookmarkRank: -1 })}
+          isOver={() =>
+            this.props.isOver({
+              draggableType: DraggableType.Bookmark,
+              folderRank: this.props.rank,
+              bookmarkRank: -1,
+            })
+          }
           rerenderProps={[folder.name, this.props.editing, this.props.hovering]}
         >
           <HoverableContainerComponent className="section-name-hoverable-container" itemId={folder.id}>
@@ -242,7 +260,14 @@ class SectionComponent extends React.Component<InternalProps> {
         <DropTargetContainerComponent
           className="add-bookmark-button-container"
           draggableType={DraggableType.Bookmark}
-          isOver={() => this.props.isOver({ folderRank: this.props.rank, bookmarkRank: folder.bookmarks.length })}
+          isOver={
+            () =>
+              this.props.isOver({
+                draggableType: DraggableType.Bookmark,
+                folderRank: this.props.rank,
+                bookmarkRank: folder.bookmarks.length,
+              })
+          }
           rerenderProps={[this.props.rank, folder.bookmarks.length]}
         >
           <div className="add-bookmark-button" onClick={this.onClickAddBookmarks}>
@@ -252,23 +277,54 @@ class SectionComponent extends React.Component<InternalProps> {
         { maybeConfirmDeleteModalComponent }
       </div>
     );
+
+    const revealDropContainerClass = this.props.dragging ? 'show' : '';
+
+    return (
+      <DropTargetContainerComponent
+        className={'section-drop-container ' + revealDropContainerClass}
+        draggableType={DraggableType.Folder}
+        isOver={() =>
+          this.props.isOver({
+            draggableType: DraggableType.Folder,
+            folderRank: this.props.rank,
+            bookmarkRank: null,
+          })
+        }
+      >
+        <DragSourceContainerComponent
+          beginDrag={() =>
+            this.props.beginDrag({
+              draggableType: DraggableType.Folder,
+              folderRank: this.props.rank,
+              bookmarkRank: null,
+            })
+          }
+          endDrag={(trueDrop: boolean) => this.props.endDrag({ trueDrop })}
+          draggable={true}
+          draggableType={DraggableType.Folder}
+        >
+          { sectionInnerComponent }
+        </DragSourceContainerComponent>
+      </DropTargetContainerComponent>
+    );
   }
 }
 
 const mapStateToProps = (state: AppState, props: {}) => {
   return {
     editingBookmarkId: state.editBookmarkState.editingBookmarkId,
-    draggedBookmarkRank: state.dragBookmarkState.bookmarkRank,
-    draggedFolderRank: state.dragBookmarkState.folderRank,
+    draggedBookmarkRank: state.dragState.bookmarkRank,
+    draggedFolderRank: state.dragState.folderRank,
     hoverItemId: state.hoverState.hoverItemId,
   };
 };
 
 const mapActionsToProps = {
   showAddBookmarksModal: AddBookmarksActions.showModal,
-  beginDrag: DragBookmarkActions.begin,
-  endDrag: DragBookmarkActions.end,
-  isOver: DragBookmarkActions.isOver,
+  beginDrag: DragActions.begin,
+  endDrag: DragActions.end,
+  isOver: DragActions.isOver,
   expandSection: SectionActions.expandSection,
   collapseSection: SectionActions.collapseSection,
   beginEdit: EditFolderActions.beginEdit,
