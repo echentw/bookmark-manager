@@ -26,9 +26,6 @@
 
 .section-drop-container {
   @include rect-border-radius;
-  width: calc(440px - 16px);
-  // TODO: why are bookmarks slightly bigger than they should be?
-  background-color: rgba(0, 0, 0, 0);
 
   &.show {
     background-color: rgba(0, 0, 0, 0.5);
@@ -46,34 +43,6 @@
   background-color: rgba(255, 255, 255, 0.65);
   border: none;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.19), 0 4px 6px rgba(0, 0, 0, 0.23);
-
-  &.collapsed {
-    padding-top: 0px;
-    padding-bottom: 0px;
-    height: 32px;
-    justify-content: center;
-
-    .section-name-container {
-      margin-bottom: 0px;
-
-      .icon-and-name-container {
-        .down-icon {
-          font-size: 14px;
-          padding-top: 2px;
-          margin-right: 4px;
-        }
-
-        .section-name {
-          font-size: 14px;
-          font-weight: 600;
-        }
-
-        &:hover {
-          cursor: pointer;
-        }
-      }
-    }
-  }
 
   .section-name-container {
     @include list-title-container;
@@ -190,11 +159,45 @@
     }
   }
 
+  &.collapsed {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    height: 32px;
+    justify-content: center;
+
+    .section-name-container {
+      margin-bottom: 0px;
+
+      .icon-and-name-container {
+        .down-icon {
+          font-size: 14px;
+          padding-top: 2px;
+          margin-right: 4px;
+        }
+
+        .section-name {
+          font-size: 14px;
+          font-weight: 600;
+        }
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
   &.vanished {
     opacity: 0;
   }
+}
 
-  &.solid-background {
+.drag-layer-item {
+  .section-drop-container {
+    width: calc(440px - 16px);
+  }
+
+  .section {
     background-color: rgb(220, 220, 220);
   }
 }

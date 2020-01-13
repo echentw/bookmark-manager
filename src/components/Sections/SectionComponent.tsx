@@ -124,7 +124,7 @@ class SectionComponent extends React.Component<InternalProps> {
   }
 
   maybeButtonsComponent = () => {
-    if (this.props.deleting || (this.props.hovering && !this.props.editing)) {
+    if (this.props.isDragPreview || this.props.deleting || (this.props.hovering && !this.props.editing)) {
       return (
         <div className="section-buttons-container">
           <IconContext.Provider value={{ size: '1.0em' }}>
@@ -215,10 +215,9 @@ class SectionComponent extends React.Component<InternalProps> {
 
     const maybeEditingClass = this.props.editing ? 'editing' : '';
     const maybeVanishedClass = this.props.dragging ? 'vanished' : '';
-    const maybeSolidBackgroundClass = this.props.isDragPreview ? 'solid-background' : '';
 
     const sectionInnerComponent = folder.collapsed ? (
-      <div className={'section collapsed ' + maybeVanishedClass + ' ' + maybeSolidBackgroundClass}>
+      <div className={'section collapsed ' + maybeVanishedClass}>
         <HoverableContainerComponent className="section-name-container" itemId={folder.id}>
           <div className={'icon-and-name-container ' + maybeEditingClass} onClick={this.expandFolder}>
             <div className="down-icon">
@@ -231,7 +230,7 @@ class SectionComponent extends React.Component<InternalProps> {
         { maybeConfirmDeleteModalComponent }
       </div>
     ) : (
-      <div className={'section ' + maybeVanishedClass + ' ' + maybeSolidBackgroundClass}>
+      <div className={'section ' + maybeVanishedClass}>
         <DropTargetContainerComponent
           className="section-name-container"
           draggableType={DraggableType.Bookmark}
