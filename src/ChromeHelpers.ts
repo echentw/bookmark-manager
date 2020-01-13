@@ -1,5 +1,6 @@
 import { Folder, FolderData } from 'Folder';
 import { User, UserData } from 'User';
+import { Bookmark } from 'Bookmark';
 
 // We don't want to sync *all* the stuff in ChromeAppState to all existing tabs.
 // This is the stuff we want to sync over.
@@ -195,9 +196,15 @@ export class ChromeHelpers {
   }
 
   private static getCleanInitialState = (): ChromeAppState => {
+    const firstBookmark = new Bookmark({
+      url: 'https://www.google.com/',
+      title: 'Google',
+      faviconUrl: 'https://www.google.com/favicon.ico',
+      name: 'My First Bookmark',
+    });
     const firstFolder = new Folder({
-      name: 'General',
-      bookmarks: [],
+      name: 'My First Folder',
+      bookmarks: [firstBookmark],
     });
     return {
       user: null,
