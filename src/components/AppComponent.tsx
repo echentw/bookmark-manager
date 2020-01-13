@@ -95,8 +95,7 @@ class AppComponent extends React.Component<Props, State> {
       const state = store.getState();
 
       const dragging = USE_SECTIONSSS ? (
-        state.dragState.folderRank !== null &&
-        state.dragState.bookmarkRank !== null
+        state.dragState.draggableType !== null
       ) : (
         state.dragDropState.draggedRank !== null
       );
