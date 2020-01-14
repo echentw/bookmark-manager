@@ -25,7 +25,7 @@ class SectionListComponent extends React.Component<Props> {
       const editing = folder.id === this.props.editingFolderId;
       const dragging = (this.props.draggedType === DraggableType.Folder && rank === this.props.draggedFolderRank);
       const hovering = folder.id === this.props.hoverItemId;
-      // const draggable = !deleting && !editing;
+      const draggable = !deleting && !editing;
       return (
         <SectionComponent
           key={folder.id}
@@ -35,6 +35,7 @@ class SectionListComponent extends React.Component<Props> {
           hovering={hovering}
           rank={rank}
           dragging={dragging}
+          draggable={draggable}
         />
       );
     });

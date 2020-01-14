@@ -33,6 +33,7 @@ interface ExternalProps {
   deleting: boolean;
   hovering: boolean;
   dragging: boolean;
+  draggable: boolean;
   isDragPreview?: boolean;
 }
 
@@ -300,7 +301,7 @@ class SectionComponent extends React.Component<InternalProps> {
             })
           }
           endDrag={(trueDrop: boolean) => this.props.endDrag({ trueDrop })}
-          draggable={true}
+          draggable={this.props.draggable}
           draggableType={DraggableType.Folder}
         >
           { sectionInnerComponent }

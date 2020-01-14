@@ -180,6 +180,7 @@ class AppComponent extends React.Component<Props, State> {
               hovering={false}
               rank={-1}
               dragging={false}
+              draggable={false}
               isDragPreview={true}
             />
           </DragLayerComponent>
