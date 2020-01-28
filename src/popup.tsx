@@ -142,8 +142,8 @@ class AppComponent extends React.Component<{}, State> {
       ChromeHelpers.loadAppState(),
     ]);
 
-    // Designate a folder as the active folder.
-    let activeFolder = state.folders.find(folder => folder.id === state.currentFolderId);
+    // Find the first expanded folder.
+    let activeFolder = state.folders.find(folder => !folder.collapsed);
     if (activeFolder === undefined) {
       activeFolder = state.folders[0];
     }

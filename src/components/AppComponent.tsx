@@ -10,7 +10,6 @@ import { ChromeAppState, ChromeAppStateForSync, ChromeHelpers } from 'ChromeHelp
 import { StateBridge } from 'StateBridge';
 import { StateDiffer } from 'StateDiffer';
 import { LocalStorageHelpers } from 'LocalStorageHelpers';
-import * as FolderActions from 'actions/FolderActions';
 import * as SyncActions from 'actions/SyncActions';
 import { LoadParams, SyncParams } from 'actions/SyncActions';
 import { AppState, reduxStore } from 'reduxStore';
@@ -18,9 +17,6 @@ import { DragState } from 'reducers/DragReducer';
 import { Action } from 'actions/constants';
 
 import { BookmarkComponent } from 'components/BookmarkComponent';
-import { FolderComponent } from 'components/FolderComponent';
-import { BookmarkListComponent } from 'components/BookmarkListComponent';
-import { FolderListComponent } from 'components/FolderListComponent';
 import { GreetingComponent } from 'components/GreetingComponent';
 import { DragLayerComponent } from 'components/DragLayerComponent';
 import { CopiedToastComponent } from 'components/CopiedToastComponent';
@@ -36,19 +32,14 @@ export enum DraggableType {
   Folder = 'folder',
 }
 
-export const USE_SECTIONSSS = true;
-
 interface Props {
   user: User | null;
   loaded: boolean;
-  currentFolderId: string | null;
   backgroundImageUrl: string;
-  draggedRank: number | null;
   dragState: DragState;
   folders: Folder[];
   showAddBookmarksModal: boolean;
   showSettingsModal: boolean;
-  closeFolder: (params: {}) => void;
   loadAppState: (params: LoadParams) => void;
   syncAppState: (params: SyncParams) => void;
 }
@@ -94,11 +85,7 @@ class AppComponent extends React.Component<Props, State> {
     store.subscribe(async () => {
       const state = store.getState();
 
-      const dragging = USE_SECTIONSSS ? (
-        state.dragState.draggableType !== null
-      ) : (
-        state.dragDropState.draggedRank !== null
-      );
+      const dragging = state.dragState.draggableType !== null;
       if (dragging) {
         // If the user is currently dragging, then they haven't finished their action yet.
         return;
@@ -136,91 +123,39 @@ class AppComponent extends React.Component<Props, State> {
       return <div className="app-container"/>;
     }
 
-    let currentFolder: Folder | null;
-    let ListComponent;
-
-    if (USE_SECTIONSSS) {
-      currentFolder = null;
-      ListComponent = <SectionListComponent/>;
-    } else {
-      currentFolder = this.props.folders.find(folder => folder.id === this.props.currentFolderId) || null;
-      ListComponent = currentFolder === null ? (
-        <FolderListComponent/>
-      ) : (
-        <BookmarkListComponent folder={currentFolder}/>
-      );
-    }
-
     let maybeDragLayer: React.ReactElement = null;
-    if (USE_SECTIONSSS) {
-      const { draggableType, folderRank, bookmarkRank } = this.props.dragState;
-      if (draggableType === DraggableType.Bookmark) {
-        const folder = this.props.folders[folderRank];
-        const bookmark = folder.bookmarks[bookmarkRank];
-        maybeDragLayer = (
-          <DragLayerComponent>
-            <BookmarkComponent
-              bookmark={bookmark}
-              editing={false}
-              dragging={false}
-              hovering={false}
-              isDragPreview={true}
-              rank={-1}
-            />
-          </DragLayerComponent>
-        );
-      } else if (draggableType === DraggableType.Folder) {
-        const folder = this.props.folders[folderRank];
-        maybeDragLayer = (
-          <DragLayerComponent>
-            <SectionComponent
-              folder={folder}
-              editing={false}
-              deleting={false}
-              hovering={false}
-              rank={-1}
-              dragging={false}
-              draggable={false}
-              isDragPreview={true}
-            />
-          </DragLayerComponent>
-        );
-      }
-    } else {
-      if (this.props.draggedRank !== null) {
-        let dragPreview: React.ReactElement = null;
-        if (currentFolder === null) {
-          const draggedFolder = this.props.folders[this.props.draggedRank];
-          dragPreview = (
-            <FolderComponent
-              folder={draggedFolder}
-              deleting={false}
-              editing={false}
-              dragging={false}
-              hovering={false}
-              isDragPreview={true}
-              rank={-1}
-            />
-          );
-        } else {
-          const draggedBookmark = currentFolder.bookmarks[this.props.draggedRank];
-          dragPreview = (
-            <BookmarkComponent
-              bookmark={draggedBookmark}
-              editing={false}
-              dragging={false}
-              hovering={false}
-              isDragPreview={true}
-              rank={-1}
-            />
-          );
-        }
-        maybeDragLayer = (
-          <DragLayerComponent>
-            { dragPreview }
-          </DragLayerComponent>
-        );
-      }
+    const { draggableType, folderRank, bookmarkRank } = this.props.dragState;
+    if (draggableType === DraggableType.Bookmark) {
+      const folder = this.props.folders[folderRank];
+      const bookmark = folder.bookmarks[bookmarkRank];
+      maybeDragLayer = (
+        <DragLayerComponent>
+          <BookmarkComponent
+            bookmark={bookmark}
+            editing={false}
+            dragging={false}
+            hovering={false}
+            isDragPreview={true}
+            rank={-1}
+          />
+        </DragLayerComponent>
+      );
+    } else if (draggableType === DraggableType.Folder) {
+      const folder = this.props.folders[folderRank];
+      maybeDragLayer = (
+        <DragLayerComponent>
+          <SectionComponent
+            folder={folder}
+            editing={false}
+            deleting={false}
+            hovering={false}
+            rank={-1}
+            dragging={false}
+            draggable={false}
+            isDragPreview={true}
+          />
+        </DragLayerComponent>
+      );
     }
 
     const maybeAddBookmarksModal = this.props.showAddBookmarksModal ? (
@@ -236,7 +171,7 @@ class AppComponent extends React.Component<Props, State> {
     ) : (
       <div className="app" key="app">
         <div className="app-list-container">
-          { ListComponent }
+          <SectionListComponent/>
         </div>
         <div className="app-greeting-container">
           <GreetingComponent user={this.props.user} date={this.state.date}/>
@@ -275,8 +210,6 @@ class AppComponent extends React.Component<Props, State> {
 const mapStateToProps = (state: AppState, props: {}) => {
   return {
     backgroundImageUrl: state.settingsState.backgroundImageUrl,
-    currentFolderId: state.navigationState.currentFolderId,
-    draggedRank: state.dragDropState.draggedRank,
     dragState: state.dragState,
     folders: state.foldersState.folders,
     loaded: state.loadedState.loaded,
@@ -289,7 +222,6 @@ const mapStateToProps = (state: AppState, props: {}) => {
 const mapActionsToProps = {
   loadAppState: SyncActions.load,
   syncAppState: SyncActions.sync,
-  closeFolder: FolderActions.closeFolder,
 };
 
 const Component = connect(mapStateToProps, mapActionsToProps)(AppComponent);

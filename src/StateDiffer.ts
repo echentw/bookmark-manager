@@ -25,7 +25,6 @@ export class StateDiffer {
     this.previousState = {
       user: state.user,
       folders: state.folders.map(folder => folder.copy()),
-      currentFolderId: state.currentFolderId,
       backgroundImageTimestamp: state.backgroundImageTimestamp,
     };
     this.initialized = true;
@@ -34,7 +33,6 @@ export class StateDiffer {
   private statesAreDifferent = (state1: ChromeAppState, state2: ChromeAppState): boolean => {
     return (
       this.userStatesAreDifferent(state1, state2) ||
-      this.currentFolderIdStatesAreDifferent(state1, state2) ||
       this.folderStatesAreDifferent(state1, state2) ||
       this.settingsStatesAreDifferent(state1, state2)
     );
@@ -47,11 +45,6 @@ export class StateDiffer {
     return !state1.user.equals(state2.user);
   }
 
-  private currentFolderIdStatesAreDifferent = (state1: ChromeAppState, state2: ChromeAppState): boolean => {
-    if (state1.currentFolderId !== state2.currentFolderId) {
-      return true;
-    }
-  }
   private folderStatesAreDifferent = (state1: ChromeAppState, state2: ChromeAppState): boolean => {
     if (state1.folders.length !== state2.folders.length) {
       return true;

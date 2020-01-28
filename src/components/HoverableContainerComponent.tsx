@@ -6,8 +6,6 @@ import { AppState } from 'reduxStore';
 import { HoverParams } from 'actions/HoverActions';
 import * as HoverActions from 'actions/HoverActions';
 
-import { USE_SECTIONSSS } from 'components/AppComponent';
-
 interface ExternalProps {
   className: string;
   itemId: string;

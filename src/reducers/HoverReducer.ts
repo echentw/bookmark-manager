@@ -2,23 +2,19 @@ import {
   Action,
   DeleteFolderActionType,
   DragActionType,
-  DragDropActionType,
   EditBookmarkActionType,
   EditFolderActionType,
-  FolderActionType,
   HoverActionType,
 } from 'actions/constants';
 import { DeleteFolderParams } from 'actions/DeleteFolderActions';
-import { DragParams as LegacyDragParams, DropParams as LegacyDropParams } from 'actions/DragDropActions';
 import { DragParams, DropParams } from 'actions/DragActions';
 import { EditBookmarkParams } from 'actions/EditBookmarkActions';
 import { EditFolderParams } from 'actions/EditFolderActions';
-import { OpenFolderParams } from 'actions/FolderActions';
 import { HoverParams } from 'actions/HoverActions';
 import { AppState } from 'reduxStore';
 import { Reducer } from 'reducers/Reducer';
 
-import { DraggableType, USE_SECTIONSSS } from 'components/AppComponent';
+import { DraggableType } from 'components/AppComponent';
 
 export interface HoverState {
   hoverItemId: string | null;
@@ -34,12 +30,9 @@ export const hoverReducer: Reducer<HoverState> = (
   appState: AppState,
 ): HoverState => {
 
-  const dragging = USE_SECTIONSSS ? (
+  const dragging = (
     action.type !== DragActionType.end &&
     appState.dragState.draggableType !== null
-  ) : (
-    action.type !== DragDropActionType.endDrag &&
-    appState.dragDropState.draggedRank !== null
   );
 
   if (dragging) {
@@ -47,7 +40,7 @@ export const hoverReducer: Reducer<HoverState> = (
     return state;
   }
 
-  if (appState.editFolderState.showingColorPicker || appState.deleteFolderState.deletingFolderId !== null) {
+  if (appState.deleteFolderState.deletingFolderId !== null) {
     // If a modal is showing, then we don't want to trigger any hover behavior.
     return state;
   }
@@ -59,12 +52,6 @@ export const hoverReducer: Reducer<HoverState> = (
       break;
     case HoverActionType.exit:
       newState = handleExit(state, action as Action<HoverParams>);
-      break;
-    case DragDropActionType.beginDrag:
-      newState = handleBeginDrag(state, action as Action<LegacyDragParams>);
-      break;
-    case DragDropActionType.endDrag:
-      newState = handleEndDrag(state, action as Action<LegacyDropParams>);
       break;
     case DragActionType.begin:
       newState = handleDragBegin(state, action as Action<DragParams>);
@@ -88,9 +75,6 @@ export const hoverReducer: Reducer<HoverState> = (
     case DeleteFolderActionType.confirmDelete:
       newState = handleConfirmDeleteFolder(state, action as Action<DeleteFolderParams>);
       break;
-    case FolderActionType.openFolder:
-      newState = handleOpenFolder(state, action as Action<OpenFolderParams>);
-      break;
   }
   return newState;
 };
@@ -109,26 +93,6 @@ function handleExit(state: HoverState, action: Action<HoverParams>): HoverState 
     hoverItemId: null,
   };
 }
-
-function handleBeginDrag(state: HoverState, action: Action<LegacyDragParams>): HoverState {
-  // If something is dragging, then we don't want any hover behavior.
-  // TODO: deprecated
-  return {
-    hoverItemId: null,
-  };
-}
-
-function handleEndDrag(state: HoverState, action: Action<LegacyDropParams>): HoverState {
-  // TODO: deprecated
-  let hoverItemId = null;
-  if (action.params.trueDrop) {
-    hoverItemId = String(action.params.rank);
-  }
-  return {
-    hoverItemId: hoverItemId,
-  };
-}
-
 
 function handleDragBegin(state: HoverState, action: Action<DragParams>): HoverState {
   // If something is dragging, then we don't want any hover behavior.
@@ -199,13 +163,6 @@ function handleShowColorPicker(state: HoverState, action: Action<EditFolderParam
 
 function handleBeginDeleteFolder(state: HoverState, action: Action<DeleteFolderParams>): HoverState {
   // See comment in handleDeleteBookmark above.
-  return {
-    hoverItemId: null,
-  };
-}
-
-function handleOpenFolder(state: HoverState, action: Action<OpenFolderParams>): HoverState {
-  // Right after we open a folder, we're not hovering over anything.
   return {
     hoverItemId: null,
   };

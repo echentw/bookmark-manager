@@ -5,8 +5,6 @@ import { AppState } from 'reduxStore';
 import { Reducer } from 'reducers/Reducer';
 import { Folder } from 'Folder';
 
-import { USE_SECTIONSSS } from 'components/AppComponent';
-
 export interface AddBookmarksState {
   showingModal: boolean;
   tabs: TabInfo[];
@@ -44,21 +42,10 @@ function handleShowModal(
   action: Action<ShowModalParams>,
   appState: AppState
 ): AddBookmarksState {
-  let folder: Folder | null;
-  if (USE_SECTIONSSS) {
-    folder = action.params.folder;
-  } else {
-    folder = appState.foldersState.folders.find(folder =>
-      folder.id === appState.navigationState.currentFolderId
-    ) || null;
-    if (folder === null) {
-      return state;
-    }
-  }
   return {
     showingModal: true,
     tabs: action.params.tabs,
-    folder: folder,
+    folder: action.params.folder,
   };
 }
 

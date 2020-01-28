@@ -6,10 +6,8 @@ import { User } from 'User';
 import { Folder } from 'Folder';
 
 // When a user opens a new tab, this is the state that we want to load.
+// TODO: get rid of this entirely
 export interface HollowAppStateForLoad extends HollowAppStateForSync {
-  navigationState: {
-    currentFolderId: string | null;
-  };
 }
 
 // If this state changes, then we want to update all open new tabs with this state.
@@ -34,7 +32,6 @@ export class StateBridge {
     return {
       user: appState.userState.user,
       folders: appState.foldersState.folders,
-      currentFolderId: appState.navigationState.currentFolderId,
       backgroundImageTimestamp: appState.settingsState.backgroundImageTimestamp,
     };
   }
@@ -47,9 +44,6 @@ export class StateBridge {
       },
       foldersState: {
         folders: chromeAppState.folders,
-      },
-      navigationState: {
-        currentFolderId: chromeAppState.currentFolderId,
       },
       loadedState: {
         loaded: true,

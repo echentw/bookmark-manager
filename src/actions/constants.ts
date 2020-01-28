@@ -3,11 +3,6 @@ export interface Action<Params = {}> {
   params: Params;
 }
 
-export const FolderActionType = {
-  openFolder: 'Folder:openFolder',
-  closeFolder: 'Folder:closeFolder',
-};
-
 export const SectionActionType = {
   expand: 'Section:expand',
   collapse: 'Section:collapse',
@@ -47,12 +42,6 @@ export const EditBookmarkActionType = {
   cancel: 'EditBookmark:cancel',
   save: 'EditBookmark:save',
   deleteBookmark: 'EditBookmark:deleteBookmark',
-};
-
-export const DragDropActionType = {
-  beginDrag: 'DragDrop:beginDrag',
-  endDrag: 'DragDrop:endDrag',
-  isOver: 'DragDrop:isOver',
 };
 
 export const DragActionType = {

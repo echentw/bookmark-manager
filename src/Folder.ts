@@ -5,56 +5,24 @@ export interface FolderData {
   id: string;
   name: string;
   bookmarks: BookmarkData[];
-  color: FolderColor;
   collapsed: boolean;
-}
-
-export enum FolderColor {
-  Red,
-  Green,
-  Blue,
-  Yellow,
-  Violet,
-  Orange,
-  Black,
-  Grey,
-  LightBlue,
-}
-
-export const colorsToCssClasses = new Map([
-  [FolderColor.Red, 'red'],
-  [FolderColor.Green, 'green'],
-  [FolderColor.Blue, 'blue'],
-  [FolderColor.Yellow, 'yellow'],
-  [FolderColor.Violet, 'violet'],
-  [FolderColor.Orange, 'orange'],
-  [FolderColor.Black, 'black'],
-  [FolderColor.Grey, 'grey'],
-  [FolderColor.LightBlue, 'light-blue'],
-]);
-
-if (Array.from(colorsToCssClasses.entries()).length !== 9) {
-  throw new Error('There are too many folder color options!');
 }
 
 export class Folder {
   public readonly id: string;
   public readonly name: string;
   public readonly bookmarks: Bookmark[];
-  public readonly color: FolderColor;
   public readonly collapsed: boolean;
 
-  constructor({ name, id, bookmarks, color, collapsed }: {
+  constructor({ name, id, bookmarks, collapsed }: {
     name: string,
     id?: string,
     bookmarks?: Bookmark[],
-    color?: FolderColor,
     collapsed?: boolean,
   }) {
     this.id = (id !== undefined) ? id : randomId();
     this.name = name;
     this.bookmarks = (bookmarks !== undefined) ? bookmarks : [];
-    this.color = (color !== undefined) ? color : FolderColor.Black;
     this.collapsed = collapsed || false;
   }
 
@@ -63,7 +31,6 @@ export class Folder {
       id: this.id,
       name: name,
       bookmarks: this.bookmarks,
-      color: this.color,
       collapsed: this.collapsed,
     });
   }
@@ -73,17 +40,6 @@ export class Folder {
       id: this.id,
       name: this.name,
       bookmarks: bookmarks,
-      color: this.color,
-      collapsed: this.collapsed,
-    });
-  }
-
-  public withColor = (color: FolderColor) => {
-    return new Folder({
-      id: this.id,
-      name: this.name,
-      bookmarks: this.bookmarks,
-      color: color,
       collapsed: this.collapsed,
     });
   }
@@ -93,7 +49,6 @@ export class Folder {
       id: this.id,
       name: this.name,
       bookmarks: this.bookmarks,
-      color: this.color,
       collapsed: collapsed,
     });
   }
@@ -105,7 +60,6 @@ export class Folder {
     if (this.id !== other.id ||
         this.name !== other.name ||
         this.bookmarks.length !== other.bookmarks.length ||
-        this.color !== other.color ||
         this.collapsed !== other.collapsed) {
       return false;
     }
@@ -119,7 +73,6 @@ export class Folder {
       id: this.id,
       name: this.name,
       bookmarks: this.bookmarks.slice(0),
-      color: this.color,
       collapsed: this.collapsed,
     });
   }
@@ -130,7 +83,6 @@ export class Folder {
       id: data.id,
       name: data.name,
       bookmarks: bookmarks,
-      color: data.color,
       collapsed: data.collapsed === undefined ? true : data.collapsed,
     });
   }
@@ -141,7 +93,6 @@ export class Folder {
       id: this.id,
       name: this.name,
       bookmarks: bookmarkDatas,
-      color: this.color,
       collapsed: this.collapsed,
     };
   }

@@ -9,20 +9,18 @@ import {
   AddBookmarksActionType,
   DeleteFolderActionType,
   DragActionType,
-  DragDropActionType,
   EditBookmarkActionType,
   EditFolderActionType,
   SectionActionType,
 } from 'actions/constants';
 import { SectionParams } from 'actions/SectionActions';
 import { DeleteFolderParams } from 'actions/DeleteFolderActions';
-import { DragParams as LegacyDragParams } from 'actions/DragDropActions';
 import { DragParams } from 'actions/DragActions';
 import { EditBookmarkParams } from 'actions/EditBookmarkActions';
-import { EditFolderParams, SelectFolderColorParams } from 'actions/EditFolderActions';
+import { EditFolderParams } from 'actions/EditFolderActions';
 import { withItemDeleted, withItemReplaced } from 'utils';
 
-import { DraggableType, USE_SECTIONSSS } from 'components/AppComponent';
+import { DraggableType } from 'components/AppComponent';
 
 export interface FoldersState {
   folders: Folder[];
@@ -48,9 +46,6 @@ export const foldersReducer: Reducer<FoldersState> = (
     case EditFolderActionType.save:
       newState = handleEditFolderSave(state, action as Action<EditFolderParams>);
       break;
-    case EditFolderActionType.selectColor:
-      newState = handleSelectFolderColor(state, action as Action<SelectFolderColorParams>);
-      break;
     case AddBookmarksActionType.save:
       newState = handleAddBookmarksSave(state, action as Action<AddBookmarksSaveParams>, appState);
       break;
@@ -59,9 +54,6 @@ export const foldersReducer: Reducer<FoldersState> = (
       break;
     case EditBookmarkActionType.deleteBookmark:
       newState = handleEditBookmarkDeleteBookmark(state, action as Action<EditBookmarkParams>, appState);
-      break;
-    case DragDropActionType.isOver:
-      newState = handleLegacyDragIsOver(state, action as Action<LegacyDragParams>, appState);
       break;
     case DragActionType.isOver:
       if (appState.dragState.draggableType === DraggableType.Bookmark) {
@@ -111,35 +103,12 @@ function handleEditFolderSave(state: FoldersState, action: Action<EditFolderPara
   };
 }
 
-function handleSelectFolderColor(state: FoldersState, action: Action<SelectFolderColorParams>): FoldersState {
-  const index = state.folders.findIndex((folder: Folder) => {
-    return folder.id === action.params.folder.id;
-  });
-  const folders = state.folders.slice(0); // copies the array
-  const newFolder = action.params.folder.withColor(action.params.color);
-  folders[index] = newFolder;
-  return {
-    folders: folders,
-  };
-}
-
 function handleAddBookmarksSave(
   state: FoldersState,
   action: Action<AddBookmarksSaveParams>,
   appState: AppState,
 ): FoldersState {
-  let folder: Folder;
-  if (USE_SECTIONSSS) {
-    folder = appState.addBookmarksState.folder;
-  } else {
-    if (appState.navigationState.currentFolderId === null) {
-      return state;
-    }
-    folder = state.folders.find(folder => folder.id === appState.navigationState.currentFolderId) || null;
-    if (folder === null) {
-      return state;
-    }
-  }
+  let folder = appState.addBookmarksState.folder;
   const newBookmarks = folder.bookmarks.concat(action.params.bookmarks);
   const newFolder = folder.withBookmarks(newBookmarks);
   const newFolders = withItemReplaced<Folder>(state.folders, newFolder);
@@ -175,82 +144,6 @@ function handleEditBookmarkDeleteBookmark(
   const newBookmarks = withItemDeleted<Bookmark>(folder.bookmarks, action.params.bookmark);
   const newFolder = folder.withBookmarks(newBookmarks);
   const newFolders = withItemReplaced<Folder>(state.folders, newFolder);
-  return {
-    folders: newFolders,
-  };
-}
-
-// So... we manually set the state in this method, which is bad.
-// But we need this for performance.
-function handleLegacyDragIsOver(
-  state: FoldersState,
-  action: Action<LegacyDragParams>,
-  appState: AppState,
-): FoldersState {
-  if (appState.navigationState.currentFolderId === null) {
-    return _handleFolderDragIsOver(state, action, appState);
-  } else {
-    return _handleBookmarkDragIsOver(state, action, appState);
-  }
-}
-
-function _handleFolderDragIsOver(
-  state: FoldersState,
-  action: Action<LegacyDragParams>,
-  appState: AppState,
-): FoldersState {
-  const folders = state.folders;
-  const draggedRank = appState.dragDropState.draggedRank;
-  const dropTargetRank = action.params.rank;
-
-  const draggedFolder = folders[draggedRank];
-  if (draggedRank > dropTargetRank) {
-    for (let i = draggedRank; i > dropTargetRank; --i) {
-      folders[i] = folders[i - 1];
-    }
-  } else {
-    for (let i = draggedRank; i < dropTargetRank; ++i) {
-      folders[i] = folders[i + 1];
-    }
-  }
-  folders[dropTargetRank] = draggedFolder;
-
-  return {
-    folders: folders,
-  };
-}
-
-function _handleBookmarkDragIsOver(
-  state: FoldersState,
-  action: Action<LegacyDragParams>,
-  appState: AppState,
-): FoldersState {
-  if (appState.navigationState.currentFolderId === null) {
-    return state;
-  }
-  const folder = state.folders.find(folder => folder.id === appState.navigationState.currentFolderId) || null;
-  if (folder === null) {
-    return state;
-  }
-  const bookmarks = folder.bookmarks;
-  const draggedRank = appState.dragDropState.draggedRank;
-  const dropTargetRank = action.params.rank;
-
-  // TODO: do the array operations properly
-  const draggedBookmark = bookmarks[draggedRank];
-  if (draggedRank > dropTargetRank) {
-    for (let i = draggedRank; i > dropTargetRank; --i) {
-      bookmarks[i] = bookmarks[i - 1];
-    }
-  } else {
-    for (let i = draggedRank; i < dropTargetRank; ++i) {
-      bookmarks[i] = bookmarks[i + 1];
-    }
-  }
-  bookmarks[dropTargetRank] = draggedBookmark;
-
-  const newFolders = state.folders;
-
   return {
     folders: newFolders,
   };

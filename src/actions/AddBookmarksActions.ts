@@ -5,8 +5,6 @@ import { Folder } from 'Folder';
 import { ChromeHelpers, TabInfo } from 'ChromeHelpers';
 import { Action, AddBookmarksActionType as ActionType } from 'actions/constants';
 
-import { USE_SECTIONSSS } from 'components/AppComponent';
-
 export interface AddBookmarksSaveParams {
   bookmarks: Bookmark[];
 }
@@ -23,20 +21,16 @@ function _showModal(params: ShowModalParams): Action<ShowModalParams> {
 }
 
 export interface ExternalShowModalParams {
-  folder?: Folder;
+  folder: Folder;
 }
 
 export function showModal(params: ExternalShowModalParams) {
   return async (dispatch: Dispatch<Action<ShowModalParams>>) => {
     const tabInfos = await ChromeHelpers.getOpenTabs();
-    if (USE_SECTIONSSS) {
-      dispatch(_showModal({
-        folder: params.folder,
-        tabs: tabInfos,
-      }));
-    } else {
-      dispatch(_showModal({ tabs: tabInfos }));
-    }
+    dispatch(_showModal({
+      folder: params.folder,
+      tabs: tabInfos,
+    }));
   };
 }
 

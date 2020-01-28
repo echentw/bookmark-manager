@@ -9,8 +9,6 @@ import * as AddBookmarksActions from 'actions/AddBookmarksActions';
 import { AddBookmarksSaveParams } from 'actions/AddBookmarksActions';
 import { ModalBackdropComponent } from 'components/ModalBackdropComponent';
 
-import { USE_SECTIONSSS } from 'components/AppComponent';
-
 interface ExternalProps {
   folder?: Folder;
 }

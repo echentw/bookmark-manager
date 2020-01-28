@@ -1,12 +1,8 @@
-import { Folder, FolderColor } from 'Folder';
+import { Folder } from 'Folder';
 import { Action, EditFolderActionType as ActionType } from 'actions/constants';
 
 export interface EditFolderParams {
   folder: Folder;
-}
-
-export interface SelectFolderColorParams extends EditFolderParams {
-  color: FolderColor;
 }
 
 export function beginEdit(params: EditFolderParams): Action<EditFolderParams> {
@@ -37,26 +33,5 @@ export function addFolder(params: {}): Action<EditFolderParams> {
     params: {
       folder: folder,
     },
-  };
-}
-
-export function showColorPicker(params: EditFolderParams): Action<EditFolderParams> {
-  return {
-    type: ActionType.showColorPicker,
-    params: params,
-  };
-}
-
-export function hideColorPicker(params: EditFolderParams): Action<EditFolderParams> {
-  return {
-    type: ActionType.hideColorPicker,
-    params: params,
-  };
-}
-
-export function selectColor(params: SelectFolderColorParams): Action<SelectFolderColorParams> {
-  return {
-    type: ActionType.selectColor,
-    params: params,
   };
 }

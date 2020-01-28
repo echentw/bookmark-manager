@@ -5,7 +5,6 @@ import Scrollbars from 'react-custom-scrollbars';
 import { Folder } from 'Folder';
 import { AppState } from 'reduxStore';
 import { DraggableType } from 'components/AppComponent';
-import { DragDropListItemContainerComponent } from 'components/DragDropListItemContainerComponent';
 import { SectionComponent } from 'components/Sections/SectionComponent';
 import { AddSectionButtonComponent } from 'components/Sections/AddSectionButtonComponent';
 
