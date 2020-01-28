@@ -53,7 +53,7 @@ export class LocalStorageHelpers {
           try {
             localStorage.setItem(LocalStorageHelpers.Keys.backgroundImageKey, dataURL);
             return resolve(dataURL);
-          } catch(e) {
+          } catch(error) {
             // If we're ever here, then probably the QuotaLength changed from 5MB to something else...
             // This would be pretty concerning.
             return reject(error);
@@ -68,6 +68,19 @@ export class LocalStorageHelpers {
         image.src = readerResult;
       });
       reader.readAsDataURL(file);
+    });
+  }
+
+  public static saveBackgroundImageRaw(dataURL: string): Promise<{}> {
+    return new Promise((resolve, reject) => {
+      try {
+        localStorage.setItem(LocalStorageHelpers.Keys.backgroundImageKey, dataURL);
+        return resolve();
+      } catch(error) {
+        // If we're ever here, then probably the QuotaLength changed from 5MB to something else...
+        // This would be pretty concerning.
+        return reject(error);
+      }
     });
   }
 

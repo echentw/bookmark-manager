@@ -69,11 +69,13 @@ class SettingsModalComponent extends React.Component<Props, State> {
     this.props.hideModal();
   }
 
-  onClickResetBackgroundImage = () => {
+  onClickResetBackgroundImage = async () => {
     LocalStorageHelpers.clearBackgroundImage();
+    const dataURL = require('assets/wallpapers/moon.json').url;
+    await LocalStorageHelpers.saveBackgroundImageRaw(dataURL);
     this.props.setBackgroundImage({
       timestamp: Date.now().toString(),
-      url: require('assets/wallpapers/moon.json').url,
+      url: dataURL,
     });
   }
 
