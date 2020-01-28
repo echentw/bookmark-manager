@@ -59,5 +59,5 @@ function _getBackgroundImageUrl(state: AppState, loadedState: HollowAppStateForS
 }
 
 function _loadBackgroundImageUrl(): string {
-  return LocalStorageHelpers.getBackgroundImageUrl() || require('../../sandbox/wallpapers/moon.png');
+  return LocalStorageHelpers.getBackgroundImageUrl() || require('assets/wallpapers/moon.json').url;
 }

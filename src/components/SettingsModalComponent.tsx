@@ -73,7 +73,7 @@ class SettingsModalComponent extends React.Component<Props, State> {
     LocalStorageHelpers.clearBackgroundImage();
     this.props.setBackgroundImage({
       timestamp: Date.now().toString(),
-      url: require('../../sandbox/wallpapers/moon.png'),
+      url: require('assets/wallpapers/moon.json').url,
     });
   }
 

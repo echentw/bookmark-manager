@@ -9,7 +9,6 @@ import { User } from 'User';
 import { ChromeAppState, ChromeAppStateForSync, ChromeHelpers } from 'ChromeHelpers';
 import { StateBridge } from 'StateBridge';
 import { StateDiffer } from 'StateDiffer';
-import { LocalStorageHelpers } from 'LocalStorageHelpers';
 import * as SyncActions from 'actions/SyncActions';
 import { LoadParams, SyncParams } from 'actions/SyncActions';
 import { AppState, reduxStore } from 'reduxStore';

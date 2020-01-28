@@ -32,33 +32,3 @@
 @mixin rect-border-radius {
   border-radius: 4px;
 }
-
-@mixin modal-background {
-  background-color: rgba(255, 255, 255, 0.5);
-  overflow: hidden;
-
-  &::before {
-    background: url('../../sandbox/wallpapers/spiderman3.jpg') no-repeat center center fixed;
-
-    content: "";
-    display: block;
-    z-index: -1;
-    position: absolute;
-    top: -5%;
-    left: -5%;
-    width: 110%;
-    height: 110%;
-
-    top: -30px;
-    left: -30px;
-    width: calc(100% + 60px);
-    height: calc(100% + 60px);
-
-    filter: blur(10px);
-
-    -webkit-background-size: cover;
-       -moz-background-size: cover;
-         -o-background-size: cover;
-            background-size: cover;
-  }
-}
