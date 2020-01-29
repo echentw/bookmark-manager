@@ -2,16 +2,10 @@ import { Folder, FolderData } from 'Folder';
 import { User, UserData } from 'User';
 import { Bookmark } from 'Bookmark';
 
-// We don't want to sync *all* the stuff in ChromeAppState to all existing tabs.
-// This is the stuff we want to sync over.
-export interface ChromeAppStateForSync {
+export interface ChromeAppState {
   user: User | null;
   folders: Folder[];
   backgroundImageTimestamp: string;
-}
-
-// TODO: rethink this
-export interface ChromeAppState extends ChromeAppStateForSync {
 }
 
 export interface ChromeData {
@@ -129,7 +123,7 @@ export class ChromeHelpers {
     });
   }
 
-  public static addOnChangedListener = (receive: (appState: ChromeAppStateForSync) => void): void => {
+  public static addOnChangedListener = (receive: (appState: ChromeAppState) => void): void => {
     chrome.storage.onChanged.addListener((
       changes: { [key: string]: chrome.storage.StorageChange },
       areaName: string,

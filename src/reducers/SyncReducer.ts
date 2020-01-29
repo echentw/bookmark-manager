@@ -3,9 +3,9 @@
 
 import { AppState } from 'reduxStore';
 import { LocalStorageHelpers } from 'LocalStorageHelpers';
-import { HollowAppStateForLoad, HollowAppStateForSync, StateBridge } from 'StateBridge';
+import { HollowAppState, StateBridge } from 'StateBridge';
 import { Action, SyncActionType as ActionType } from 'actions/constants';
-import { LoadParams, SyncParams } from 'actions/SyncActions';
+import { LoadParams } from 'actions/SyncActions';
 
 export const syncReducer = (state: AppState, action: Action): AppState => {
   let newState = state;
@@ -14,14 +14,14 @@ export const syncReducer = (state: AppState, action: Action): AppState => {
       newState = handleLoad(state, action as Action<LoadParams>);
       break;
     case ActionType.sync:
-      newState = handleSync(state, action as Action<SyncParams>);
+      newState = handleSync(state, action as Action<LoadParams>);
       break;
   }
   return newState;
 };
 
 function handleLoad(state: AppState, action: Action<LoadParams>): AppState {
-  const hollowState: HollowAppStateForLoad = StateBridge.toHollowAppStateForLoad(action.params);
+  const hollowState: HollowAppState = StateBridge.toHollowAppState(action.params);
   const backgroundImageUrl = _loadBackgroundImageUrl();
   return {
     ...state,
@@ -34,8 +34,8 @@ function handleLoad(state: AppState, action: Action<LoadParams>): AppState {
   };
 }
 
-function handleSync(state: AppState, action: Action<SyncParams>): AppState {
-  const hollowState: HollowAppStateForSync = StateBridge.toHollowAppStateForSync(action.params);
+function handleSync(state: AppState, action: Action<LoadParams>): AppState {
+  const hollowState: HollowAppState = StateBridge.toHollowAppState(action.params);
   const backgroundImageUrl: string = _getBackgroundImageUrl(state, hollowState);
   return {
     ...state,
@@ -48,7 +48,7 @@ function handleSync(state: AppState, action: Action<SyncParams>): AppState {
   };
 }
 
-function _getBackgroundImageUrl(state: AppState, loadedState: HollowAppStateForSync): string {
+function _getBackgroundImageUrl(state: AppState, loadedState: HollowAppState): string {
   let imageUrl: string;
   if (state.settingsState.backgroundImageTimestamp === loadedState.settingsState.backgroundImageTimestamp) {
     imageUrl = state.settingsState.backgroundImageUrl;

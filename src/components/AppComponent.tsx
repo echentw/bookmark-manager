@@ -6,11 +6,11 @@ import { CSSTransitionGroup } from 'react-transition-group';
 import { Bookmark } from 'Bookmark';
 import { Folder } from 'Folder';
 import { User } from 'User';
-import { ChromeAppState, ChromeAppStateForSync, ChromeHelpers } from 'ChromeHelpers';
+import { ChromeAppState, ChromeHelpers } from 'ChromeHelpers';
 import { StateBridge } from 'StateBridge';
 import { StateDiffer } from 'StateDiffer';
 import * as SyncActions from 'actions/SyncActions';
-import { LoadParams, SyncParams } from 'actions/SyncActions';
+import { LoadParams } from 'actions/SyncActions';
 import { AppState, reduxStore } from 'reduxStore';
 import { DragState } from 'reducers/DragReducer';
 import { Action } from 'actions/constants';
@@ -40,7 +40,7 @@ interface Props {
   showAddBookmarksModal: boolean;
   showSettingsModal: boolean;
   loadAppState: (params: LoadParams) => void;
-  syncAppState: (params: SyncParams) => void;
+  syncAppState: (params: LoadParams) => void;
 }
 
 interface State {
@@ -108,7 +108,7 @@ class AppComponent extends React.Component<Props, State> {
     });
 
     // When the persisted state changes, we want to update the current react state.
-    ChromeHelpers.addOnChangedListener((appState: ChromeAppStateForSync) => {
+    ChromeHelpers.addOnChangedListener((appState: ChromeAppState) => {
       this.props.syncAppState(appState);
     });
 
