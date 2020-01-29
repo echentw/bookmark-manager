@@ -61,102 +61,127 @@
     }
 
     .settings-section {
+      overflow-y: scroll;
+
       .set-background-image-container {
-        display: grid;
-        grid-template-rows: 50% 50%;
-        grid-template-columns: 50% 50%;
+        display: flex;
+        flex-direction: column;
 
-        .set-background-image-label {
-          padding: 10px;
-          font-family: $font-family;
-          font-size: 20px;
+        .set-background-image-upper-container {
+          display: flex;
+          flex-direction: row;
 
-          grid-column-start: 1;
-          grid-column-end: 2;
-          grid-row-start: 1;
-          grid-row-end: 2;
-        }
+          .set-background-image-left-container {
+            flex: 1;
 
-        .set-background-image-reset-container {
-          padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
 
-          grid-column-start: 1;
-          grid-column-end: 2;
-          grid-row-start: 2;
-          grid-row-end: 3;
+            .set-background-image-label {
+              font-family: $font-family;
+              font-size: 20px;
+            }
 
-          .set-background-image-reset {
-            display: inline-block;
-            font-family: $font-family;
-            font-size: 14px;
-            font-weight: bold;
-            color: rgb(100, 100, 255);
+            .button-text {
+              font-family: $font-family;
+              font-size: 14px;
+              font-weight: bold;
+              color: rgb(100, 100, 255);
 
-            &:hover {
-              cursor: pointer;
-              color: rgb(0, 0, 200);
+              &:hover {
+                cursor: pointer;
+                color: rgb(0, 0, 200);
+              }
             }
           }
-        }
 
-        .set-background-image-preview-container {
-          position: relative;
-
-          width: 160px;
-          height: 90px;
-
-          grid-column-start: 2;
-          grid-column-end: 3;
-          grid-row-start: 1;
-          grid-row-end: 3;
-
-          input.set-background-image-input {
-            position: absolute;
-            width: 0.1px;
-            height: 0.1px;
-            opacity: 0;
-            overflow: hidden;
-            z-index: -1;
-          }
-
-          img {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 2px;
-          }
-
-          label.set-background-image-preview {
-            position: relative;
-            width: 100%;
-            height: 100%;
+          .set-background-image-right-container {
+            flex: 1;
 
             display: flex;
             justify-content: center;
             align-items: center;
 
-            .background-image-loading-icon {
-              position: absolute;
-              width: 24px;
-              height: 24px;
-              color: white;
-              animation: spinner 1s linear infinite;
+            .set-background-image-preview-container {
+              position: relative;
+
+              width: 160px;
+              height: 90px;
+
+              input.set-background-image-input {
+                position: absolute;
+                width: 0.1px;
+                height: 0.1px;
+                opacity: 0;
+                overflow: hidden;
+                z-index: -1;
+              }
+
+              img {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                border-radius: 2px;
+              }
+
+              label.set-background-image-preview {
+                position: relative;
+                width: 100%;
+                height: 100%;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .background-image-loading-icon {
+                  position: absolute;
+                  width: 24px;
+                  height: 24px;
+                  color: white;
+                  animation: spinner 1s linear infinite;
+                }
+
+                .background-image-upload-icon {
+                  position: absolute;
+                  width: 24px;
+                  height: 24px;
+                  color: white;
+                  opacity: 0;
+                }
+
+                &:hover {
+                  background-color: rgba(0, 0, 0, 0.5);
+                  cursor: pointer;
+
+                  .background-image-upload-icon {
+                    opacity: 0.6;
+                  }
+                }
+              }
             }
+          }
+        }
 
-            .background-image-upload-icon {
-              position: absolute;
-              width: 24px;
-              height: 24px;
-              color: white;
-              opacity: 0;
-            }
+        .set-background-image-lower-container {
+          margin-top: 10px;
 
-            &:hover {
-              background-color: rgba(0, 0, 0, 0.5);
-              cursor: pointer;
+          .background-image-defaults {
+            height: 280px;
 
-              .background-image-upload-icon {
-                opacity: 0.6;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            justify-items: center;
+            align-items: center;
+
+            img {
+              width: calc(160px * 0.8);
+              height: calc(90px * 0.8);
+
+              &:hover {
+                cursor: pointer;
               }
             }
           }

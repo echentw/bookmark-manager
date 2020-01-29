@@ -26,6 +26,7 @@ enum Section {
 interface State {
   imageLoading: boolean;
   activeSection: Section;
+  showBackgroundImageDefaults: boolean;
 }
 
 class SettingsModalComponent extends React.Component<Props, State> {
@@ -37,7 +38,24 @@ class SettingsModalComponent extends React.Component<Props, State> {
   state: State = {
     imageLoading: false,
     activeSection: Section.Settings,
+    showBackgroundImageDefaults: false,
   };
+
+  loadBackgroundImageDefaultURLs = (): string[] => {
+    return [
+      require('assets/wallpapers/moon.json').url,
+      require('assets/wallpapers/ocean.json').url,
+      require('assets/wallpapers/pawn.json').url,
+
+      require('assets/wallpapers/abstract.json').url,
+      require('assets/wallpapers/puppy.json').url,
+      require('assets/wallpapers/wolf.json').url,
+
+      require('assets/wallpapers/mountain.json').url,
+      require('assets/wallpapers/galaxy.json').url,
+      require('assets/wallpapers/guitar.json').url,
+    ];
+  }
 
   onFileInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files.length > 0) {
@@ -69,14 +87,30 @@ class SettingsModalComponent extends React.Component<Props, State> {
     this.props.hideModal();
   }
 
-  onClickResetBackgroundImage = async () => {
+  onClickShowBackgroundImageDefaults = async () => {
+    this.setState({ showBackgroundImageDefaults: true });
+  }
+
+  setBackgroundImage = async (imageURL: string) => {
     LocalStorageHelpers.clearBackgroundImage();
-    const dataURL = require('assets/wallpapers/moon.json').url;
-    await LocalStorageHelpers.saveBackgroundImageRaw(dataURL);
+    await LocalStorageHelpers.saveBackgroundImageRaw(imageURL);
     this.props.setBackgroundImage({
       timestamp: Date.now().toString(),
-      url: dataURL,
+      url: imageURL,
     });
+  }
+
+  backgroundImageDefaultsComponent = () => {
+    const images = this.loadBackgroundImageDefaultURLs().map((imageURL, index) => {
+      return (
+        <img key={index} src={imageURL} onClick={() => this.setBackgroundImage(imageURL)}/>
+      );
+    });
+    return (
+      <div className="background-image-defaults">
+        { images }
+      </div>
+    );
   }
 
   settingsSectionComponent = () => {
@@ -92,30 +126,44 @@ class SettingsModalComponent extends React.Component<Props, State> {
       <FaUpload className="background-image-upload-icon"/>
     ) : null;
 
+    const maybeBackgroundImageDefaults = this.state.showBackgroundImageDefaults ? (
+      this.backgroundImageDefaultsComponent()
+    ) : null;
+
     return (
       <div className="settings-section">
         <div className="set-background-image-container">
-          <div className="set-background-image-label">
-            Background Image
-          </div>
-          <div className="set-background-image-reset-container">
-            <div className="set-background-image-reset" onClick={this.onClickResetBackgroundImage}>
-              Reset to default
+          <div className="set-background-image-upper-container">
+            <div className="set-background-image-left-container">
+              <div className="set-background-image-label">
+                  Background Image
+              </div>
+              <label htmlFor="file" className="button-text">
+                Upload your own image
+              </label>
+              <div className="button-text" onClick={this.onClickShowBackgroundImageDefaults}>
+                Choose from defaults
+              </div>
+            </div>
+            <div className="set-background-image-right-container">
+              <div className="set-background-image-preview-container">
+                <input
+                  id="file"
+                  className="set-background-image-input"
+                  type="file"
+                  ref={this.fileInputRef}
+                  onChange={this.onFileInputChange}
+                />
+                <img src={this.props.backgroundImageUrl}/>
+                <label htmlFor="file" className="set-background-image-preview" style={backgroundImageCustomStyles}>
+                  { maybeImageLoadingIcon }
+                  { maybeUploadIcon }
+                </label>
+              </div>
             </div>
           </div>
-          <div className="set-background-image-preview-container">
-            <input
-              id="file"
-              className="set-background-image-input"
-              type="file"
-              ref={this.fileInputRef}
-              onChange={this.onFileInputChange}
-            />
-            <img src={this.props.backgroundImageUrl}/>
-            <label htmlFor="file" className="set-background-image-preview" style={backgroundImageCustomStyles}>
-              { maybeImageLoadingIcon }
-              { maybeUploadIcon }
-            </label>
+          <div className="set-background-image-lower-container">
+            { maybeBackgroundImageDefaults }
           </div>
         </div>
       </div>
