@@ -5,8 +5,8 @@ import Scrollbars from 'react-custom-scrollbars';
 import { Folder } from 'Folder';
 import { AppState } from 'reduxStore';
 import { DraggableType } from 'components/AppComponent';
-import { SectionComponent } from 'components/Sections/SectionComponent';
-import { AddSectionButtonComponent } from 'components/Sections/AddSectionButtonComponent';
+import { SectionComponent } from 'components/SectionComponent';
+import { AddSectionButtonComponent } from 'components/AddSectionButtonComponent';
 
 interface Props {
   folders: Folder[];

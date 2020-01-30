@@ -20,8 +20,8 @@ import * as DeleteFolderActions from 'actions/DeleteFolderActions';
 import { DeleteFolderParams } from 'actions/DeleteFolderActions';
 
 import { BookmarkComponent } from 'components/BookmarkComponent';
-import { DragSourceContainerComponent } from 'components/Sections/DragSourceContainerComponent';
-import { DropTargetContainerComponent } from 'components/Sections/DropTargetContainerComponent';
+import { DragSourceContainerComponent } from 'components/DragSourceContainerComponent';
+import { DropTargetContainerComponent } from 'components/DropTargetContainerComponent';
 import { EditTextFieldComponent } from 'components/EditTextFieldComponent';
 import { ConfirmDeleteFolderModalComponent } from 'components/ConfirmDeleteFolderModalComponent';
 import { HoverableContainerComponent } from 'components/HoverableContainerComponent';

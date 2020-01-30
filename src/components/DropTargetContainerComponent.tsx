@@ -2,7 +2,11 @@ import * as React from 'react';
 import { useDrop } from 'react-dnd';
 
 import { Bookmark } from 'Bookmark';
-import { propsDidNotChange as dragSourcePropsDidNotChange, isDragSourceContainerProps, DragSourceContainerComponent } from 'components/Sections/DragSourceContainerComponent';
+import {
+  propsDidNotChange as dragSourcePropsDidNotChange,
+  isDragSourceContainerProps,
+  DragSourceContainerComponent,
+} from 'components/DragSourceContainerComponent';
 
 interface Props {
   className: string;

@@ -23,8 +23,8 @@ import { AddBookmarksModalComponent } from 'components/AddBookmarksModalComponen
 import { DateComponent } from 'components/DateComponent';
 import { NuxComponent } from 'components/NuxComponent';
 import { SettingsModalComponent } from 'components/SettingsModalComponent';
-import { SectionListComponent } from 'components/Sections/SectionListComponent';
-import { SectionComponent } from 'components/Sections/SectionComponent';
+import { SectionListComponent } from 'components/SectionListComponent';
+import { SectionComponent } from 'components/SectionComponent';
 
 export enum DraggableType {
   Bookmark = 'bookmark',
