@@ -103,7 +103,10 @@ class SettingsModalComponent extends React.Component<Props, State> {
   backgroundImageDefaultsComponent = () => {
     const images = this.loadBackgroundImageDefaultURLs().map((imageURL, index) => {
       return (
-        <img key={index} src={imageURL} onClick={() => this.setBackgroundImage(imageURL)}/>
+        <div key={index} className="default-image-container">
+          <div className="image-overlay" onClick={() => this.setBackgroundImage(imageURL)}/>
+          <img src={imageURL}/>
+        </div>
       );
     });
     return (
@@ -126,9 +129,17 @@ class SettingsModalComponent extends React.Component<Props, State> {
       <FaUpload className="background-image-upload-icon"/>
     ) : null;
 
-    const maybeBackgroundImageDefaults = this.state.showBackgroundImageDefaults ? (
-      this.backgroundImageDefaultsComponent()
-    ) : null;
+
+    const {
+      maybeBackgroundImageDefaults,
+      showBackgroundDefaultsClass
+    } = this.state.showBackgroundImageDefaults ? ({
+      maybeBackgroundImageDefaults: this.backgroundImageDefaultsComponent(),
+      showBackgroundDefaultsClass: 'show',
+    }) : ({
+      maybeBackgroundImageDefaults: null,
+      showBackgroundDefaultsClass: '',
+    });
 
     return (
       <div className="settings-section">
@@ -162,7 +173,7 @@ class SettingsModalComponent extends React.Component<Props, State> {
               </div>
             </div>
           </div>
-          <div className="set-background-image-lower-container">
+          <div className={'set-background-image-lower-container ' + showBackgroundDefaultsClass}>
             { maybeBackgroundImageDefaults }
           </div>
         </div>
