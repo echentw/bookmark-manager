@@ -9,11 +9,11 @@ interface Props {
   addFolder: (params: {}) => void;
 }
 
-class AddSectionButtonComponent extends React.Component<Props> {
+class AddFolderButtonComponent extends React.Component<Props> {
   render() {
     return (
-      <div className="add-section-button" onClick={this.props.addFolder}>
-        <FaPlus className="add-section-icon"/>
+      <div className="add-folder-button" onClick={this.props.addFolder}>
+        <FaPlus className="add-folder-icon"/>
       </div>
     );
   }
@@ -27,5 +27,5 @@ const mapActionsToProps = {
   addFolder: EditFolderActions.addFolder,
 };
 
-const Component = connect(mapStateToProps, mapActionsToProps)(AddSectionButtonComponent);
-export { Component as AddSectionButtonComponent };
+const Component = connect(mapStateToProps, mapActionsToProps)(AddFolderButtonComponent);
+export { Component as AddFolderButtonComponent };

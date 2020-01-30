@@ -12,8 +12,8 @@ import * as AddBookmarksActions from 'actions/AddBookmarksActions';
 import { ExternalShowModalParams } from 'actions/AddBookmarksActions';
 import * as DragActions from 'actions/DragActions';
 import { DragParams, DropParams } from 'actions/DragActions';
-import * as SectionActions from 'actions/SectionActions';
-import { SectionParams } from 'actions/SectionActions';
+import * as FolderActions from 'actions/FolderActions';
+import { FolderParams } from 'actions/FolderActions';
 import * as EditFolderActions from 'actions/EditFolderActions';
 import { EditFolderParams } from 'actions/EditFolderActions';
 import * as DeleteFolderActions from 'actions/DeleteFolderActions';
@@ -46,8 +46,8 @@ interface InternalProps extends ExternalProps {
   beginDrag: (params: DragParams) => void;
   endDrag: (params: DropParams) => void;
   isOver: (params: DragParams) => void;
-  expandSection: (params: SectionParams) => void;
-  collapseSection: (params: SectionParams) => void;
+  expandFolder: (params: FolderParams) => void;
+  collapseFolder: (params: FolderParams) => void;
   beginEdit: (params: EditFolderParams) => void;
   cancelEdit: (params: {}) => void;
   saveEdit: (params: EditFolderParams) => void;
@@ -56,7 +56,7 @@ interface InternalProps extends ExternalProps {
   cancelDelete: (params: DeleteFolderParams) => void;
 }
 
-class SectionComponent extends React.Component<InternalProps> {
+class FolderComponent extends React.Component<InternalProps> {
 
   private textInputRef: React.RefObject<HTMLInputElement> = React.createRef();
   private deleteIconRef: React.RefObject<HTMLDivElement> = React.createRef();
@@ -114,24 +114,24 @@ class SectionComponent extends React.Component<InternalProps> {
     if (this.props.editing) {
       return;
     }
-    this.props.expandSection({ folder: this.props.folder });
+    this.props.expandFolder({ folder: this.props.folder });
   }
 
   collapseFolder = () => {
     if (this.props.editing) {
       return;
     }
-    this.props.collapseSection({ folder: this.props.folder });
+    this.props.collapseFolder({ folder: this.props.folder });
   }
 
   maybeButtonsComponent = () => {
     if (this.props.isDragPreview || this.props.deleting || (this.props.hovering && !this.props.editing)) {
       return (
-        <div className="section-buttons-container">
+        <div className="folder-buttons-container">
           <IconContext.Provider value={{ size: '1.0em' }}>
-            <FaPen className="section-button" onClick={this.onClickEdit}/>
+            <FaPen className="folder-button" onClick={this.onClickEdit}/>
             <div className="delete-icon-container" ref={this.deleteIconRef} onClick={this.onClickDelete}>
-              <FaTrash className="section-button"/>
+              <FaTrash className="folder-button"/>
             </div>
           </IconContext.Provider>
         </div>
@@ -192,7 +192,7 @@ class SectionComponent extends React.Component<InternalProps> {
   render() {
     const { folder } = this.props;
 
-    const sectionNameComponent = this.props.editing ? (
+    const folderNameComponent = this.props.editing ? (
       <EditTextFieldComponent
         textInputRef={this.textInputRef}
         initialText={folder.name}
@@ -200,7 +200,7 @@ class SectionComponent extends React.Component<InternalProps> {
         cancel={this.cancelEdit}
       />
     ) : (
-      <div className="section-name">
+      <div className="folder-name">
         { folder.name }
       </div>
     );
@@ -217,23 +217,23 @@ class SectionComponent extends React.Component<InternalProps> {
     const maybeEditingClass = this.props.editing ? 'editing' : '';
     const maybeVanishedClass = this.props.dragging ? 'vanished' : '';
 
-    const sectionInnerComponent = folder.collapsed ? (
-      <div className={'section collapsed ' + maybeVanishedClass}>
-        <HoverableContainerComponent className="section-name-container" itemId={folder.id}>
+    const folderInnerComponent = folder.collapsed ? (
+      <div className={'folder collapsed ' + maybeVanishedClass}>
+        <HoverableContainerComponent className="folder-name-container" itemId={folder.id}>
           <div className={'icon-and-name-container ' + maybeEditingClass} onClick={this.expandFolder}>
             <div className="down-icon">
               <FaChevronDown/>
             </div>
-            { sectionNameComponent }
+            { folderNameComponent }
           </div>
           { this.maybeButtonsComponent() }
         </HoverableContainerComponent>
         { maybeConfirmDeleteModalComponent }
       </div>
     ) : (
-      <div className={'section ' + maybeVanishedClass}>
+      <div className={'folder ' + maybeVanishedClass}>
         <DropTargetContainerComponent
-          className="section-name-container"
+          className="folder-name-container"
           draggableType={DraggableType.Bookmark}
           isOver={() =>
             this.props.isOver({
@@ -244,17 +244,17 @@ class SectionComponent extends React.Component<InternalProps> {
           }
           rerenderProps={[folder.name, this.props.editing, this.props.hovering]}
         >
-          <HoverableContainerComponent className="section-name-hoverable-container" itemId={folder.id}>
+          <HoverableContainerComponent className="folder-name-hoverable-container" itemId={folder.id}>
             <div className={'icon-and-name-container ' + maybeEditingClass} onClick={this.collapseFolder}>
               <div className="up-icon">
                 <FaChevronUp/>
               </div>
-              { sectionNameComponent }
+              { folderNameComponent }
             </div>
             { this.maybeButtonsComponent() }
           </HoverableContainerComponent>
         </DropTargetContainerComponent>
-        <div className="section-bookmarks">
+        <div className="folder-bookmarks">
           { this.bookmarkComponents() }
         </div>
         <DropTargetContainerComponent
@@ -282,7 +282,7 @@ class SectionComponent extends React.Component<InternalProps> {
 
     return (
       <DropTargetContainerComponent
-        className={'section-drop-container ' + revealDropContainerClass}
+        className={'folder-drop-container ' + revealDropContainerClass}
         draggableType={DraggableType.Folder}
         isOver={() =>
           this.props.isOver({
@@ -304,7 +304,7 @@ class SectionComponent extends React.Component<InternalProps> {
           draggable={this.props.draggable}
           draggableType={DraggableType.Folder}
         >
-          { sectionInnerComponent }
+          { folderInnerComponent }
         </DragSourceContainerComponent>
       </DropTargetContainerComponent>
     );
@@ -325,8 +325,8 @@ const mapActionsToProps = {
   beginDrag: DragActions.begin,
   endDrag: DragActions.end,
   isOver: DragActions.isOver,
-  expandSection: SectionActions.expandSection,
-  collapseSection: SectionActions.collapseSection,
+  expandFolder: FolderActions.expandFolder,
+  collapseFolder: FolderActions.collapseFolder,
   beginEdit: EditFolderActions.beginEdit,
   cancelEdit: EditFolderActions.cancel,
   saveEdit: EditFolderActions.save,
@@ -335,5 +335,5 @@ const mapActionsToProps = {
   cancelDelete: DeleteFolderActions.cancelDelete,
 };
 
-const Component = connect(mapStateToProps, mapActionsToProps)(SectionComponent);
-export { Component as SectionComponent };
+const Component = connect(mapStateToProps, mapActionsToProps)(FolderComponent);
+export { Component as FolderComponent };

@@ -1,7 +1,7 @@
 @import './mixins/list';
 @import './mixins/misc';
 
-.section-list {
+.folder-list {
   @include list;
   padding-top: 12px;
   padding-bottom: 12px;
@@ -9,12 +9,12 @@
   width: 440px;
   background-color: rgba(255, 255, 255, 0.5);
 
-  .section-list-scrollable-area {
+  .folder-list-scrollable-area {
     @include list-scrollable-area;
     padding-left: 8px;
     padding-right: 8px;
 
-    .add-section-button {
+    .add-folder-button {
       @include list-button;
       background-color: rgba(255, 255, 255, 0.5);
       box-shadow: 0 8px 8px rgba(0, 0, 0, 0.19), 0 4px 6px rgba(0, 0, 0, 0.23);
@@ -24,7 +24,7 @@
   }
 }
 
-.section-drop-container {
+.folder-drop-container {
   @include rect-border-radius;
 
   &.show {
@@ -32,7 +32,7 @@
   }
 }
 
-.section {
+.folder {
   @include list-item;
   flex-direction: column;
   align-items: flex-start;
@@ -44,7 +44,7 @@
   border: none;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.19), 0 4px 6px rgba(0, 0, 0, 0.23);
 
-  .section-name-container {
+  .folder-name-container {
     @include list-title-container;
     height: 20px;
     min-height: 20px;
@@ -55,7 +55,7 @@
     display: flex;
     flex-direction: row;
 
-    .section-name-hoverable-container {
+    .folder-name-hoverable-container {
       flex: 1;
       display: flex;
       flex-direction: row;
@@ -83,7 +83,7 @@
         font-size: 16px;
       }
 
-      .section-name {
+      .folder-name {
         @include list-title;
         font-size: 16px;
       }
@@ -99,12 +99,12 @@
       }
     }
 
-    .section-buttons-container {
+    .folder-buttons-container {
       @include list-item-buttons-container;
       width: $buttons-container-width;
       height: 100%;
 
-      .section-button {
+      .folder-button {
         @include list-item-button;
         margin-right: 4px;
       }
@@ -115,7 +115,7 @@
     }
   }
 
-  .section-bookmarks {
+  .folder-bookmarks {
     width: 100%;
     padding-left: 10px;
     padding-right: 10px;
@@ -166,7 +166,7 @@
     height: 32px;
     justify-content: center;
 
-    .section-name-container {
+    .folder-name-container {
       margin-bottom: 0px;
 
       .icon-and-name-container {
@@ -176,7 +176,7 @@
           margin-right: 4px;
         }
 
-        .section-name {
+        .folder-name {
           font-size: 14px;
           font-weight: 600;
         }
@@ -194,11 +194,11 @@
 }
 
 .drag-layer-item {
-  .section-drop-container {
+  .folder-drop-container {
     width: calc(440px - 16px);
   }
 
-  .section {
+  .folder {
     background-color: rgb(220, 220, 220);
   }
 }

@@ -3,9 +3,9 @@ export interface Action<Params = {}> {
   params: Params;
 }
 
-export const SectionActionType = {
-  expand: 'Section:expand',
-  collapse: 'Section:collapse',
+export const FolderActionType = {
+  expand: 'Folder:expand',
+  collapse: 'Folder:collapse',
 };
 
 export const EditFolderActionType = {

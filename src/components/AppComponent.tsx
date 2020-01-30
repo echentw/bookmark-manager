@@ -23,8 +23,8 @@ import { AddBookmarksModalComponent } from 'components/AddBookmarksModalComponen
 import { DateComponent } from 'components/DateComponent';
 import { NuxComponent } from 'components/NuxComponent';
 import { SettingsModalComponent } from 'components/SettingsModalComponent';
-import { SectionListComponent } from 'components/SectionListComponent';
-import { SectionComponent } from 'components/SectionComponent';
+import { FolderListComponent } from 'components/FolderListComponent';
+import { FolderComponent } from 'components/FolderComponent';
 
 export enum DraggableType {
   Bookmark = 'bookmark',
@@ -143,7 +143,7 @@ class AppComponent extends React.Component<Props, State> {
       const folder = this.props.folders[folderRank];
       maybeDragLayer = (
         <DragLayerComponent>
-          <SectionComponent
+          <FolderComponent
             folder={folder}
             editing={false}
             deleting={false}
@@ -170,7 +170,7 @@ class AppComponent extends React.Component<Props, State> {
     ) : (
       <div className="app" key="app">
         <div className="app-list-container">
-          <SectionListComponent/>
+          <FolderListComponent/>
         </div>
         <div className="app-greeting-container">
           <GreetingComponent user={this.props.user} date={this.state.date}/>

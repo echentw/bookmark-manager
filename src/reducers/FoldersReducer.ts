@@ -11,9 +11,9 @@ import {
   DragActionType,
   EditBookmarkActionType,
   EditFolderActionType,
-  SectionActionType,
+  FolderActionType,
 } from 'actions/constants';
-import { SectionParams } from 'actions/SectionActions';
+import { FolderParams } from 'actions/FolderActions';
 import { DeleteFolderParams } from 'actions/DeleteFolderActions';
 import { DragParams } from 'actions/DragActions';
 import { EditBookmarkParams } from 'actions/EditBookmarkActions';
@@ -62,11 +62,11 @@ export const foldersReducer: Reducer<FoldersState> = (
         newState = handleDragIsOverFolder(state, action as Action<DragParams>, appState);
       }
       break;
-    case SectionActionType.expand:
-      newState = handleExpandSection(state, action as Action<SectionParams>);
+    case FolderActionType.expand:
+      newState = handleExpandFolder(state, action as Action<FolderParams>);
       break;
-    case SectionActionType.collapse:
-      newState = handleCollapseSection(state, action as Action<SectionParams>);
+    case FolderActionType.collapse:
+      newState = handleCollapseFolder(state, action as Action<FolderParams>);
       break;
 
   }
@@ -177,14 +177,14 @@ function handleDragIsOverBookmark(
       bookmarks[targetBookmarkRank] = draggedBookmark;
     }
   } else if (draggedFolderRank < targetFolderRank) {
-    // We are moving the Bookmark from a Section above to a Section below.
+    // We are moving the Bookmark from a Folder above to a Folder below.
     if (targetBookmarkRank < targetFolder.bookmarks.length) {
       // Insert the dragged bookmark after the bookmark we're hovering over.
       startFolder.bookmarks.splice(draggedBookmarkRank, 1);
       targetFolder.bookmarks.splice(targetBookmarkRank + 1, 0, draggedBookmark);
     }
   } else {
-    // We are moving the Bookmark from a Section below to a Section above.
+    // We are moving the Bookmark from a Folder below to a Folder above.
     if (targetBookmarkRank > -1) {
       // Insert the dragged bookmark before the bookmark we're hovering over.
       startFolder.bookmarks.splice(draggedBookmarkRank, 1);
@@ -226,7 +226,7 @@ function handleDragIsOverFolder(
 }
 
 
-function handleExpandSection(state: FoldersState, action: Action<SectionParams>): FoldersState {
+function handleExpandFolder(state: FoldersState, action: Action<FolderParams>): FoldersState {
   const folder = state.folders.find(folder => folder.id === action.params.folder.id) || null;
   if (folder === null) {
     return state;
@@ -238,7 +238,7 @@ function handleExpandSection(state: FoldersState, action: Action<SectionParams>)
   };
 }
 
-function handleCollapseSection(state: FoldersState, action: Action<SectionParams>): FoldersState {
+function handleCollapseFolder(state: FoldersState, action: Action<FolderParams>): FoldersState {
   const folder = state.folders.find(folder => folder.id === action.params.folder.id) || null;
   if (folder === null) {
     return state;

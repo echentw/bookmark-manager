@@ -5,8 +5,8 @@ import Scrollbars from 'react-custom-scrollbars';
 import { Folder } from 'Folder';
 import { AppState } from 'reduxStore';
 import { DraggableType } from 'components/AppComponent';
-import { SectionComponent } from 'components/SectionComponent';
-import { AddSectionButtonComponent } from 'components/AddSectionButtonComponent';
+import { FolderComponent } from 'components/FolderComponent';
+import { AddFolderButtonComponent } from 'components/AddFolderButtonComponent';
 
 interface Props {
   folders: Folder[];
@@ -17,16 +17,16 @@ interface Props {
   draggedFolderRank: number | null;
 }
 
-class SectionListComponent extends React.Component<Props> {
+class FolderListComponent extends React.Component<Props> {
   render() {
-    const sectionComponents = this.props.folders.map((folder: Folder, rank: number) => {
+    const folderComponents = this.props.folders.map((folder: Folder, rank: number) => {
       const deleting = folder.id === this.props.deletingFolderId;
       const editing = folder.id === this.props.editingFolderId;
       const dragging = (this.props.draggedType === DraggableType.Folder && rank === this.props.draggedFolderRank);
       const hovering = folder.id === this.props.hoverItemId;
       const draggable = !deleting && !editing;
       return (
-        <SectionComponent
+        <FolderComponent
           key={folder.id}
           folder={folder}
           editing={editing}
@@ -40,11 +40,11 @@ class SectionListComponent extends React.Component<Props> {
     });
 
     return (
-      <div className="section-list">
+      <div className="folder-list">
         <Scrollbars>
-          <div className="section-list-scrollable-area">
-            { sectionComponents }
-            <AddSectionButtonComponent/>
+          <div className="folder-list-scrollable-area">
+            { folderComponents }
+            <AddFolderButtonComponent/>
           </div>
         </Scrollbars>
       </div>
@@ -63,5 +63,5 @@ const mapStateToProps = (state: AppState, props: {}) => {
   };
 };
 
-const Component = connect(mapStateToProps)(SectionListComponent);
-export { Component as SectionListComponent };
+const Component = connect(mapStateToProps)(FolderListComponent);
+export { Component as FolderListComponent };
