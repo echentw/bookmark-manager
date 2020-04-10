@@ -2,47 +2,35 @@
 @import './mixins/misc';
 
 .date {
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
+  position: absolute;
+  bottom: 0;
+  right: 0;
 
   .date-text {
     @include unselectable;
 
-    margin-right: 50px;
-    margin-bottom: 50px;
+    margin-right: 10px;
+    margin-bottom: 10px;
 
     color: white;
     font-family: $font-family;
-    font-size: 24px;
+    font-size: 20px;
     text-align: center;
     text-shadow: 0 0 6px rgba(0, 0, 0, 0.2),
                  0 0 3px rgba(0, 0, 0, 0.3);
   }
 }
 
-// Medium screens
-@media (max-width: $medium-screen-max-width) {
-  .date {
-    justify-content: center;
-
-    .date-text {
-      margin-right: 0;
-    }
-  }
-}
-
 // Small screens
 @media (max-width: $small-screen-max-width) {
   .date {
+    width: 100%;
+    flex: 1;
     justify-content: center;
     align-items: center;
 
     .date-text {
-      margin: 0;
+      margin-right: 0;
     }
   }
 }

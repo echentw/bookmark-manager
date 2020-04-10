@@ -175,9 +175,7 @@ class AppComponent extends React.Component<Props, State> {
         <div className="app-greeting-container">
           <GreetingComponent user={this.props.user} date={this.state.date}/>
         </div>
-        <div className="app-date-container">
-          <DateComponent date={this.state.date}/>
-        </div>
+        <DateComponent date={this.state.date}/>
         { maybeDragLayer }
         { maybeAddBookmarksModal }
         { maybeSettingsModal }
