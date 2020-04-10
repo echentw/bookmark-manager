@@ -75,14 +75,14 @@ function handleIsOverBookmark(
       newBookmarkRank = action.params.bookmarkRank;
     }
   } else if (state.folderRank < action.params.folderRank) {
-    // We are moving the Bookmark from a Section above to a Section below.
+    // We are moving the Bookmark from a Folder above to a Folder below.
     if (action.params.bookmarkRank < targetFolder.bookmarks.length) {
       // Insert the dragged bookmark after the bookmark we're hovering over.
       newFolderRank = action.params.folderRank;
       newBookmarkRank = action.params.bookmarkRank + 1;
     }
   } else {
-    // We are moving the Bookmark from a Section below to a Section above.
+    // We are moving the Bookmark from a Folder below to a Folder above.
     if (action.params.bookmarkRank > -1) {
       // Insert the dragged bookmark before the bookmark we're hovering over.
       newFolderRank = action.params.folderRank;
