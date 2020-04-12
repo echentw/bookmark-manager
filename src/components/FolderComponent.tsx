@@ -198,6 +198,7 @@ class FolderComponent extends React.Component<InternalProps> {
         initialText={folder.name}
         save={this.saveEdit}
         cancel={this.cancelEdit}
+        placeholder={'Folder Name'}
       />
     ) : (
       <div className="folder-name">

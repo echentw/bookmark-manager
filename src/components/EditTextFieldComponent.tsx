@@ -5,6 +5,7 @@ interface Props {
   initialText: string;
   save: (text: string) => void;
   cancel: () => void;
+  placeholder?: string;
 }
 
 export class EditTextFieldComponent extends React.Component<Props> {
@@ -31,6 +32,7 @@ export class EditTextFieldComponent extends React.Component<Props> {
   }
 
   render() {
+    const placeholder = this.props.placeholder || '';
     return (
       <input
         className="edit-text-field"
@@ -39,6 +41,7 @@ export class EditTextFieldComponent extends React.Component<Props> {
         defaultValue={this.props.initialText}
         onChange={this.onChangeText}
         onKeyDown={this.onKeyDown}
+        placeholder={placeholder}
       />
     );
   }
