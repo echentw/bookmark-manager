@@ -1,0 +1,36 @@
+.close-button {
+  @include rect-box-shadow;
+
+  $radius: 20px;
+  $color: rgb(100, 100, 100);
+
+  position: absolute;
+  top: calc(-#{$radius} / 2);
+  right: calc(-#{$radius} / 2);
+
+  border-style: solid;
+  border-width: 2px;
+  border-color: $color;
+  border-radius: calc(#{$radius} / 2);
+
+  width: $radius;
+  height: $radius;
+  background-color: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .x-icon {
+    color: $color;
+  }
+
+  &:hover {
+    cursor: pointer;
+    $hover-color: rgb(80, 80, 80);
+    border-color: $hover-color;
+    .x-icon {
+      color: $hover-color;
+    }
+  }
+}

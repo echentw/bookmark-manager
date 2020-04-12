@@ -11,6 +11,8 @@
     @include rect-box-shadow;
     @include rect-border-radius;
 
+    position: relative;
+
     background-color: rgb(230, 230, 230);
 
     width: 500px;
@@ -272,5 +274,12 @@
         }
       }
     }
+  }
+
+  .close-button {
+    position: absolute;
+    $radius: 20px;
+    top: calc(-#{$radius} / 2);
+    right: calc(-#{$radius} / 2);
   }
 }

@@ -8,6 +8,7 @@ import { TabInfo } from 'ChromeHelpers';
 import * as AddBookmarksActions from 'actions/AddBookmarksActions';
 import { AddBookmarksSaveParams } from 'actions/AddBookmarksActions';
 import { ModalBackdropComponent } from 'components/ModalBackdropComponent';
+import { CloseButtonComponent } from 'components/CloseButtonComponent';
 
 interface ExternalProps {
   folder?: Folder;
@@ -98,6 +99,7 @@ class AddBookmarksModalComponent extends React.Component<Props, State> {
             Save
           </div>
         </div>
+        <CloseButtonComponent onClick={this.cancel}/>
       </div>
     );
 

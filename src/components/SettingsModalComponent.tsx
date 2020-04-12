@@ -10,6 +10,7 @@ import { ShowToastParams } from 'actions/CopyUrlActions';
 import * as SettingsActions from 'actions/SettingsActions';
 import { SetBackgroundImageParams } from 'actions/SettingsActions';
 import { ModalBackdropComponent } from 'components/ModalBackdropComponent';
+import { CloseButtonComponent } from 'components/CloseButtonComponent';
 
 interface Props {
   backgroundImageUrl: string;
@@ -276,6 +277,7 @@ class SettingsModalComponent extends React.Component<Props, State> {
         </div>
         <div className="horizontal-bar"/>
         { sectionComponent }
+        <CloseButtonComponent onClick={this.cancel}/>
       </div>
     );
 

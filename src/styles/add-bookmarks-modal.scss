@@ -13,6 +13,8 @@
     @include rect-box-shadow;
     background-color: white;
 
+    position: relative;
+
     width: 500px;
     max-height: calc(100% - 100px);
 
@@ -86,6 +88,13 @@
         @include unselectable;
         width: 224px;
       }
+    }
+
+    .close-button {
+      position: absolute;
+      $radius: 20px;
+      top: calc(-#{$radius} / 2);
+      right: calc(-#{$radius} / 2);
     }
   }
 }
