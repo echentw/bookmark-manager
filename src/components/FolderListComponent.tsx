@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import Scrollbars from 'react-custom-scrollbars';
 
 import { Folder } from 'Folder';
 import { AppState } from 'reduxStore';
@@ -41,12 +40,8 @@ class FolderListComponent extends React.Component<Props> {
 
     return (
       <div className="folder-list">
-        <Scrollbars>
-          <div className="folder-list-scrollable-area">
-            { folderComponents }
-            <AddFolderButtonComponent/>
-          </div>
-        </Scrollbars>
+        { folderComponents }
+        <AddFolderButtonComponent/>
       </div>
     );
   }

@@ -2,28 +2,18 @@
 @import './mixins/misc';
 
 .folder-list {
-  @include list;
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding-left: 8px;
+  padding-right: 8px;
 
-  width: 440px;
-  background-color: rgba(255, 255, 255, 0.5);
+  .add-folder-button {
+    @include list-button;
+    background-color: rgba(255, 255, 255, 0.65);
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.19), 0 4px 6px rgba(0, 0, 0, 0.23);
+    margin-bottom: 12px;
+    border: none;
 
-  .folder-list-scrollable-area {
-    @include list-scrollable-area;
-    padding-left: 8px;
-    padding-right: 8px;
-
-    .add-folder-button {
-      @include list-button;
-      background-color: rgba(255, 255, 255, 0.65);
-      box-shadow: 0 8px 8px rgba(0, 0, 0, 0.19), 0 4px 6px rgba(0, 0, 0, 0.23);
-      margin-bottom: 12px;
-      border: none;
-
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.9);
-      }
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.9);
     }
   }
 }

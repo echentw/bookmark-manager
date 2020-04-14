@@ -23,8 +23,8 @@ import { AddBookmarksModalComponent } from 'components/AddBookmarksModalComponen
 import { DateComponent } from 'components/DateComponent';
 import { NuxComponent } from 'components/NuxComponent';
 import { SettingsModalComponent } from 'components/SettingsModalComponent';
-import { FolderListComponent } from 'components/FolderListComponent';
 import { FolderComponent } from 'components/FolderComponent';
+import { UtilitiesPaneComponent } from 'components/UtilitiesPaneComponent';
 
 export enum DraggableType {
   Bookmark = 'bookmark',
@@ -166,11 +166,11 @@ class AppComponent extends React.Component<Props, State> {
     ) : null;
 
     const innerComponent = this.props.user === null ? (
-      <NuxComponent key="nux"/>
+      <NuxComponent/>
     ) : (
-      <div className="app" key="app">
-        <div className="app-list-container">
-          <FolderListComponent/>
+      <div className="app">
+        <div className="utilities-pane-container">
+          <UtilitiesPaneComponent/>
         </div>
         <div className="app-greeting-container">
           <GreetingComponent user={this.props.user} date={this.state.date}/>

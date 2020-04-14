@@ -1,0 +1,65 @@
+@import './globals';
+@import './mixins/misc';
+
+$pane-primary-color: rgba(255, 255, 255, 0.5);
+$pane-secondary-color: rgba(255, 255, 255, 0.3);
+$pane-tertiary-color: rgba(255, 255, 255, 0.35);
+
+.utilities-pane {
+  width: 440px;
+
+  @include rect-border-radius;
+  @include rect-subtle-box-shadow;
+
+  display: flex;
+  flex-direction: column;
+
+  .tabs {
+    display: flex;
+    flex-direction: row;
+
+    height: 24px;
+
+    .tab {
+      flex: 1;
+      border-radius: 4px 4px 0 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: default;
+      user-select: none;
+    }
+
+    .active-tab {
+      background-color: $pane-primary-color;
+      font-weight: 600;
+    }
+
+    .inactive-tab {
+      background-color: $pane-secondary-color;
+      &:hover {
+        background-color: $pane-tertiary-color;
+        cursor: pointer;
+      }
+    }
+
+    .bookmarks-tab {
+      @extend .tab;
+      @extend .active-tab;
+    }
+
+    .notes-tab {
+      @extend .tab;
+      @extend .inactive-tab;
+    }
+  }
+
+  .pane {
+    flex: 1;
+    background-color: $pane-primary-color;
+    border-radius: 0 0 4px 4px;
+
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+}
