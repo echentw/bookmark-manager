@@ -1,21 +1,11 @@
-import { Folder, FolderData } from 'Folder';
-import { User, UserData } from 'User';
+import { Folder, FolderJson } from 'Folder';
+import { User, UserJson } from 'User';
 import { Bookmark } from 'Bookmark';
+import { JsonState, mergeStates } from 'StateConverter';
 
-export interface ChromeAppState {
-  user: User | null;
-  folders: Folder[];
-  backgroundImageTimestamp: string;
-}
 
 export interface ChromeData {
-  appData: AppData;
-}
-
-export interface AppData {
-  user: UserData | null;
-  folders: FolderData[];
-  backgroundImageTimestamp: string | null;
+  appData: JsonState;
 }
 
 export interface TabInfo {
@@ -83,65 +73,64 @@ export class ChromeHelpers {
     });
   }
 
-  public static saveRawChromeAppState = (appState: ChromeAppState): Promise<{}> => {
+  public static save = async (jsonState: Partial<JsonState>): Promise<void> => {
     return new Promise((resolve, reject) => {
-      storageEngine.set({ [ChromeHelpers.Keys.AppData]: appState }, () => {
-        if (chrome.runtime.lastError) {
-          return reject(chrome.runtime.lastError);
-        }
-        resolve();
+      ChromeHelpers.load().then(storedJsonState => {
+        const mergedJsonState = mergeStates<JsonState>(storedJsonState, jsonState);
+        storageEngine.set({ [ChromeHelpers.Keys.AppData]: mergedJsonState }, () => {
+          if (chrome.runtime.lastError) {
+            return reject(chrome.runtime.lastError);
+          }
+          resolve();
+        });
       });
     });
   }
 
-  public static saveAppState = (appState: ChromeAppState): Promise<{}> => {
-    const appData = ChromeHelpers.toSerializedData(appState);
-    return new Promise((resolve, reject) => {
-      storageEngine.set({ [ChromeHelpers.Keys.AppData]: appData }, () => {
-        if (chrome.runtime.lastError) {
-          return reject(chrome.runtime.lastError);
-        }
-        resolve();
-      });
-    });
-  }
-
-  public static loadAppState = (): Promise<ChromeAppState> => {
+  public static load = (): Promise<JsonState> => {
     return new Promise((resolve, reject) => {
       storageEngine.get([ChromeHelpers.Keys.AppData], (result: ChromeData) => {
         if (chrome.runtime.lastError) {
           return reject(chrome.runtime.lastError);
         }
-        if (result.appData) {
-          const appState = ChromeHelpers.toDeserializedState(result.appData);
-          return resolve(appState);
-        } else {
-          const appState = ChromeHelpers.getCleanInitialState();
-          return resolve(appState);
-        }
+        const jsonState = result.appData || ChromeHelpers.freshJsonState();
+        return resolve(jsonState);
       });
     });
   }
 
-  public static addOnChangedListener = (receive: (appState: ChromeAppState) => void): void => {
-    chrome.storage.onChanged.addListener((
-      changes: { [key: string]: chrome.storage.StorageChange },
-      areaName: string,
-    ) => {
-      if (chrome.runtime.lastError) {
-        return;
+  public static addOnChangedListener = (receive: (jsonState: JsonState) => void): void => {
+    chrome.storage.onChanged.addListener(
+      (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
+        if (chrome.runtime.lastError) {
+          return;
+        }
+        if (areaName === 'local' && changes[ChromeHelpers.Keys.AppData]) {
+          const change: chrome.storage.StorageChange = changes[ChromeHelpers.Keys.AppData];
+          const jsonState: JsonState = change.newValue;
+          receive(jsonState);
+        }
       }
-      if (areaName === 'local' && changes[ChromeHelpers.Keys.AppData]) {
-        const change: chrome.storage.StorageChange = changes[ChromeHelpers.Keys.AppData];
-        const appData: AppData = change.newValue;
-        const appState = ChromeHelpers.toDeserializedState(appData);
-        receive({
-          user: appState.user,
-          folders: appState.folders,
-          backgroundImageTimestamp: appState.backgroundImageTimestamp,
-        });
-      }
+    );
+  }
+
+  private static freshJsonState = (): JsonState => {
+    const firstFolder = new Folder({
+      name: 'My First Folder',
+      bookmarks: [
+        new Bookmark({
+          url: 'https://www.google.com/',
+          title: 'Google',
+          faviconUrl: 'https://www.google.com/favicon.ico',
+          name: 'My First Bookmark',
+        }),
+      ],
     });
+    return {
+      user: null,
+      folders: [firstFolder.toJson()],
+      backgroundImageTimestamp: '',
+    };
   }
 
   public static printStorageDetails = () => {
@@ -151,54 +140,5 @@ export class ChromeHelpers {
     storageEngine.get([ChromeHelpers.Keys.AppData], result => {
       console.log('data', result);
     });
-  }
-
-  private static toSerializedData = (chromeAppState: ChromeAppState): AppData => {
-    const { user, folders, backgroundImageTimestamp } = chromeAppState;
-
-    const userData: UserData | null = user === null ? null : user.toData();
-    const folderDatas: FolderData[] = folders.map(folder => folder.toData());
-
-    return {
-      user: userData,
-      folders: folderDatas,
-      backgroundImageTimestamp: backgroundImageTimestamp,
-    };
-  }
-
-  private static toDeserializedState = (appData: AppData): ChromeAppState => {
-    const {
-      user: userData,
-      folders: folderDatas,
-      backgroundImageTimestamp: backgroundImageTimestampData,
-    } = appData;
-
-    const user: User | null = userData === null ? null : User.fromData(userData);
-    const folders: Folder[] = folderDatas.map(data => Folder.fromData(data));
-    const backgroundImageTimestamp: string = backgroundImageTimestampData ? backgroundImageTimestampData : '';
-
-    return {
-      user: user,
-      folders: folders,
-      backgroundImageTimestamp: backgroundImageTimestamp,
-    };
-  }
-
-  private static getCleanInitialState = (): ChromeAppState => {
-    const firstBookmark = new Bookmark({
-      url: 'https://www.google.com/',
-      title: 'Google',
-      faviconUrl: 'https://www.google.com/favicon.ico',
-      name: 'My First Bookmark',
-    });
-    const firstFolder = new Folder({
-      name: 'My First Folder',
-      bookmarks: [firstBookmark],
-    });
-    return {
-      user: null,
-      folders: [firstFolder],
-      backgroundImageTimestamp: '',
-    };
   }
 }

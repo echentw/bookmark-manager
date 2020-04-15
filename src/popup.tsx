@@ -7,7 +7,8 @@ import Select from 'react-select';
 import { withItemReplaced, withItemDeleted } from 'utils';
 import { Bookmark } from 'Bookmark';
 import { Folder } from 'Folder';
-import { ChromeAppState, ChromeHelpers, TabInfo } from 'ChromeHelpers';
+import { ChromeHelpers, TabInfo } from 'ChromeHelpers';
+import { StateConverter, JsonState, AppStateLoadPartial, mergeStates } from 'StateConverter';
 
 interface FoundBookmarkInFoldersData {
   found: boolean;
@@ -59,7 +60,7 @@ interface FoundBookmarkInFolderData {
   index: number | null;
 }
 
-function findBookmarkInFolder(url: string, folder: Folder) {
+function findBookmarkInFolder(url: string, folder: Folder): FoundBookmarkInFolderData {
   for (let i = 0; i < folder.bookmarks.length; ++i) {
     const bookmark = folder.bookmarks[i];
     if (bookmark.url === url) {
@@ -75,34 +76,37 @@ function findBookmarkInFolder(url: string, folder: Folder) {
   };
 }
 
-function addBookmark(state: ChromeAppState, bookmark: Bookmark, folder: Folder): ChromeAppState {
+function addBookmark(state: AppStateLoadPartial, bookmark: Bookmark, folder: Folder): AppStateLoadPartial {
   const newBookmarks = folder.bookmarks.concat([bookmark]);
   const newFolder = folder.withBookmarks(newBookmarks);
-  const newFolders = withItemReplaced<Folder>(state.folders, newFolder);
-  return {
-    ...state,
-    folders: newFolders,
-  };
+  const newFolders = withItemReplaced<Folder>(state.foldersState.folders, newFolder);
+  return mergeStates(state, {
+    foldersState: {
+      folders: newFolders,
+    },
+  });
 }
 
-function editBookmark(state: ChromeAppState, bookmark: Bookmark, folder: Folder): ChromeAppState {
+function editBookmark(state: AppStateLoadPartial, bookmark: Bookmark, folder: Folder): AppStateLoadPartial {
   const newBookmarks = withItemReplaced<Bookmark>(folder.bookmarks, bookmark);
   const newFolder = folder.withBookmarks(newBookmarks);
-  const newFolders = withItemReplaced<Folder>(state.folders, newFolder);
-  return {
-    ...state,
-    folders: newFolders,
-  };
+  const newFolders = withItemReplaced<Folder>(state.foldersState.folders, newFolder);
+  return mergeStates(state, {
+    foldersState: {
+      folders: newFolders,
+    },
+  });
 }
 
-function deleteBookmark(state: ChromeAppState, bookmark: Bookmark, folder: Folder): ChromeAppState {
+function deleteBookmark(state: AppStateLoadPartial, bookmark: Bookmark, folder: Folder): AppStateLoadPartial {
   const newBookmarks = withItemDeleted<Bookmark>(folder.bookmarks, bookmark);
   const newFolder = folder.withBookmarks(newBookmarks);
-  const newFolders = withItemReplaced<Folder>(state.folders, newFolder);
-  return {
-    ...state,
-    folders: newFolders,
-  };
+  const newFolders = withItemReplaced<Folder>(state.foldersState.folders, newFolder);
+  return mergeStates(state, {
+    foldersState: {
+      folders: newFolders,
+    },
+  });
 }
 
 interface SelectOption {
@@ -114,7 +118,7 @@ interface State {
   loaded: boolean;
   bookmarkName: string;
   bookmark: Bookmark | null;
-  appState: ChromeAppState | null;
+  appState: AppStateLoadPartial | null;
   selectedFolder: Folder | null;
 
   // Whether the currently selected folder contains the current tab's url.
@@ -137,15 +141,16 @@ class AppComponent extends React.Component<{}, State> {
   };
 
   componentDidMount = async () => {
-    const [tabInfo, state]: [TabInfo, ChromeAppState] = await Promise.all([
+    const [tabInfo, jsonState]: [TabInfo, JsonState] = await Promise.all([
       ChromeHelpers.getCurrentActiveTab(),
-      ChromeHelpers.loadAppState(),
+      ChromeHelpers.load(),
     ]);
+    const state: AppStateLoadPartial = StateConverter.jsonStateToAppStateLoadPartial(jsonState);
 
     // Find the first expanded folder.
-    let activeFolder = state.folders.find(folder => !folder.collapsed);
+    let activeFolder = state.foldersState.folders.find(folder => !folder.collapsed);
     if (activeFolder === undefined) {
-      activeFolder = state.folders[0];
+      activeFolder = state.foldersState.folders[0];
     }
 
     let selectedFolder: Folder | null = null;
@@ -153,11 +158,11 @@ class AppComponent extends React.Component<{}, State> {
     let alreadyBookmarked = false;
 
     // Check if the bookmark has already been saved. Find the first match.
-    const foundData: FoundBookmarkInFoldersData = findBookmarkInFolders(tabInfo.url, activeFolder, state.folders);
+    const foundData = findBookmarkInFolders(tabInfo.url, activeFolder, state.foldersState.folders);
 
     if (foundData.found) {
       const { folderIndex, bookmarkIndex } = foundData;
-      selectedFolder = state.folders[folderIndex];
+      selectedFolder = state.foldersState.folders[folderIndex];
       bookmark = selectedFolder.bookmarks[bookmarkIndex];
       alreadyBookmarked = true;
     } else {
@@ -185,7 +190,7 @@ class AppComponent extends React.Component<{}, State> {
   }
 
   onChangeSelect = (option: SelectOption) => {
-    const folder = this.state.appState.folders.find(folder => folder.id === option.value);
+    const folder = this.state.appState.foldersState.folders.find(folder => folder.id === option.value);
     if (folder !== undefined) {
       const foundData: FoundBookmarkInFolderData = findBookmarkInFolder(this.state.bookmark.url, folder);
       if (foundData.found) {
@@ -228,7 +233,8 @@ class AppComponent extends React.Component<{}, State> {
   onClickRemove = async () => {
     if (this.state.alreadyBookmarked) {
       const newAppState = deleteBookmark(this.state.appState, this.state.bookmark, this.state.selectedFolder);
-      await ChromeHelpers.saveRawChromeAppState(newAppState);
+      const jsonState = StateConverter.appStateLoadPartialToJsonState(newAppState);
+      await ChromeHelpers.save(jsonState);
       window.close();
     }
   }
@@ -242,7 +248,8 @@ class AppComponent extends React.Component<{}, State> {
         addBookmark(this.state.appState, newBookmark, this.state.selectedFolder)
       );
       try {
-        await ChromeHelpers.saveRawChromeAppState(newAppState);
+        const jsonState = StateConverter.appStateLoadPartialToJsonState(newAppState);
+        await ChromeHelpers.save(jsonState);
       } catch (e) {
         if (e.message.startsWith('QUOTA_BYTES')) {
           alert('Not enough storage space left! Consider deleting some folders/bookmarks to make room for new bookmarks.');
@@ -259,7 +266,7 @@ class AppComponent extends React.Component<{}, State> {
     let selectedOption: SelectOption | null = null;
 
     if (this.state.loaded) {
-      options = this.state.appState.folders.map(folder => ({
+      options = this.state.appState.foldersState.folders.map(folder => ({
         value: folder.id,
         label: folder.name,
       }));

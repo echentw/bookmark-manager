@@ -3,9 +3,9 @@
 
 import { AppState } from 'reduxStore';
 import { LocalStorageHelpers } from 'LocalStorageHelpers';
-import { HollowAppState, StateBridge } from 'StateBridge';
+import { StateConverter, mergeStates, AppStateSyncPartial } from 'StateConverter';
 import { Action, SyncActionType as ActionType } from 'actions/constants';
-import { LoadParams } from 'actions/SyncActions';
+import { LoadParams, SyncParams } from 'actions/SyncActions';
 
 export const syncReducer = (state: AppState, action: Action): AppState => {
   let newState = state;
@@ -14,43 +14,44 @@ export const syncReducer = (state: AppState, action: Action): AppState => {
       newState = handleLoad(state, action as Action<LoadParams>);
       break;
     case ActionType.sync:
-      newState = handleSync(state, action as Action<LoadParams>);
+      newState = handleSync(state, action as Action<SyncParams>);
       break;
   }
   return newState;
 };
 
 function handleLoad(state: AppState, action: Action<LoadParams>): AppState {
-  const hollowState: HollowAppState = StateBridge.toHollowAppState(action.params);
+  const appStateLoadPartial = StateConverter.jsonStateToAppStateLoadPartial(action.params.state);
   const backgroundImageUrl = _loadBackgroundImageUrl();
-  return {
-    ...state,
-    ...hollowState,
+
+  const merged1 = mergeStates<AppState>(state, appStateLoadPartial);
+  const merged2 = mergeStates<AppState>(merged1, {
     settingsState: {
-      ...state.settingsState,
-      ...hollowState.settingsState,
       backgroundImageUrl: backgroundImageUrl,
     },
-  };
+    loadedState: {
+      loaded: true,
+    },
+  });
+  return merged2;
 }
 
-function handleSync(state: AppState, action: Action<LoadParams>): AppState {
-  const hollowState: HollowAppState = StateBridge.toHollowAppState(action.params);
-  const backgroundImageUrl: string = _getBackgroundImageUrl(state, hollowState);
-  return {
-    ...state,
-    ...hollowState,
+function handleSync(state: AppState, action: Action<SyncParams>): AppState {
+  const appStateSyncPartial = StateConverter.jsonStateSyncPartialToAppStateSyncPartial(action.params.state);
+  const backgroundImageUrl: string = _getBackgroundImageUrl(state, appStateSyncPartial);
+
+  const merged1 = mergeStates<AppState>(state, appStateSyncPartial);
+  const merged2 = mergeStates<AppState>(merged1, {
     settingsState: {
-      ...state.settingsState,
-      ...hollowState.settingsState,
       backgroundImageUrl: backgroundImageUrl,
     },
-  };
+  });
+  return merged2;
 }
 
-function _getBackgroundImageUrl(state: AppState, loadedState: HollowAppState): string {
+function _getBackgroundImageUrl(state: AppState, syncedState: AppStateSyncPartial): string {
   let imageUrl: string;
-  if (state.settingsState.backgroundImageTimestamp === loadedState.settingsState.backgroundImageTimestamp) {
+  if (state.settingsState.backgroundImageTimestamp === syncedState.settingsState.backgroundImageTimestamp) {
     imageUrl = state.settingsState.backgroundImageUrl;
   } else {
     imageUrl = _loadBackgroundImageUrl();

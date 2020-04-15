@@ -1,10 +1,10 @@
-import { Bookmark, BookmarkData } from 'Bookmark';
+import { Bookmark, BookmarkJson } from 'Bookmark';
 import { randomId } from 'utils';
 
-export interface FolderData {
+export interface FolderJson {
   id: string;
   name: string;
-  bookmarks: BookmarkData[];
+  bookmarks: BookmarkJson[];
   collapsed: boolean;
 }
 
@@ -77,22 +77,22 @@ export class Folder {
     });
   }
 
-  public static fromData = (data: FolderData): Folder => {
-    const bookmarks = data.bookmarks.map(bookmarkData => Bookmark.fromData(bookmarkData));
+  public static fromJson = (json: FolderJson): Folder => {
+    const bookmarks = json.bookmarks.map(bookmarkJson => Bookmark.fromJson(bookmarkJson));
     return new Folder({
-      id: data.id,
-      name: data.name,
+      id: json.id,
+      name: json.name,
       bookmarks: bookmarks,
-      collapsed: data.collapsed === undefined ? true : data.collapsed,
+      collapsed: json.collapsed === undefined ? true : json.collapsed,
     });
   }
 
-  public toData = (): FolderData => {
-    const bookmarkDatas = this.bookmarks.map(bookmark => bookmark.toData());
+  public toJson = (): FolderJson => {
+    const bookmarkJsons = this.bookmarks.map(bookmark => bookmark.toJson());
     return {
       id: this.id,
       name: this.name,
-      bookmarks: bookmarkDatas,
+      bookmarks: bookmarkJsons,
       collapsed: this.collapsed,
     };
   }

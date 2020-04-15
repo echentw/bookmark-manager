@@ -69,3 +69,8 @@ export const SyncActionType = {
   load: 'Sync:load',
   sync: 'Sync:sync',
 };
+
+export const UtilitiesActionType = {
+  selectBookmarksTab: 'Utilities:selectBookmarksTab',
+  selectNotesTab: 'Utilities:selectNotesTab',
+};

@@ -1,4 +1,4 @@
-export interface UserData {
+export interface UserJson {
   name: string;
 }
 
@@ -24,11 +24,11 @@ export class User {
     return new User({ name: this.name });
   }
 
-  public static fromData = (data: UserData): User => {
-    return new User({ name: data.name });
+  public static fromJson = (json: UserJson): User => {
+    return new User(json);
   }
 
-  public toData = (): UserData => {
+  public toJson = (): UserJson => {
     return { name: this.name };
   }
 }

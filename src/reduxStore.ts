@@ -2,7 +2,6 @@ import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 
 import { Action } from 'actions/constants';
-import { HollowAppState } from 'stateBridge';
 
 import { addBookmarksReducer, AddBookmarksState, initialAddBookmarksState } from 'reducers/AddBookmarksReducer';
 import { copyUrlReducer, CopyUrlState, initialCopyUrlState } from 'reducers/CopyUrlReducer';
@@ -15,6 +14,7 @@ import { hoverReducer, HoverState, initialHoverState } from 'reducers/HoverReduc
 import { initialLoadedState, loadedReducer, LoadedState } from 'reducers/LoadedReducer';
 import { initialSettingsState, settingsReducer, SettingsState } from 'reducers/SettingsReducer';
 import { initialUserState, userReducer, UserState } from 'reducers/UserReducer';
+import { initialUtilitiesState, utilitiesReducer, UtilitiesState } from 'reducers/UtilitiesReducer';
 
 import { syncReducer } from 'reducers/SyncReducer';
 
@@ -24,7 +24,7 @@ declare global {
   }
 }
 
-export interface AppState extends HollowAppState {
+export interface AppState {
   addBookmarksState: AddBookmarksState;
   copyUrlState: CopyUrlState;
   deleteFolderState: DeleteFolderState;
@@ -36,6 +36,7 @@ export interface AppState extends HollowAppState {
   loadedState: LoadedState;
   settingsState: SettingsState;
   userState: UserState;
+  utilitiesState: UtilitiesState;
 }
 
 const initialAppState: AppState = {
@@ -50,6 +51,7 @@ const initialAppState: AppState = {
   loadedState: initialLoadedState,
   settingsState: initialSettingsState,
   userState: initialUserState,
+  utilitiesState: initialUtilitiesState,
 };
 
 const reducer = (state: AppState = initialAppState, action: Action): AppState => {
@@ -65,6 +67,7 @@ const reducer = (state: AppState = initialAppState, action: Action): AppState =>
     loadedState: loadedReducer(state.loadedState, action, state),
     settingsState: settingsReducer(state.settingsState, action, state),
     userState: userReducer(state.userState, action, state),
+    utilitiesState: utilitiesReducer(state.utilitiesState, action, state),
   };
   const syncedState: AppState = syncReducer(newState, action);
   return syncedState;

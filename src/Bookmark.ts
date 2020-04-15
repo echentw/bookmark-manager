@@ -2,7 +2,7 @@ import { randomId } from 'utils';
 
 export const defaultFaviconUrl = 'assets/world_favicon.ico';
 
-export interface BookmarkData {
+export interface BookmarkJson {
   id: string;
   url: string;
   faviconUrl: string;
@@ -65,11 +65,11 @@ export class Bookmark {
     );
   }
 
-  public static fromData = (data: BookmarkData): Bookmark => {
-    return new Bookmark(data);
+  public static fromJson = (json: BookmarkJson): Bookmark => {
+    return new Bookmark(json);
   }
 
-  public toData = (): BookmarkData => {
+  public toJson = (): BookmarkJson => {
     return {
       id: this.id,
       url: this.url,

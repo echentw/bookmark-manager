@@ -1,7 +1,13 @@
-import { ChromeAppState } from 'ChromeHelpers';
 import { Action, SyncActionType as ActionType } from 'actions/constants';
+import { JsonState, JsonStateSyncPartial } from 'StateConverter';
 
-export interface LoadParams extends ChromeAppState {}
+export interface LoadParams {
+  state: JsonState;
+}
+
+export interface SyncParams {
+  state: JsonStateSyncPartial;
+}
 
 export function load(params: LoadParams): Action<LoadParams> {
   return {
@@ -10,7 +16,7 @@ export function load(params: LoadParams): Action<LoadParams> {
   };
 }
 
-export function sync(params: LoadParams): Action<LoadParams> {
+export function sync(params: SyncParams): Action<SyncParams> {
   return {
     type: ActionType.sync,
     params: params,

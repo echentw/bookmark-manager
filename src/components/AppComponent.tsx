@@ -6,14 +6,15 @@ import { CSSTransitionGroup } from 'react-transition-group';
 import { Bookmark } from 'Bookmark';
 import { Folder } from 'Folder';
 import { User } from 'User';
-import { ChromeAppState, ChromeHelpers } from 'ChromeHelpers';
-import { StateBridge } from 'StateBridge';
-import { StateDiffer } from 'StateDiffer';
+import { ChromeHelpers } from 'ChromeHelpers';
 import * as SyncActions from 'actions/SyncActions';
-import { LoadParams } from 'actions/SyncActions';
+import { LoadParams, SyncParams } from 'actions/SyncActions';
 import { AppState, reduxStore } from 'reduxStore';
 import { DragState } from 'reducers/DragReducer';
 import { Action } from 'actions/constants';
+
+import { StateManager } from 'StateManager';
+import { StateConverter, JsonState } from 'StateConverter';
 
 import { BookmarkComponent } from 'components/BookmarkComponent';
 import { GreetingComponent } from 'components/GreetingComponent';
@@ -40,7 +41,7 @@ interface Props {
   showAddBookmarksModal: boolean;
   showSettingsModal: boolean;
   loadAppState: (params: LoadParams) => void;
-  syncAppState: (params: LoadParams) => void;
+  syncAppState: (params: SyncParams) => void;
 }
 
 interface State {
@@ -54,7 +55,7 @@ class AppComponent extends React.Component<Props, State> {
     backgroundImageLoaded: true,
   };
 
-  private stateDiffer: StateDiffer = new StateDiffer();
+  private stateManager: StateManager = new StateManager();
 
   componentDidMount = () => {
     this.beginSyncingDate();
@@ -90,11 +91,10 @@ class AppComponent extends React.Component<Props, State> {
         return;
       }
 
-      const chromeAppState = StateBridge.toPersistedState(state);
-
-      if (this.stateDiffer.shouldPersistState(chromeAppState)) {
+      const maybeJsonPartialState: Partial<JsonState> = this.stateManager.maybeGetStateToPersist(state);
+      if (maybeJsonPartialState !== null) {
         try {
-          await ChromeHelpers.saveAppState(chromeAppState);
+          await ChromeHelpers.save(maybeJsonPartialState);
         } catch(e) {
           if (e.message.startsWith('QUOTA_BYTES')) {
             alert('Not enough storage space left! Please refresh this page, and consider deleting some folders/bookmarks to make room.');
@@ -104,17 +104,18 @@ class AppComponent extends React.Component<Props, State> {
         }
       }
 
-      this.stateDiffer.update(chromeAppState);
+      this.stateManager.update(state);
     });
 
     // When the persisted state changes, we want to update the current react state.
-    ChromeHelpers.addOnChangedListener((appState: ChromeAppState) => {
-      this.props.syncAppState(appState);
+    ChromeHelpers.addOnChangedListener((jsonState: JsonState) => {
+      const partialState = StateConverter.jsonStateToJsonStateSyncPartial(jsonState);
+      this.props.syncAppState({ state: partialState });
     });
 
     // Do the initial load of state.
-    const loadedState: ChromeAppState = await ChromeHelpers.loadAppState();
-    this.props.loadAppState(loadedState);
+    const loadedState: JsonState = await ChromeHelpers.load();
+    this.props.loadAppState({ state: loadedState });
   }
 
   render() {
