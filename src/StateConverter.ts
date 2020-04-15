@@ -3,6 +3,7 @@ import * as merge from 'deepmerge';
 import { AppState } from 'reduxStore';
 import { User, UserJson } from 'User';
 import { Folder, FolderJson } from 'Folder';
+import { UtilityTab } from 'reducers/UtilitiesReducer';
 
 
 type RecursivePartial<T> = {
@@ -33,6 +34,7 @@ export type JsonState = {
   user: UserJson | null;
   folders: FolderJson[];
   backgroundImageTimestamp?: string;
+  activeUtilityTab?: string;
 }
 
 type UserJsonPick = Pick<JsonState, 'user'>
@@ -44,9 +46,10 @@ export type JsonStateSyncPartial = UserJsonPick & FoldersJsonPick & SettingsJson
 type UserPick = Pick2<AppState, 'userState', 'user'>
 type FoldersPick = Pick2<AppState, 'foldersState', 'folders'>
 type SettingsPick = Pick2<AppState, 'settingsState', 'backgroundImageTimestamp'>
+type ActiveUtilityTabPick = Pick2<AppState, 'utilitiesState', 'activeTab'>
 
 export type AppStateSyncPartial = UserPick & FoldersPick & SettingsPick;
-export type AppStateLoadPartial = AppStateSyncPartial;
+export type AppStateLoadPartial = AppStateSyncPartial & ActiveUtilityTabPick;
 
 export class StateConverter {
 
@@ -63,6 +66,7 @@ export class StateConverter {
     const { user } = appState.userState;
     const { folders } = appState.foldersState;
     const { backgroundImageTimestamp } = appState.settingsState;
+    const { activeTab: activeUtilityTab } = appState.utilitiesState;
 
     const userJson: UserJson | null = user === null ? null : user.toJson();
     const folderJsons: FolderJson[] = folders.map(folder => folder.toJson());
@@ -71,6 +75,7 @@ export class StateConverter {
       user: userJson,
       folders: folderJsons,
       backgroundImageTimestamp: backgroundImageTimestamp,
+      activeUtilityTab: activeUtilityTab,
     };
   }
 
@@ -79,9 +84,7 @@ export class StateConverter {
     return { user, folders, backgroundImageTimestamp };
   }
 
-  public static jsonStateSyncPartialToAppStateSyncPartial = (
-    jsonStateSyncPartial: JsonStateSyncPartial
-  ): AppStateSyncPartial => {
+  public static jsonStateSyncPartialToAppStateSyncPartial = (jsonStateSyncPartial: JsonStateSyncPartial): AppStateSyncPartial => {
     const {
       user: userJson,
       folders: folderJsons,
@@ -93,23 +96,33 @@ export class StateConverter {
     const backgroundImageTimestamp: string = maybeBackgroundImageTimestamp || '';
 
     return {
-      userState: {
-        user: user,
-      },
-      foldersState: {
-        folders: folders,
-      },
-      settingsState: {
-        backgroundImageTimestamp: backgroundImageTimestamp,
-      },
+      userState: { user },
+      foldersState: { folders },
+      settingsState: { backgroundImageTimestamp },
+    };
+  }
+
+  private static appStateLoadPartialToAppStateSyncPartial = (appStateLoadPartial: AppStateLoadPartial): AppStateSyncPartial => {
+    const { user } = appStateLoadPartial.userState;
+    const { folders } = appStateLoadPartial.foldersState;
+    const { backgroundImageTimestamp } = appStateLoadPartial.settingsState;
+
+    return {
+      userState: { user },
+      foldersState: { folders },
+      settingsState: { backgroundImageTimestamp },
     };
   }
 
   public static jsonStateToAppStateLoadPartial = (jsonState: JsonState): AppStateLoadPartial => {
     const syncPartial = StateConverter.jsonStateSyncPartialToAppStateSyncPartial(jsonState);
 
-    // TODO: expand sync partial
+    const { activeUtilityTab: maybeActiveTabString } = jsonState;
+    const activeTab = UtilityTab.create(maybeActiveTabString);
 
-    return syncPartial;
+    return {
+      ...syncPartial,
+      utilitiesState: { activeTab },
+    }
   }
 }

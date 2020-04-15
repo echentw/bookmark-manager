@@ -69,7 +69,9 @@ export class StateManager {
   }
 
   private loadOnlyPropertiesAreSame = (state1: AppState, state2: AppState): boolean => {
-    return true;
+    return (
+      this.activeTabsAreSame(state1, state2)
+    );
   }
 
   private usersAreSame = (state1: AppState, state2: AppState): boolean => {
@@ -96,5 +98,11 @@ export class StateManager {
     const backgroundImageTimestamp1 = state1.settingsState.backgroundImageTimestamp;
     const backgroundImageTimestamp2 = state2.settingsState.backgroundImageTimestamp;
     return backgroundImageTimestamp1 === backgroundImageTimestamp2;
+  }
+
+  private activeTabsAreSame = (state1: AppState, state2: AppState): boolean => {
+    const activeTab1 = state1.utilitiesState.activeTab;
+    const activeTab2 = state2.utilitiesState.activeTab;
+    return activeTab1 === activeTab2;
   }
 }

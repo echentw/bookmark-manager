@@ -3,8 +3,18 @@ import { AppState } from 'reduxStore';
 import { Reducer } from 'reducers/Reducer';
 
 export enum UtilityTab {
-  Bookmarks,
-  Notes,
+  Bookmarks = 'bookmarks',
+  Notes = 'notes',
+}
+
+export namespace UtilityTab {
+  export const create = (maybeStr: string | undefined): UtilityTab => {
+    switch (maybeStr) {
+      case UtilityTab.Bookmarks: return UtilityTab.Bookmarks;
+      case UtilityTab.Notes: return UtilityTab.Notes;
+      default: return UtilityTab.Bookmarks;
+    }
+  };
 }
 
 export interface UtilitiesState {
