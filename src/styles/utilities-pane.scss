@@ -45,12 +45,10 @@ $pane-tertiary-color: rgba(255, 255, 255, 0.35);
 
     .bookmarks-tab {
       @extend .tab;
-      @extend .active-tab;
     }
 
     .notes-tab {
       @extend .tab;
-      @extend .inactive-tab;
     }
   }
 

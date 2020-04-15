@@ -2,17 +2,17 @@ import { Action, UtilitiesActionType as ActionType } from 'actions/constants';
 import { AppState } from 'reduxStore';
 import { Reducer } from 'reducers/Reducer';
 
-enum Tab {
+export enum UtilityTab {
   Bookmarks,
   Notes,
 }
 
 export interface UtilitiesState {
-  activeTab: Tab;
+  activeTab: UtilityTab;
 }
 
 export const initialUtilitiesState = {
-  activeTab: Tab.Bookmarks,
+  activeTab: UtilityTab.Bookmarks,
 };
 
 export const utilitiesReducer: Reducer<UtilitiesState> = (
@@ -24,12 +24,14 @@ export const utilitiesReducer: Reducer<UtilitiesState> = (
   switch (action.type) {
     case ActionType.selectBookmarksTab:
       newState = {
-        activeTab: Tab.Bookmarks,
+        activeTab: UtilityTab.Bookmarks,
       };
+      break;
     case ActionType.selectNotesTab:
       newState = {
-        activeTab: Tab.Notes,
+        activeTab: UtilityTab.Notes,
       };
+      break;
   }
   return newState;
 }
