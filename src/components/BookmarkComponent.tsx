@@ -15,11 +15,7 @@ interface ExternalProps {
   editing: boolean;
   dragging: boolean;
   hovering: boolean;
-
   isDragPreview?: boolean;
-
-  // This just gets passed down to HoverableContainerComponent
-  rank: number;
 }
 
 interface InternalProps extends ExternalProps {

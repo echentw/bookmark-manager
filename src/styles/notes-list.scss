@@ -1,0 +1,88 @@
+@import './mixins/misc';
+@import './mixins/list';
+
+.notes-list {
+  @include rect-border-radius;
+
+  min-height: calc(100% - 6px);
+  margin-top: 3px;
+  margin-bottom: 3px;
+
+  margin-left: 8px;
+  margin-right: 8px;
+
+  background-color: rgba(255, 255, 255, 0.65);
+
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.19), 0 0 2px rgba(0, 0, 0, 0.23);
+
+  padding: 4px;
+
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-auto-rows: 84px;
+
+  .note-container {
+    padding: 4px;
+
+    .note {
+      @include list-item;
+      @include unselectable;
+
+      padding: 6px;
+      height: 100%;
+
+      flex-direction: column;
+      align-items: stretch;
+
+      &:hover {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.19), 0 4px 6px rgba(0, 0, 0, 0.23);
+        transition: box-shadow 0.2s ease-in-out;
+        cursor: pointer;
+      }
+
+      .note-name-and-buttons-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        height: 30px;
+
+        .note-name {
+          @include list-title;
+          font-size: 16px;
+        }
+
+        .note-buttons-container {
+          @include list-item-buttons-container;
+          cursor: default;
+
+          .note-button {
+            margin-left: 4px;
+          }
+        }
+      }
+
+      .note-preview-text {
+        color: rgb(150, 150, 150);
+
+        .note-preview-text-line {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+
+    .add-note-button {
+      @include rect-border;
+      @include rect-border-radius;
+
+      background-color: rgba(0, 0, 0, 0.1);
+      height: 100%;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+      }
+    }
+  }
+}

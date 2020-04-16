@@ -180,7 +180,6 @@ class FolderComponent extends React.Component<InternalProps> {
               editing={editing}
               dragging={dragging}
               hovering={hovering}
-              rank={rank}
             />
           </DragSourceContainerComponent>
         </DropTargetContainerComponent>
