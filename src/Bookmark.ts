@@ -24,11 +24,11 @@ export class Bookmark {
     title: string,
     name?: string,
   }) {
-    this.id = id || randomId();
+    this.id = id ?? randomId();
     this.url = url;
-    this.faviconUrl = faviconUrl || defaultFaviconUrl;
+    this.faviconUrl = faviconUrl ?? defaultFaviconUrl;
     this.title = title;
-    this.name = name || '';
+    this.name = name ?? '';
   }
 
   public displayName = (): string => {

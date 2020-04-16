@@ -93,7 +93,7 @@ export class ChromeHelpers {
         if (chrome.runtime.lastError) {
           return reject(chrome.runtime.lastError);
         }
-        const jsonState = result.appData || ChromeHelpers.freshJsonState();
+        const jsonState = result.appData ?? ChromeHelpers.freshJsonState();
         return resolve(jsonState);
       });
     });

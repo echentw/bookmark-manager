@@ -93,7 +93,7 @@ export class StateConverter {
 
     const user: User | null = userJson === null ? null : User.fromJson(userJson);
     const folders: Folder[] = folderJsons.map(json => Folder.fromJson(json));
-    const backgroundImageTimestamp: string = maybeBackgroundImageTimestamp || '';
+    const backgroundImageTimestamp: string = maybeBackgroundImageTimestamp ?? '';
 
     return {
       userState: { user },

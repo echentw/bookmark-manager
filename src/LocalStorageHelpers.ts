@@ -88,7 +88,7 @@ export class LocalStorageHelpers {
     localStorage.setItem(LocalStorageHelpers.Keys.backgroundImageKey, '');
   }
 
-  public static getBackgroundImageUrl = (): string => {
+  public static getBackgroundImageUrl = (): string | null => {
     return localStorage.getItem(LocalStorageHelpers.Keys.backgroundImageKey);
   }
 

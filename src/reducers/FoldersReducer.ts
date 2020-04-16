@@ -227,7 +227,7 @@ function handleDragIsOverFolder(
 
 
 function handleExpandFolder(state: FoldersState, action: Action<FolderParams>): FoldersState {
-  const folder = state.folders.find(folder => folder.id === action.params.folder.id) || null;
+  const folder = state.folders.find(folder => folder.id === action.params.folder.id) ?? null;
   if (folder === null) {
     return state;
   }
@@ -239,7 +239,7 @@ function handleExpandFolder(state: FoldersState, action: Action<FolderParams>): 
 }
 
 function handleCollapseFolder(state: FoldersState, action: Action<FolderParams>): FoldersState {
-  const folder = state.folders.find(folder => folder.id === action.params.folder.id) || null;
+  const folder = state.folders.find(folder => folder.id === action.params.folder.id) ?? null;
   if (folder === null) {
     return state;
   }

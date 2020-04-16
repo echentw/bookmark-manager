@@ -60,5 +60,6 @@ function _getBackgroundImageUrl(state: AppState, syncedState: AppStateSyncPartia
 }
 
 function _loadBackgroundImageUrl(): string {
+  // It can be null, undefined, or empty string
   return LocalStorageHelpers.getBackgroundImageUrl() || require('assets/wallpapers/moon.json').url;
 }

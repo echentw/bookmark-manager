@@ -20,10 +20,10 @@ export class Folder {
     bookmarks?: Bookmark[],
     collapsed?: boolean,
   }) {
-    this.id = (id !== undefined) ? id : randomId();
+    this.id = id ?? randomId();
     this.name = name;
-    this.bookmarks = (bookmarks !== undefined) ? bookmarks : [];
-    this.collapsed = collapsed || false;
+    this.bookmarks = bookmarks ?? [];
+    this.collapsed = collapsed ?? false;
   }
 
   public withName = (name: string) => {

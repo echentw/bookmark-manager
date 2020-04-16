@@ -32,7 +32,7 @@ export class EditTextFieldComponent extends React.Component<Props> {
   }
 
   render() {
-    const placeholder = this.props.placeholder || '';
+    const placeholder = this.props.placeholder ?? '';
     return (
       <input
         className="edit-text-field"
