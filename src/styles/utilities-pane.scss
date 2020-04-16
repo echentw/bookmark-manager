@@ -21,13 +21,13 @@ $pane-tertiary-color: rgba(255, 255, 255, 0.35);
     height: 24px;
 
     .tab {
+      @include unselectable;
       flex: 1;
       border-radius: 4px 4px 0 0;
       display: flex;
       justify-content: center;
       align-items: center;
       cursor: default;
-      user-select: none;
     }
 
     .active-tab {

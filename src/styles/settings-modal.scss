@@ -38,11 +38,11 @@
       flex-direction: row;
 
       .title {
+        @include unselectable;
         font-family: $font-family;
         font-size: 28px;
         font-weight: bold;
         color: rgb(160, 160, 160);
-        user-select: none;
 
         &:hover {
           cursor: pointer;

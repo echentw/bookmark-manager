@@ -17,19 +17,18 @@ export class Bookmark {
   public readonly title: string;
   public readonly name: string;
 
-  constructor({ url, title, faviconUrl, id, name }: {
+  constructor({ id, url, faviconUrl, title, name }: {
+    id?: string,
     url: string,
-    title: string,
     faviconUrl: string,
-    id?: string
+    title: string,
     name?: string,
   }) {
+    this.id = id || randomId();
     this.url = url;
+    this.faviconUrl = faviconUrl || defaultFaviconUrl;
     this.title = title;
-    this.faviconUrl = faviconUrl ? faviconUrl : defaultFaviconUrl;
-
-    this.id = id ? id : randomId();
-    this.name = name ? name : '';
+    this.name = name || '';
   }
 
   public displayName = (): string => {
