@@ -2,8 +2,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { AppState } from 'reduxStore';
-import { Note } from 'Note';
-import { NoteComponent } from 'components/Notes/NoteComponent';
+import { Note } from 'models/Note';
+import { NotePreviewComponent } from 'components/Notes/NotePreviewComponent';
 
 
 class AddNoteButtonComponent extends React.Component {
@@ -18,31 +18,15 @@ class AddNoteButtonComponent extends React.Component {
 
 interface Props {
   hoverItemId: string | null;
+  notes: Note[];
 }
 
-class NotesListComponent extends React.Component<Props> {
+class NotePreviewListComponent extends React.Component<Props> {
   render() {
-    const notes: Note[] = [];
-    for (let i = 0; i < 10; ++i) {
-      notes.push(
-        new Note({
-          id: `note-id-${i}`,
-          name: `Note ${i}`,
-          text: [
-            'This is a preview of the note.',
-            'This is the second line of the preview. And more text here.',
-            'Third line gg yy of the note.',
-            'Another line, the fourth!',
-            'Hopefully this line will ensure that the text preview goes overflow.',
-          ].join('\n\n'),
-        })
-      );
-    }
-
-    const noteComponents = notes.map(note => {
+    const noteComponents = this.props.notes.map(note => {
       return (
         <div className="note-container">
-          <NoteComponent
+          <NotePreviewComponent
             note={note}
             hovering={this.props.hoverItemId === note.id}
           />
@@ -64,10 +48,11 @@ class NotesListComponent extends React.Component<Props> {
 const mapStateToProps = (state: AppState, props: {}) => {
   return {
     hoverItemId: state.hoverState.hoverItemId,
+    notes: state.notesState.notes,
   };
 };
 
 const mapActionsToProps = {};
 
-const Component = connect(mapStateToProps, mapActionsToProps)(NotesListComponent);
-export { Component as NotesListComponent };
+const Component = connect(mapStateToProps, mapActionsToProps)(NotePreviewListComponent);
+export { Component as NotePreviewListComponent };

@@ -1,6 +1,6 @@
-import { Folder, FolderJson } from 'Folder';
-import { User, UserJson } from 'User';
-import { Bookmark } from 'Bookmark';
+import { Folder, FolderJson } from 'models/Folder';
+import { User, UserJson } from 'models/User';
+import { Bookmark } from 'models/Bookmark';
 import { JsonState, mergeStates } from 'StateConverter';
 
 

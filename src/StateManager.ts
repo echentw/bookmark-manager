@@ -1,5 +1,5 @@
 import { AppState } from 'reduxStore';
-import { Folder } from 'Folder';
+import { Folder } from 'models/Folder';
 import {
   StateConverter,
   JsonState,
@@ -43,7 +43,7 @@ export class StateManager {
       case PersistType.None:
         return null;
       default:
-        throw Error('This should not happen!');
+        throw new Error('This should not happen!');
     }
   }
 

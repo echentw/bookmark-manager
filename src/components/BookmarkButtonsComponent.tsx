@@ -8,7 +8,7 @@ import * as CopyUrlActions from 'actions/CopyUrlActions';
 import * as EditBookmarkActions from 'actions/EditBookmarkActions';
 import { EditBookmarkParams } from 'actions/EditBookmarkActions';
 
-import { Bookmark } from 'Bookmark';
+import { Bookmark } from 'models/Bookmark';
 import { ShowToastParams } from 'actions/CopyUrlActions';
 import { AppState } from 'reduxStore';
 

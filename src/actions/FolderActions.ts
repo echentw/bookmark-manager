@@ -1,4 +1,4 @@
-import { Folder } from 'Folder';
+import { Folder } from 'models/Folder';
 import { Action, FolderActionType as ActionType } from 'actions/constants';
 
 export interface FolderParams {

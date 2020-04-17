@@ -1,15 +1,19 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { FaCog } from 'react-icons/fa';
 
+import { AppState } from 'reduxStore';
+import * as SettingsActions from 'actions/SettingsActions';
+
 interface Props {
-  onClick: () => void;
+  showSettingsModal: () => void;
 }
 
 interface State {
   hovering: boolean;
 }
 
-export class SettingsCogComponent extends React.Component<Props, State> {
+class SettingsCogComponent extends React.Component<Props, State> {
 
   state: State = {
     hovering: false,
@@ -31,7 +35,7 @@ export class SettingsCogComponent extends React.Component<Props, State> {
         <FaCog className={'settings-cog-inside-shadow ' + hoveringClass}/>
         <FaCog
           className={'settings-cog ' + hoveringClass}
-          onClick={this.props.onClick}
+          onClick={this.props.showSettingsModal}
           onMouseOver={this.onMouseOver}
           onMouseLeave={this.onMouseLeave}
         />
@@ -39,3 +43,14 @@ export class SettingsCogComponent extends React.Component<Props, State> {
     );
   }
 }
+
+const mapStateToProps = (state: AppState, props: {}) => {
+  return {};
+};
+
+const mapActionsToProps = {
+  showSettingsModal: SettingsActions.showModal,
+};
+
+const Component = connect(mapStateToProps, mapActionsToProps)(SettingsCogComponent);
+export { Component as SettingsCogComponent };

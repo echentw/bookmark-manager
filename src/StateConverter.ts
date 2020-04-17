@@ -1,8 +1,8 @@
 import * as merge from 'deepmerge';
 
 import { AppState } from 'reduxStore';
-import { User, UserJson } from 'User';
-import { Folder, FolderJson } from 'Folder';
+import { User, UserJson } from 'models/User';
+import { Folder, FolderJson } from 'models/Folder';
 import { UtilityTab } from 'reducers/UtilitiesReducer';
 
 

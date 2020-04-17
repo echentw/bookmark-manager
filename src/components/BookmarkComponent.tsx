@@ -6,7 +6,7 @@ import { AppState } from 'reduxStore';
 import { EditTextFieldComponent } from 'components/EditTextFieldComponent';
 import { BookmarkButtonsComponent } from 'components/BookmarkButtonsComponent';
 import { HoverableContainerComponent } from 'components/HoverableContainerComponent';
-import { Bookmark } from 'Bookmark';
+import { Bookmark } from 'models/Bookmark';
 import { EditBookmarkParams } from 'actions/EditBookmarkActions';
 import * as EditBookmarkActions from 'actions/EditBookmarkActions';
 

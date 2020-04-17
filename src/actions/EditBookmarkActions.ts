@@ -1,5 +1,5 @@
-import { Bookmark } from 'Bookmark';
-import { Folder } from 'Folder';
+import { Bookmark } from 'models/Bookmark';
+import { Folder } from 'models/Folder';
 import { Action, EditBookmarkActionType as ActionType } from 'actions/constants';
 
 export interface EditBookmarkParams {

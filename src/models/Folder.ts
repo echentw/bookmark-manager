@@ -1,5 +1,5 @@
-import { Bookmark, BookmarkJson } from 'Bookmark';
 import { randomId } from 'utils';
+import { Bookmark, BookmarkJson } from 'models/Bookmark';
 
 export interface FolderJson {
   id: string;

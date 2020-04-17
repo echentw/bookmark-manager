@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import { Store } from 'redux';
 import { CSSTransitionGroup } from 'react-transition-group';
 
-import { Bookmark } from 'Bookmark';
-import { Folder } from 'Folder';
-import { User } from 'User';
+import { Bookmark } from 'models/Bookmark';
+import { Folder } from 'models/Folder';
+import { User } from 'models/User';
+
 import { ChromeHelpers } from 'ChromeHelpers';
 import * as SyncActions from 'actions/SyncActions';
 import { LoadParams, SyncParams } from 'actions/SyncActions';
@@ -26,6 +27,7 @@ import { NuxComponent } from 'components/NuxComponent';
 import { SettingsModalComponent } from 'components/SettingsModalComponent';
 import { FolderComponent } from 'components/FolderComponent';
 import { UtilitiesPaneComponent } from 'components/UtilitiesPaneComponent';
+import { SettingsCogComponent } from 'components/SettingsCogComponent';
 
 export enum DraggableType {
   Bookmark = 'bookmark',
@@ -40,6 +42,7 @@ interface Props {
   folders: Folder[];
   showAddBookmarksModal: boolean;
   showSettingsModal: boolean;
+
   loadAppState: (params: LoadParams) => void;
   syncAppState: (params: SyncParams) => void;
 }
@@ -176,6 +179,7 @@ class AppComponent extends React.Component<Props, State> {
           <GreetingComponent user={this.props.user} date={this.state.date}/>
         </div>
         <DateComponent date={this.state.date}/>
+        <SettingsCogComponent/>
         { maybeDragLayer }
         { maybeAddBookmarksModal }
         { maybeSettingsModal }

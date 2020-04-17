@@ -1,4 +1,4 @@
-import { Folder } from 'Folder';
+import { Folder } from 'models/Folder';
 import { Action, EditFolderActionType as ActionType } from 'actions/constants';
 
 export interface EditFolderParams {

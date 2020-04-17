@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { AppState } from 'reduxStore';
-import { Folder } from 'Folder';
+import { Folder } from 'models/Folder';
 import { ModalBackdropComponent } from 'components/ModalBackdropComponent';
 
 interface ExternalProps {

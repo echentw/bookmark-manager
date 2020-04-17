@@ -5,8 +5,8 @@ import * as ReactDOM from 'react-dom';
 import Select from 'react-select';
 
 import { withItemReplaced, withItemDeleted } from 'utils';
-import { Bookmark } from 'Bookmark';
-import { Folder } from 'Folder';
+import { Bookmark } from 'models/Bookmark';
+import { Folder } from 'models/Folder';
 import { ChromeHelpers, TabInfo } from 'ChromeHelpers';
 import { StateConverter, JsonState, AppStateLoadPartial, mergeStates } from 'StateConverter';
 

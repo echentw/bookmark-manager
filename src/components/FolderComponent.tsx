@@ -4,8 +4,8 @@ import { IconContext } from 'react-icons';
 import { FaChevronDown, FaChevronUp, FaPen, FaPlus, FaTrash } from 'react-icons/fa';
 
 import { AppState } from 'reduxStore';
-import { Folder } from 'Folder';
-import { Bookmark } from 'Bookmark';
+import { Folder } from 'models/Folder';
+import { Bookmark } from 'models/Bookmark';
 import { DraggableType } from 'components/AppComponent';
 
 import * as AddBookmarksActions from 'actions/AddBookmarksActions';

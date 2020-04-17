@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useDrop } from 'react-dnd';
 
-import { Bookmark } from 'Bookmark';
+import { Bookmark } from 'models/Bookmark';
 import {
   propsDidNotChange as dragSourcePropsDidNotChange,
   isDragSourceContainerProps,

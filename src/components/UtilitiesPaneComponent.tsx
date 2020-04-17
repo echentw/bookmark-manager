@@ -7,7 +7,7 @@ import { UtilityTab } from 'reducers/UtilitiesReducer';
 import * as UtilitiesActions from 'actions/UtilitiesActions';
 
 import { FolderListComponent } from 'components/FolderListComponent';
-import { NotesListComponent } from 'components/Notes/NotesListComponent';
+import { NotePreviewListComponent } from 'components/Notes/NotePreviewListComponent';
 
 interface Props {
   activeTab: UtilityTab;
@@ -30,10 +30,10 @@ class UtilitiesPaneComponent extends React.Component<Props> {
       case UtilityTab.Notes:
         bookmarksActive = 'inactive-tab';
         notesActive = 'active-tab';
-        utilityComponent = <NotesListComponent/>;
+        utilityComponent = <NotePreviewListComponent/>;
         break;
       default:
-        throw Error('Unknown UtilityTab enum value');
+        throw new Error('Unknown UtilityTab enum value');
     }
 
     return (

@@ -1,5 +1,5 @@
-import { Bookmark } from 'Bookmark';
-import { Folder } from 'Folder';
+import { Bookmark } from 'models/Bookmark';
+import { Folder } from 'models/Folder';
 import { AppState } from 'reduxStore';
 import { Reducer } from 'reducers/Reducer';
 

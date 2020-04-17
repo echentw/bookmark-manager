@@ -15,6 +15,7 @@ import { initialLoadedState, loadedReducer, LoadedState } from 'reducers/LoadedR
 import { initialSettingsState, settingsReducer, SettingsState } from 'reducers/SettingsReducer';
 import { initialUserState, userReducer, UserState } from 'reducers/UserReducer';
 import { initialUtilitiesState, utilitiesReducer, UtilitiesState } from 'reducers/UtilitiesReducer';
+import { initialNotesState, notesReducer, NotesState } from 'reducers/NotesReducer';
 
 import { syncReducer } from 'reducers/SyncReducer';
 
@@ -37,6 +38,7 @@ export interface AppState {
   settingsState: SettingsState;
   userState: UserState;
   utilitiesState: UtilitiesState;
+  notesState: NotesState;
 }
 
 const initialAppState: AppState = {
@@ -52,6 +54,7 @@ const initialAppState: AppState = {
   settingsState: initialSettingsState,
   userState: initialUserState,
   utilitiesState: initialUtilitiesState,
+  notesState: initialNotesState,
 };
 
 const reducer = (state: AppState = initialAppState, action: Action): AppState => {
@@ -68,6 +71,7 @@ const reducer = (state: AppState = initialAppState, action: Action): AppState =>
     settingsState: settingsReducer(state.settingsState, action, state),
     userState: userReducer(state.userState, action, state),
     utilitiesState: utilitiesReducer(state.utilitiesState, action, state),
+    notesState: notesReducer(state.notesState, action, state),
   };
   const syncedState: AppState = syncReducer(newState, action);
   return syncedState;

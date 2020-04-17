@@ -74,3 +74,9 @@ export const UtilitiesActionType = {
   selectBookmarksTab: 'Utilities:selectBookmarksTab',
   selectNotesTab: 'Utilities:selectNotesTab',
 };
+
+export const NotesActionType = {
+  openNote: 'Notes:openNote',
+  addNote: 'Notes:addNote',
+  deleteNote: 'Notes:deleteNote',
+};

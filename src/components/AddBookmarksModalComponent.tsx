@@ -2,8 +2,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { AppState } from 'reduxStore';
-import { Bookmark, defaultFaviconUrl } from 'Bookmark';
-import { Folder } from 'Folder';
+import { Bookmark, defaultFaviconUrl } from 'models/Bookmark';
+import { Folder } from 'models/Folder';
 import { TabInfo } from 'ChromeHelpers';
 import * as AddBookmarksActions from 'actions/AddBookmarksActions';
 import { AddBookmarksSaveParams } from 'actions/AddBookmarksActions';

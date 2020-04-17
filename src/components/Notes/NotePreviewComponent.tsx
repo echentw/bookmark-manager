@@ -1,16 +1,24 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { FaPen, FaTrash } from 'react-icons/fa';
 
-import { Note } from 'Note';
+import { AppState } from 'reduxStore';
+import { Note } from 'models/Note';
 import { HoverableContainerComponent } from 'components/HoverableContainerComponent';
+import * as NotesActions from 'actions/NotesActions';
+import { NoteParams } from 'actions/NotesActions';
 
 
-interface Props {
+interface ExternalProps {
   note: Note;
   hovering: boolean;
 }
 
-export class NoteComponent extends React.Component<Props> {
+interface InternalProps extends ExternalProps {
+  openNote: (params: NoteParams) => void;
+}
+
+class NotePreviewComponent extends React.Component<InternalProps> {
   render() {
     const maybeButtonsComponent = this.props.hovering ? (
       <div className="note-buttons-container">
@@ -33,7 +41,11 @@ export class NoteComponent extends React.Component<Props> {
     ));
 
     return (
-      <HoverableContainerComponent className={classes} itemId={this.props.note.id}>
+      <HoverableContainerComponent
+        className={classes}
+        itemId={this.props.note.id}
+        onClick={() => this.props.openNote({ note: this.props.note })}
+      >
         <div className="note-name-and-buttons-container">
           <div className="note-name">
             { this.props.note.name }
@@ -47,3 +59,14 @@ export class NoteComponent extends React.Component<Props> {
     );
   }
 }
+
+const mapStateToProps = (state: AppState, props: ExternalProps) => {
+  return {};
+};
+
+const mapActionsToProps = {
+  openNote: NotesActions.openNote,
+};
+
+const Component = connect(mapStateToProps, mapActionsToProps)(NotePreviewComponent);
+export { Component as NotePreviewComponent };

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useDrag, DragPreviewImage, DragSourceMonitor } from 'react-dnd';
 
-import { Bookmark } from 'Bookmark';
+import { Bookmark } from 'models/Bookmark';
 
 interface Props {
   beginDrag: () => void;

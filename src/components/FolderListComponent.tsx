@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { Folder } from 'Folder';
+import { Folder } from 'models/Folder';
 import { AppState } from 'reduxStore';
 import { DraggableType } from 'components/AppComponent';
 import { FolderComponent } from 'components/FolderComponent';

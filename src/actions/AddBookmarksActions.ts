@@ -1,8 +1,8 @@
 import { Dispatch } from 'redux';
 
-import { Bookmark } from 'Bookmark';
-import { Folder } from 'Folder';
 import { ChromeHelpers, TabInfo } from 'ChromeHelpers';
+import { Bookmark } from 'models/Bookmark';
+import { Folder } from 'models/Folder';
 import { Action, AddBookmarksActionType as ActionType } from 'actions/constants';
 
 export interface AddBookmarksSaveParams {

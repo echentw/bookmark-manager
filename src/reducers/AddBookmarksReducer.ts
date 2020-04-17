@@ -3,7 +3,7 @@ import { Action, AddBookmarksActionType as ActionType } from 'actions/constants'
 import { TabInfo } from 'ChromeHelpers';
 import { AppState } from 'reduxStore';
 import { Reducer } from 'reducers/Reducer';
-import { Folder } from 'Folder';
+import { Folder } from 'models/Folder';
 
 export interface AddBookmarksState {
   showingModal: boolean;
