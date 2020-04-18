@@ -31,8 +31,6 @@ class SettingsCogComponent extends React.Component<Props, State> {
     const hoveringClass = this.state.hovering ? 'hovering' : '';
     return (
       <div className="settings-cog-container">
-        <FaCog className={'settings-cog-outside-shadow ' + hoveringClass}/>
-        <FaCog className={'settings-cog-inside-shadow ' + hoveringClass}/>
         <FaCog
           className={'settings-cog ' + hoveringClass}
           onClick={this.props.showSettingsModal}

@@ -1,3 +1,8 @@
+.settings-cog-hover {
+  cursor: pointer;
+  color: rgb(200, 200, 200);
+}
+
 .settings-cog-container {
   position: absolute;
   top: 10px;
@@ -15,31 +20,22 @@
     height: 24px;
     color: white;
 
+    stroke-width: 20;
+    stroke: rgba(0, 0, 0, 0.5);
+
+    .poiu {
+      cursor: pointer;
+      color: rgb(200, 200, 200);
+    }
+
+    &.hovering {
+      @extend .settings-cog-hover;
+    }
+
     // The .hovering class is managed by react state, so in case something goes awry with that,
     // at least this one will not look ugly.
     &:hover {
-      color: rgb(200, 200, 200);
-      cursor: pointer;
-    }
-  }
-
-  .settings-cog-outside-shadow {
-    position: absolute;
-    width: 28px;
-    height: 28px;
-    color: rgba(0, 0, 0, 0.15);
-    &.hovering {
-      color: rgba(0, 0, 0, 0.5);
-    }
-  }
-
-  .settings-cog-inside-shadow {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    color: rgba(0, 0, 0, 0.2);
-    &.hovering {
-      color: rgba(0, 0, 0, 0.6);
+      @extend .settings-cog-hover;
     }
   }
 }
