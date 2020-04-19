@@ -1,0 +1,20 @@
+.quick-add-note-button {
+  // background-color: blue;
+  font-size: 18px;
+  // color: rgb(150, 150, 150);
+  // color: rgb(230, 230, 230);
+  color: white;
+  width: 120px;
+  height: 30px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+
+  &:hover {
+    color: rgb(200, 200, 200);
+    cursor: pointer;
+  }
+}
