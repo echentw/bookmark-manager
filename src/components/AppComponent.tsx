@@ -28,7 +28,6 @@ import { SettingsModalComponent } from 'components/SettingsModalComponent';
 import { FolderComponent } from 'components/FolderComponent';
 import { UtilitiesPaneComponent } from 'components/UtilitiesPaneComponent';
 import { SettingsCogComponent } from 'components/SettingsCogComponent';
-import { QuickAddNoteButtonComponent } from 'components/Notes/QuickAddNoteButtonComponent';
 
 export enum DraggableType {
   Bookmark = 'bookmark',
@@ -176,13 +175,8 @@ class AppComponent extends React.Component<Props, State> {
         <div className="utilities-pane-container">
           <UtilitiesPaneComponent/>
         </div>
-        <div className="right-container">
-          <div className="note-section-container">
-            <QuickAddNoteButtonComponent/>
-          </div>
-          <div className="app-greeting-container">
-            <GreetingComponent user={this.props.user} date={this.state.date}/>
-          </div>
+        <div className="app-greeting-container">
+          <GreetingComponent user={this.props.user} date={this.state.date}/>
         </div>
         <DateComponent date={this.state.date}/>
         <SettingsCogComponent/>

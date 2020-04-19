@@ -7,61 +7,45 @@
 
   display: flex;
   flex-direction: row;
-
-  .utilities-pane-container {
-    width: calc(440px + #{$app-margin});
-
-    display: flex;
-    justify-content: center;
-
-    padding-left: $app-margin;
-    padding-top: $app-margin;
-    padding-bottom: $app-margin;
-  }
-
-  .right-container {
-    flex: 1;
-
-    display: flex;
-    flex-direction: column;
-
-    padding-top: $app-margin;
-    padding-bottom: $app-margin;
-
-    .note-section-container {}
-
-    .app-greeting-container {
-      flex: 1;
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-  }
 }
 
+.utilities-pane-container {
+  width: calc(440px + #{$app-margin});
+
+  display: flex;
+  justify-content: center;
+
+  padding-left: $app-margin;
+  padding-top: $app-margin;
+  padding-bottom: $app-margin;
+}
+
+.app-greeting-container {
+  flex: 1;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-greeting-container {
+  padding-top: $app-margin;
+}
 
 @media (max-width: $small-screen-max-width) {
   .app {
     flex-direction: column-reverse;
+  }
 
-    .utilities-pane-container {
-      flex: 1;
-      width: 100%;
-      padding-left: 0;
-      padding-top: 10px;
-    }
+  .utilities-pane-container {
+    flex: 1;
+    width: 100%;
+    padding-left: 0;
+    padding-top: 10px;
+  }
 
-    .right-container {
-      flex: none;
-      padding-top: 10px;
-      padding-bottom: 0;
-
-      .note-section-container {
-        display: none;
-      }
-
-      .app-greeting-container {}
-    }
+  .app-greeting-container {
+    flex: none;
+    padding-top: 10px;
   }
 }
