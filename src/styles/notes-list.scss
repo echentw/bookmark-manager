@@ -79,9 +79,18 @@
       background-color: rgba(0, 0, 0, 0.1);
       height: 100%;
 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
       &:hover {
         background-color: rgba(0, 0, 0, 0.15);
         cursor: pointer;
+      }
+
+      .add-note-icon {
+        width: 18px;
+        height: 18px;
       }
     }
   }

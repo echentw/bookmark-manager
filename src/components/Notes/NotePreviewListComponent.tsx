@@ -4,13 +4,14 @@ import { connect } from 'react-redux';
 import { AppState } from 'reduxStore';
 import { Note } from 'models/Note';
 import { NotePreviewComponent } from 'components/Notes/NotePreviewComponent';
+import * as PlusIcon from 'assets/plus_icon.svg';
 
 
 class AddNoteButtonComponent extends React.Component {
   render() {
     return (
       <div className="add-note-button">
-        This is the button.
+        <img src={PlusIcon} className="add-note-icon"/>
       </div>
     );
   }
