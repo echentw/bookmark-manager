@@ -1,6 +1,9 @@
 @import './mixins/misc';
 @import './mixins/list';
 
+$row-height: 84px;
+$row-padding: 4px;
+
 .notes-list {
   @include rect-border-radius;
 
@@ -19,59 +22,17 @@
 
   display: grid;
   grid-template-columns: 50% 50%;
-  grid-auto-rows: 84px;
+  grid-auto-rows: $row-height;
 
   .note-container {
-    padding: 4px;
+    padding: $row-padding;
 
-    .note {
-      @include list-item;
-      @include unselectable;
+    .note-drop-container {
+      @include rect-border-radius;
+      background-color: rgba(0, 0, 0, 0.5);
 
-      padding: 6px;
       width: 100%;
       height: 100%;
-
-      flex-direction: column;
-
-      &:hover {
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.19), 0 4px 6px rgba(0, 0, 0, 0.23);
-        transition: box-shadow 0.2s ease-in-out;
-        cursor: pointer;
-      }
-
-      .note-name-and-buttons-container {
-        width: 100%;
-        height: 18px;
-
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-
-        .note-name {
-          @include list-title;
-          font-size: 16px;
-        }
-
-        .note-buttons-container {
-          @include list-item-buttons-container;
-          cursor: default;
-
-          .note-button {
-            margin-left: 2px;
-            margin-right: 2px;
-          }
-        }
-      }
-
-      .note-preview-text {
-        flex: 1;
-        width: 100%;
-
-        color: rgb(150, 150, 150);
-
-        overflow: hidden;
-      }
     }
 
     .add-note-button {
@@ -95,5 +56,61 @@
         height: 18px;
       }
     }
+  }
+}
+
+.note {
+  @include list-item;
+  @include unselectable;
+
+  padding: 6px;
+  width: 100%;
+  height: calc(#{$row-height} - 2 * #{$row-padding}); // Not sure why height: 100% doesn't work here.
+
+  flex-direction: column;
+
+  &:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.19), 0 4px 6px rgba(0, 0, 0, 0.23);
+    transition: box-shadow 0.2s ease-in-out;
+    cursor: pointer;
+  }
+
+  .note-name-and-buttons-container {
+    width: 100%;
+    height: 18px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .note-name {
+      @include list-title;
+      font-size: 16px;
+    }
+
+    .note-buttons-container {
+      @include list-item-buttons-container;
+      cursor: default;
+
+      .note-button {
+        margin-left: 2px;
+        margin-right: 2px;
+      }
+    }
+  }
+
+  .note-preview-text {
+    flex: 1;
+    width: 100%;
+
+    color: rgb(150, 150, 150);
+
+    overflow: hidden;
+  }
+}
+
+.drag-layer-item {
+  .note {
+    width: calc((440px - 16px - 8px - 4 * #{$row-padding}) / 2);
   }
 }

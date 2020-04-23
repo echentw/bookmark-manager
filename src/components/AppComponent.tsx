@@ -19,6 +19,8 @@ import { StateManager } from 'StateManager';
 import { StateConverter, JsonState } from 'StateConverter';
 
 import { BookmarkComponent } from 'components/BookmarkComponent';
+import { FolderComponent } from 'components/FolderComponent';
+import { NotePreviewComponent } from 'components/Notes/NotePreviewComponent';
 import { GreetingComponent } from 'components/GreetingComponent';
 import { DragLayerComponent } from 'components/DragLayerComponent';
 import { CopiedToastComponent } from 'components/CopiedToastComponent';
@@ -26,7 +28,6 @@ import { AddBookmarksModalComponent } from 'components/AddBookmarksModalComponen
 import { DateComponent } from 'components/DateComponent';
 import { NuxComponent } from 'components/NuxComponent';
 import { SettingsModalComponent } from 'components/SettingsModalComponent';
-import { FolderComponent } from 'components/FolderComponent';
 import { UtilitiesPaneComponent } from 'components/UtilitiesPaneComponent';
 import { SettingsCogComponent } from 'components/SettingsCogComponent';
 import { NoteEditorComponent } from 'components/Notes/NoteEditorComponent';
@@ -34,6 +35,7 @@ import { NoteEditorComponent } from 'components/Notes/NoteEditorComponent';
 export enum DraggableType {
   Bookmark = 'bookmark',
   Folder = 'folder',
+  Note = 'note',
 }
 
 interface Props {
@@ -42,6 +44,7 @@ interface Props {
   backgroundImageUrl: string;
   dragState: DragState;
   folders: Folder[];
+  notes: Note[];
   showAddBookmarksModal: boolean;
   showSettingsModal: boolean;
   currentOpenNote: Note | null;
@@ -130,7 +133,7 @@ class AppComponent extends React.Component<Props, State> {
     }
 
     let maybeDragLayer: React.ReactElement = null;
-    const { draggableType, folderRank, bookmarkRank } = this.props.dragState;
+    const { draggableType, folderRank, bookmarkRank, noteRank } = this.props.dragState;
     if (draggableType === DraggableType.Bookmark) {
       const folder = this.props.folders[folderRank];
       const bookmark = folder.bookmarks[bookmarkRank];
@@ -157,6 +160,18 @@ class AppComponent extends React.Component<Props, State> {
             rank={-1}
             dragging={false}
             draggable={false}
+            isDragPreview={true}
+          />
+        </DragLayerComponent>
+      );
+    } else if (draggableType === DraggableType.Note) {
+      const note = this.props.notes[noteRank];
+      maybeDragLayer = (
+        <DragLayerComponent>
+          <NotePreviewComponent
+            note={note}
+            dragging={false}
+            hovering={false}
             isDragPreview={true}
           />
         </DragLayerComponent>
@@ -231,6 +246,7 @@ const mapStateToProps = (state: AppState, props: {}) => {
     backgroundImageUrl: state.settingsState.backgroundImageUrl,
     dragState: state.dragState,
     folders: state.foldersState.folders,
+    notes: state.notesState.notes,
     loaded: state.loadedState.loaded,
     showAddBookmarksModal: state.addBookmarksState.showingModal,
     showSettingsModal: state.settingsState.showingModal,

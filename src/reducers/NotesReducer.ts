@@ -1,10 +1,12 @@
 import { Note } from 'models/Note';
-import { Action, NotesActionType as ActionType } from 'actions/constants';
+import { Action, NotesActionType, DragActionType } from 'actions/constants';
 import { NoteParams } from 'actions/NotesActions'
 import { AppState } from 'reduxStore';
 import { Reducer } from 'reducers/Reducer';
 
 import { withItemDeleted, withItemReplaced } from 'utils';
+import { DragNoteParams } from 'actions/DragActions';
+import { DraggableType } from 'components/AppComponent';
 
 export interface NotesState {
   notes: Note[];
@@ -33,20 +35,23 @@ export const notesReducer: Reducer<NotesState> = (
 ): NotesState => {
   let newState = state;
   switch (action.type) {
-    case ActionType.openNote:
+    case NotesActionType.openNote:
       newState = handleOpenNote(state, action as Action<NoteParams>);
       break;
-    case ActionType.closeNote:
+    case NotesActionType.closeNote:
       newState = handleCloseNote(state, action as Action<NoteParams>);
       break;
-    case ActionType.addNote:
+    case NotesActionType.addNote:
       newState = handleAddNote(state, action as Action<NoteParams>);
       break;
-    case ActionType.deleteNote:
+    case NotesActionType.deleteNote:
       newState = handleDeleteNote(state, action as Action<NoteParams>);
       break;
-    case ActionType.editNote:
+    case NotesActionType.editNote:
       newState = handleEditNote(state, action as Action<NoteParams>);
+      break;
+    case DragActionType.isOverNote:
+      newState = handleDragIsOverNote(state, action as Action<DragNoteParams>, appState);
       break;
   }
   return newState;
@@ -89,5 +94,23 @@ function handleEditNote(state: NotesState, action: Action<NoteParams>): NotesSta
   return {
     ...state,
     notes: notes,
+  };
+}
+
+function handleDragIsOverNote(
+  state: NotesState,
+  action: Action<DragNoteParams>,
+  appState: AppState
+): NotesState {
+  const newNotes = state.notes;
+
+  const draggedRank = appState.dragState.noteRank;
+  const dropTargetRank = action.params.noteRank;
+
+  [newNotes[draggedRank], newNotes[dropTargetRank]] = [newNotes[dropTargetRank], newNotes[draggedRank]];
+
+  return {
+    ...state,
+    notes: newNotes,
   };
 }

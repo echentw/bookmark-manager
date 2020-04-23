@@ -45,9 +45,13 @@ export const EditBookmarkActionType = {
 };
 
 export const DragActionType = {
-  begin: 'Drag:begin',
+  beginDragBookmark: 'Drag:beginDragBookmark',
+  beginDragFolder: 'Drag:beginDragFolder',
+  beginDragNote: 'Drag:beginDragNote',
+  isOverBookmark: 'Drag:isOverBookmark',
+  isOverFolder: 'Drag:isOverFolder',
+  isOverNote: 'Drag:isOverNote',
   end: 'Drag:end',
-  isOver: 'Drag:isOver',
 };
 
 export const HoverActionType = {

@@ -33,6 +33,17 @@ export class Note {
     });
   }
 
+  public equals = (other: Note | null): boolean => {
+    if (other === null) {
+      return false;
+    }
+    return (
+      this.id === other.id &&
+      this.name === other.name &&
+      this.text === other.text
+    );
+  }
+
   public static fromJson = (json: NoteJson): Note => {
     return new Note(json);
   }

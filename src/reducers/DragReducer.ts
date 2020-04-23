@@ -1,5 +1,5 @@
 import { Action, DragActionType as ActionType } from 'actions/constants';
-import { DragParams, DropParams } from 'actions/DragActions';
+import { DragBookmarkParams, DragFolderParams, DragNoteParams, DropParams } from 'actions/DragActions';
 import { AppState } from 'reduxStore';
 import { Reducer } from 'reducers/Reducer';
 import { DraggableType } from 'components/AppComponent';
@@ -8,12 +8,14 @@ export interface DragState {
   draggableType: DraggableType | null;
   folderRank: number | null;
   bookmarkRank: number | null;
+  noteRank: number | null;
 }
 
 export const initialDragState: DragState = {
   draggableType: null,
   folderRank: null,
   bookmarkRank: null,
+  noteRank: null,
 };
 
 export const dragReducer: Reducer<DragState> = (
@@ -23,46 +25,61 @@ export const dragReducer: Reducer<DragState> = (
 ): DragState => {
   let newState = state;
   switch (action.type) {
-    case ActionType.begin:
-      newState = handleBegin(state, action as Action<DragParams>);
+    case ActionType.beginDragBookmark:
+      newState = handleBeginDragBookmark(state, action as Action<DragBookmarkParams>);
+      break;
+    case ActionType.beginDragFolder:
+      newState = handleBeginDragFolder(state, action as Action<DragFolderParams>);
+      break;
+    case ActionType.beginDragNote:
+      newState = handleBeginDragNote(state, action as Action<DragNoteParams>);
+      break;
+    case ActionType.isOverBookmark:
+      newState = handleIsOverBookmark(state, action as Action<DragBookmarkParams>, appState);
+      break;
+    case ActionType.isOverFolder:
+      newState = handleIsOverFolder(state, action as Action<DragFolderParams>);
+      break;
+    case ActionType.isOverNote:
+      newState = handleIsOverNote(state, action as Action<DragNoteParams>);
       break;
     case ActionType.end:
-      newState = handleEnd(state, action as Action<DropParams>, appState);
-      break;
-    case ActionType.isOver:
-      if (state.draggableType === DraggableType.Bookmark) {
-        newState = handleIsOverBookmark(state, action as Action<DragParams>, appState);
-      } else if (state.draggableType === DraggableType.Folder) {
-        newState = handleIsOverFolder(state, action as Action<DragParams>, appState);
-      }
+      newState = handleEnd(state, action as Action<DropParams>);
       break;
   }
   return newState;
 }
 
-function handleBegin(state: DragState, action: Action<DragParams>): DragState {
+function handleBeginDragBookmark(state: DragState, action: Action<DragBookmarkParams>): DragState {
   return {
-    draggableType: action.params.draggableType,
+    draggableType: DraggableType.Bookmark,
     folderRank: action.params.folderRank,
     bookmarkRank: action.params.bookmarkRank,
+    noteRank: null,
   };
 }
 
-function handleEnd(
-  state: DragState,
-  action: Action<DropParams>,
-  appState: AppState
-): DragState {
+function handleBeginDragFolder(state: DragState, action: Action<DragFolderParams>): DragState {
   return {
-    draggableType: null,
+    draggableType: DraggableType.Folder,
+    folderRank: action.params.folderRank,
+    bookmarkRank: null,
+    noteRank: null,
+  };
+}
+
+function handleBeginDragNote(state: DragState, action: Action<DragNoteParams>): DragState {
+  return {
+    draggableType: DraggableType.Note,
     folderRank: null,
     bookmarkRank: null,
+    noteRank: action.params.noteRank,
   };
 }
 
 function handleIsOverBookmark(
   state: DragState,
-  action: Action<DragParams>,
+  action: Action<DragBookmarkParams>,
   appState: AppState
 ): DragState {
   const targetFolder = appState.foldersState.folders[action.params.folderRank];
@@ -97,13 +114,25 @@ function handleIsOverBookmark(
   };
 }
 
-function handleIsOverFolder(
-  state: DragState,
-  action: Action<DragParams>,
-  appState: AppState
-): DragState {
+function handleIsOverFolder(state: DragState, action: Action<DragFolderParams>): DragState {
   return {
     ...state,
     folderRank: action.params.folderRank,
+  };
+}
+
+function handleIsOverNote(state: DragState, action: Action<DragNoteParams>): DragState {
+  return {
+    ...state,
+    noteRank: action.params.noteRank,
+  };
+}
+
+function handleEnd(state: DragState, action: Action<DropParams>): DragState {
+  return {
+    draggableType: null,
+    folderRank: null,
+    bookmarkRank: null,
+    noteRank: null,
   };
 }

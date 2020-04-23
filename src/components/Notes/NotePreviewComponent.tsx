@@ -12,7 +12,9 @@ import { NoteParams } from 'actions/NotesActions';
 
 interface ExternalProps {
   note: Note;
+  dragging: boolean;
   hovering: boolean;
+  isDragPreview?: boolean;
 }
 
 interface InternalProps extends ExternalProps {
@@ -27,14 +29,21 @@ class NotePreviewComponent extends React.Component<InternalProps> {
   }
 
   render() {
-    const maybeButtonsComponent = this.props.hovering ? (
+    const { note, dragging, hovering, isDragPreview } = this.props;
+    const shouldShowButtons = hovering || isDragPreview;
+    const shouldShowBoxShadow = shouldShowButtons;
+
+    const maybeButtonsComponent = shouldShowButtons ? (
       <div className="note-buttons-container" onClick={this.onClickDelete}>
         <FaTrash className="note-button"/>
       </div>
     ) : null;
 
     let classes = 'note';
-    if (this.props.hovering) {
+    if (dragging) {
+      classes += ' vanished';
+    }
+    if (shouldShowBoxShadow) {
       classes += ' with-shadow';
     }
 

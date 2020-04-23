@@ -11,7 +11,7 @@ import { DraggableType } from 'components/AppComponent';
 import * as AddBookmarksActions from 'actions/AddBookmarksActions';
 import { ExternalShowModalParams } from 'actions/AddBookmarksActions';
 import * as DragActions from 'actions/DragActions';
-import { DragParams, DropParams } from 'actions/DragActions';
+import { DragBookmarkParams, DragFolderParams, DropParams } from 'actions/DragActions';
 import * as FolderActions from 'actions/FolderActions';
 import { FolderParams } from 'actions/FolderActions';
 import * as EditFolderActions from 'actions/EditFolderActions';
@@ -43,9 +43,6 @@ interface InternalProps extends ExternalProps {
   draggedFolderRank: number | null;
   draggedBookmarkRank: number | null;
   showAddBookmarksModal: (params: ExternalShowModalParams) => void;
-  beginDrag: (params: DragParams) => void;
-  endDrag: (params: DropParams) => void;
-  isOver: (params: DragParams) => void;
   expandFolder: (params: FolderParams) => void;
   collapseFolder: (params: FolderParams) => void;
   beginEdit: (params: EditFolderParams) => void;
@@ -54,6 +51,12 @@ interface InternalProps extends ExternalProps {
   beginDelete: (params: DeleteFolderParams) => void;
   confirmDelete: (params: DeleteFolderParams) => void;
   cancelDelete: (params: DeleteFolderParams) => void;
+
+  beginDragBookmark: (params: DragBookmarkParams) => void;
+  beginDragFolder: (params: DragFolderParams) => void;
+  isOverBookmark: (params: DragBookmarkParams) => void;
+  isOverFolder: (params: DragFolderParams) => void;
+  endDrag: (params: DropParams) => void;
 }
 
 class FolderComponent extends React.Component<InternalProps> {
@@ -155,8 +158,7 @@ class FolderComponent extends React.Component<InternalProps> {
           className="list-item-container"
           draggableType={DraggableType.Bookmark}
           isOver={() =>
-            this.props.isOver({
-              draggableType: DraggableType.Bookmark,
+            this.props.isOverBookmark({
               folderRank: this.props.rank,
               bookmarkRank: rank,
             })
@@ -166,8 +168,7 @@ class FolderComponent extends React.Component<InternalProps> {
           <DragSourceContainerComponent
             draggableType={DraggableType.Bookmark}
             beginDrag={() =>
-              this.props.beginDrag({
-                draggableType: DraggableType.Bookmark,
+              this.props.beginDragBookmark({
                 folderRank: this.props.rank,
                 bookmarkRank: rank,
               })
@@ -236,8 +237,7 @@ class FolderComponent extends React.Component<InternalProps> {
           className="folder-name-container"
           draggableType={DraggableType.Bookmark}
           isOver={() =>
-            this.props.isOver({
-              draggableType: DraggableType.Bookmark,
+            this.props.isOverBookmark({
               folderRank: this.props.rank,
               bookmarkRank: -1,
             })
@@ -260,13 +260,11 @@ class FolderComponent extends React.Component<InternalProps> {
         <DropTargetContainerComponent
           className="add-bookmark-button-container"
           draggableType={DraggableType.Bookmark}
-          isOver={
-            () =>
-              this.props.isOver({
-                draggableType: DraggableType.Bookmark,
-                folderRank: this.props.rank,
-                bookmarkRank: folder.bookmarks.length,
-              })
+          isOver={() =>
+            this.props.isOverBookmark({
+              folderRank: this.props.rank,
+              bookmarkRank: folder.bookmarks.length,
+            })
           }
           rerenderProps={[this.props.rank, folder.bookmarks.length]}
         >
@@ -285,19 +283,15 @@ class FolderComponent extends React.Component<InternalProps> {
         className={'folder-drop-container ' + revealDropContainerClass}
         draggableType={DraggableType.Folder}
         isOver={() =>
-          this.props.isOver({
-            draggableType: DraggableType.Folder,
+          this.props.isOverFolder({
             folderRank: this.props.rank,
-            bookmarkRank: null,
           })
         }
       >
         <DragSourceContainerComponent
           beginDrag={() =>
-            this.props.beginDrag({
-              draggableType: DraggableType.Folder,
+            this.props.beginDragFolder({
               folderRank: this.props.rank,
-              bookmarkRank: null,
             })
           }
           endDrag={(trueDrop: boolean) => this.props.endDrag({ trueDrop })}
@@ -322,9 +316,6 @@ const mapStateToProps = (state: AppState, props: {}) => {
 
 const mapActionsToProps = {
   showAddBookmarksModal: AddBookmarksActions.showModal,
-  beginDrag: DragActions.begin,
-  endDrag: DragActions.end,
-  isOver: DragActions.isOver,
   expandFolder: FolderActions.expandFolder,
   collapseFolder: FolderActions.collapseFolder,
   beginEdit: EditFolderActions.beginEdit,
@@ -333,6 +324,12 @@ const mapActionsToProps = {
   beginDelete: DeleteFolderActions.beginDelete,
   confirmDelete: DeleteFolderActions.confirmDelete,
   cancelDelete: DeleteFolderActions.cancelDelete,
+
+  beginDragBookmark: DragActions.beginDragBookmark,
+  beginDragFolder: DragActions.beginDragFolder,
+  isOverBookmark: DragActions.isOverBookmark,
+  isOverFolder: DragActions.isOverFolder,
+  endDrag: DragActions.end,
 };
 
 const Component = connect(mapStateToProps, mapActionsToProps)(FolderComponent);

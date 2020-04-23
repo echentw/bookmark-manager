@@ -15,7 +15,7 @@ import {
 } from 'actions/constants';
 import { FolderParams } from 'actions/FolderActions';
 import { DeleteFolderParams } from 'actions/DeleteFolderActions';
-import { DragParams } from 'actions/DragActions';
+import { DragBookmarkParams, DragFolderParams } from 'actions/DragActions';
 import { EditBookmarkParams } from 'actions/EditBookmarkActions';
 import { EditFolderParams } from 'actions/EditFolderActions';
 import { withItemDeleted, withItemReplaced } from 'utils';
@@ -55,12 +55,11 @@ export const foldersReducer: Reducer<FoldersState> = (
     case EditBookmarkActionType.deleteBookmark:
       newState = handleEditBookmarkDeleteBookmark(state, action as Action<EditBookmarkParams>, appState);
       break;
-    case DragActionType.isOver:
-      if (appState.dragState.draggableType === DraggableType.Bookmark) {
-        newState = handleDragIsOverBookmark(state, action as Action<DragParams>, appState);
-      } else if (appState.dragState.draggableType === DraggableType.Folder) {
-        newState = handleDragIsOverFolder(state, action as Action<DragParams>, appState);
-      }
+    case DragActionType.isOverBookmark:
+      newState = handleDragIsOverBookmark(state, action as Action<DragBookmarkParams>, appState);
+      break;
+    case DragActionType.isOverFolder:
+      newState = handleDragIsOverFolder(state, action as Action<DragFolderParams>, appState);
       break;
     case FolderActionType.expand:
       newState = handleExpandFolder(state, action as Action<FolderParams>);
@@ -151,7 +150,7 @@ function handleEditBookmarkDeleteBookmark(
 
 function handleDragIsOverBookmark(
   state: FoldersState,
-  action: Action<DragParams>,
+  action: Action<DragBookmarkParams>,
   appState: AppState,
 ): FoldersState {
   const { folderRank: draggedFolderRank, bookmarkRank: draggedBookmarkRank } = appState.dragState;
@@ -200,7 +199,7 @@ function handleDragIsOverBookmark(
 
 function handleDragIsOverFolder(
   state: FoldersState,
-  action: Action<DragParams>,
+  action: Action<DragFolderParams>,
   appState: AppState,
 ): FoldersState {
   const newFolders = state.folders;

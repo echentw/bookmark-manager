@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useDrop } from 'react-dnd';
 
 import { Bookmark } from 'models/Bookmark';
+import { Note } from 'models/Note';
 import {
   propsDidNotChange as dragSourcePropsDidNotChange,
   isDragSourceContainerProps,
@@ -27,7 +28,7 @@ function propsDidNotChange(prevProps: Props, nextProps: Props): boolean {
     }
     const rerenderPropsSame = prevProps.rerenderProps.every((prevProp: any, i: number) => {
       const nextProp = nextProps.rerenderProps[i];
-      const same = prevProp instanceof Bookmark ? prevProp.equals(nextProp) : prevProp === nextProp;
+      const same = (prevProp instanceof Bookmark || prevProp instanceof Note) ? prevProp.equals(nextProp) : prevProp === nextProp;
       return same;
     });
     return rerenderPropsSame;

@@ -5,10 +5,10 @@ import {
   EditBookmarkActionType,
   EditFolderActionType,
   HoverActionType,
+  NotesActionType,
 } from 'actions/constants';
 import { DeleteFolderParams } from 'actions/DeleteFolderActions';
-import { DragParams, DropParams } from 'actions/DragActions';
-import { EditBookmarkParams } from 'actions/EditBookmarkActions';
+import { DropParams } from 'actions/DragActions';
 import { EditFolderParams } from 'actions/EditFolderActions';
 import { HoverParams } from 'actions/HoverActions';
 import { AppState } from 'reduxStore';
@@ -53,18 +53,25 @@ export const hoverReducer: Reducer<HoverState> = (
     case HoverActionType.exit:
       newState = handleExit(state, action as Action<HoverParams>);
       break;
-    case DragActionType.begin:
-      newState = handleDragBegin(state, action as Action<DragParams>);
+    case DragActionType.beginDragBookmark:
+    case DragActionType.beginDragFolder:
+    case DragActionType.beginDragNote:
+      newState = handleDragBegin(state, action);
       break;
     case DragActionType.end:
       if (appState.dragState.draggableType === DraggableType.Bookmark) {
         newState = handleDragBookmarkEnd(state, action as Action<DropParams>, appState);
       } else if (appState.dragState.draggableType === DraggableType.Folder) {
         newState = handleDragFolderEnd(state, action as Action<DropParams>, appState);
+      } else if (appState.dragState.draggableType === DraggableType.Note) {
+        newState = handleDragNoteEnd(state, action as Action<DropParams>, appState);
       }
       break;
     case EditBookmarkActionType.deleteBookmark:
-      newState = handleDeleteBookmark(state, action as Action<EditBookmarkParams>);
+      newState = handleDeleteBookmark(state, action);
+      break;
+    case NotesActionType.deleteNote:
+      newState = handleDeleteNote(state, action);
       break;
     case EditFolderActionType.showColorPicker:
       newState = handleShowColorPicker(state, action as Action<EditFolderParams>);
@@ -94,7 +101,7 @@ function handleExit(state: HoverState, action: Action<HoverParams>): HoverState 
   };
 }
 
-function handleDragBegin(state: HoverState, action: Action<DragParams>): HoverState {
+function handleDragBegin(state: HoverState, action: Action): HoverState {
   // If something is dragging, then we don't want any hover behavior.
   return {
     hoverItemId: null,
@@ -138,10 +145,35 @@ function handleDragFolderEnd(
   };
 }
 
-function handleDeleteBookmark(state: HoverState, action: Action<EditBookmarkParams>): HoverState {
+function handleDragNoteEnd(
+  state: HoverState,
+  action: Action<DropParams>,
+  appState: AppState
+): HoverState {
+  // If the drop is a "true" drop (the mouse is inside the drop container), then the user is
+  // currently hovered over that item.
+  let hoverItemId = null;
+  if (action.params.trueDrop) {
+    const { noteRank } = appState.dragState;
+    const note = appState.notesState.notes[noteRank];
+    hoverItemId = note.id;
+  }
+  return {
+    hoverItemId: hoverItemId,
+  };
+}
+
+function handleDeleteBookmark(state: HoverState, action: Action): HoverState {
   // Deleting something requires that we are hovering over the delete button.
   // After we delete, then that list item will disappear, so there's nothing hovered over.
   // Until the next hover event fires :)
+  return {
+    hoverItemId: null,
+  };
+}
+
+function handleDeleteNote(state: HoverState, action: Action): HoverState {
+  // See comment in handleDeleteBookmark
   return {
     hoverItemId: null,
   };
