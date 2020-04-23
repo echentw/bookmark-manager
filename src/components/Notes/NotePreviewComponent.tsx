@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { FaPen, FaTrash } from 'react-icons/fa';
+import { FaTrash } from 'react-icons/fa';
+import ContentEditable from 'react-contenteditable';
 
 import { AppState } from 'reduxStore';
 import { Note } from 'models/Note';
@@ -22,7 +23,6 @@ class NotePreviewComponent extends React.Component<InternalProps> {
   render() {
     const maybeButtonsComponent = this.props.hovering ? (
       <div className="note-buttons-container">
-        <FaPen className="note-button"/>
         <FaTrash className="note-button"/>
       </div>
     ) : null;
@@ -31,14 +31,6 @@ class NotePreviewComponent extends React.Component<InternalProps> {
     if (this.props.hovering) {
       classes += ' with-shadow';
     }
-
-    const firstThreeLines = this.props.note.text.split(/\n+/).slice(0, 3);
-
-    const lineElements = firstThreeLines.map(line => (
-      <div key={line} className="note-preview-text-line">
-        { line }
-      </div>
-    ));
 
     return (
       <HoverableContainerComponent
@@ -52,9 +44,12 @@ class NotePreviewComponent extends React.Component<InternalProps> {
           </div>
           { maybeButtonsComponent }
         </div>
-        <div className="note-preview-text">
-          { lineElements }
-        </div>
+        <ContentEditable
+          className="note-preview-text"
+          html={this.props.note.text}
+          disabled={true}
+          onChange={() => {}}
+        />
       </HoverableContainerComponent>
     );
   }
