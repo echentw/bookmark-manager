@@ -36,6 +36,9 @@ export const notesReducer: Reducer<NotesState> = (
     case ActionType.openNote:
       newState = handleOpenNote(state, action as Action<NoteParams>);
       break;
+    case ActionType.closeNote:
+      newState = handleCloseNote(state, action as Action<NoteParams>);
+      break;
     case ActionType.addNote:
       newState = handleAddNote(state, action as Action<NoteParams>);
       break;
@@ -56,6 +59,14 @@ function handleOpenNote(state: NotesState, action: Action<NoteParams>): NotesSta
   };
 }
 
+function handleCloseNote(state: NotesState, action: Action<NoteParams>): NotesState {
+  const newOpenNote = action.params.note.id === state.currentOpenNote?.id ? null : state.currentOpenNote;
+  return {
+    ...state,
+    currentOpenNote: newOpenNote,
+  };
+}
+
 function handleAddNote(state: NotesState, action: Action<NoteParams>): NotesState {
   const notes = state.notes.concat([action.params.note]);
   return {
@@ -66,11 +77,10 @@ function handleAddNote(state: NotesState, action: Action<NoteParams>): NotesStat
 
 function handleDeleteNote(state: NotesState, action: Action<NoteParams>): NotesState {
   const notes = withItemDeleted<Note>(state.notes, action.params.note);
-  const currentOpenNoteId = state.currentOpenNote === null ? null : state.currentOpenNote.id;
-  const newOpenNoteId = currentOpenNoteId === action.params.note.id ? null : state.currentOpenNote;
+  const newOpenNote = action.params.note.id === state.currentOpenNote?.id ? null : state.currentOpenNote;
   return {
     notes,
-    currentOpenNote: newOpenNoteId,
+    currentOpenNote: newOpenNote,
   };
 }
 

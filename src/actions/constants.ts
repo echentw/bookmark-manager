@@ -77,6 +77,7 @@ export const UtilitiesActionType = {
 
 export const NotesActionType = {
   openNote: 'Notes:openNote',
+  closeNote: 'Notes:closeNote',
   addNote: 'Notes:addNote',
   deleteNote: 'Notes:deleteNote',
   editNote: 'Notes:editNote',

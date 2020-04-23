@@ -47,4 +47,14 @@
       outline: 0;
     }
   }
+
+  .close-button {
+    position: absolute;
+    $radius: 20px;
+    top: calc(-#{$radius} / 2);
+    right: calc(-#{$radius} / 2);
+
+    -webkit-animation: fade-in 0.3s;
+            animation: fade-in 0.3s;
+  }
 }

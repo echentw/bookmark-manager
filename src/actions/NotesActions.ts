@@ -34,3 +34,10 @@ export function editNote(params: NoteParams): Action<NoteParams> {
     params: params,
   };
 }
+
+export function closeNote(params: NoteParams): Action<NoteParams> {
+  return {
+    type: ActionType.closeNote,
+    params: params,
+  };
+}
