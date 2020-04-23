@@ -15,6 +15,7 @@ interface Props {
   hoverItemId: string | null;
   draggedType: DraggableType | null;
   draggedFolderRank: number | null;
+  editingBookmarkId: string | null;
 }
 
 class FolderListComponent extends React.Component<Props> {
@@ -24,7 +25,11 @@ class FolderListComponent extends React.Component<Props> {
       const editing = folder.id === this.props.editingFolderId;
       const dragging = (this.props.draggedType === DraggableType.Folder && rank === this.props.draggedFolderRank);
       const hovering = folder.id === this.props.hoverItemId;
-      const draggable = !deleting && !editing;
+      const draggable = (
+        this.props.deletingFolderId === null &&
+        this.props.editingFolderId === null &&
+        this.props.editingBookmarkId === null
+      );
       return (
         <FolderComponent
           key={folder.id}
@@ -60,6 +65,7 @@ const mapStateToProps = (state: AppState, props: {}) => {
     draggedType: state.dragState.draggableType,
     draggedFolderRank: state.dragState.folderRank,
     hoverItemId: state.hoverState.hoverItemId,
+    editingBookmarkId: state.editBookmarkState.editingBookmarkId,
   };
 };
 
