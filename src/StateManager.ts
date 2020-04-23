@@ -1,5 +1,6 @@
 import { AppState } from 'reduxStore';
 import { Folder } from 'models/Folder';
+import { Note } from 'models/Note';
 import {
   StateConverter,
   JsonState,
@@ -64,13 +65,15 @@ export class StateManager {
     return (
       this.usersAreSame(state1, state2) &&
       this.foldersAreSame(state1, state2) &&
+      this.notesAreSame(state1, state2) &&
       this.backgroundImageTimestampsAreSame(state1, state2)
     );
   }
 
   private loadOnlyPropertiesAreSame = (state1: AppState, state2: AppState): boolean => {
     return (
-      this.activeTabsAreSame(state1, state2)
+      this.activeTabsAreSame(state1, state2) &&
+      this.currentOpenNotesAreSame(state1, state2)
     );
   }
 
@@ -94,6 +97,17 @@ export class StateManager {
     return false;
   }
 
+  private notesAreSame = (state1: AppState, state2: AppState): boolean => {
+    const notes1 = state1.notesState.notes;
+    const notes2 = state2.notesState.notes;
+    if (notes1.length === notes2.length) {
+      return notes1.every((note1: Note, index: number) => {
+        return note1.equals(notes2[index]);
+      });
+    }
+    return false;
+  }
+
   private backgroundImageTimestampsAreSame = (state1: AppState, state2: AppState): boolean => {
     const backgroundImageTimestamp1 = state1.settingsState.backgroundImageTimestamp;
     const backgroundImageTimestamp2 = state2.settingsState.backgroundImageTimestamp;
@@ -104,5 +118,15 @@ export class StateManager {
     const activeTab1 = state1.utilitiesState.activeTab;
     const activeTab2 = state2.utilitiesState.activeTab;
     return activeTab1 === activeTab2;
+  }
+
+  private currentOpenNotesAreSame = (state1: AppState, state2: AppState): boolean => {
+    const note1 = state1.notesState.currentOpenNote;
+    const note2 = state2.notesState.currentOpenNote;
+    if (note1 === null) {
+      return note1 === note2;
+    } else {
+      return note1.equals(note2);
+    }
   }
 }

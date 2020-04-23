@@ -1,11 +1,15 @@
-import { Folder, FolderJson } from 'models/Folder';
-import { User, UserJson } from 'models/User';
+import { Folder } from 'models/Folder';
+import { User } from 'models/User';
+import { Note } from 'models/Note';
 import { Bookmark } from 'models/Bookmark';
 import { JsonState, mergeStates } from 'StateConverter';
+import { UtilityTab } from 'reducers/UtilitiesReducer'
 
+
+type StoredJsonState = Partial<JsonState>;
 
 export interface ChromeData {
-  appData: JsonState;
+  appData: StoredJsonState;
 }
 
 export interface TabInfo {
@@ -93,7 +97,11 @@ export class ChromeHelpers {
         if (chrome.runtime.lastError) {
           return reject(chrome.runtime.lastError);
         }
-        const jsonState = result.appData ?? ChromeHelpers.freshJsonState();
+        const storedJsonState: StoredJsonState = result.appData ?? {};
+        const jsonState = {
+          ...ChromeHelpers.freshJsonState(),
+          ...storedJsonState,
+        };
         return resolve(jsonState);
       });
     });
@@ -107,7 +115,11 @@ export class ChromeHelpers {
         }
         if (areaName === 'local' && changes[ChromeHelpers.Keys.AppData]) {
           const change: chrome.storage.StorageChange = changes[ChromeHelpers.Keys.AppData];
-          const jsonState: JsonState = change.newValue;
+          const storedJsonState: StoredJsonState = change.newValue;
+          const jsonState = {
+            ...ChromeHelpers.freshJsonState(),
+            ...storedJsonState,
+          };
           receive(jsonState);
         }
       }
@@ -126,10 +138,17 @@ export class ChromeHelpers {
         }),
       ],
     });
+    const firstNote = new Note({
+      name: 'My First Note',
+      text: 'Remember to smile!',
+    });
     return {
       user: null,
       folders: [firstFolder.toJson()],
+      notes: [firstNote.toJson()],
       backgroundImageTimestamp: '',
+      activeUtilityTab: UtilityTab.Bookmarks,
+      currentOpenNoteId: null,
     };
   }
 
