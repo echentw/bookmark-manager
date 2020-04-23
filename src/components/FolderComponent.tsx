@@ -148,7 +148,7 @@ class FolderComponent extends React.Component<InternalProps> {
         this.props.rank === this.props.draggedFolderRank && rank === this.props.draggedBookmarkRank
       );
       const hovering = bookmark.id === this.props.hoverItemId;
-      const draggable = !editing;
+      const draggable = this.props.editingBookmarkId === null;
       return (
         <DropTargetContainerComponent
           key={bookmark.id}
