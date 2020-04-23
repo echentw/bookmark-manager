@@ -17,12 +17,18 @@ interface ExternalProps {
 
 interface InternalProps extends ExternalProps {
   openNote: (params: NoteParams) => void;
+  deleteNote: (params: NoteParams) => void;
 }
 
 class NotePreviewComponent extends React.Component<InternalProps> {
+  onClickDelete = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
+    this.props.deleteNote({ note: this.props.note });
+  }
+
   render() {
     const maybeButtonsComponent = this.props.hovering ? (
-      <div className="note-buttons-container">
+      <div className="note-buttons-container" onClick={this.onClickDelete}>
         <FaTrash className="note-button"/>
       </div>
     ) : null;
@@ -61,6 +67,7 @@ const mapStateToProps = (state: AppState, props: ExternalProps) => {
 
 const mapActionsToProps = {
   openNote: NotesActions.openNote,
+  deleteNote: NotesActions.deleteNote,
 };
 
 const Component = connect(mapStateToProps, mapActionsToProps)(NotePreviewComponent);

@@ -66,10 +66,11 @@ function handleAddNote(state: NotesState, action: Action<NoteParams>): NotesStat
 
 function handleDeleteNote(state: NotesState, action: Action<NoteParams>): NotesState {
   const notes = withItemDeleted<Note>(state.notes, action.params.note);
-  const currentOpenNote = state.currentOpenNote.id === action.params.note.id ? null : state.currentOpenNote;
+  const currentOpenNoteId = state.currentOpenNote === null ? null : state.currentOpenNote.id;
+  const newOpenNoteId = currentOpenNoteId === action.params.note.id ? null : state.currentOpenNote;
   return {
     notes,
-    currentOpenNote,
+    currentOpenNote: newOpenNoteId,
   };
 }
 
