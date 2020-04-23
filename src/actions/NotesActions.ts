@@ -16,7 +16,7 @@ export function addNote(): Action<NoteParams> {
   return {
     type: ActionType.addNote,
     params: {
-      note: new Note({ name: '', text: '' }),
+      note: new Note({ name: 'New Note', text: '' }),
     },
   };
 }

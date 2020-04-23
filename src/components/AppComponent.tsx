@@ -171,22 +171,7 @@ class AppComponent extends React.Component<Props, State> {
       <SettingsModalComponent/>
     ) : null;
 
-    // TODO: delete this later
-    const i = 1;
-    const currentOpenNote = new Note({
-      id: `note-id-${i}`,
-      name: `Note ${i}`,
-      text: [
-        'This is a preview of the note.',
-        'This is the second line of the preview. And more text here.',
-        'Third line gg yy of the note.',
-        'Another line, the fourth!',
-        'Hopefully this line will ensure that the text preview goes overflow.',
-      ].join('\n\n'),
-    });
-
-    // const displayingNote = this.props.currentOpenNote !== null;
-    const displayingNote = true;
+    const displayingNote = this.props.currentOpenNote !== null;
 
     let maybeNoteEditor: React.ReactElement = null;
     let maybeWithNoteCssClass = '';
@@ -194,7 +179,7 @@ class AppComponent extends React.Component<Props, State> {
     if (displayingNote) {
       maybeNoteEditor = (
         <div className={'note-editor-container'}>
-          <NoteEditorComponent note={currentOpenNote}/>
+          <NoteEditorComponent note={this.props.currentOpenNote}/>
         </div>
       );
       maybeWithNoteCssClass = ' with-note';

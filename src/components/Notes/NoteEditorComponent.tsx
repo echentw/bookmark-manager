@@ -11,41 +11,29 @@ interface Props {
   note: Note;
 }
 
-interface State {
-  name: string;
-  text: string;
-}
-
-class NoteEditorComponent extends React.Component<Props, State> {
-
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      name: props.note.name,
-      text: props.note.text,
-    };
-  }
+class NoteEditorComponent extends React.Component<Props> {
 
   onChangeName = (event: ContentEditableEvent) => {
-    this.setState({ name: event.target.value });
+    console.log(event.target.value);
   }
 
   onChangeText = (event: ContentEditableEvent) => {
-    this.setState({ text: event.target.value });
+    console.log(event.target.value);
   }
 
   render() {
+    const { note } = this.props;
     return (
       <div className="note-editor">
         <ContentEditable
           className="note-name"
-          html={this.state.name}
+          html={note.name}
           disabled={false}
           onChange={this.onChangeName}
         />
         <ContentEditable
           className="note-editable-text"
-          html={this.state.text}
+          html={note.text}
           disabled={false}
           onChange={this.onChangeText}
         />

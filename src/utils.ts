@@ -1,30 +1,26 @@
-interface WithId {
+interface Identifiable {
   id: string;
 }
 
 // Returns a copy of the input array, with the item replaced.
 // If the item is not found in the array, then a copy of the original array is returned.
-export function withItemReplaced<T extends WithId>(items: T[], newItem: T): T[] {
-  const newItems = items.slice(0); // copies the array
-  const index = items.findIndex((item: T) => {
-    return item.id === newItem.id;
+export function withItemReplaced<T extends Identifiable>(items: T[], newItem: T): T[] {
+  const newItems = items.map((item: T) => {
+    if (item.id === newItem.id) {
+      return newItem;
+    } else {
+      return item;
+    }
   });
-  if (index !== -1) {
-    newItems[index] = newItem;
-  }
   return newItems;
 }
 
 // Returns a copy of the input array, with the item deleted.
 // If the item is not found in the array, then a copy of the original array is returned.
-export function withItemDeleted<T extends WithId>(items: T[], itemToDelete: T): T[] {
-  const newItems = items.slice(0); // copies the array
-  const index = items.findIndex((item: T) => {
-    return item.id === itemToDelete.id;
+export function withItemDeleted<T extends Identifiable>(items: T[], itemToDelete: T): T[] {
+  const newItems = items.filter((item: T) => {
+    return item.id !== itemToDelete.id;
   });
-  if (index !== -1) {
-    newItems.splice(index, 1);
-  }
   return newItems;
 }
 

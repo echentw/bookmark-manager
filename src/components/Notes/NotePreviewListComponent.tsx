@@ -4,18 +4,8 @@ import { connect } from 'react-redux';
 import { AppState } from 'reduxStore';
 import { Note } from 'models/Note';
 import { NotePreviewComponent } from 'components/Notes/NotePreviewComponent';
-import * as PlusIcon from 'assets/plus_icon.svg';
+import { AddNoteButtonComponent } from 'components/Notes/AddNoteButtonComponent';
 
-
-class AddNoteButtonComponent extends React.Component {
-  render() {
-    return (
-      <div className="add-note-button">
-        <img src={PlusIcon} className="add-note-icon"/>
-      </div>
-    );
-  }
-}
 
 interface Props {
   hoverItemId: string | null;
