@@ -4,7 +4,7 @@ import { NoteParams } from 'actions/NotesActions'
 import { AppState } from 'reduxStore';
 import { Reducer } from 'reducers/Reducer';
 
-import { withItemDeleted } from 'utils';
+import { withItemDeleted, withItemReplaced } from 'utils';
 
 export interface NotesState {
   notes: Note[];
@@ -42,6 +42,9 @@ export const notesReducer: Reducer<NotesState> = (
     case ActionType.deleteNote:
       newState = handleDeleteNote(state, action as Action<NoteParams>);
       break;
+    case ActionType.editNote:
+      newState = handleEditNote(state, action as Action<NoteParams>);
+      break;
   }
   return newState;
 };
@@ -67,5 +70,13 @@ function handleDeleteNote(state: NotesState, action: Action<NoteParams>): NotesS
   return {
     notes,
     currentOpenNote,
+  };
+}
+
+function handleEditNote(state: NotesState, action: Action<NoteParams>): NotesState {
+  const notes = withItemReplaced<Note>(state.notes, action.params.note);
+  return {
+    ...state,
+    notes: notes,
   };
 }

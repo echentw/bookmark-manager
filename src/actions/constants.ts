@@ -79,4 +79,5 @@ export const NotesActionType = {
   openNote: 'Notes:openNote',
   addNote: 'Notes:addNote',
   deleteNote: 'Notes:deleteNote',
+  editNote: 'Notes:editNote',
 };

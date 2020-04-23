@@ -17,6 +17,22 @@ export class Note {
     this.text = text || '';
   }
 
+  withName = (name: string): Note => {
+    return new Note({
+      id: this.id,
+      name: name,
+      text: this.text,
+    });
+  }
+
+  withText = (text: string): Note => {
+    return new Note({
+      id: this.id,
+      name: this.name,
+      text: text,
+    });
+  }
+
   public static fromJson = (json: NoteJson): Note => {
     return new Note(json);
   }

@@ -27,3 +27,10 @@ export function deleteNote(params: NoteParams): Action<NoteParams> {
     params: params,
   };
 }
+
+export function editNote(params: NoteParams): Action<NoteParams> {
+  return {
+    type: ActionType.editNote,
+    params: params,
+  };
+}
