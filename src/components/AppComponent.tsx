@@ -185,26 +185,31 @@ class AppComponent extends React.Component<Props, State> {
       ].join('\n\n'),
     });
 
-    // const currentOpenNote = this.props.currentOpenNote;
+    // const displayingNote = this.props.currentOpenNote !== null;
+    const displayingNote = true;
 
-    const maybeNoteEditor = currentOpenNote !== null ? (
-      <div className="note-editor-container">
-        <NoteEditorComponent note={currentOpenNote}/>
-      </div>
-    ) : null;
+    let maybeNoteEditor: React.ReactElement = null;
+    let maybeWithNoteCssClass = '';
+
+    if (displayingNote) {
+      maybeNoteEditor = (
+        <div className={'note-editor-container'}>
+          <NoteEditorComponent note={currentOpenNote}/>
+        </div>
+      );
+      maybeWithNoteCssClass = ' with-note';
+    }
 
     const innerComponent = this.props.user === null ? (
       <NuxComponent/>
     ) : (
-      <div className="app">
+      <div className={'app' + maybeWithNoteCssClass}>
         <div className="utilities-pane-container">
           <UtilitiesPaneComponent/>
         </div>
-        <div className="right-container">
-          { maybeNoteEditor }
-          <div className="app-greeting-container">
-            <GreetingComponent user={this.props.user} date={this.state.date}/>
-          </div>
+        { maybeNoteEditor }
+        <div className="app-greeting-container">
+          <GreetingComponent user={this.props.user} date={this.state.date}/>
         </div>
         <DateComponent date={this.state.date}/>
         <SettingsCogComponent/>

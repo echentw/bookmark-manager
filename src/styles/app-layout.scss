@@ -5,12 +5,7 @@
   width: 100%;
   height: 100%;
 
-  display: flex;
-  flex-direction: row;
-
   .utilities-pane-container {
-    width: calc(440px + #{$app-margin});
-
     display: flex;
     justify-content: center;
 
@@ -19,52 +14,91 @@
     padding-bottom: $app-margin;
   }
 
-  .right-container {
-    flex: 1;
-
-    display: flex;
-    flex-direction: column;
-
+  .note-editor-container {
     padding-top: $app-margin;
-    padding-bottom: $app-margin;
+    padding-left: 12px;
+    padding-right: $app-margin;
+  }
+
+  .app-greeting-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.app {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-areas: "left right";
+  grid-template-columns: calc(440px + #{$app-margin}) 1fr;
+
+  .utilities-pane-container {
+    grid-area: left;
+  }
+
+  .note-editor-container {
+    display: none;
+  }
+
+  .app-greeting-container {
+    grid-area: right;
+  }
+
+  &.with-note {
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+      "left upper"
+      "left lower";
+
+    .utilities-pane-container {
+      grid-area: left;
+    }
 
     .note-editor-container {
-      flex: 1;
-      padding-left: 12px;
+      display: initial;
+      grid-area: upper;
     }
 
     .app-greeting-container {
-      flex: 1;
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      grid-area: lower;
     }
   }
 }
 
-
 @media (max-width: $small-screen-max-width) {
   .app {
-    flex-direction: column-reverse;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding-bottom: $app-margin;
 
     .utilities-pane-container {
-      flex: 1;
-      width: 100%;
+      order: 2;
+      flex: 5;
+
       padding-left: 0;
       padding-top: 10px;
+      padding-bottom: 0;
     }
 
-    .right-container {
-      flex: none;
+    .note-editor-container {
+      order: 3;
+      flex: 2;
+
+      padding-top: 10px;
+      padding-left: 0;
+      padding-right: 0;
+
+      width: 440px;
+    }
+
+    .app-greeting-container {
+      order: 1;
+
       padding-top: 10px;
       padding-bottom: 0;
-
-      .note-editor-container {
-        display: none;
-      }
-
-      .app-greeting-container {}
     }
   }
 }
