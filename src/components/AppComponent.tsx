@@ -193,7 +193,7 @@ class AppComponent extends React.Component<Props, State> {
 
     if (displayingNote) {
       maybeNoteEditor = (
-        <div className={'note-editor-container'}>
+        <div className="note-editor-container">
           <NoteEditorComponent note={this.props.currentOpenNote}/>
         </div>
       );

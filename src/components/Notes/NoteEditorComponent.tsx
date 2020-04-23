@@ -68,7 +68,8 @@ class NoteEditorComponent extends React.Component<Props, State> {
         <ContentEditable
           className="note-editable-text"
           html={note.text}
-          disabled={false} onChange={this.onChangeText}
+          disabled={false}
+          onChange={this.onChangeText}
         />
         { maybeCloseButton }
       </div>

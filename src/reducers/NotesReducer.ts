@@ -14,17 +14,7 @@ export interface NotesState {
 }
 
 export const initialNotesState: NotesState = {
-  notes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => new Note({
-    id: `note-id-${i}`,
-    name: `Note ${i}`,
-    text: [
-      'This is a preview of the note.',
-      'This is the second line of the preview. And more text here.',
-      'Third line gg yy of the note.',
-      'Another line, the fourth!',
-      'Hopefully this line will ensure that the text preview goes overflow.',
-    ].join('\n\n'),
-  })),
+  notes: [],
   currentOpenNote: null,
 };
 
@@ -92,8 +82,8 @@ function handleDeleteNote(state: NotesState, action: Action<NoteParams>): NotesS
 function handleEditNote(state: NotesState, action: Action<NoteParams>): NotesState {
   const notes = withItemReplaced<Note>(state.notes, action.params.note);
   return {
-    ...state,
     notes: notes,
+    currentOpenNote: action.params.note,
   };
 }
 
