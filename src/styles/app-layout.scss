@@ -30,8 +30,8 @@
 .app {
   display: grid;
   grid-template-rows: 1fr;
-  grid-template-areas: "left right";
   grid-template-columns: calc(440px + #{$app-margin}) 1fr;
+  grid-template-areas: "left right";
 
   .utilities-pane-container {
     grid-area: left;
@@ -46,7 +46,7 @@
   }
 
   &.with-note {
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 50% 50%;
     grid-template-areas:
       "left upper"
       "left lower";
@@ -66,17 +66,22 @@
   }
 }
 
+$greeting-height: 80px;
+
 @media (max-width: $small-screen-max-width) {
   .app {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    grid-template-rows: $greeting-height 1fr;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "upper"
+      "lower";
+
+    justify-items: center;
 
     padding-bottom: $app-margin;
 
     .utilities-pane-container {
-      order: 2;
-      flex: 5;
+      grid-area: lower;
 
       padding-left: 0;
       padding-top: 10px;
@@ -84,8 +89,7 @@
     }
 
     .note-editor-container {
-      order: 3;
-      flex: 2;
+      display: none;
 
       padding-top: 10px;
       padding-left: 0;
@@ -95,10 +99,36 @@
     }
 
     .app-greeting-container {
-      order: 1;
+      grid-area: upper;
 
       padding-top: 10px;
       padding-bottom: 0;
+    }
+
+    &.with-note {
+      $remaining-height: calc(100% - #{$greeting-height});
+      $height2: calc(5 / 7 * #{$remaining-height});
+      $height3: calc(2 / 7 * #{$remaining-height});
+      grid-template-rows: $greeting-height $height2 $height3;
+      grid-template-areas:
+        "upper"
+        "middle"
+        "lower";
+
+      .utilities-pane-container {
+        grid-area: middle;
+      }
+
+      .note-editor-container {
+        grid-area: lower;
+
+        display: flex;
+        align-items: center;
+      }
+
+      .app-greeting-container {
+        grid-area: upper;
+      }
     }
   }
 }
