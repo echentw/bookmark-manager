@@ -6,6 +6,7 @@ import { CSSTransitionGroup } from 'react-transition-group';
 import { Bookmark } from 'models/Bookmark';
 import { Folder } from 'models/Folder';
 import { User } from 'models/User';
+import { Note } from 'models/Note';
 
 import { ChromeHelpers } from 'ChromeHelpers';
 import * as SyncActions from 'actions/SyncActions';
@@ -28,7 +29,7 @@ import { SettingsModalComponent } from 'components/SettingsModalComponent';
 import { FolderComponent } from 'components/FolderComponent';
 import { UtilitiesPaneComponent } from 'components/UtilitiesPaneComponent';
 import { SettingsCogComponent } from 'components/SettingsCogComponent';
-import { QuickAddNoteButtonComponent } from 'components/Notes/QuickAddNoteButtonComponent';
+import { NoteEditorComponent } from 'components/Notes/NoteEditorComponent';
 
 export enum DraggableType {
   Bookmark = 'bookmark',
@@ -43,6 +44,7 @@ interface Props {
   folders: Folder[];
   showAddBookmarksModal: boolean;
   showSettingsModal: boolean;
+  currentOpenNote: Note | null;
 
   loadAppState: (params: LoadParams) => void;
   syncAppState: (params: SyncParams) => void;
@@ -169,6 +171,28 @@ class AppComponent extends React.Component<Props, State> {
       <SettingsModalComponent/>
     ) : null;
 
+    // TODO: delete this later
+    const i = 1;
+    const currentOpenNote = new Note({
+      id: `note-id-${i}`,
+      name: `Note ${i}`,
+      text: [
+        'This is a preview of the note.',
+        'This is the second line of the preview. And more text here.',
+        'Third line gg yy of the note.',
+        'Another line, the fourth!',
+        'Hopefully this line will ensure that the text preview goes overflow.',
+      ].join('\n\n'),
+    });
+
+    // const currentOpenNote = this.props.currentOpenNote;
+
+    const maybeNoteEditor = currentOpenNote !== null ? (
+      <div className="note-editor-container">
+        <NoteEditorComponent note={currentOpenNote}/>
+      </div>
+    ) : null;
+
     const innerComponent = this.props.user === null ? (
       <NuxComponent/>
     ) : (
@@ -177,9 +201,7 @@ class AppComponent extends React.Component<Props, State> {
           <UtilitiesPaneComponent/>
         </div>
         <div className="right-container">
-          <div className="note-section-container">
-            <QuickAddNoteButtonComponent/>
-          </div>
+          { maybeNoteEditor }
           <div className="app-greeting-container">
             <GreetingComponent user={this.props.user} date={this.state.date}/>
           </div>
@@ -223,6 +245,7 @@ const mapStateToProps = (state: AppState, props: {}) => {
     showAddBookmarksModal: state.addBookmarksState.showingModal,
     showSettingsModal: state.settingsState.showingModal,
     user: state.userState.user,
+    currentOpenNote: state.notesState.currentOpenNote,
   };
 };
 

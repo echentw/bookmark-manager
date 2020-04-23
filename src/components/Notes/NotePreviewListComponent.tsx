@@ -26,7 +26,7 @@ class NotePreviewListComponent extends React.Component<Props> {
   render() {
     const noteComponents = this.props.notes.map(note => {
       return (
-        <div className="note-container">
+        <div key={note.id} className="note-container">
           <NotePreviewComponent
             note={note}
             hovering={this.props.hoverItemId === note.id}

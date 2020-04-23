@@ -35,7 +35,7 @@ class NotePreviewComponent extends React.Component<InternalProps> {
     const firstThreeLines = this.props.note.text.split(/\n+/).slice(0, 3);
 
     const lineElements = firstThreeLines.map(line => (
-      <div className="note-preview-text-line">
+      <div key={line} className="note-preview-text-line">
         { line }
       </div>
     ));

@@ -1,0 +1,56 @@
+@import './mixins/misc';
+@import './mixins/list';
+
+.note-editor {
+  @include rect-border-radius;
+  @include rect-subtle-box-shadow;
+
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.5);
+
+  width: 100%;
+  height: 100%;
+  max-width: 600px;
+
+  padding: 10px;
+
+  display: flex;
+  flex-direction: column;
+
+  &:before {
+    @include rect-border-radius;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    content: '';
+    background-color: rgba(255, 255, 255, 0.65);
+  }
+
+  .note-name {
+    @include list-title;
+    position: relative;
+    font-size: 20px;
+    margin-bottom: 4px;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  .note-editable-text {
+    @include rect-border;
+    @include rect-border-radius;
+
+    flex: 1;
+
+    position: relative;
+    background-color: white;
+    padding: 4px;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+}
