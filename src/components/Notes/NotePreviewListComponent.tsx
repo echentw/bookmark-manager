@@ -28,14 +28,6 @@ class NotePreviewListComponent extends React.Component<Props> {
       const dragging = rank === this.props.draggedNoteRank;
       const hovering = note.id === this.props.hoverItemId;
 
-      if (rank === 5) {
-        console.log('note at rank 5:', note);
-      }
-
-      if (rank === 3) {
-        console.log('note at rank 3:', note);
-      }
-
       return (
         <div className="note-container" key={note.id}>
           <DropTargetContainerComponent
