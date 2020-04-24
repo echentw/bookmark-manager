@@ -30,7 +30,9 @@
 .app {
   display: grid;
   grid-template-rows: 1fr;
-  grid-template-columns: calc(440px + #{$app-margin}) 1fr;
+  // Using calc(100% - blah) instead of 1fr to restrict the contents from overflowing.
+  // If there's a very long word in the notetext, it will overflow the 1fr.
+  grid-template-columns: calc(440px + #{$app-margin}) calc(100% - 440px - #{$app-margin});
   grid-template-areas: "left right";
 
   .utilities-pane-container {
