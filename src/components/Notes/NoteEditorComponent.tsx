@@ -21,6 +21,8 @@ interface State {
 
 class NoteEditorComponent extends React.Component<Props, State> {
 
+  private nameRef: React.RefObject<HTMLDivElement> = React.createRef();
+
   state: State = {
     hovering: false,
   };
@@ -34,8 +36,20 @@ class NoteEditorComponent extends React.Component<Props, State> {
   }
 
   onChangeName = (event: ContentEditableEvent) => {
-    const newNote = this.props.note.withName(event.target.value);
+    // This should get rid of all html tags, i.e. everything that looks like <...>
+    const sanitizedName  = event.target.value.replace(/<.*?>/g, '');
+    const newNote = this.props.note.withName(sanitizedName);
     this.props.editNote({ note: newNote });
+  }
+
+  onKeyDownName = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.keyCode === 13 || event.keyCode === 27) {
+      // Pressed enter or escape
+      this.nameRef.current.blur();
+
+      // Prevent onChangeName from getting called.
+      event.stopPropagation();
+    }
   }
 
   onChangeText = (event: ContentEditableEvent) => {
@@ -62,8 +76,11 @@ class NoteEditorComponent extends React.Component<Props, State> {
         <ContentEditable
           className="note-name"
           html={note.name}
+          spellCheck={false}
           disabled={false}
           onChange={this.onChangeName}
+          onKeyDown={this.onKeyDownName}
+          innerRef={this.nameRef}
         />
         <ContentEditable
           className="note-editable-text"
