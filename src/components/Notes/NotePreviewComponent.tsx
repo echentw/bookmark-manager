@@ -54,9 +54,12 @@ class NotePreviewComponent extends React.Component<InternalProps> {
         onClick={() => this.props.openNote({ note: this.props.note })}
       >
         <div className="note-name-and-buttons-container">
-          <div className="note-name">
-            { this.props.note.name }
-          </div>
+          <ContentEditable
+            className="note-name"
+            html={this.props.note.name}
+            disabled={true}
+            onChange={() => {}}
+          />
           { maybeButtonsComponent }
         </div>
         <ContentEditable
