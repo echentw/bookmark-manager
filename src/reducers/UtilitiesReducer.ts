@@ -1,4 +1,5 @@
-import { Action, UtilitiesActionType as ActionType } from 'actions/constants';
+import { Action, UtilitiesActionType, SyncActionType } from 'actions/constants';
+import { LoadParams } from 'actions/SyncActions';
 import { AppState } from 'reduxStore';
 import { Reducer } from 'reducers/Reducer';
 
@@ -32,16 +33,25 @@ export const utilitiesReducer: Reducer<UtilitiesState> = (
 ): UtilitiesState => {
   let newState = state;
   switch (action.type) {
-    case ActionType.selectBookmarksTab:
+    case UtilitiesActionType.selectBookmarksTab:
       newState = {
         activeTab: UtilityTab.Bookmarks,
       };
       break;
-    case ActionType.selectNotesTab:
+    case UtilitiesActionType.selectNotesTab:
       newState = {
         activeTab: UtilityTab.Notes,
       };
       break;
+    case SyncActionType.load:
+      newState = handleLoad(state, action as Action<LoadParams>);
+      break;
   }
   return newState;
+}
+
+function handleLoad(state: UtilitiesState, action: Action<LoadParams>): UtilitiesState {
+  return {
+    activeTab: action.params.state.utilitiesState.activeTab,
+  };
 }
