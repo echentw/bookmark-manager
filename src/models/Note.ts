@@ -44,6 +44,14 @@ export class Note {
     );
   }
 
+  public copy = (): Note => {
+    return new Note({
+      id: this.id,
+      name: this.name,
+      text: this.text,
+    });
+  }
+
   public static fromJson = (json: NoteJson): Note => {
     return new Note(json);
   }

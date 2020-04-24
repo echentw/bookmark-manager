@@ -9,9 +9,9 @@ import {
 } from 'StateConverter';
 
 enum PersistType {
-  Sync,
-  Load,
-  None,
+  Sync = 'sync',
+  Load = 'load',
+  None = 'none',
 }
 
 export class StateManager {
@@ -27,6 +27,9 @@ export class StateManager {
       foldersState: {
         folders: state.foldersState.folders.map(folder => folder.copy()),
       },
+      notesState: {
+        notes: state.notesState.notes.map(note => note.copy()),
+      },
     });
   }
 
@@ -36,6 +39,7 @@ export class StateManager {
     }
 
     const persistType = this.getPersistType(this.previousState, newState);
+
     switch (persistType) {
       case PersistType.Sync:
         return StateConverter.appStateToJsonStateSyncPartial(newState);
