@@ -107,7 +107,7 @@ class AppComponent extends React.Component<Props, State> {
           await ChromeHelpers.save(maybeJsonPartialState);
         } catch(e) {
           if (e.message.startsWith('QUOTA_BYTES')) {
-            alert('Not enough storage space left! Please refresh this page, and consider deleting some folders/bookmarks to make room.');
+            alert('Not enough storage space left! Please refresh this page, and consider deleting some folders/bookmarks/notes to make room.');
           } else {
             alert(`Unknown error: ${e.message}`);
           }
