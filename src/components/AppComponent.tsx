@@ -39,6 +39,7 @@ export enum DraggableType {
 }
 
 interface Props {
+  dataVersion: number;
   user: User | null;
   loaded: boolean;
   backgroundImageUrl: string;
@@ -118,8 +119,10 @@ class AppComponent extends React.Component<Props, State> {
 
     // When the persisted state changes, we want to update the current react state.
     ChromeHelpers.addOnChangedListener((jsonState: JsonState) => {
-      const appStateSyncPartial = StateConverter.jsonStateToAppStateSyncPartial(jsonState);
-      this.props.syncAppState({ state: appStateSyncPartial });
+      if (jsonState.dataVersion > this.props.dataVersion) {
+        const appStateSyncPartial = StateConverter.jsonStateToAppStateSyncPartial(jsonState);
+        this.props.syncAppState({ state: appStateSyncPartial });
+      }
     });
 
     // Do the initial load of state.
@@ -244,11 +247,12 @@ class AppComponent extends React.Component<Props, State> {
 
 const mapStateToProps = (state: AppState, props: {}) => {
   return {
+    dataVersion: state.metaState.dataVersion,
     backgroundImageUrl: state.settingsState.backgroundImageUrl,
     dragState: state.dragState,
     folders: state.foldersState.folders,
     notes: state.notesState.notes,
-    loaded: state.loadedState.loaded,
+    loaded: state.metaState.loaded,
     showAddBookmarksModal: state.addBookmarksState.showingModal,
     showSettingsModal: state.settingsState.showingModal,
     user: state.userState.user,

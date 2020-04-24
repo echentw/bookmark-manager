@@ -32,6 +32,7 @@ export function mergeStates<T>(state1: T, state2: RecursivePartial<T>): T {
 }
 
 export type JsonState = {
+  dataVersion: number;
   user: UserJson | null;
   folders: FolderJson[];
   notes: NoteJson[];
@@ -40,13 +41,21 @@ export type JsonState = {
   currentOpenNoteId: string | null;
 }
 
+type DataVersionJsonPick = Pick<JsonState, 'dataVersion'>
 type UserJsonPick = Pick<JsonState, 'user'>
 type FoldersJsonPick = Pick<JsonState, 'folders'>
 type NotesJsonPick = Pick<JsonState, 'notes'>
 type SettingsJsonPick = Pick<JsonState, 'backgroundImageTimestamp'>
 
-export type JsonStateSyncPartial = UserJsonPick & FoldersJsonPick & NotesJsonPick & SettingsJsonPick;
+export type JsonStateSyncPartial = (
+  DataVersionJsonPick
+  & UserJsonPick
+  & FoldersJsonPick
+  & NotesJsonPick
+  & SettingsJsonPick
+);
 
+type DataVersionPick = Pick2<AppState, 'metaState', 'dataVersion'>
 type UserPick = Pick2<AppState, 'userState', 'user'>
 type FoldersPick = Pick2<AppState, 'foldersState', 'folders'>
 type NotesPick = Pick2<AppState, 'notesState', 'notes'>
@@ -54,7 +63,7 @@ type SettingsPick = Pick2<AppState, 'settingsState', 'backgroundImageTimestamp'>
 type ActiveUtilityTabPick = Pick2<AppState, 'utilitiesState', 'activeTab'>
 type CurrentOpenNotePick = Pick2<AppState, 'notesState', 'currentOpenNote'>
 
-export type AppStateSyncPartial = UserPick & FoldersPick & NotesPick & SettingsPick;
+export type AppStateSyncPartial = DataVersionPick & UserPick & FoldersPick & NotesPick & SettingsPick;
 export type AppStateLoadPartial = AppStateSyncPartial & ActiveUtilityTabPick & CurrentOpenNotePick;
 
 export class StateConverter {
@@ -69,6 +78,7 @@ export class StateConverter {
   }
 
   public static appStateLoadPartialToJsonState = (appState: AppStateLoadPartial): JsonState => {
+    const { dataVersion } = appState.metaState;
     const { user } = appState.userState;
     const { folders } = appState.foldersState;
     const { notes, currentOpenNote } = appState.notesState;
@@ -82,6 +92,7 @@ export class StateConverter {
     const currentOpenNoteId = currentOpenNote?.id ?? null;
 
     return {
+      dataVersion: dataVersion,
       user: userJson,
       folders: folderJsons,
       notes: noteJsons,
@@ -92,8 +103,8 @@ export class StateConverter {
   }
 
   public static jsonStateToJsonStateSyncPartial = (jsonState: JsonState): JsonStateSyncPartial => {
-    const { user, folders, notes, backgroundImageTimestamp } = jsonState;
-    return { user, folders, notes, backgroundImageTimestamp };
+    const { dataVersion, user, folders, notes, backgroundImageTimestamp } = jsonState;
+    return { dataVersion, user, folders, notes, backgroundImageTimestamp };
   }
 
   public static jsonStateToAppStateSyncPartial = (jsonState: JsonState): AppStateSyncPartial => {
@@ -103,6 +114,7 @@ export class StateConverter {
 
   public static jsonStateSyncPartialToAppStateSyncPartial = (jsonStateSyncPartial: JsonStateSyncPartial): AppStateSyncPartial => {
     const {
+      dataVersion,
       user: userJson,
       folders: folderJsons,
       notes: noteJsons,
@@ -115,6 +127,7 @@ export class StateConverter {
     const backgroundImageTimestamp: string = maybeBackgroundImageTimestamp ?? '';
 
     return {
+      metaState: { dataVersion },
       userState: { user },
       foldersState: { folders },
       notesState: { notes },
@@ -123,12 +136,14 @@ export class StateConverter {
   }
 
   private static appStateLoadPartialToAppStateSyncPartial = (appStateLoadPartial: AppStateLoadPartial): AppStateSyncPartial => {
+    const { dataVersion } = appStateLoadPartial.metaState;
     const { user } = appStateLoadPartial.userState;
     const { folders } = appStateLoadPartial.foldersState;
     const { notes } = appStateLoadPartial.notesState;
     const { backgroundImageTimestamp } = appStateLoadPartial.settingsState;
 
     return {
+      metaState: { dataVersion },
       userState: { user },
       foldersState: { folders },
       notesState: { notes },

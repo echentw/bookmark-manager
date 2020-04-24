@@ -143,6 +143,7 @@ export class ChromeHelpers {
       text: 'Remember to smile!',
     });
     return {
+      dataVersion: 10, // Some arbitrary number bigger than 1.
       user: null,
       folders: [firstFolder.toJson()],
       notes: [firstNote.toJson()],

@@ -11,7 +11,7 @@ import { editBookmarkReducer, EditBookmarkState, initialEditBookmarkState } from
 import { editFolderReducer, EditFolderState, initialEditFolderState } from 'reducers/EditFolderReducer';
 import { foldersReducer, FoldersState, initialFoldersState } from 'reducers/FoldersReducer';
 import { hoverReducer, HoverState, initialHoverState } from 'reducers/HoverReducer';
-import { initialLoadedState, loadedReducer, LoadedState } from 'reducers/LoadedReducer';
+import { initialMetaState, metaStateReducer, MetaState } from 'reducers/MetaStateReducer';
 import { initialSettingsState, settingsReducer, SettingsState } from 'reducers/SettingsReducer';
 import { initialUserState, userReducer, UserState } from 'reducers/UserReducer';
 import { initialUtilitiesState, utilitiesReducer, UtilitiesState } from 'reducers/UtilitiesReducer';
@@ -33,7 +33,7 @@ export interface AppState {
   editFolderState: EditFolderState;
   foldersState: FoldersState;
   hoverState: HoverState;
-  loadedState: LoadedState;
+  metaState: MetaState;
   settingsState: SettingsState;
   userState: UserState;
   utilitiesState: UtilitiesState;
@@ -49,7 +49,7 @@ const initialAppState: AppState = {
   editFolderState: initialEditFolderState,
   foldersState: initialFoldersState,
   hoverState: initialHoverState,
-  loadedState: initialLoadedState,
+  metaState: initialMetaState,
   settingsState: initialSettingsState,
   userState: initialUserState,
   utilitiesState: initialUtilitiesState,
@@ -66,7 +66,7 @@ const reducer = (state: AppState = initialAppState, action: Action): AppState =>
     editFolderState: editFolderReducer(state.editFolderState, action, state),
     foldersState: foldersReducer(state.foldersState, action, state),
     hoverState: hoverReducer(state.hoverState, action, state),
-    loadedState: loadedReducer(state.loadedState, action, state),
+    metaState: metaStateReducer(state.metaState, action, state),
     settingsState: settingsReducer(state.settingsState, action, state),
     userState: userReducer(state.userState, action, state),
     utilitiesState: utilitiesReducer(state.utilitiesState, action, state),
