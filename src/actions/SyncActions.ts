@@ -1,12 +1,12 @@
 import { Action, SyncActionType as ActionType } from 'actions/constants';
-import { JsonState, JsonStateSyncPartial } from 'StateConverter';
+import { AppStateLoadPartial, AppStateSyncPartial } from 'StateConverter';
 
 export interface LoadParams {
-  state: JsonState;
+  state: AppStateLoadPartial;
 }
 
 export interface SyncParams {
-  state: JsonStateSyncPartial;
+  state: AppStateSyncPartial;
 }
 
 export function load(params: LoadParams): Action<LoadParams> {

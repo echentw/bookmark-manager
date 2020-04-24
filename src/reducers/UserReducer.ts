@@ -1,5 +1,6 @@
-import { Action, UserActionType  as ActionType } from 'actions/constants';
+import { Action, UserActionType, SyncActionType } from 'actions/constants';
 import { UserParams } from 'actions/UserActions';
+import { LoadParams, SyncParams } from 'actions/SyncActions';
 import { AppState } from 'reduxStore';
 import { User } from 'models/User';
 import { Reducer } from 'reducers/Reducer';
@@ -19,8 +20,14 @@ export const userReducer: Reducer<UserState> = (
 ): UserState => {
   let newState = state;
   switch (action.type) {
-    case ActionType.setName:
+    case UserActionType.setName:
       newState = handleSetName(state, action as Action<UserParams>);
+      break;
+    case SyncActionType.load:
+      newState = handleLoad(state, action as Action<LoadParams>);
+      break;
+    case SyncActionType.sync:
+      newState = handleSync(state, action as Action<SyncParams>);
       break;
   }
   return newState;
@@ -30,5 +37,17 @@ function handleSetName(state: UserState, action: Action<UserParams>): UserState 
   const user = new User({ name: action.params.name });
   return {
     user: user,
+  };
+}
+
+function handleLoad(state: UserState, action: Action<LoadParams>): UserState {
+  return {
+    user: action.params.state.userState.user,
+  };
+}
+
+function handleSync(state: UserState, action: Action<SyncParams>): UserState {
+  return {
+    user: action.params.state.userState.user,
   };
 }

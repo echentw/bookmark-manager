@@ -96,6 +96,11 @@ export class StateConverter {
     return { user, folders, notes, backgroundImageTimestamp };
   }
 
+  public static jsonStateToAppStateSyncPartial = (jsonState: JsonState): AppStateSyncPartial => {
+    const jsonStateSyncPartial = StateConverter.jsonStateToJsonStateSyncPartial(jsonState);
+    return StateConverter.jsonStateSyncPartialToAppStateSyncPartial(jsonStateSyncPartial);
+  }
+
   public static jsonStateSyncPartialToAppStateSyncPartial = (jsonStateSyncPartial: JsonStateSyncPartial): AppStateSyncPartial => {
     const {
       user: userJson,

@@ -17,7 +17,6 @@ import { initialUserState, userReducer, UserState } from 'reducers/UserReducer';
 import { initialUtilitiesState, utilitiesReducer, UtilitiesState } from 'reducers/UtilitiesReducer';
 import { initialNotesState, notesReducer, NotesState } from 'reducers/NotesReducer';
 
-import { syncReducer } from 'reducers/SyncReducer';
 
 declare global {
   interface Window {
@@ -58,7 +57,7 @@ const initialAppState: AppState = {
 };
 
 const reducer = (state: AppState = initialAppState, action: Action): AppState => {
-  const newState: AppState = {
+  let newState: AppState = {
     addBookmarksState: addBookmarksReducer(state.addBookmarksState, action, state),
     copyUrlState: copyUrlReducer(state.copyUrlState, action, state),
     deleteFolderState: deleteFolderReducer(state.deleteFolderState, action, state),
@@ -73,8 +72,7 @@ const reducer = (state: AppState = initialAppState, action: Action): AppState =>
     utilitiesState: utilitiesReducer(state.utilitiesState, action, state),
     notesState: notesReducer(state.notesState, action, state),
   };
-  const syncedState: AppState = syncReducer(newState, action);
-  return syncedState;
+  return newState;
 };
 
 const enhancers = window.__REDUX_DEVTOOLS_EXTENSION__ ? (

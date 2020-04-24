@@ -1,7 +1,9 @@
-import { Action, SettingsActionType as ActionType } from 'actions/constants';
+import { Action, SettingsActionType, SyncActionType } from 'actions/constants';
 import { AppState } from 'reduxStore';
+import { LocalStorageHelpers } from 'LocalStorageHelpers';
 import { Reducer } from 'reducers/Reducer';
 import { SetBackgroundImageParams } from 'actions/SettingsActions';
+import { LoadParams, SyncParams } from 'actions/SyncActions';
 
 export interface SettingsState {
   showingModal: boolean;
@@ -12,8 +14,6 @@ export interface SettingsState {
   // (Unix timestamp in milliseconds)
   backgroundImageTimestamp: string;
 
-  // Do not persist this! This could be a big as 5MB worth of pure string.
-  // This state is completely managed by SyncReducer, so we don't need to worry about it here.
   backgroundImageUrl: string;
 }
 
@@ -30,14 +30,21 @@ export const settingsReducer: Reducer<SettingsState> = (
 ): SettingsState => {
   let newState = state;
   switch (action.type) {
-    case ActionType.showModal:
+    case SettingsActionType.showModal:
       newState = handleShowModal(state, action);
       break;
-    case ActionType.hideModal:
+    case SettingsActionType.hideModal:
       newState = handleHideModal(state, action);
       break;
-    case ActionType.setBackgroundImage:
+    case SettingsActionType.setBackgroundImage:
       newState = handleSetBackgroundImage(state, action as Action<SetBackgroundImageParams>);
+      break;
+    case SyncActionType.load:
+      newState = handleLoad(state, action as Action<LoadParams>);
+      break;
+    case SyncActionType.sync:
+      newState = handleSync(state, action as Action<SyncParams>);
+      break;
   }
   return newState;
 }
@@ -62,4 +69,31 @@ function handleSetBackgroundImage(state: SettingsState, action: Action<SetBackgr
     backgroundImageTimestamp: action.params.timestamp,
     backgroundImageUrl: action.params.url,
   };
+}
+
+function handleLoad(state: SettingsState, action: Action<LoadParams>): SettingsState {
+  const backgroundImageUrl = _loadBackgroundImageUrl();
+  const { backgroundImageTimestamp } = action.params.state.settingsState;
+  return {
+    ...state,
+    backgroundImageTimestamp,
+    backgroundImageUrl,
+  };
+}
+
+function handleSync(state: SettingsState, action: Action<SyncParams>): SettingsState {
+  const newTimestamp = action.params.state.settingsState.backgroundImageTimestamp;
+  const newBackgroundImageUrl = state.backgroundImageTimestamp === newTimestamp ?
+    state.backgroundImageUrl : _loadBackgroundImageUrl();
+
+  return {
+    ...state,
+    backgroundImageTimestamp: newTimestamp,
+    backgroundImageUrl: newBackgroundImageUrl,
+  };
+}
+
+function _loadBackgroundImageUrl(): string {
+  // It can be null, undefined, or empty string
+  return LocalStorageHelpers.getBackgroundImageUrl() || require('assets/wallpapers/moon.json').url;
 }

@@ -12,12 +12,14 @@ import {
   EditBookmarkActionType,
   EditFolderActionType,
   FolderActionType,
+  SyncActionType,
 } from 'actions/constants';
 import { FolderParams } from 'actions/FolderActions';
 import { DeleteFolderParams } from 'actions/DeleteFolderActions';
 import { DragBookmarkParams, DragFolderParams } from 'actions/DragActions';
 import { EditBookmarkParams } from 'actions/EditBookmarkActions';
 import { EditFolderParams } from 'actions/EditFolderActions';
+import { LoadParams, SyncParams } from 'actions/SyncActions';
 import { withItemDeleted, withItemReplaced } from 'utils';
 
 import { DraggableType } from 'components/AppComponent';
@@ -67,7 +69,12 @@ export const foldersReducer: Reducer<FoldersState> = (
     case FolderActionType.collapse:
       newState = handleCollapseFolder(state, action as Action<FolderParams>);
       break;
-
+    case SyncActionType.load:
+      newState = handleLoad(state, action as Action<LoadParams>);
+      break;
+    case SyncActionType.sync:
+      newState = handleSync(state, action as Action<SyncParams>);
+      break;
   }
   return newState;
 };
@@ -224,7 +231,6 @@ function handleDragIsOverFolder(
   };
 }
 
-
 function handleExpandFolder(state: FoldersState, action: Action<FolderParams>): FoldersState {
   const folder = state.folders.find(folder => folder.id === action.params.folder.id) ?? null;
   if (folder === null) {
@@ -246,5 +252,17 @@ function handleCollapseFolder(state: FoldersState, action: Action<FolderParams>)
   const newFolders = withItemReplaced<Folder>(state.folders, newFolder);
   return {
     folders: newFolders,
+  };
+}
+
+function handleLoad(state: FoldersState, action: Action<LoadParams>): FoldersState {
+  return {
+    folders: action.params.state.foldersState.folders,
+  };
+}
+
+function handleSync(state: FoldersState, action: Action<SyncParams>): FoldersState {
+  return {
+    folders: action.params.state.foldersState.folders,
   };
 }

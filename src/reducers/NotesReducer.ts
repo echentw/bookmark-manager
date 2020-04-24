@@ -1,6 +1,12 @@
 import { Note } from 'models/Note';
-import { Action, NotesActionType, DragActionType } from 'actions/constants';
+import {
+  Action,
+  NotesActionType,
+  DragActionType,
+  SyncActionType,
+} from 'actions/constants';
 import { NoteParams } from 'actions/NotesActions'
+import { LoadParams, SyncParams } from 'actions/SyncActions';
 import { AppState } from 'reduxStore';
 import { Reducer } from 'reducers/Reducer';
 
@@ -42,6 +48,12 @@ export const notesReducer: Reducer<NotesState> = (
       break;
     case DragActionType.isOverNote:
       newState = handleDragIsOverNote(state, action as Action<DragNoteParams>, appState);
+      break;
+    case SyncActionType.load:
+      newState = handleLoad(state, action as Action<LoadParams>);
+      break;
+    case SyncActionType.sync:
+      newState = handleSync(state, action as Action<SyncParams>);
       break;
   }
   return newState;
@@ -102,5 +114,26 @@ function handleDragIsOverNote(
   return {
     ...state,
     notes: newNotes,
+  };
+}
+
+function handleLoad(state: NotesState, action: Action<LoadParams>): NotesState {
+  const { notes, currentOpenNote } = action.params.state.notesState;
+  return {
+    notes,
+    currentOpenNote,
+  };
+}
+
+function handleSync(state: NotesState, action: Action<SyncParams>): NotesState {
+  const newNotes = action.params.state.notesState.notes;
+
+  // It's possible that the currentOpenNote has been deleted by another session.
+  const foundNote = newNotes.find(note => note.id === state.currentOpenNote?.id);
+  const newOpenNote = foundNote ?? null;
+
+  return {
+    notes: newNotes,
+    currentOpenNote: newOpenNote,
   };
 }
