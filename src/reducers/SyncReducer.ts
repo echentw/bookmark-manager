@@ -46,6 +46,16 @@ function handleSync(state: AppState, action: Action<SyncParams>): AppState {
       backgroundImageUrl: backgroundImageUrl,
     },
   });
+
+  // Check that the currentOpenNote still exists.
+  const { notes, currentOpenNote } = merged2.notesState;
+  const foundNote = notes.find(note => note.id === currentOpenNote?.id);
+  if (foundNote === undefined) {
+    merged2.notesState.currentOpenNote = null;
+  } else {
+    merged2.notesState.currentOpenNote = foundNote;
+  }
+
   return merged2;
 }
 
