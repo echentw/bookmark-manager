@@ -32,6 +32,9 @@ import { UtilitiesPaneComponent } from 'components/UtilitiesPaneComponent';
 import { SettingsCogComponent } from 'components/SettingsCogComponent';
 import { NoteEditorComponent } from 'components/Notes/NoteEditorComponent';
 
+import { ENABLE_NOTES } from 'features';
+
+
 export enum DraggableType {
   Bookmark = 'bookmark',
   Folder = 'folder',
@@ -190,7 +193,7 @@ class AppComponent extends React.Component<Props, State> {
       <SettingsModalComponent/>
     ) : null;
 
-    const displayingNote = this.props.currentOpenNote !== null;
+    const displayingNote = ENABLE_NOTES && this.props.currentOpenNote !== null;
 
     let maybeNoteEditor: React.ReactElement = null;
     let maybeWithNoteCssClass = '';
