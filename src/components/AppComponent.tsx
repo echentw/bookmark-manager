@@ -128,10 +128,11 @@ class AppComponent extends React.Component<Props, State> {
 
     // When the persisted state changes, we want to update the current react state.
     ChromeHelpers.addOnChangedListener((jsonState: JsonState) => {
-      if (jsonState.dataVersion > this.props.dataVersion) {
-        const appStateSyncPartial = StateConverter.jsonStateToAppStateSyncPartial(jsonState);
-        this.props.syncAppState({ state: appStateSyncPartial });
+      if (ENABLE_NOTES && jsonState.dataVersion <= this.props.dataVersion) {
+        return;
       }
+      const appStateSyncPartial = StateConverter.jsonStateToAppStateSyncPartial(jsonState);
+      this.props.syncAppState({ state: appStateSyncPartial });
     });
 
     // Do the initial load of state.
