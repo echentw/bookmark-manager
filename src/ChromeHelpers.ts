@@ -80,6 +80,16 @@ export class ChromeHelpers {
   public static save = async (jsonState: Partial<JsonState>): Promise<void> => {
     return new Promise((resolve, reject) => {
       ChromeHelpers.load().then(storedJsonState => {
+        // console.log(`our version: ${jsonState.codeVersion}, stored version: ${storedJsonState.codeVersion}`);
+        if (jsonState.codeVersion < storedJsonState.codeVersion) {
+          return reject(
+            new Error(
+              `OUTDATED_CODE_VERSION: Trying to save version ` +
+              `${jsonState.codeVersion} over ${storedJsonState.codeVersion}`
+            )
+          );
+        }
+
         const mergedJsonState = mergeStates<JsonState>(storedJsonState, jsonState);
         storageEngine.set({ [ChromeHelpers.Keys.AppData]: mergedJsonState }, () => {
           if (chrome.runtime.lastError) {
@@ -143,6 +153,7 @@ export class ChromeHelpers {
       text: '',
     });
     return {
+      codeVersion: 0, // This value gets overridden by MetaStateReducer.ts
       dataVersion: 10, // Some arbitrary number bigger than 1.
       user: null,
       folders: [firstFolder.toJson()],

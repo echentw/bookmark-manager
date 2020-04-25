@@ -4,13 +4,21 @@ import { AppState } from 'reduxStore';
 import { Reducer } from 'reducers/Reducer';
 
 export interface MetaState {
+  codeVersion: number;
   dataVersion: number;
   loaded: boolean;
+  lastAction: Action | null;
 }
 
+// Increment this number when new code version is backwards-incompatible,
+// and old sessions need to refresh the page.
+const CODE_VERSION = 1;
+
 export const initialMetaState: MetaState = {
+  codeVersion: CODE_VERSION,
   dataVersion: 0,
   loaded: false,
+  lastAction: null,
 };
 
 export const metaStateReducer: Reducer<MetaState> = (
@@ -30,6 +38,7 @@ export const metaStateReducer: Reducer<MetaState> = (
       newState = {
         ...state,
         dataVersion: state.dataVersion + 1,
+        lastAction: action,
       };
   }
   return newState;
@@ -37,14 +46,17 @@ export const metaStateReducer: Reducer<MetaState> = (
 
 function handleLoad(state: MetaState, action: Action<LoadParams>): MetaState {
   return {
+    ...state,
     dataVersion: action.params.state.metaState.dataVersion,
     loaded: true,
+    lastAction: action,
   };
 }
 
 function handleSync(state: MetaState, action: Action<SyncParams>): MetaState {
   return {
+    ...state,
     dataVersion: action.params.state.metaState.dataVersion,
-    loaded: true,
+    lastAction: action,
   };
 }

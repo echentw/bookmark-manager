@@ -32,6 +32,7 @@ export function mergeStates<T>(state1: T, state2: RecursivePartial<T>): T {
 }
 
 export type JsonState = {
+  codeVersion: number;
   dataVersion: number;
   user: UserJson | null;
   folders: FolderJson[];
@@ -41,6 +42,7 @@ export type JsonState = {
   currentOpenNoteId: string | null;
 }
 
+type CodeVersionJsonPick = Pick<JsonState, 'codeVersion'>
 type DataVersionJsonPick = Pick<JsonState, 'dataVersion'>
 type UserJsonPick = Pick<JsonState, 'user'>
 type FoldersJsonPick = Pick<JsonState, 'folders'>
@@ -48,13 +50,15 @@ type NotesJsonPick = Pick<JsonState, 'notes'>
 type SettingsJsonPick = Pick<JsonState, 'backgroundImageTimestamp'>
 
 export type JsonStateSyncPartial = (
-  DataVersionJsonPick
+  CodeVersionJsonPick
+  & DataVersionJsonPick
   & UserJsonPick
   & FoldersJsonPick
   & NotesJsonPick
   & SettingsJsonPick
 );
 
+type CodeVersionPick = Pick2<AppState, 'metaState', 'codeVersion'>
 type DataVersionPick = Pick2<AppState, 'metaState', 'dataVersion'>
 type UserPick = Pick2<AppState, 'userState', 'user'>
 type FoldersPick = Pick2<AppState, 'foldersState', 'folders'>
@@ -63,8 +67,17 @@ type SettingsPick = Pick2<AppState, 'settingsState', 'backgroundImageTimestamp'>
 type ActiveUtilityTabPick = Pick2<AppState, 'utilitiesState', 'activeTab'>
 type CurrentOpenNotePick = Pick2<AppState, 'notesState', 'currentOpenNote'>
 
-export type AppStateSyncPartial = DataVersionPick & UserPick & FoldersPick & NotesPick & SettingsPick;
+export type AppStateSyncPartial = (
+  CodeVersionPick
+  & DataVersionPick
+  & UserPick
+  & FoldersPick
+  & NotesPick
+  & SettingsPick
+);
+
 export type AppStateLoadPartial = AppStateSyncPartial & ActiveUtilityTabPick & CurrentOpenNotePick;
+
 
 export class StateConverter {
 
@@ -78,7 +91,7 @@ export class StateConverter {
   }
 
   public static appStateLoadPartialToJsonState = (appState: AppStateLoadPartial): JsonState => {
-    const { dataVersion } = appState.metaState;
+    const { codeVersion, dataVersion } = appState.metaState;
     const { user } = appState.userState;
     const { folders } = appState.foldersState;
     const { notes, currentOpenNote } = appState.notesState;
@@ -92,6 +105,7 @@ export class StateConverter {
     const currentOpenNoteId = currentOpenNote?.id ?? null;
 
     return {
+      codeVersion: codeVersion,
       dataVersion: dataVersion,
       user: userJson,
       folders: folderJsons,
@@ -103,8 +117,8 @@ export class StateConverter {
   }
 
   public static jsonStateToJsonStateSyncPartial = (jsonState: JsonState): JsonStateSyncPartial => {
-    const { dataVersion, user, folders, notes, backgroundImageTimestamp } = jsonState;
-    return { dataVersion, user, folders, notes, backgroundImageTimestamp };
+    const { codeVersion, dataVersion, user, folders, notes, backgroundImageTimestamp } = jsonState;
+    return { codeVersion, dataVersion, user, folders, notes, backgroundImageTimestamp };
   }
 
   public static jsonStateToAppStateSyncPartial = (jsonState: JsonState): AppStateSyncPartial => {
@@ -114,6 +128,7 @@ export class StateConverter {
 
   public static jsonStateSyncPartialToAppStateSyncPartial = (jsonStateSyncPartial: JsonStateSyncPartial): AppStateSyncPartial => {
     const {
+      codeVersion,
       dataVersion,
       user: userJson,
       folders: folderJsons,
@@ -127,7 +142,7 @@ export class StateConverter {
     const backgroundImageTimestamp: string = maybeBackgroundImageTimestamp ?? '';
 
     return {
-      metaState: { dataVersion },
+      metaState: { codeVersion, dataVersion },
       userState: { user },
       foldersState: { folders },
       notesState: { notes },
@@ -136,14 +151,14 @@ export class StateConverter {
   }
 
   private static appStateLoadPartialToAppStateSyncPartial = (appStateLoadPartial: AppStateLoadPartial): AppStateSyncPartial => {
-    const { dataVersion } = appStateLoadPartial.metaState;
+    const { codeVersion, dataVersion } = appStateLoadPartial.metaState;
     const { user } = appStateLoadPartial.userState;
     const { folders } = appStateLoadPartial.foldersState;
     const { notes } = appStateLoadPartial.notesState;
     const { backgroundImageTimestamp } = appStateLoadPartial.settingsState;
 
     return {
-      metaState: { dataVersion },
+      metaState: { codeVersion, dataVersion },
       userState: { user },
       foldersState: { folders },
       notesState: { notes },

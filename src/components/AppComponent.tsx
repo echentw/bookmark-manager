@@ -10,6 +10,7 @@ import { Note } from 'models/Note';
 
 import { ChromeHelpers } from 'ChromeHelpers';
 import * as SyncActions from 'actions/SyncActions';
+import { SyncActionType } from 'actions/constants';
 import { LoadParams, SyncParams } from 'actions/SyncActions';
 import { AppState, reduxStore } from 'reduxStore';
 import { DragState } from 'reducers/DragReducer';
@@ -104,15 +105,20 @@ class AppComponent extends React.Component<Props, State> {
         return;
       }
 
-      const maybeJsonPartialState: Partial<JsonState> = this.stateManager.maybeGetStateToPersist(state);
-      if (maybeJsonPartialState !== null) {
-        try {
-          await ChromeHelpers.save(maybeJsonPartialState);
-        } catch(e) {
-          if (e.message.startsWith('QUOTA_BYTES')) {
-            alert('Not enough storage space left! Please refresh this page, and consider deleting some folders/bookmarks/notes to make room.');
-          } else {
-            alert(`Unknown error: ${e.message}`);
+      if (![SyncActionType.load, SyncActionType.sync].includes(state.metaState.lastAction.type)) {
+        const maybeJsonPartialState: Partial<JsonState> = this.stateManager.maybeGetStateToPersist(state);
+        if (maybeJsonPartialState !== null) {
+          try {
+            await ChromeHelpers.save(maybeJsonPartialState);
+          } catch(e) {
+            console.log(e.message);
+            if (e.message.startsWith('QUOTA_BYTES')) {
+              alert('Not enough storage space left! Please refresh this page, and consider deleting some folders/bookmarks/notes to make room.');
+            } else if (e.message.startsWith('OUTDATED_CODE_VERSION')) {
+              alert('There is a new version of Axle available! Please refresh the page to get the new version.');
+            } else {
+              alert(`Unknown error: ${e.message}`);
+            }
           }
         }
       }
