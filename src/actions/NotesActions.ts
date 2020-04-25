@@ -12,12 +12,10 @@ export function openNote(params: NoteParams): Action<NoteParams> {
   };
 }
 
-export function addNote(): Action<NoteParams> {
+export function addNote(): Action {
   return {
     type: ActionType.addNote,
-    params: {
-      note: new Note({ name: 'New Note', text: '' }),
-    },
+    params: {},
   };
 }
 

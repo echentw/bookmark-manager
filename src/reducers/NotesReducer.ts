@@ -38,7 +38,7 @@ export const notesReducer: Reducer<NotesState> = (
       newState = handleCloseNote(state, action as Action<NoteParams>);
       break;
     case NotesActionType.addNote:
-      newState = handleAddNote(state, action as Action<NoteParams>);
+      newState = handleAddNote(state, action);
       break;
     case NotesActionType.deleteNote:
       newState = handleDeleteNote(state, action as Action<NoteParams>);
@@ -74,11 +74,21 @@ function handleCloseNote(state: NotesState, action: Action<NoteParams>): NotesSt
   };
 }
 
-function handleAddNote(state: NotesState, action: Action<NoteParams>): NotesState {
-  const notes = state.notes.concat([action.params.note]);
+function handleAddNote(state: NotesState, action: Action): NotesState {
+  const allNoteNames = new Set(state.notes.map(note => note.name));
+
+  let name: string;
+  for (let i = 0; i < 200; ++i) {
+    name = i === 0 ? 'New Note' : `New Note ${i}`;
+    if (!allNoteNames.has(name)) {
+      break;
+    }
+  }
+  const newNote = new Note({ name: name, text: '' });
+  const notes = state.notes.concat([newNote]);
   return {
     notes: notes,
-    currentOpenNote: action.params.note,
+    currentOpenNote: newNote,
   };
 }
 
