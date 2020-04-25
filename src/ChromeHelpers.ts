@@ -140,7 +140,7 @@ export class ChromeHelpers {
     });
     const firstNote = new Note({
       name: 'My First Note',
-      text: 'Remember to smile!',
+      text: '',
     });
     return {
       dataVersion: 10, // Some arbitrary number bigger than 1.
