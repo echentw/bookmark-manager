@@ -10,11 +10,10 @@ import { Note } from 'models/Note';
 
 import { ChromeHelpers } from 'ChromeHelpers';
 import * as SyncActions from 'actions/SyncActions';
-import { SyncActionType } from 'actions/constants';
+import { Action, SyncActionType } from 'actions/constants';
 import { LoadParams, SyncParams } from 'actions/SyncActions';
 import { AppState, reduxStore } from 'reduxStore';
 import { DragState } from 'reducers/DragReducer';
-import { Action } from 'actions/constants';
 
 import { StateManager } from 'StateManager';
 import { StateConverter, JsonState } from 'StateConverter';

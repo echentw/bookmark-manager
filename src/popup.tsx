@@ -2,13 +2,27 @@ import 'styles/popup.scss';
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { Provider, connect } from 'react-redux';
+import { Store } from 'redux';
 import Select from 'react-select';
 
-import { withItemReplaced, withItemDeleted } from 'utils';
+import { Action, SyncActionType, AddBookmarksActionType, EditBookmarkActionType } from 'actions/constants';
+import * as SyncActions from 'actions/SyncActions';
+import { LoadParams, SyncParams } from 'actions/SyncActions';
+import * as EditBookmarkActions from 'actions/EditBookmarkActions';
+import { EditBookmarkParams } from 'actions/EditBookmarkActions';
+import * as AddBookmarksActions from 'actions/AddBookmarksActions';
+import { AddBookmarksSaveParams, ExternalShowModalParams } from 'actions/AddBookmarksActions';
+
 import { Bookmark } from 'models/Bookmark';
 import { Folder } from 'models/Folder';
+
 import { ChromeHelpers, TabInfo } from 'ChromeHelpers';
-import { StateConverter, JsonState, AppStateLoadPartial, mergeStates } from 'StateConverter';
+import { StateConverter, JsonState } from 'StateConverter';
+import { AppState, reduxStore } from 'reduxStore';
+import { StateManager } from 'StateManager';
+
+import { ENABLE_NOTES } from 'features';
 
 interface FoundBookmarkInFoldersData {
   found: boolean;
@@ -76,49 +90,31 @@ function findBookmarkInFolder(url: string, folder: Folder): FoundBookmarkInFolde
   };
 }
 
-function addBookmark(state: AppStateLoadPartial, bookmark: Bookmark, folder: Folder): AppStateLoadPartial {
-  const newBookmarks = folder.bookmarks.concat([bookmark]);
-  const newFolder = folder.withBookmarks(newBookmarks);
-  const newFolders = withItemReplaced<Folder>(state.foldersState.folders, newFolder);
-  return mergeStates(state, {
-    foldersState: {
-      folders: newFolders,
-    },
-  });
-}
-
-function editBookmark(state: AppStateLoadPartial, bookmark: Bookmark, folder: Folder): AppStateLoadPartial {
-  const newBookmarks = withItemReplaced<Bookmark>(folder.bookmarks, bookmark);
-  const newFolder = folder.withBookmarks(newBookmarks);
-  const newFolders = withItemReplaced<Folder>(state.foldersState.folders, newFolder);
-  return mergeStates(state, {
-    foldersState: {
-      folders: newFolders,
-    },
-  });
-}
-
-function deleteBookmark(state: AppStateLoadPartial, bookmark: Bookmark, folder: Folder): AppStateLoadPartial {
-  const newBookmarks = withItemDeleted<Bookmark>(folder.bookmarks, bookmark);
-  const newFolder = folder.withBookmarks(newBookmarks);
-  const newFolders = withItemReplaced<Folder>(state.foldersState.folders, newFolder);
-  return mergeStates(state, {
-    foldersState: {
-      folders: newFolders,
-    },
-  });
-}
-
 interface SelectOption {
   value: string;
   label: string;
 }
 
+interface Props {
+  dataVersion: number;
+  appStateLoaded: boolean;
+  folders: Folder[];
+
+  deleteBookmark: (params: EditBookmarkParams) => void;
+  editBookmark: (params: EditBookmarkParams) => void;
+  addBookmarks: (params: AddBookmarksSaveParams) => void;
+
+  showAddBookmarksModal: (params: ExternalShowModalParams) => void;
+  loadAppState: (params: LoadParams) => void;
+  syncAppState: (params: SyncParams) => void;
+}
+
 interface State {
-  loaded: boolean;
+  computed: boolean;
+  tabInfo: TabInfo | null;
+
   bookmarkName: string;
   bookmark: Bookmark | null;
-  appState: AppStateLoadPartial | null;
   selectedFolder: Folder | null;
 
   // Whether the currently selected folder contains the current tab's url.
@@ -128,58 +124,112 @@ interface State {
   titlePulsing: boolean;
 }
 
-class AppComponent extends React.Component<{}, State> {
+class PopupComponent extends React.Component<Props, State> {
+
+  private stateManager: StateManager = new StateManager();
 
   state: State = {
-    loaded: false,
+    computed: false,
+    tabInfo: null,
     bookmarkName: '',
     bookmark: null,
-    appState: null,
     selectedFolder: null,
     alreadyBookmarked: false,
     titlePulsing: false,
   };
 
   componentDidMount = async () => {
-    const [tabInfo, jsonState]: [TabInfo, JsonState] = await Promise.all([
-      ChromeHelpers.getCurrentActiveTab(),
-      ChromeHelpers.load(),
-    ]);
-    const state: AppStateLoadPartial = StateConverter.jsonStateToAppStateLoadPartial(jsonState);
+    const tabInfo: TabInfo = await ChromeHelpers.getCurrentActiveTab();
+    this.setState({ tabInfo }, () => {
+      this.beginSyncingStore(reduxStore);
+    });
+  }
 
-    // Find the first expanded folder.
-    let activeFolder = state.foldersState.folders.find(folder => !folder.collapsed);
-    if (activeFolder === undefined) {
-      activeFolder = state.foldersState.folders[0];
-    }
+  private beginSyncingStore = async (store: Store<AppState, Action>) => {
+    store.subscribe(async () => {
+      const state = store.getState();
+
+      if ([SyncActionType.load, SyncActionType.sync].includes(state.metaState.lastAction.type)) {
+        this.recomputeFolderAndBookmark(this.state.selectedFolder);
+      }
+
+      if (
+        [
+          AddBookmarksActionType.save,
+          EditBookmarkActionType.save,
+          EditBookmarkActionType.deleteBookmark,
+        ]
+        .includes(state.metaState.lastAction.type)
+      ) {
+        const maybeJsonPartialState: Partial<JsonState> = this.stateManager.maybeGetStateToPersist(state);
+        if (maybeJsonPartialState !== null) {
+          try {
+            await ChromeHelpers.save(maybeJsonPartialState);
+            window.close();
+          } catch(e) {
+            console.log(e.message);
+            if (e.message.startsWith('QUOTA_BYTES')) {
+              alert('Not enough storage space left! Please refresh this page, and consider deleting some folders/bookmarks/notes to make room.');
+            } else if (e.message.startsWith('OUTDATED_CODE_VERSION')) {
+              alert('There is a new version of Axle available! Please refresh the page to get the new version.');
+            } else {
+              alert(`Unknown error: ${e.message}`);
+            }
+          }
+        }
+      }
+
+      this.stateManager.update(state);
+    });
+
+    // When the persisted state changes, we want to update the current react state.
+    ChromeHelpers.addOnChangedListener((jsonState: JsonState) => {
+      if (ENABLE_NOTES && jsonState.dataVersion <= this.props.dataVersion) {
+        return;
+      }
+      const appStateSyncPartial = StateConverter.jsonStateToAppStateSyncPartial(jsonState);
+      this.props.syncAppState({ state: appStateSyncPartial });
+    });
+
+    // Do the initial load of state.
+    const jsonState: JsonState = await ChromeHelpers.load();
+    const appStateLoadPartial = StateConverter.jsonStateToAppStateLoadPartial(jsonState);
+    this.props.loadAppState({ state: appStateLoadPartial });
+  };
+
+  private recomputeFolderAndBookmark = (maybeFolder: Folder | null) => {
+    const activeFolder = maybeFolder
+      ?? this.props.folders.find(folder => !folder.collapsed)
+      ?? this.props.folders[0];
 
     let selectedFolder: Folder | null = null;
     let bookmark: Bookmark | null = null;
     let alreadyBookmarked = false;
 
     // Check if the bookmark has already been saved. Find the first match.
-    const foundData = findBookmarkInFolders(tabInfo.url, activeFolder, state.foldersState.folders);
+    const foundData = findBookmarkInFolders(this.state.tabInfo.url, activeFolder, this.props.folders);
 
     if (foundData.found) {
       const { folderIndex, bookmarkIndex } = foundData;
-      selectedFolder = state.foldersState.folders[folderIndex];
+      selectedFolder = this.props.folders[folderIndex];
       bookmark = selectedFolder.bookmarks[bookmarkIndex];
       alreadyBookmarked = true;
     } else {
       selectedFolder = activeFolder;
       bookmark = new Bookmark({
-        url: tabInfo.url,
-        title: tabInfo.title,
-        faviconUrl: tabInfo.faviconUrl,
+        url: this.state.tabInfo.url,
+        title: this.state.tabInfo.title,
+        faviconUrl: this.state.tabInfo.faviconUrl,
       });
       alreadyBookmarked = false;
     }
 
+    this.props.showAddBookmarksModal({ folder: selectedFolder });
+
     this.setState({
-      loaded: true,
+      computed: true,
       bookmarkName: bookmark.displayName(),
       bookmark: bookmark,
-      appState: state,
       selectedFolder: selectedFolder,
       alreadyBookmarked: alreadyBookmarked,
     });
@@ -190,29 +240,38 @@ class AppComponent extends React.Component<{}, State> {
   }
 
   onChangeSelect = (option: SelectOption) => {
-    const folder = this.state.appState.foldersState.folders.find(folder => folder.id === option.value);
-    if (folder !== undefined) {
-      const foundData: FoundBookmarkInFolderData = findBookmarkInFolder(this.state.bookmark.url, folder);
-      if (foundData.found) {
-        if (!this.state.alreadyBookmarked) {
-          this.pulseTitle();
-        }
-        const bookmark = folder.bookmarks[foundData.index];
-        this.setState({
-          selectedFolder: folder,
-          bookmarkName: bookmark.displayName(),
-          bookmark: bookmark,
-          alreadyBookmarked: true,
-        });
-      } else {
-        if (this.state.alreadyBookmarked) {
-          this.pulseTitle();
-        }
-        this.setState({
-          selectedFolder: folder,
-          alreadyBookmarked: false,
-        });
+    const folder = this.props.folders.find(folder => folder.id === option.value);
+    if (folder === undefined) {
+      return;
+    }
+
+    this.props.showAddBookmarksModal({ folder });
+
+    const foundData: FoundBookmarkInFolderData = findBookmarkInFolder(this.state.bookmark.url, folder);
+    if (foundData.found) {
+      if (!this.state.alreadyBookmarked) {
+        this.pulseTitle();
       }
+      const bookmark = folder.bookmarks[foundData.index];
+      this.setState({
+        selectedFolder: folder,
+        bookmarkName: bookmark.displayName(),
+        bookmark: bookmark,
+        alreadyBookmarked: true,
+      });
+    } else {
+      if (this.state.alreadyBookmarked) {
+        this.pulseTitle();
+      }
+      this.setState({
+        selectedFolder: folder,
+        bookmark: new Bookmark({
+          url: this.state.tabInfo.url,
+          title: this.state.tabInfo.title,
+          faviconUrl: this.state.tabInfo.faviconUrl,
+        }),
+        alreadyBookmarked: false,
+      });
     }
   }
 
@@ -232,32 +291,18 @@ class AppComponent extends React.Component<{}, State> {
 
   onClickRemove = async () => {
     if (this.state.alreadyBookmarked) {
-      const newAppState = deleteBookmark(this.state.appState, this.state.bookmark, this.state.selectedFolder);
-      const jsonState = StateConverter.appStateLoadPartialToJsonState(newAppState);
-      await ChromeHelpers.save(jsonState);
-      window.close();
+      this.props.deleteBookmark({ bookmark: this.state.bookmark });
     }
   }
 
   onClickSave = async () => {
-    if (this.state.loaded) {
+    if (this.state.computed) {
       const newBookmark = this.state.bookmark.withName(this.state.bookmarkName);
-      const newAppState = this.state.alreadyBookmarked ? (
-        editBookmark(this.state.appState, newBookmark, this.state.selectedFolder)
-      ) : (
-        addBookmark(this.state.appState, newBookmark, this.state.selectedFolder)
-      );
-      try {
-        const jsonState = StateConverter.appStateLoadPartialToJsonState(newAppState);
-        await ChromeHelpers.save(jsonState);
-      } catch (e) {
-        if (e.message.startsWith('QUOTA_BYTES')) {
-          alert('Not enough storage space left! Consider deleting some folders/bookmarks to make room for new bookmarks.');
-        } else {
-          alert(`Unknown error: ${e.message}`);
-        }
+      if (this.state.alreadyBookmarked) {
+        this.props.editBookmark({ bookmark: newBookmark });
+      } else {
+        this.props.addBookmarks({ bookmarks: [newBookmark] });
       }
-      window.close();
     }
   }
 
@@ -265,8 +310,8 @@ class AppComponent extends React.Component<{}, State> {
     let options: SelectOption[] = [];
     let selectedOption: SelectOption | null = null;
 
-    if (this.state.loaded) {
-      options = this.state.appState.foldersState.folders.map(folder => ({
+    if (this.state.computed) {
+      options = this.props.folders.map(folder => ({
         value: folder.id,
         label: folder.name,
       }));
@@ -338,4 +383,30 @@ class AppComponent extends React.Component<{}, State> {
   }
 };
 
-ReactDOM.render(<AppComponent/>, document.getElementById('main'));
+const mapStateToProps = (state: AppState, props: {}) => {
+  return {
+    dataVersion: state.metaState.dataVersion,
+    appStateLoaded: state.metaState.loaded,
+    folders: state.foldersState.folders,
+  };
+};
+
+const mapActionsToProps = {
+  deleteBookmark: EditBookmarkActions.deleteBookmark,
+  editBookmark: EditBookmarkActions.save,
+  addBookmarks: AddBookmarksActions.save,
+
+  showAddBookmarksModal: AddBookmarksActions.showModal,
+  loadAppState: SyncActions.load,
+  syncAppState: SyncActions.sync,
+};
+
+const ReduxedPopupComponent = connect(mapStateToProps, mapActionsToProps)(PopupComponent);
+
+const MainComponent = () => (
+  <Provider store={reduxStore}>
+    <ReduxedPopupComponent/>
+  </Provider>
+);
+
+ReactDOM.render(<MainComponent/>, document.getElementById('main'));
