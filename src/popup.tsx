@@ -1,5 +1,8 @@
 import 'styles/popup.scss';
 
+// react-icons/fa doesn't have regular option for FaStar
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider, connect } from 'react-redux';
@@ -330,6 +333,13 @@ class PopupComponent extends React.Component<Props, State> {
       </div>
     );
 
+    const blueColor = 'rgb(38, 132, 255)';
+    const starIcon = this.state.alreadyBookmarked ? (
+      <i className="fas fa-star star-icon" style={{ color: blueColor }}></i>
+    ) : (
+      <i className="far fa-star star-icon" style={{ color: blueColor }}></i>
+    );
+
     // Doesn't look like @types/react-select exports the Theme interface.
     const theme = (theme: any): any => {
       return {
@@ -337,7 +347,7 @@ class PopupComponent extends React.Component<Props, State> {
         colors: {
           ...theme.colors,
           neutral20: 'rgb(150, 150, 150)',
-          primary: 'rgb(38, 132, 255)',
+          primary: blueColor,
         },
       };
     };
@@ -346,6 +356,7 @@ class PopupComponent extends React.Component<Props, State> {
       <div className="app">
         <div className="head">
           { titleComponent }
+          { starIcon }
         </div>
         <div className="body">
           <div className="first-row">

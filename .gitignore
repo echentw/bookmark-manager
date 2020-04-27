@@ -1,9 +1,15 @@
 dist/
-axle.zip
 node_modules/
 sandbox/
 .DS_Store
 
+# To upload Chrome Web Store
+axle.zip
+
+# Design stuff
 design/promo/
 design/screenshots/
 design/logo/generated/
+
+# My personal Axle
+my_dist/

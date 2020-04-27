@@ -23,7 +23,13 @@ body {
   .head {
     margin-bottom: 18px;
 
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
     .title {
+      flex: 1;
+
       font-size: 20px;
 
       display: flex;
@@ -41,6 +47,10 @@ body {
       .title-object {
         margin-left: 5px;
       }
+    }
+
+    .star-icon {
+      font-size: 18px;
     }
   }
 
