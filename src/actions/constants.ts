@@ -4,29 +4,29 @@ export interface Action<Params = {}> {
 }
 
 export const FolderActionType = {
-  expand: 'Folder:expand',
-  collapse: 'Folder:collapse',
+  expand: 'Folder:expand', // write
+  collapse: 'Folder:collapse', // write
 };
 
 export const EditFolderActionType = {
-  addFolder: 'EditFolder:addFolder',
+  addFolder: 'EditFolder:addFolder', // write
   beginEdit: 'EditFolder:beginEdit',
   cancel: 'EditFolder:cancel',
-  save: 'EditFolder:save',
+  save: 'EditFolder:save', // write
   showConfirmDeleteModal: 'EditFolder:showConfirmDeleteModal',
   hideConfirmDeleteModal: 'EditFolder:hideConfirmDeleteModal',
 };
 
 export const DeleteFolderActionType = {
   beginDelete: 'EditFolder:beginDelete',
-  confirmDelete: 'EditFolder:confirmDelete',
+  confirmDelete: 'EditFolder:confirmDelete', // write
   cancelDelete: 'EditFolder:cancelDelete',
 };
 
 export const AddBookmarksActionType = {
   showModal: 'AddBookmarks:showModal',
   cancel: 'AddBookmarks:cancel',
-  save: 'AddBookmarks:save',
+  save: 'AddBookmarks:save', // write
 };
 
 export const CopyUrlActionType = {
@@ -37,8 +37,8 @@ export const CopyUrlActionType = {
 export const EditBookmarkActionType = {
   beginEdit: 'EditBookmark:beginEdit',
   cancel: 'EditBookmark:cancel',
-  save: 'EditBookmark:save',
-  deleteBookmark: 'EditBookmark:deleteBookmark',
+  save: 'EditBookmark:save', // write
+  deleteBookmark: 'EditBookmark:deleteBookmark', // write
 };
 
 export const DragActionType = {
@@ -48,7 +48,7 @@ export const DragActionType = {
   isOverBookmark: 'Drag:isOverBookmark',
   isOverFolder: 'Drag:isOverFolder',
   isOverNote: 'Drag:isOverNote',
-  end: 'Drag:end',
+  end: 'Drag:end', // write
 };
 
 export const HoverActionType = {
@@ -57,13 +57,13 @@ export const HoverActionType = {
 };
 
 export const UserActionType = {
-  setName: 'User:setName',
+  setName: 'User:setName', // write
 };
 
 export const SettingsActionType = {
   showModal: 'Settings:showModal',
   hideModal: 'Settings:hideModal',
-  setBackgroundImage: 'Settings:setBackgroundImage',
+  setBackgroundImage: 'Settings:setBackgroundImage', // write
 };
 
 export const SyncActionType = {
@@ -72,14 +72,14 @@ export const SyncActionType = {
 };
 
 export const UtilitiesActionType = {
-  selectBookmarksTab: 'Utilities:selectBookmarksTab',
-  selectNotesTab: 'Utilities:selectNotesTab',
+  selectBookmarksTab: 'Utilities:selectBookmarksTab', // write
+  selectNotesTab: 'Utilities:selectNotesTab', // write
 };
 
 export const NotesActionType = {
-  openNote: 'Notes:openNote',
-  closeNote: 'Notes:closeNote',
-  addNote: 'Notes:addNote',
-  deleteNote: 'Notes:deleteNote',
-  editNote: 'Notes:editNote',
+  openNote: 'Notes:openNote', // write
+  closeNote: 'Notes:closeNote', // write
+  addNote: 'Notes:addNote', // write
+  deleteNote: 'Notes:deleteNote', // write
+  editNote: 'Notes:editNote', // write
 };
