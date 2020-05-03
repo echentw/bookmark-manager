@@ -73,9 +73,6 @@ export const hoverReducer: Reducer<HoverState> = (
     case NotesActionType.deleteNote:
       newState = handleDeleteNote(state, action);
       break;
-    case EditFolderActionType.showColorPicker:
-      newState = handleShowColorPicker(state, action as Action<EditFolderParams>);
-      break;
     case DeleteFolderActionType.beginDelete:
       newState = handleBeginDeleteFolder(state, action as Action<DeleteFolderParams>);
       break;
@@ -180,13 +177,6 @@ function handleDeleteNote(state: HoverState, action: Action): HoverState {
 }
 
 function handleConfirmDeleteFolder(state: HoverState, action: Action<DeleteFolderParams>): HoverState {
-  // See comment in handleDeleteBookmark above.
-  return {
-    hoverItemId: null,
-  };
-}
-
-function handleShowColorPicker(state: HoverState, action: Action<EditFolderParams>): HoverState {
   // See comment in handleDeleteBookmark above.
   return {
     hoverItemId: null,

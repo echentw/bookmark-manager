@@ -2,6 +2,7 @@ import { Action, SyncActionType } from 'actions/constants';
 import { LoadParams, SyncParams } from 'actions/SyncActions';
 import { AppState } from 'reduxStore';
 import { Reducer } from 'reducers/Reducer';
+import { allMutationActionTypes } from 'actions/mutations';
 
 export interface MetaState {
   codeVersion: number;
@@ -35,11 +36,8 @@ export const metaStateReducer: Reducer<MetaState> = (
       newState = handleSync(state, action as Action<SyncParams>);
       break;
     default:
-      newState = {
-        ...state,
-        dataVersion: state.dataVersion + 1,
-        lastAction: action,
-      };
+      newState = handleGenericAction(state, action);
+      break;
   }
   return newState;
 };
@@ -57,6 +55,15 @@ function handleSync(state: MetaState, action: Action<SyncParams>): MetaState {
   return {
     ...state,
     dataVersion: action.params.state.metaState.dataVersion,
+    lastAction: action,
+  };
+}
+
+function handleGenericAction(state: MetaState, action: Action): MetaState {
+  const newDataVersion = state.dataVersion + (allMutationActionTypes.has(action.type) ? 1 : 0);
+  return {
+    ...state,
+    dataVersion: newDataVersion,
     lastAction: action,
   };
 }

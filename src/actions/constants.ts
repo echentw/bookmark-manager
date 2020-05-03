@@ -13,9 +13,6 @@ export const EditFolderActionType = {
   beginEdit: 'EditFolder:beginEdit',
   cancel: 'EditFolder:cancel',
   save: 'EditFolder:save',
-  showColorPicker: 'EditFolder:showColorPicker',
-  hideColorPicker: 'EditFolder:hideColorPicker',
-  selectColor: 'EditFolder:selectColor',
   showConfirmDeleteModal: 'EditFolder:showConfirmDeleteModal',
   hideConfirmDeleteModal: 'EditFolder:hideConfirmDeleteModal',
 };

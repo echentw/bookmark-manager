@@ -3,13 +3,11 @@
     "module": "commonjs",
     "target": "es5",
     "sourceMap": true,
-
     "outDir": "./dist/",
     "noImplicitAny": true,
     "jsx": "react",
-
     "resolveJsonModule": true,
-
+    "downlevelIteration": true,
     "baseUrl": ".",
     "paths": {
       "*": ["*", "src/*"]
