@@ -1,1 +1,1 @@
-export const ENABLE_NOTES = false;
+export const ENABLE_NOTES = true;
