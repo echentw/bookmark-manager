@@ -56,7 +56,10 @@
 
   .close-button {
     position: absolute;
-    $radius: 20px;
+    $radius: 24px;
+    border-radius: calc(#{$radius} / 2);
+    width: $radius;
+    height: $radius;
     top: calc(-#{$radius} / 2);
     right: calc(-#{$radius} / 2);
 

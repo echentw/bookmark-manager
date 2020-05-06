@@ -65,7 +65,10 @@ class NoteEditorComponent extends React.Component<Props, State> {
     const { note } = this.props;
 
     const maybeCloseButton = this.state.hovering ? (
-      <CloseButtonComponent onClick={this.onClickCloseButton}/>
+      <CloseButtonComponent
+        onClick={this.onClickCloseButton}
+        minus={true}
+      />
     ) : null;
 
     return (
