@@ -43,6 +43,7 @@ class UtilitiesPaneComponent extends React.Component<Props> {
           <div className={`bookmarks-tab ${bookmarksActive}`} onClick={this.props.selectBookmarksTab}>
             Bookmarks
           </div>
+          <div className="tab-divider"/>
           <div className={`notes-tab ${notesActive}`} onClick={this.props.selectNotesTab}>
             Notes
           </div>

@@ -47,6 +47,13 @@ $pane-tertiary-color: rgba(255, 255, 255, 0.35);
       @extend .tab;
     }
 
+    .tab-divider {
+      margin-top: 4px;
+      height: 20px;
+      width: 1px;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+
     .notes-tab {
       @extend .tab;
     }
