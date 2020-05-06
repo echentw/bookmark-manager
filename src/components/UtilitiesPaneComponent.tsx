@@ -9,8 +9,6 @@ import * as UtilitiesActions from 'actions/UtilitiesActions';
 import { FolderListComponent } from 'components/FolderListComponent';
 import { NotePreviewListComponent } from 'components/Notes/NotePreviewListComponent';
 
-import { ENABLE_NOTES } from 'features';
-
 
 interface Props {
   activeTab: UtilityTab;
@@ -37,36 +35,6 @@ class UtilitiesPaneComponent extends React.Component<Props> {
         break;
       default:
         throw new Error('Unknown UtilityTab enum value');
-    }
-
-    if (ENABLE_NOTES) {
-      return (
-        <div className="utilities-pane">
-          <div className="tabs">
-            <div className={`bookmarks-tab ${bookmarksActive}`} onClick={this.props.selectBookmarksTab}>
-              Bookmarks
-            </div>
-            <div className={`notes-tab ${notesActive}`} onClick={this.props.selectNotesTab}>
-              Notes
-            </div>
-          </div>
-          <div className="pane">
-            <Scrollbars>
-              { utilityComponent }
-            </Scrollbars>
-          </div>
-        </div>
-      );
-    } else {
-      return (
-        <div className="utilities-pane">
-          <div className="pane">
-            <Scrollbars>
-              { utilityComponent }
-            </Scrollbars>
-          </div>
-        </div>
-      );
     }
 
     return (

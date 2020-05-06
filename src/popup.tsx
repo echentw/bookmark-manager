@@ -25,7 +25,6 @@ import { StateConverter, JsonState } from 'StateConverter';
 import { AppState, reduxStore } from 'reduxStore';
 import { StateManager } from 'StateManager';
 
-import { ENABLE_NOTES } from 'features';
 
 interface FoundBookmarkInFoldersData {
   found: boolean;
@@ -187,7 +186,7 @@ class PopupComponent extends React.Component<Props, State> {
 
     // When the persisted state changes, we want to update the current react state.
     ChromeHelpers.addOnChangedListener((jsonState: JsonState) => {
-      if (ENABLE_NOTES && jsonState.dataVersion <= this.props.dataVersion) {
+      if (jsonState.dataVersion <= this.props.dataVersion) {
         return;
       }
       const appStateSyncPartial = StateConverter.jsonStateToAppStateSyncPartial(jsonState);

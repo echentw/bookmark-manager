@@ -32,8 +32,6 @@ import { UtilitiesPaneComponent } from 'components/UtilitiesPaneComponent';
 import { SettingsCogComponent } from 'components/SettingsCogComponent';
 import { NoteEditorComponent } from 'components/Notes/NoteEditorComponent';
 
-import { ENABLE_NOTES } from 'features';
-
 
 export enum DraggableType {
   Bookmark = 'bookmark',
@@ -127,7 +125,7 @@ class AppComponent extends React.Component<Props, State> {
 
     // When the persisted state changes, we want to update the current react state.
     ChromeHelpers.addOnChangedListener((jsonState: JsonState) => {
-      if (ENABLE_NOTES && jsonState.dataVersion <= this.props.dataVersion) {
+      if (jsonState.dataVersion <= this.props.dataVersion) {
         return;
       }
       const appStateSyncPartial = StateConverter.jsonStateToAppStateSyncPartial(jsonState);
@@ -199,7 +197,7 @@ class AppComponent extends React.Component<Props, State> {
       <SettingsModalComponent/>
     ) : null;
 
-    const displayingNote = ENABLE_NOTES && this.props.currentOpenNote !== null;
+    const displayingNote = this.props.currentOpenNote !== null;
 
     let maybeNoteEditor: React.ReactElement = null;
     let maybeWithNoteCssClass = '';
