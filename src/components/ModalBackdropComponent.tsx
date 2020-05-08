@@ -33,11 +33,11 @@ interface Props {
 export class ModalBackdropComponent extends React.Component<Props> {
 
   componentDidMount = () => {
-    document.addEventListener('keydown', this.onKeyDown, false);
+    document.addEventListener('keydown', this.onKeyDown);
   }
 
   componentWillUnmount = () => {
-    document.removeEventListener('keydown', this.onKeyDown, false);
+    document.removeEventListener('keydown', this.onKeyDown);
   }
 
   save = () => {

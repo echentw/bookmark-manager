@@ -22,6 +22,7 @@ interface State {
 class NoteEditorComponent extends React.Component<Props, State> {
 
   private nameRef: React.RefObject<HTMLDivElement> = React.createRef();
+  private textRef: React.RefObject<HTMLDivElement> = React.createRef();
 
   state: State = {
     hovering: false,
@@ -57,6 +58,13 @@ class NoteEditorComponent extends React.Component<Props, State> {
     this.props.editNote({ note: newNote });
   }
 
+  onKeyDownText = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.keyCode === 27) {
+      // Pressed escape
+      this.textRef.current.blur();
+    }
+  }
+
   onClickCloseButton = () => {
     this.props.closeNote({ note: this.props.note });
   }
@@ -90,6 +98,8 @@ class NoteEditorComponent extends React.Component<Props, State> {
           html={note.text}
           disabled={false}
           onChange={this.onChangeText}
+          onKeyDown={this.onKeyDownText}
+          innerRef={this.textRef}
         />
         { maybeCloseButton }
       </div>

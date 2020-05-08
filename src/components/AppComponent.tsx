@@ -12,6 +12,8 @@ import { ChromeHelpers } from 'ChromeHelpers';
 import * as SyncActions from 'actions/SyncActions';
 import { Action, SyncActionType } from 'actions/constants';
 import { LoadParams, SyncParams } from 'actions/SyncActions';
+import * as NotesActions from 'actions/NotesActions';
+import { NoteParams } from 'actions/NotesActions';
 import { AppState, reduxStore } from 'reduxStore';
 import { DragState } from 'reducers/DragReducer';
 
@@ -50,7 +52,9 @@ interface Props {
   showAddBookmarksModal: boolean;
   showSettingsModal: boolean;
   currentOpenNote: Note | null;
+  deletingFolderId: string | null;
 
+  closeNote: (params: NoteParams) => void;
   loadAppState: (params: LoadParams) => void;
   syncAppState: (params: SyncParams) => void;
 }
@@ -71,6 +75,24 @@ class AppComponent extends React.Component<Props, State> {
   componentDidMount = () => {
     this.beginSyncingDate();
     this.beginSyncingStore(reduxStore);
+
+    document.addEventListener('keydown', this.handleKeyboardShortcuts);
+  }
+
+  handleKeyboardShortcuts = (event: KeyboardEvent) => {
+    if (document.activeElement.tagName.toUpperCase() === 'BODY') {
+      if (event.keyCode === 72) {
+        // 'h' key
+        if (
+          this.props.currentOpenNote !== null
+          && !this.props.showSettingsModal
+          && !this.props.showAddBookmarksModal
+          && this.props.deletingFolderId === null
+        ) {
+          this.props.closeNote({ note: this.props.currentOpenNote });
+        }
+      }
+    }
   }
 
   componentDidUpdate = (prevProps: Props) => {
@@ -264,10 +286,12 @@ const mapStateToProps = (state: AppState, props: {}) => {
     showSettingsModal: state.settingsState.showingModal,
     user: state.userState.user,
     currentOpenNote: state.notesState.currentOpenNote,
+    deletingFolderId: state.deleteFolderState.deletingFolderId,
   };
 };
 
 const mapActionsToProps = {
+  closeNote: NotesActions.closeNote,
   loadAppState: SyncActions.load,
   syncAppState: SyncActions.sync,
 };
