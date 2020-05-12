@@ -52,6 +52,21 @@
     &:focus {
       outline: 0;
     }
+
+    &:hover {
+      cursor: text;
+    }
+
+    display: flex;
+    flex-direction: column;
+
+    ol, ul {
+      margin: 0;
+    }
+
+    .DraftEditor-root {
+      height: 100%;
+    }
   }
 
   .close-button {

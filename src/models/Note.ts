@@ -1,35 +1,45 @@
 import { randomId } from 'utils';
+import {
+  EditorState,
+  ContentState,
+  convertFromHTML,
+  convertToRaw,
+  convertFromRaw,
+  RawDraftContentState,
+} from 'draft-js';
+
 
 export interface NoteJson {
   id: string;
   name: string;
-  text: string;
+  text?: string; // deprecated
+  content?: RawDraftContentState;
 }
 
 export class Note {
   public readonly id: string;
   public readonly name: string;
-  public readonly text: string;
+  public readonly editorState: EditorState;
 
-  constructor({ id, name, text }: { id?: string, name?: string, text?: string }) {
+  constructor({ id, name, editorState }: { id?: string, name?: string, editorState?: EditorState }) {
     this.id = id || randomId();
     this.name = name || '';
-    this.text = text || '';
+    this.editorState = editorState || EditorState.createEmpty();
   }
 
   withName = (name: string): Note => {
     return new Note({
       id: this.id,
       name: name,
-      text: this.text,
+      editorState: this.editorState,
     });
   }
 
-  withText = (text: string): Note => {
+  withEditorState = (editorState: EditorState): Note => {
     return new Note({
       id: this.id,
       name: this.name,
-      text: text,
+      editorState: editorState,
     });
   }
 
@@ -40,7 +50,7 @@ export class Note {
     return (
       this.id === other.id &&
       this.name === other.name &&
-      this.text === other.text
+      this.editorState === other.editorState
     );
   }
 
@@ -48,19 +58,32 @@ export class Note {
     return new Note({
       id: this.id,
       name: this.name,
-      text: this.text,
+      editorState: this.editorState,
     });
   }
 
   public static fromJson = (json: NoteJson): Note => {
-    return new Note(json);
+    let contentState: ContentState;
+    if (json.content) {
+      contentState = convertFromRaw(json.content);
+    } else {
+      const blocks = convertFromHTML(json.text);
+      contentState = ContentState.createFromBlockArray(blocks.contentBlocks, blocks.entityMap);
+    }
+    return new Note({
+      id: json.id,
+      name: json.name,
+      editorState: EditorState.createWithContent(contentState),
+    });
   }
 
   public toJson = (): NoteJson => {
+    const contentState = this.editorState.getCurrentContent();
+    const rawContentState = convertToRaw(contentState);
     return {
       id: this.id,
       name: this.name,
-      text: this.text,
+      content: rawContentState,
     };
   }
 }

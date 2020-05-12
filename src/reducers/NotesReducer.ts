@@ -1,3 +1,5 @@
+import { EditorState } from 'draft-js';
+
 import { Note } from 'models/Note';
 import {
   Action,
@@ -84,7 +86,7 @@ function handleAddNote(state: NotesState, action: Action): NotesState {
       break;
     }
   }
-  const newNote = new Note({ name: name, text: '' });
+  const newNote = new Note({ name: name, editorState: EditorState.createEmpty() });
   const notes = state.notes.concat([newNote]);
   return {
     notes: notes,

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { FaTrash } from 'react-icons/fa';
 import ContentEditable from 'react-contenteditable';
+import { Editor, EditorState } from 'draft-js';
 
 import { AppState } from 'reduxStore';
 import { Note } from 'models/Note';
@@ -47,6 +48,8 @@ class NotePreviewComponent extends React.Component<InternalProps> {
       classes += ' with-shadow';
     }
 
+    const editorState = EditorState.createWithContent(this.props.note.editorState.getCurrentContent());
+
     return (
       <HoverableContainerComponent
         className={classes}
@@ -62,12 +65,13 @@ class NotePreviewComponent extends React.Component<InternalProps> {
           />
           { maybeButtonsComponent }
         </div>
-        <ContentEditable
-          className="note-preview-text"
-          html={this.props.note.text}
-          disabled={true}
-          onChange={() => {}}
-        />
+        <div className="note-preview-text">
+          <Editor
+            editorState={editorState}
+            readOnly={true}
+            onChange={() => {}}
+          />
+        </div>
       </HoverableContainerComponent>
     );
   }

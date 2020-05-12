@@ -1,3 +1,5 @@
+import { EditorState } from 'draft-js';
+
 import { Folder } from 'models/Folder';
 import { User } from 'models/User';
 import { Note } from 'models/Note';
@@ -150,7 +152,7 @@ export class ChromeHelpers {
     });
     const firstNote = new Note({
       name: 'My First Note',
-      text: '',
+      editorState: EditorState.createEmpty(),
     });
     return {
       codeVersion: 0, // This value gets overridden by MetaStateReducer.ts
