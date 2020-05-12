@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { Editor, EditorState, RichUtils, getDefaultKeyBinding } from 'draft-js';
+import { FaBold, FaItalic, FaUnderline, FaStrikethrough, FaListUl, FaListOl } from 'react-icons/fa';
 
 import { NoteParams } from 'actions/NotesActions';
 import * as NotesActions from 'actions/NotesActions';
@@ -92,43 +93,11 @@ class NoteEditorComponent extends React.Component<Props, State> {
     return 'not-handled';
   }
 
-  onClickBold = () => {
-    const newEditorState = RichUtils.toggleInlineStyle(this.props.note.editorState, 'BOLD');
-    this.onChangeEditor(newEditorState);
-  }
-
-  onClickItalicize = () => {
-    const newEditorState = RichUtils.toggleInlineStyle(this.props.note.editorState, 'ITALIC');
-    this.onChangeEditor(newEditorState);
-  }
-
-  onClickUnderline = () => {
-    const newEditorState = RichUtils.toggleInlineStyle(this.props.note.editorState, 'UNDERLINE');
-    this.onChangeEditor(newEditorState);
-  }
-
-  onClickStrikethrough = () => {
-    const newEditorState = RichUtils.toggleInlineStyle(this.props.note.editorState, 'STRIKETHROUGH');
-    this.onChangeEditor(newEditorState);
-  }
-
   onClickCloseButton = () => {
     this.props.closeNote({ note: this.props.note });
   }
 
-  onClickOrderedList = () => {
-    this.onChangeEditor(
-      RichUtils.toggleBlockType(this.props.note.editorState, 'ordered-list-item')
-    );
-  }
-
-  onClickUnorderedList = () => {
-    this.onChangeEditor(
-      RichUtils.toggleBlockType(this.props.note.editorState, 'unordered-list-item')
-    );
-  }
-
-  handleMouseDown = (e: any) => {
+  handleMouseDown = (e: React.MouseEvent<{}, MouseEvent>) => {
     e.preventDefault();
   }
 
@@ -141,6 +110,48 @@ class NoteEditorComponent extends React.Component<Props, State> {
         minus={true}
       />
     ) : null;
+
+    const onClickEditorButtonFunc = (key: string) => {
+      return () => {
+        if (['BOLD', 'ITALIC', 'UNDERLINE', 'STRIKETHROUGH'].includes(key)) {
+          this.onChangeEditor(
+            RichUtils.toggleInlineStyle(note.editorState, key)
+          );
+        } else {
+          this.onChangeEditor(
+            RichUtils.toggleBlockType(note.editorState, key)
+          );
+        }
+
+        const editorFocused = note.editorState.getSelection().getHasFocus();
+        if (!editorFocused) {
+          this.focusEditor();
+        }
+      };
+    };
+
+    const onClickBold = onClickEditorButtonFunc('BOLD');
+    const onClickItalic = onClickEditorButtonFunc('ITALIC');
+    const onClickUnderline = onClickEditorButtonFunc('UNDERLINE');
+    const onClickStrikethrough = onClickEditorButtonFunc('STRIKETHROUGH');
+    const onClickOrderedList = onClickEditorButtonFunc('ordered-list-item');
+    const onClickUnorderedList = onClickEditorButtonFunc('unordered-list-item');
+
+    const blockType: string = RichUtils.getCurrentBlockType(note.editorState);
+    const inlineStyle = note.editorState.getCurrentInlineStyle();
+
+    const boldActive = inlineStyle.contains('BOLD');
+    const italicActive = inlineStyle.contains('ITALIC');
+    const underlineActive = inlineStyle.contains('UNDERLINE');
+    const strikethroughActive = inlineStyle.contains('STRIKETHROUGH');
+    const orderedListActive = blockType === 'ordered-list-item';
+    const unorderedListActive = blockType === 'unordered-list-item';
+
+    const editorButtonClass = (active: boolean) => {
+      return 'editor-button' + (active ? ' active': '');
+    };
+
+    const editorFocused = note.editorState.getSelection().getHasFocus();
 
     return (
       <div className="note-editor"
@@ -156,21 +167,25 @@ class NoteEditorComponent extends React.Component<Props, State> {
           onKeyDown={this.onKeyDownName}
           innerRef={this.nameRef}
         />
-        <div className="note-editable-text" onClick={this.focusEditor}>
+        <div className="note-editable-text">
           <Editor
             ref={this.textEditorRef}
-            editorState={this.props.note.editorState}
+            editorState={note.editorState}
             onChange={this.onChangeText}
             handleKeyCommand={this.handleKeyCommand}
             keyBindingFn={this.onKeyDownText}
           />
-          <div className="buttons-container">
-            <button onMouseDown={this.handleMouseDown} onClick={this.onClickBold}>Bold</button>
-            <button onMouseDown={this.handleMouseDown} onClick={this.onClickItalicize}>Italic</button>
-            <button onMouseDown={this.handleMouseDown} onClick={this.onClickUnderline}>Underline</button>
-            <button onMouseDown={this.handleMouseDown} onClick={this.onClickStrikethrough}>Strikethrough</button>
-            <button onMouseDown={this.handleMouseDown} onClick={this.onClickOrderedList}>OrderedList</button>
-            <button onMouseDown={this.handleMouseDown} onClick={this.onClickUnorderedList}>UnorderedList</button>
+          <div
+            className={'editor-buttons-container' + (editorFocused ? '' : ' hidden')}
+            onMouseDown={this.handleMouseDown}
+          >
+            <FaBold className={editorButtonClass(boldActive)} onClick={onClickBold}/>
+            <FaItalic className={editorButtonClass(italicActive)} onClick={onClickItalic}/>
+            <FaUnderline className={editorButtonClass(underlineActive)} onClick={onClickUnderline}/>
+            <FaStrikethrough className={editorButtonClass(strikethroughActive)} onClick={onClickStrikethrough}/>
+            <div className="editor-buttons-divider"/>
+            <FaListOl className={editorButtonClass(orderedListActive)} onClick={onClickOrderedList}/>
+            <FaListUl className={editorButtonClass(unorderedListActive)} onClick={onClickUnorderedList}/>
           </div>
         </div>
         { maybeCloseButton }

@@ -49,14 +49,6 @@
     padding: 4px;
     overflow: scroll;
 
-    &:focus {
-      outline: 0;
-    }
-
-    &:hover {
-      cursor: text;
-    }
-
     display: flex;
     flex-direction: column;
 
@@ -66,6 +58,42 @@
 
     .DraftEditor-root {
       height: 100%;
+    }
+
+    .editor-buttons-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      height: 20px;
+      min-height: 20px;
+
+      &.hidden {
+        display: none;
+      }
+
+      .editor-button {
+        margin-left: 4px;
+        margin-right: 4px;
+        color: rgb(200, 200, 200);
+        font-size: 1.2em;
+
+        &.active {
+          color: rgb(100, 100, 100);
+        }
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      .editor-buttons-divider {
+        background-color: rgb(200, 200, 200);
+        margin-left: 8px;
+        margin-right: 8px;
+        width: 1px;
+        height: calc(100% - 2px);
+      }
     }
   }
 

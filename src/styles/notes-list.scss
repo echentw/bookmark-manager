@@ -104,6 +104,10 @@ $row-padding: 4px;
     color: rgb(150, 150, 150);
 
     overflow: hidden;
+
+    ol, ul {
+      margin: 0;
+    }
   }
 }
 
