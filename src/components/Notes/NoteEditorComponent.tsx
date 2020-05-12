@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { Editor, EditorState, RichUtils, KeyBindingUtil, getDefaultKeyBinding } from 'draft-js';
 import { FaBold, FaItalic, FaUnderline, FaStrikethrough, FaListUl, FaListOl } from 'react-icons/fa';
+import ReactTooltip from 'react-tooltip';
 
 import { NoteParams } from 'actions/NotesActions';
 import * as NotesActions from 'actions/NotesActions';
@@ -80,6 +81,10 @@ class NoteEditorComponent extends React.Component<Props, State> {
         this.onChangeEditor(newEditorState);
       }
       return;
+    } else if (event.keyCode === 88 && event.shiftKey && KeyBindingUtil.hasCommandModifier(event)) {
+      // ctrl (windows) / cmd (mac) + shift + 'X'
+      this.toggleStrikethrough();
+      return 'axle-editor-strikethrough';
     } else if (event.keyCode === 55 && event.shiftKey && KeyBindingUtil.hasCommandModifier(event)) {
       // ctrl (windows) / cmd (mac) + shift + '7'
       this.toggleOrderedList();
@@ -162,6 +167,17 @@ class NoteEditorComponent extends React.Component<Props, State> {
 
     const editorFocused = note.editorState.getSelection().getHasFocus();
 
+    const commandModifier = window.navigator.platform.toLowerCase().includes('mac')
+      ? String.fromCharCode(0x02318)
+      : 'Ctrl';
+
+    const boldTooltipText = `Bold (${commandModifier} + B)`;
+    const italicTooltipText = `Italics (${commandModifier} + I)`;
+    const underlineTooltipText = `Underline (${commandModifier} + U)`;
+    const strikethroughTooltipText = `Strikethrough (${commandModifier} + Shift + X)`;
+    const orderedListTooltipText = `Numbered list (${commandModifier} + Shift + 7)`;
+    const unorderedListTooltipText = `Bulleted list (${commandModifier} + Shift + 8)`;
+
     return (
       <div className="note-editor"
         onMouseOver={this.onMouseOver}
@@ -188,13 +204,43 @@ class NoteEditorComponent extends React.Component<Props, State> {
             className={'editor-buttons-container' + (editorFocused ? '' : ' hidden')}
             onMouseDown={this.handleMouseDown}
           >
-            <FaBold className={editorButtonClass(boldActive)} onClick={this.toggleBold}/>
-            <FaItalic className={editorButtonClass(italicActive)} onClick={this.toggleItalic}/>
-            <FaUnderline className={editorButtonClass(underlineActive)} onClick={this.toggleUnderline}/>
-            <FaStrikethrough className={editorButtonClass(strikethroughActive)} onClick={this.toggleStrikethrough}/>
+            <FaBold
+              className={editorButtonClass(boldActive)}
+              onClick={this.toggleBold}
+              data-tip data-for='tooltip-bold'
+            />
+            <FaItalic
+              className={editorButtonClass(italicActive)}
+              onClick={this.toggleItalic}
+              data-tip data-for='tooltip-italic'
+            />
+            <FaUnderline
+              className={editorButtonClass(underlineActive)}
+              onClick={this.toggleUnderline}
+              data-tip data-for='tooltip-underline'
+            />
+            <FaStrikethrough
+              className={editorButtonClass(strikethroughActive)}
+              onClick={this.toggleStrikethrough}
+              data-tip data-for='tooltip-strikethrough'
+            />
             <div className="editor-buttons-divider"/>
-            <FaListOl className={editorButtonClass(orderedListActive)} onClick={this.toggleOrderedList}/>
-            <FaListUl className={editorButtonClass(unorderedListActive)} onClick={this.toggleUnorderedList}/>
+            <FaListOl
+              className={editorButtonClass(orderedListActive)}
+              onClick={this.toggleOrderedList}
+              data-tip data-for='tooltip-orderedlist'
+            />
+            <FaListUl
+              className={editorButtonClass(unorderedListActive)}
+              onClick={this.toggleUnorderedList}
+              data-tip data-for='tooltip-unorderedlist'
+            />
+            <ReactTooltip id='tooltip-bold' effect='solid'>{ boldTooltipText }</ReactTooltip>
+            <ReactTooltip id='tooltip-italic' effect='solid'>{ italicTooltipText }</ReactTooltip>
+            <ReactTooltip id='tooltip-underline' effect='solid'>{ underlineTooltipText }</ReactTooltip>
+            <ReactTooltip id='tooltip-strikethrough' effect='solid'>{ strikethroughTooltipText }</ReactTooltip>
+            <ReactTooltip id='tooltip-orderedlist' effect='solid'>{ orderedListTooltipText }</ReactTooltip>
+            <ReactTooltip id='tooltip-unorderedlist' effect='solid'>{ unorderedListTooltipText }</ReactTooltip>
           </div>
         </div>
         { maybeCloseButton }
