@@ -38,26 +38,33 @@
     }
   }
 
-  .note-editable-text {
-    @include rect-border;
-    @include rect-border-radius;
-
+  .note-editable-text-container {
     flex: 1;
 
-    position: relative;
+    @include rect-border;
+    @include rect-border-radius;
     background-color: white;
     padding: 4px;
-    overflow: scroll;
 
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 
-    ol, ul {
-      margin: 0;
-    }
+    .note-editable-text {
+      flex: 1;
 
-    .DraftEditor-root {
-      height: 100%;
+      position: relative;
+      overflow: scroll;
+
+      ol, ul {
+        margin: 0;
+      }
+
+      .DraftEditor-root {
+        height: 100%;
+        max-height: 100%;
+        overflow: scroll;
+      }
     }
 
     .editor-buttons-container {
@@ -67,6 +74,7 @@
 
       height: 20px;
       min-height: 20px;
+      margin-top: 4px;
 
       &.hidden {
         display: none;

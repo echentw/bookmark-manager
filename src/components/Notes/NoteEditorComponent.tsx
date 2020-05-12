@@ -192,14 +192,16 @@ class NoteEditorComponent extends React.Component<Props, State> {
           onKeyDown={this.onKeyDownName}
           innerRef={this.nameRef}
         />
-        <div className="note-editable-text">
-          <Editor
-            ref={this.textEditorRef}
-            editorState={note.editorState}
-            onChange={this.onChangeText}
-            handleKeyCommand={this.handleKeyCommand}
-            keyBindingFn={this.onKeyDownText}
-          />
+        <div className="note-editable-text-container">
+          <div className="note-editable-text">
+            <Editor
+              ref={this.textEditorRef}
+              editorState={note.editorState}
+              onChange={this.onChangeText}
+              handleKeyCommand={this.handleKeyCommand}
+              keyBindingFn={this.onKeyDownText}
+            />
+          </div>
           <div
             className={'editor-buttons-container' + (editorFocused ? '' : ' hidden')}
             onMouseDown={this.handleMouseDown}
