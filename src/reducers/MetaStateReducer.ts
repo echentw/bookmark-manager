@@ -13,7 +13,7 @@ export interface MetaState {
 
 // Increment this number when new code version is backwards-incompatible,
 // and old sessions need to refresh the page.
-const CODE_VERSION = 2;
+const CODE_VERSION = 3;
 
 export const initialMetaState: MetaState = {
   codeVersion: CODE_VERSION,
