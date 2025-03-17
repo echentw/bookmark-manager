@@ -1,10 +1,12 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Axle: New Tab Dashboard & Bookmark Manager",
   "short_name": "Axle",
   "version": "2.1.1",
   "description": "Transform your new tab page into a beautiful customizable dashboard and easy-to-use bookmark manager.",
-  "content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'"
+  },
   "permissions": [
     "activeTab",
     "storage",
@@ -30,7 +32,7 @@
     "newtab": "newtab.html"
   },
   "background": {
-    "scripts": ["background.js"],
-    "persistent": false
+    "service_worker": "background.js",
+    "type": "module"
   }
 }
